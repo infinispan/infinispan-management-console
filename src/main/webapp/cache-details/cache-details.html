@@ -1,0 +1,135 @@
+
+<div class="container-fluid" style="margin:20px">
+  <div class="row">
+    <div class="col-md-6 breadcrumbs">
+      <span> <a> {{currentCluster.name}} </a>  >>  {{currentCache.name}} </span>
+    </div>
+
+    <div class="col-md-6 text-right">
+        <select>
+          <option value="0">Actions</option>
+          <option value="1">Edit cache</option>
+          <option value="2">Disable cache</option>
+          <option value="3">Delete existing entries</option>
+          <option value="4">Delete cache</option>
+        </select>
+    </div>
+  </div>
+  <br>
+
+  <div class="cache-details">
+    <div class="cache-name">{{currentCache.name}}</div>
+    <div class="cache-status">
+        <span class="cache-status-label">Status:</span> <span class="available">{{currentCache.data['cache-status']}}</span>
+    </div>
+    <div class="cache-details row cache-information">
+        <div class="col-md-3">
+            <div class="col-md-7">
+                <div>Average read time: </div>
+                <div>Average write time: </div>
+                <div>Average size of entry: </div>
+                <div>Total number of entries: </div>
+            </div>
+            <div class="col-md-5">
+                <div>{{currentCache.data['average-read-time']}} ms</div>
+                <div>{{currentCache.data['average-write-time']}} ms</div>
+                <div>N/A</div>
+                <div>{{currentCache.data['number-of-entries']}}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="col-md-7">
+                <div>Total number of hits: </div>
+                <div>Total number of misses: </div>
+                <div>Average replication time: </div>
+                <div>Success ratio: </div>
+            </div>
+            <div class="col-md-5">
+                <div>{{currentCache.data['hits']}}</div>
+                <div>{{currentCache.data['misses']}}</div>
+                <div>{{currentCache.data['average-replication-time']}}</div>
+                <div>{{currentCache.data['success-ratio']}}</div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+      <div class="col-md-9 text-left">
+        <div class="cache-status">
+          <span class="cache-status-label">Nodes</span>
+        </div>
+      </div>
+      <div class="col-md-3 text-right">
+        <span class="search-text"> Search: </span> <input type="search" class="search-field">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead>
+            <th> Name </th>
+            <th> Average reads </th>
+            <th> Average writes </th>
+            <th> Total entries </th>
+            <th> Hits </th>
+            <th> Misses </th>
+            <th> Read/Write ratio </th>
+            <th> Total failed writes </th>
+          </thead>
+          <tr>
+            <td> First node </td>
+            <td> {{currentCache.data['average-read-time']}} ms </td>
+            <td> {{currentCache.data['average-write-time']}} ms </td>
+            <td> {{currentCache.data['number-of-entries']}} </td>
+            <td> {{currentCache.data['hits']}} </td>
+            <td> {{currentCache.data['misses']}} </td>
+            <td> {{currentCache.data['read-write-ratio']}} </td>
+            <td> {{currentCache.data.locking.LOCKING.isolation}} </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="cache-status">
+          <span class="cache-status-label">Properties</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cache-properties row">
+      <div class="col-md-3">
+          <div>Cache name:</div>
+          <div>Mode:</div>
+          <div>Associated cache/loader store:</div>
+
+          <div>Write-through/Write-behind:</div>
+          <div>Isolation level:</div>
+          <div>Eviction strategy:</div>
+
+          <div>Passivation:</div>
+          <div>Expiration configuration:</div>
+          <div>Cross-site replication:</div>
+      </div>
+      <div class="col-md-9">
+          <div>{{currentCache.name}}</div>
+          <div>{{currentCache.type}}</div>
+          <div>N/A</div>
+
+          <div>Mock</div>
+          <div>{{currentCache.locking.LOCKING.isolation}}</div>
+          <div>N/A</div>
+          
+          <div>N/A</div>
+          <div>N/A</div>
+          <div>N/A</div>
+      </div>
+    </div>
+
+  </div>
+</div>

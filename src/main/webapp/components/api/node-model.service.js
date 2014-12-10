@@ -9,7 +9,7 @@ angular.module('managementConsole.api')
       var Node = function(host, server, modelController) {
         this.host = host;
         this.server = server;
-        this.name = (server == null) ? host : host + '/' + server;
+        this.name = (server === null) ? host : host + '/' + server;
         this.modelController = modelController;
         this.lastRefresh = null;
       };

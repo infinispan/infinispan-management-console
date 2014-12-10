@@ -7,18 +7,19 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css({.tmp,src/main}) styles/vendor.css -->
-    <link rel="stylesheet" type="text/css" href="webapp/vendor.css">
+    <!-- build:css({target/tmp,src/main}) styles/vendor.css -->
+    <link rel="stylesheet" type="text/css" href="vendor.css">
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly.css" />
+    <link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:css({.tmp,src/main}) styles/managementConsole.css -->
-    <link rel="stylesheet" href="webapp/management-console.css">
+    <!-- build:css({target/tmp,src/main}) styles/managementConsole.css -->
+    <link rel="stylesheet" href="management-console.css">
     <!-- endbuild -->
 
-    <!-- build:js scripts/modernizr.js -->
+    <!-- build:js(src/main) scripts/modernizr.js -->
     <script src="bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
   </head>
@@ -33,30 +34,32 @@
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
+    <!-- script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
       e.src='//www.google-analytics.com/analytics.js';
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
-    </script>
+    </script -->
 
-    <!-- build:js scripts/vendor.js -->
+    <!-- build:js(src/main) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/patternfly/dist/js/patternfly.js"></script>
+    <script src="bower_components/seiyria-bootstrap-slider/dist/bootstrap-slider.min.js"></script>
+    <script src="bower_components/angular-bootstrap-slider/slider.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:js({src/main,.tmp}) scripts/main.js -->
-    <script src="webapp/management-console.js"></script>
-    <script src="webapp/cluster-view/cluster-view.controller.js"></script>
-    <script src="webapp/node-details/node-details.controller.js"></script>
-    <script src="webapp/cache-details/cache-details.controller.js"></script>
+    <!-- build:js({src/main/webapp,target/tmp}) scripts/main.js -->
+    <script src="management-console.js"></script>
+    <script src="cluster-view/cluster-view.controller.js"></script>
+    <script src="node-details/node-details.controller.js"></script>
+    <script src="cache-details/cache-details.controller.js"></script>
 
     <script src="components/api/api.js"></script>
     <script src="components/api/api.service.js"></script>
@@ -74,3 +77,4 @@
 
   </body>
 </html>
+

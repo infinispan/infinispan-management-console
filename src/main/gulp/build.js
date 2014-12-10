@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 
 var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license']
+  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
 function handleError(err) {
@@ -12,29 +12,28 @@ function handleError(err) {
 }
 
 gulp.task('styles', ['clean'], function () {
-  return gulp.src('src/main/{webapp,components}/**/*.less')
+  return gulp.src('src/main/webapp/**/*.less')
     .pipe($.less({
       paths: [
         'src/main/bower_components',
-        'src/main/webapp',
-        'src/main/components'
+        'src/main/webapp'
       ]
     }))
     .on('error', handleError)
     .pipe($.autoprefixer('last 1 version'))
-    .pipe(gulp.dest('.tmp'))
+    .pipe(gulp.dest('target/tmp'))
     .pipe($.size());
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('src/main/{webapp,components}/**/*.js')
+  return gulp.src('src/main/webapp/**/*.js')
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.size());
 });
 
 gulp.task('partials', ['clean'], function () {
-  return gulp.src('src/main/{webapp,components}/**/*.html')
+  return gulp.src('src/main/webapp/**/*.html')
     .pipe($.minifyHtml({
       empty: true,
       spare: true,
@@ -43,7 +42,7 @@ gulp.task('partials', ['clean'], function () {
     .pipe($.ngHtml2js({
       moduleName: 'managementConsole'
     }))
-    .pipe(gulp.dest('.tmp'))
+    .pipe(gulp.dest('target/tmp'))
     .pipe($.size());
 });
 
@@ -53,8 +52,8 @@ gulp.task('html', ['clean', 'styles', 'scripts', 'partials'], function () {
   var cssFilter = $.filter('**/*.css');
   var assets;
 
-  return gulp.src('src/main/*.html')
-    .pipe($.inject(gulp.src('.tmp/{webapp,components}/**/*.js'), {
+  return gulp.src('src/main/webapp/*.html')
+    .pipe($.inject(gulp.src('target/tmp/webapp/**/*.js'), {
       read: false,
       starttag: '<!-- inject:partials -->',
       addRootSlash: false,
@@ -91,7 +90,7 @@ gulp.task('images', ['clean'], function () {
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest('dist/assets/images'))
+    .pipe(gulp.dest('target/dist/assets/images'))
     .pipe($.size());
 });
 
@@ -99,12 +98,12 @@ gulp.task('fonts', ['clean'], function () {
   return gulp.src($.mainBowerFiles())
     .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
     .pipe($.flatten())
-    .pipe(gulp.dest('dist/fonts'))
+    .pipe(gulp.dest('target/dist/fonts'))
     .pipe($.size());
 });
 
-gulp.task('clean', function () {
-  return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.rimraf());
+gulp.task('clean', function (cb) {
+  $.del(['target/tmp/**', 'target/dist/**'], cb);
 });
 
 gulp.task('clear-cache', function (done) {
@@ -112,3 +111,4 @@ gulp.task('clear-cache', function (done) {
 });
 
 gulp.task('build', ['html', 'partials', 'images', 'fonts']);
+

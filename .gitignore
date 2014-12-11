@@ -2,5 +2,8 @@ node_modules
 dist
 .tmp
 .sass-cache
+.settings
+.project
+.classpath
 src/main/bower_components
 target

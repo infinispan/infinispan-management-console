@@ -8,6 +8,7 @@
     "angular-ui-router": "0.2.x",
     "bootstrap": "3.2.x",
     "angular-ui-bootstrap-bower": "~0.11.2",
+    "angular-bootstrap-slider": "0.0.8",
     "patternfly": "1.1.2"
   },
   "devDependencies": {
@@ -15,6 +16,7 @@
   },
   "resolutions": {
     "angular": "1.2.x",
-    "jquery": "1.x.x"
+    "jquery": "1.x.x",
+    "seiyria-bootstrap-slider": "4.3.0"
   }
 }

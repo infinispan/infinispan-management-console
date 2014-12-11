@@ -5,17 +5,8 @@
    <groupId>org.infinispan</groupId>
    <artifactId>infinispan-management-console</artifactId>
    <version>7.1.0-SNAPSHOT</version>
-   <packaging>war</packaging>
+   <packaging>jar</packaging>
    <name>Infinispan Management Console</name>
    <description>Web Management Console for Infinispan</description>
-
-   <build>
-      <plugins>
-         <plugin>
-            <artifactId>maven-war-plugin</artifactId>
-         </plugin>
-      </plugins>
-
-   </build>
 </project>
 

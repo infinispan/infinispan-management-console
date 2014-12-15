@@ -2,14 +2,20 @@
 
 angular.module('managementConsole.api')
     .factory('DomainModel', [
+    '$q',
     'ClusterModel',
-    'NodeModel',
-    function (ClusterModel, NodeModel) {
+    'ProfileModel',
+    'ServerGroupModel',
+    'ServerModel',
+    function ($q, ClusterModel, ProfileModel, ServerGroupModel, ServerModel) {
             var Domain = function (modelController, info) {
                 this.modelController = modelController;
                 this.lastRefresh = null;
                 this.info = info;
                 this.name = this.info.name;
+                this.serverGroups = {};
+                this.profiles = {};
+                this.servers = [];
             };
 
             Domain.prototype.getModelController = function () {
@@ -20,57 +26,73 @@ angular.module('managementConsole.api')
                 return [];
             };
 
-            Domain.prototype.refresh = function (callback) {
-                this.modelController.readChildrenResources(this.getResourcePath(), 'host', true, true, false, function (response) {
-                    this.name = response.name;
-                    this.data = response;
-                    this.lastRefresh = new Date();
-                    if (callback) {
-                        callback(this);
+            Domain.prototype.refresh = function () {
+                var promises = [];
+                var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {
+                    this.serverGroups = {};
+                    for (var name in response) {
+                        if (name !== undefined) {
+                            this.serverGroups[name] = new ServerGroupModel(name, response[name].profile, this);
+                        }
                     }
                 }.bind(this));
-            };
+                promises.push(serverGroupPromise);
 
-            Domain.prototype.getClusters = function () {
-                var allClusters = {};
-                for (var host in this.data) {
-                    if (host !== undefined) {
-                        var hostData = this.data[host];
-                        for (var server in hostData.server) {
-                            if (server !== undefined) {
-                                var serverData = hostData.server[server];
-                                if (serverData.subsystem !== undefined && serverData.subsystem.infinispan !== undefined) {
-                                    for (var name in serverData.subsystem.infinispan['cache-container']) {
-                                        if (name !== undefined && !(name in allClusters)) {
-                                            allClusters[name] = new ClusterModel(this, host, server, name);
-                                        }
-                                    }
+                var profilePromise = this.modelController.readChildrenResources(this.getResourcePath(), 'profile', 1, true, false).then(function (response) {
+                    this.profiles = {};
+                    var profilePromises = [];
+                    for (var name in response) {
+                        if (name !== undefined) {
+                            this.profiles[name] = new ProfileModel(name, this);
+                            profilePromises.push(this.profiles[name].refresh());
+                        }
+                    }
+                    return $q.all(profilePromises);
+                }.bind(this));
+                promises.push(profilePromise);
+
+                this.servers = [];
+                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 1, true, false).then(function (response) {
+                    var serverPromises = [];
+                    for (var hostName in response) {
+                        if (hostName !== undefined) {
+                            var host = response[hostName];
+                            for (var serverName in host.server) {
+                                if (serverName !== undefined) {
+                                    var server = new ServerModel(hostName, serverName, host.server[serverName]['server-group'], this);
+                                    this.servers.push(server);
+                                    serverPromises.push(server.refresh());
                                 }
                             }
                         }
                     }
-                }
+                    return $q.all(serverPromises);
+                }.bind(this));
+                promises.push(hostsPromise);
+                return $q.all(promises);
+            };
+
+            Domain.prototype.getClusters = function () {
                 var clusters = [];
-                for (var cluster in allClusters) {
-                    if (cluster !== undefined) {
-                        clusters.push(allClusters[cluster]);
+                for (var name in this.profiles) {
+                    if (name !== undefined) {
+                        clusters = clusters.concat(this.profiles[name].getClusters());
                     }
                 }
                 return clusters;
             };
 
-            Domain.prototype.getNodes = function () {
-                var nodes = [];
-                for (var host in this.data) {
-                    if (host !== undefined) {
-                        for (var server in host.server) {
-                            if (server !== undefined) {
-                                nodes.push(new NodeModel(host, server, this.getModelController()));
-                            }
-                        }
+            Domain.prototype.getCluster = function (clusters, name) {
+                for (var i = 0; i < clusters.length; i++) {
+                    if (clusters[i].name === name) {
+                        return clusters[i];
                     }
                 }
-                return nodes;
+                return null;
+            };
+
+            Domain.prototype.getNodes = function () {
+                return this.servers;
             };
 
             return Domain;

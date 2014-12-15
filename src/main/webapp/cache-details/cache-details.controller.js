@@ -3,18 +3,21 @@
 angular.module('managementConsole')
     .controller('CacheDetailsCtrl', [
     '$scope',
-    'api',
     '$stateParams',
     '$state',
-    function ($scope, api, $stateParams, $state) {
+    'modelController',
+    function ($scope, $stateParams, $state, modelController) {
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }
+            var server = modelController.getServer();
+            var clusters = server.getClusters();
+            $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
 
             // Set currentCache according to the url params.
             // TODO(matija): use some hashMap-like structure instead of
             //               searching through an array.
-            api.getClustersDeep(function (clusters) {
+            /*api.getClustersDeep(function (clusters) {
                 $scope.safeApply(function () {
                     angular.forEach(clusters, function (cluster) {
                         if (cluster.name === $stateParams.clusterName) {
@@ -31,5 +34,5 @@ angular.module('managementConsole')
                         }
                     });
                 });
-            });
+            });*/
     }]);

@@ -1,0 +1,41 @@
+<!-- MAIN START -->
+<div class="container-fluid" style="margin:20px">
+
+    <!-- TOP ROW #1 START -->
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">Clusters</div>
+            <div class="list-group">
+                <div class="list-group-item row" ng-repeat="cluster in clusters">
+                    <div class="col-md-4">
+                        <a href="#/cluster/{{cluster.name}}"><h4>{{cluster.name}}</h4>
+                        <i class="fa fa-check-square fa-2x available"></i>  <span class="available">Available</span></a>
+                    </div>
+                    <div class="col-md-4">? Nodes
+                    </div>
+                    <div class="col-md-3 dropdown dropdown-menu-right">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            Actions
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">View cluster</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Configure cluster</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create cache</a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shutdown cluster</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TOP ROW #1 END -->
+
+
+</div>
+<!-- MAIN END -->

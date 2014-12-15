@@ -28,7 +28,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div>
+    <div ng-controller="NavBarCtrl">
         <ng-include src="'components/navbar/navbar.html'"></ng-include>
         <div ui-view></div>
     </div>
@@ -57,18 +57,21 @@
 
     <!-- build:js({src/main/webapp,target/tmp}) scripts/main.js -->
     <script src="management-console.js"></script>
+    <script src="login/login.controller.js"></script>
+    <script src="clusters-view/clusters-view.controller.js"></script>
     <script src="cluster-view/cluster-view.controller.js"></script>
     <script src="node-details/node-details.controller.js"></script>
     <script src="cache-details/cache-details.controller.js"></script>
 
     <script src="components/api/api.js"></script>
-    <script src="components/api/api.service.js"></script>
     <script src="components/api/cache-model.service.js"></script>
     <script src="components/api/cluster-model.service.js"></script>
     <script src="components/api/domain-model.service.js"></script>
     <script src="components/api/model-controller.service.js"></script>
-    <script src="components/api/node-model.service.js"></script>
-    <script src="components/api/standalone-model.service.js"></script>
+    <script src="components/api/profile-model.service.js"></script>
+    <script src="components/api/server-model.service.js"></script>
+    <script src="components/api/servergroup-model.service.js"></script>
+    <script src="components/navbar/navbar.controller.js"></script>
  
     <!-- inject:partials -->
     <!-- angular templates will be automaticaly converted in js and inserted here -->

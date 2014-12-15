@@ -4,7 +4,7 @@ angular.module('managementConsole.api')
     .factory('CacheModel', [
 
     function () {
-            var Cache = function (cluster, name, type) {
+            var Cache = function (name, type, cluster) {
                 this.cluster = cluster;
                 this.name = name;
                 this.type = type;
@@ -21,13 +21,10 @@ angular.module('managementConsole.api')
                 return this.cluster.getResourcePath().concat(this.type, this.name);
             };
 
-            Cache.prototype.refresh = function (callback) {
-                this.modelController.readResource(this.getResourcePath(), false, true, function (response) {
+            Cache.prototype.refresh = function () {
+                return this.modelController.readResource(this.getResourcePath(), false, true).then(function (response) {
                     this.data = response;
                     this.lastRefresh = new Date();
-                    if (callback) {
-                        callback(this);
-                    }
                 }.bind(this));
             };
 

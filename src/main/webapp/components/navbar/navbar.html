@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-pf" role="navigation">
+<nav class="navbar navbar-default navbar-pf" role="navigation" ng-if="isVisible()">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-1">
       <span class="sr-only">Toggle navigation</span>
@@ -22,16 +22,16 @@
           <li>
             <a href="#">Preferences</a>
           </li>
-          <li class="divider"></li>
+          <li class="divider" ng-click="preferences()"></li>
           <li>
-            <a href="#">Logout</a>
+            <a href="#" ng-click="logout()">Logout</a>
           </li>
         </ul>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-primary">
       <li>
-        <a href="dashboard.html">Clusters</a>
+        <a href="#/clusters">Clusters</a>
       </li>
     </ul>
   </div>

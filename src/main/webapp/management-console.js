@@ -15,6 +15,14 @@ angular.module('managementConsole', [
                 templateUrl: 'webapp/login/login.html',
                 controller: 'LoginCtrl'
             })
+            .state('logout', {
+                url: '/'
+            })
+            .state('clustersView', {
+                url: '/clusters',
+                templateUrl: 'webapp/clusters-view/clusters-view.html',
+                controller: 'ClustersViewCtrl'
+            })
             .state('clusterView', {
                 url: '/cluster/:clusterName',
                 templateUrl: 'webapp/cluster-view/cluster-view.html',
@@ -35,8 +43,8 @@ angular.module('managementConsole', [
                 templateUrl: 'webapp/error404/error404.html',
             });
         $urlRouterProvider
-            .when('/', '/cluster/')
-            .when('', '/cluster/')
+            .when('/', '/login')
+            .when('', '/login')
             .otherwise('/error404');
   }])
 

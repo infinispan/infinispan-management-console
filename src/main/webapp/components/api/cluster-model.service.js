@@ -2,17 +2,17 @@
 
 angular.module('managementConsole.api')
     .factory('ClusterModel', [
+    '$q',
     'CacheModel',
-    function (CacheModel) {
-            var Cluster = function (domain, host, server, name) {
-                this.domain = domain;
-                this.host = host;
-                this.server = server;
+    function ($q, CacheModel) {
+            var Cluster = function (name, profile, path, domain) {
                 this.name = name;
+                this.profile = profile;
+                this.path = path;
+                this.domain = domain;
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
-                this.data = null;
-                this.caches = undefined;
+                this.caches = {};
             };
 
             Cluster.prototype.getModelController = function () {
@@ -20,38 +20,39 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.getResourcePath = function () {
-                return this.domain.getResourcePath().concat('host', this.host, 'server', this.server, 'subsystem', 'infinispan', 'cache-container', this.name);
+                return this.path.concat('subsystem', 'infinispan', 'cache-container', this.name);
             };
 
-            Cluster.prototype.refresh = function (callback) {
-                this.modelController.readResource(this.getResourcePath(), false, false, function (response) {
+            Cluster.prototype.refresh = function () {
+                return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
                     this.lastRefresh = new Date();
-                    this.data = response;
-                    if (callback) {
-                        callback(this);
+                    this.caches = {};
+                    var cachePromises = [];
+                    var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
+                    for (var i = 0; i < cacheTypes.length; i++) {
+                        var typedCaches = response[cacheTypes[i]];
+                        if (typedCaches !== undefined) {
+                            for (var name in typedCaches) {
+                                if (name !== undefined) {
+                                    var cache = new CacheModel(name, cacheTypes[i], this);
+                                    this.caches[name] = cache;
+                                    cachePromises.push(cache.refresh());
+                                }
+                            }
+                        }
                     }
+                    return $q.all(cachePromises);
                 }.bind(this));
             };
 
             Cluster.prototype.getAvailability = function () {};
 
-            Cluster.prototype.getNodes = function () {};
+            Cluster.prototype.getNodes = function () {
+                return this.domain.getNodes();
+            };
 
             Cluster.prototype.getCaches = function () {
-                var caches = [];
-                var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
-                for (var i = 0; i < cacheTypes.length; i++) {
-                    var typedCaches = this.data[cacheTypes[i]];
-                    if (typedCaches !== undefined) {
-                        for (var name in typedCaches) {
-                            if (name !== undefined) {
-                                caches.push(new CacheModel(this, name, cacheTypes[i]));
-                            }
-                        }
-                    }
-                }
-                this.caches = caches;
-                return caches;
+                return this.caches;
             };
 
             return Cluster;

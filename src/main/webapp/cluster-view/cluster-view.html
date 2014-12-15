@@ -4,11 +4,10 @@
     <!-- TOP ROW #1 START -->
     <div class="row">
         <div class="col-md-2">
-            <select class="selectpicker" ng-model="currentCluster" ng-options="cluster.name for cluster in clusters">
-            </select>
+            <select class="selectpicker" ng-model="currentCluster" ng-options="cluster.name for cluster in clusters" />
         </div>
         <div class="col-md-2 text-center">
-            <span class="bigger-font"> ? </span>  <span class="smaller-font"> Nodes</span>
+            <span class="bigger-font"> {{currentCluster.getNodes().length || '?'}} </span>  <span class="smaller-font"> Nodes</span>
         </div>
         <div class="col-md-3 text-center">
             <a class="bigger-font link-jobs">?</a>  <span class="smaller-font"> current execution jobs</span>
@@ -65,7 +64,7 @@
                     <div ng-show="shared.currentCollection == 'nodes'">
                         <span style="font-size:16px; font-weight: bold;"> Caches</span> 
                         <br>
-                        <div ng-repeat="cache in currentCluster.caches | limitTo: 3">
+                        <div ng-repeat="cache in currentCluster.caches">
                             <input type="checkbox" value="checkbox" name="caches">{{cache.name}}
                             <br>
                         </div>
@@ -73,7 +72,7 @@
                     <div ng-show="shared.currentCollection == 'caches'">
                         <span style="font-size:16px; font-weight: bold;"> Servers</span> 
                         <br>
-                        <div ng-repeat="node in currentCluster.nodes | limitTo: 3">
+                        <div ng-repeat="node in currentCluster.getNodes()">
                             <input type="checkbox" value="checkbox" name="caches">{{node.name}}
                             <br>
                         </div>
@@ -82,7 +81,6 @@
                     <br>
                     <span class="slider-text"> Average read time </span> 
                     <br>
-                    <slider min="100" step="10" max="200"></slider>
                     <div class="slider-one"></div>
                     <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
                     <br>
@@ -129,10 +127,10 @@
             <!-- RIGHT COLUMN ROW #2 START -->
             <div class="row" style="padding-left:15px !important; margin: 0px important!;">
                 <div ng-show="shared.currentCollection == 'nodes'">
-                    <div ng-show="!currentCluster.nodes || currentCluster.nodes.length === 0">There are no nodes to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.nodes">
+                    <div ng-show="!currentCluster.getNodes() || currentCluster.getNodes().length === 0">There are no nodes to show.</div>
+                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()">
                         <a class="text-center" ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
-              Node_name <br><br>
+              {{node.name}} <br><br>
             </a>
                     </div>
                 </div>

@@ -21,7 +21,7 @@
     <br>
 
     <div class="node-details">
-        <div class="node-name">Node_a3b10</div>
+        <div class="node-name">{{currentNode.name}}</div>
         <div class="node-status">
             <span class="node-status-label">Status:</span>  <span class="node-status-value available">Available</span>
         </div>
@@ -68,8 +68,8 @@
                         <th>Total writes</th>
                         <th>Total failed writes</th>
                     </thead>
-                    <tr>
-                        <td>Employee data</td>
+                    <tr ng-repeat="cache in currentNode.getCaches()">
+                        <td>{{cache.name}}</td>
                         <td>135</td>
                         <td>45</td>
                         <td>125,000</td>
@@ -77,26 +77,6 @@
                         <td>56</td>
                         <td>156,078</td>
                         <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>Payroll Data</td>
-                        <td>23</td>
-                        <td>35</td>
-                        <td>1,562,400</td>
-                        <td>549,848</td>
-                        <td>2</td>
-                        <td>265,889</td>
-                        <td>0</td>
-                    </tr>
-                    <tr>
-                        <td>Benefits data</td>
-                        <td>15</td>
-                        <td>24</td>
-                        <td>865,000</td>
-                        <td>984,754</td>
-                        <td>68</td>
-                        <td>358,745</td>
-                        <td>3</td>
                     </tr>
                 </table>
             </div>

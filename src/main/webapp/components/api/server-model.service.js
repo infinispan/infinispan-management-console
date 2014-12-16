@@ -14,6 +14,7 @@ angular.module('managementConsole.api')
                 this.group = group;
                 this.domain = domain;
                 this.lastRefresh = null;
+                this.state = 'UNKNOWN';
             };
 
             Server.prototype.getResourcePath = function () {
@@ -28,6 +29,20 @@ angular.module('managementConsole.api')
                 return this.getModelController().readAttribute(this.getResourcePath(), 'server-state').then(function (response) {
                     this.state = response.toUpperCase();
                 }.bind(this));
+            };
+        
+            Server.prototype.fetchCacheStats = function(cache) {
+                return this.getModelController()
+                    .readResource(this.getResourcePath().concat('subsystem', 'infinispan', 'cache-container', cache.cluster.name, cache.type, cache.name),
+                                  false, true).then(function (response) {
+                    response['node-name'] = this.name;
+                    response['cache'] = this;
+                    return response;
+                }.bind(this));
+            };
+        
+            Server.prototype.isRunning = function() {
+                return this.state === 'RUNNING';
             };
 
             return Server;

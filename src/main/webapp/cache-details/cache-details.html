@@ -1,7 +1,7 @@
 <div class="container-fluid" style="margin:20px">
     <div class="row">
         <div class="col-md-6 breadcrumbs">
-            <span> <a> {{currentCluster.name}} </a>  >>  {{currentCache.name}} </span>
+            <span> <a href="#/cluster/{{currentCluster.name}}"> {{currentCluster.name}} </a>  >>  {{currentCache.name}} </span>
         </div>
 
         <div class="col-md-6 text-right">
@@ -29,7 +29,7 @@
     <div class="cache-details">
         <div class="cache-name">{{currentCache.name}}</div>
         <div class="cache-status">
-            <span class="cache-status-label">Status:</span>  <span class="available">{{currentCache.data['cache-status']}}</span>
+            <span class="cache-status-label">Status:</span>  <span class="available">{{currentCacheStats['cache-status']}}</span>
         </div>
         <div class="cache-details row cache-information">
             <div class="col-md-3">
@@ -89,15 +89,15 @@
                         <th>Read/Write ratio</th>
                         <th>Total failed writes</th>
                     </thead>
-                    <tr>
-                        <td>First node</td>
-                        <td>{{currentCache.data['average-read-time']}} ms</td>
-                        <td>{{currentCache.data['average-write-time']}} ms</td>
-                        <td>{{currentCache.data['number-of-entries']}}</td>
-                        <td>{{currentCache.data['hits']}}</td>
-                        <td>{{currentCache.data['misses']}}</td>
-                        <td>{{currentCache.data['read-write-ratio']}}</td>
-                        <td>{{currentCache.data.locking.LOCKING.isolation}}</td>
+                    <tr  ng-repeat="stats in currentCacheStats.nodeStats">
+                        <td>{{stats['node-name']}}</td>
+                        <td>{{stats['average-read-time']}} ms</td>
+                        <td>{{stats['average-write-time']}} ms</td>
+                        <td>{{stats['number-of-entries']}}</td>
+                        <td>{{stats['hits']}}</td>
+                        <td>{{stats['misses']}}</td>
+                        <td>{{stats['read-write-ratio']}}</td>
+                        <td>N/A</td>
                     </tr>
                 </table>
             </div>

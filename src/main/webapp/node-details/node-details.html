@@ -1,7 +1,7 @@
 <div class="container-fluid" style="margin:20px">
     <div class="row">
         <div class="col-md-6 breadcrumbs">
-            <span> <a> Cluster A </a>  >>  Node_a3b10 </span>
+            <span> <a href="#/cluster/{{currentCluster.name}}"> {{currentCluster.name}} </a> >> {{currentNode.name}} </span>
         </div>
 
         <div class="col-md-6 dropdown dropdown-menu-right">
@@ -23,7 +23,7 @@
     <div class="node-details">
         <div class="node-name">{{currentNode.name}}</div>
         <div class="node-status">
-            <span class="node-status-label">Status:</span>  <span class="node-status-value available">Available</span>
+            <span class="node-status-label">Status:</span>  <span class="node-status-value available">{{currentNode.state}}</span>
         </div>
         <div class="node-details row node-information">
             <div class="col-md-3">
@@ -68,15 +68,15 @@
                         <th>Total writes</th>
                         <th>Total failed writes</th>
                     </thead>
-                    <tr ng-repeat="cache in currentNode.getCaches()">
-                        <td>{{cache.name}}</td>
-                        <td>135</td>
-                        <td>45</td>
-                        <td>125,000</td>
-                        <td>984,587</td>
-                        <td>56</td>
-                        <td>156,078</td>
-                        <td>1</td>
+                    <tr ng-repeat="stats in currentNodeStats.cacheStats">
+                        <td>{{stats['cache-name']}}</td>
+                        <td>{{stats['average-read-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
+                        <td>{{stats['average-write-time']}}</td>
                     </tr>
                 </table>
             </div>

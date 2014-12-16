@@ -7,6 +7,9 @@ angular.module('managementConsole')
     '$state',
     'modelController',
     function ($scope, $stateParams, $state, modelController) {
+            if (!modelController.isAuthenticated()) {
+                $state.go('/logout');
+            }
             $scope.shared = {
                 currentCollection: 'caches'
             };

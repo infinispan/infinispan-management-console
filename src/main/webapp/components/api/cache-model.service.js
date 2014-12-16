@@ -5,9 +5,9 @@ angular.module('managementConsole.api')
 
     function () {
             var Cache = function (name, type, cluster) {
-                this.cluster = cluster;
                 this.name = name;
                 this.type = type;
+                this.cluster = cluster;
                 this.modelController = cluster.getModelController();
                 this.lastRefresh = null;
                 this.data = null;

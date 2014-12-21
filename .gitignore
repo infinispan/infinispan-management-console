@@ -5,5 +5,7 @@ dist
 .settings
 .project
 .classpath
+.idea
+infinispan-management-console.iml
 src/main/bower_components
 target

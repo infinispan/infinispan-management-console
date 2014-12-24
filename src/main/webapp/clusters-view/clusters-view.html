@@ -8,7 +8,7 @@
             <div class="list-group">
                 <div class="list-group-item row" ng-repeat="cluster in clusters">
                     <div class="col-md-4">
-                        <a href="#/cluster/{{cluster.name}}"><h4>{{cluster.name}}</h4>
+                        <a href="#/cluster/{{cluster.name}}" id="cluster-link-{{cluster.name}}"><h4>{{cluster.name}}</h4>
                         <i class="fa fa-check-square fa-2x available"></i>  <span class="available">Available</span></a>
                     </div>
                     <div class="col-md-4">? Nodes

@@ -9,3 +9,4 @@ dist
 infinispan-management-console.iml
 src/main/bower_components
 target
+README.md~

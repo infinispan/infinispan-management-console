@@ -32,5 +32,5 @@
   - `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
 
 - If you meet: "Error: ENOENT, stat /path/to/index.html" try following clears:
-  - `sudo npm cache clear` `gulp clean` `gulp clear-cache`
+  - `gulp clean` `gulp clear-cache`
 

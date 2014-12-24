@@ -12,7 +12,7 @@ angular.module('managementConsole.api')
                 this.domain = domain;
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
-                this.caches = {};
+                this.caches = []; // desired to have caches in an array so we can filter out through their names
             };
 
             Cluster.prototype.getModelController = function () {
@@ -26,7 +26,7 @@ angular.module('managementConsole.api')
             Cluster.prototype.refresh = function () {
                 return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
                     this.lastRefresh = new Date();
-                    this.caches = {};
+                    this.caches = [];
                     var cachePromises = [];
                     var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
                     for (var i = 0; i < cacheTypes.length; i++) {
@@ -35,7 +35,7 @@ angular.module('managementConsole.api')
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
                                     var cache = new CacheModel(name, cacheTypes[i], this);
-                                    this.caches[name] = cache;
+                                    this.caches.push(cache);
                                     cachePromises.push(cache.refresh());
                                 }
                             }

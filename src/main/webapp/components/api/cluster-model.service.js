@@ -13,6 +13,7 @@ angular.module('managementConsole.api')
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
                 this.caches = []; // desired to have caches in an array so we can filter out through their names
+                this.cachesNameMap = {}; // hashMap for fast Cache object referencing by cache name
             };
 
             Cluster.prototype.getModelController = function () {
@@ -36,6 +37,7 @@ angular.module('managementConsole.api')
                                 if (name !== undefined) {
                                     var cache = new CacheModel(name, cacheTypes[i], this);
                                     this.caches.push(cache);
+                                    this.cachesNameMap[name] = cache;
                                     cachePromises.push(cache.refresh());
                                 }
                             }
@@ -51,10 +53,20 @@ angular.module('managementConsole.api')
                 return this.domain.getNodes();
             };
 
+            /**
+             * @returns {Array} caches in a particular Cluster as a common Array
+             */
             Cluster.prototype.getCaches = function () {
                 return this.caches;
             };
 
-            return Cluster;
+            /**
+             * @returns hashMap where Caches are mapped by their names
+             */
+            Cluster.prototype.getCachesNameMap = function () {
+                return this.cachesNameMap;
+            };
+
+        return Cluster;
     }
   ]);

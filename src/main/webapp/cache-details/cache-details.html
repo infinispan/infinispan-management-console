@@ -141,5 +141,22 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="cache-status">
+                    <span class="cache-status-label">Experimental</span>
+                </div>
+            </div>
+        </div>
+        Connection to Infinispan Server REST endpoint through corsproxy (NOTE: check README for necessary instructions)<br>
+        <input type="text" ng-model="corsproxyAddress">/
+        <input type="text" ng-model="ispnRestEndpoint">/{{currentCache.name}}
+        <br>
+        <input type="text" ng-model="cacheEntryKey" placeholder="cache entry key" ng-change="getEntry()">
+        <input type="text" ng-model="cacheEntryValue" placeholder="cache entry value">
+        <form ng-submit="putEntry()">
+            <input type="submit" value="putEntry"></form>
+        <h3>The value for key: <b>{{cacheEntryKey}}</b> is <b>{{returnedCacheEntryValue}}</b></h3>
+
     </div>
 </div>

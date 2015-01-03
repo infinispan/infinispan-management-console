@@ -1,15 +1,16 @@
 'use strict';
 
-describe('The main view', function () {
+describe('The main clusters view', function () {
+
+  var utils = require('../e2eUtils');
 
   beforeEach(function () {
-    browser.get('http://localhost:3000/index.html');
+    utils.defaultLogin();
+    // login page automatically redirects to #/clusters page, no action needed here
   });
 
-  it('list more than 5 awesome things', function () {
-    element.all(by.repeater('awesomeThing in awesomeThings')).count().then(function(count) {
-      expect(count > 5).toBeTruthy();
-    });
+  it('should contain 2 containers by default ', function () {
+    var clusters = element.all(by.repeater('cluster in clusters'));
+    expect(clusters.count()).toBe(2);
   });
-
 });

@@ -116,7 +116,7 @@ angular.module('managementConsole.api')
                 if (server.isRunning()) {
                     var serverGroup = this.serverGroups[server.group];
                     var serverProfile = this.profiles[serverGroup.profile];
-                    var caches = cluster.getCaches();
+                    var caches = cluster.getCachesNameMap();
                     for (var name in caches) {
                         var cache = caches[name];
                         promises.push(server.fetchCacheStats(cache));

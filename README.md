@@ -4,6 +4,13 @@
 - Install gulp globally (use sudo if needed): `npm install gulp -g`
 - run `build.sh` to instal local packages and client dependencies
 - NOTE: you will need to repeat the step above if there are some changes to package.json or bower.json
+- NOTE: you might want to consult Troubleshooting section of this README
+
+# Windows specific installation
+
+- You can download respective node.js installer here: http://nodejs.org/download/
+- After installation set up user specific environment properties *NODE_PATH* and *PATH* pointing to the installation location
+  - needed for running gulp from command prompt -- typically: C:\Users\You\AppData\Roaming\npm
 
 # Setting up the server (we need it for web application to fetch data, you do this only once)
 - you need JDK 7 or 8 and Maven
@@ -21,3 +28,15 @@
 - Run e2e tests on production code by running `gulp protractor:dist`
 - Run `gulp clean` to remove generated files like /dist/ and /.tmp/
 - Run `gulp clear-cache` to clean gulp cache
+
+#  Troubleshooting
+- If you meet: "Cannot find where you keep your Bower packages."
+  - Install bower globally (use sudo if needed): `npm install bower -g`
+  - run `bower install` from application root directory, it will install dependencies into ./src/main/bower_components
+
+- If you meet: "Error: watch ENOSPC"; try to increase number of watches:
+  - `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
+
+- If you meet: "Error: ENOENT, stat /path/to/index.html" try following clears:
+  - `gulp clean` `gulp clear-cache`
+

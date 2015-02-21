@@ -12,7 +12,8 @@ angular.module('managementConsole.api')
                 this.domain = domain;
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
-                this.caches = {};
+                this.caches = []; // desired to have caches in an array so we can filter out through their names
+                this.cachesNameMap = {}; // hashMap for fast Cache object referencing by cache name
             };
 
             Cluster.prototype.getModelController = function () {
@@ -26,7 +27,7 @@ angular.module('managementConsole.api')
             Cluster.prototype.refresh = function () {
                 return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
                     this.lastRefresh = new Date();
-                    this.caches = {};
+                    this.caches = [];
                     var cachePromises = [];
                     var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
                     for (var i = 0; i < cacheTypes.length; i++) {
@@ -35,7 +36,8 @@ angular.module('managementConsole.api')
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
                                     var cache = new CacheModel(name, cacheTypes[i], this);
-                                    this.caches[name] = cache;
+                                    this.caches.push(cache);
+                                    this.cachesNameMap[name] = cache;
                                     cachePromises.push(cache.refresh());
                                 }
                             }
@@ -51,8 +53,18 @@ angular.module('managementConsole.api')
                 return this.domain.getNodes();
             };
 
+            /**
+             * @returns {Array} caches in a particular Cluster as a common Array
+             */
             Cluster.prototype.getCaches = function () {
                 return this.caches;
+            };
+
+            /**
+             * @returns hashMap where Caches are mapped by their names
+             */
+            Cluster.prototype.getCachesNameMap = function () {
+                return this.cachesNameMap;
             };
 
             return Cluster;

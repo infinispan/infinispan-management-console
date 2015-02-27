@@ -42,7 +42,12 @@
     <!-- TOP ROW #2 START -->
     <div class="row">
         <div class="col-md-2 text-center">
-            <h4 style="color:   #009A31;">Available</h4>
+           <div ng-show="currentCluster.clusterAvailability === 'AVAILABLE'">
+              <p class="fa fa-check-square fa-1x available"> {{currentCluster.clusterAvailability}} </p>
+           </div>
+           <div ng-show="currentCluster.clusterAvailability !== 'AVAILABLE'">
+              <p class="fa fa-times-circle fa-1x unavailable"> UNAVAILABLE </p>
+           </div>
         </div>
         <div class="col-md-2 text-center">
             <span class="bigger-font"> {{currentCluster.caches.length || '?'}} </span>  <span class="smaller-font"> Caches</span>
@@ -73,7 +78,8 @@
                         <span style="font-size:16px; font-weight: bold;"> Servers</span> 
                         <br>
                         <div ng-repeat="node in currentCluster.getNodes()">
-                            <input type="checkbox" value="checkbox" name="caches">{{node.name}}
+                            <input type="checkbox" ng-model="serversCheckboxes[node.server]"
+                                   name="serverCheckboxFor{{node.server}}">{{node.name}}
                             <br>
                         </div>
                     </div>
@@ -138,13 +144,36 @@
                 </div>
 
                 <div ng-show="shared.currentCollection == 'caches'">
-                    <div ng-show="!currentCluster.caches || currentCluster.caches.length === 0">There are no caches to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.caches | filter:cacheOrNodeFilterQuery">
-                           <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
-                               <h4>{{cache.name}}</h4>
-                            <br>
-                        </a>
-                    </div>
+
+                   <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()">
+
+                         <div ng-show="!currentCluster.caches || currentCluster.caches.length === 0">There are no caches to show.</div>
+
+                            <div ng-show="serversCheckboxes[node.server]">
+
+                                 <h6>{{node.name}}</h6>
+
+                                 <div class="box col-md-2 nopadding"
+                                     ng-repeat="cache in currentCluster.getCachesByServerName(node.server) | filter:cacheOrNodeFilterQuery">
+
+                                       <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
+                                          <h4>{{cache.name}}</h4>
+                                          <div ng-show="cache.cacheStatus === 'RUNNING'">
+                                             <p class="fa fa-check-square fa-1x available"></p> {{cache.cacheStatus}}
+                                          </div>
+                                          <div ng-show="cache.cacheStatus !== 'RUNNING'">
+                                             <p class="fa fa-times-circle fa-1x unavailable"></p> {{cache.cacheStatus}}
+                                          </div>
+                                          <div ng-show="cache.cacheAvailability === 'AVAILABLE'">
+                                             <p class="fa fa-check-square fa-1x available"></p> {{cache.cacheAvailability}}
+                                          </div>
+                                          <div ng-show="cache.cacheAvailability !== 'AVAILABLE'">
+                                             <p class="fa fa-times-circle fa-1x unavailable"></p> {{cache.cacheAvailability}}
+                                          </div>
+                                       </a>
+                                 </div>
+                            </div>
+                   </div>
                 </div>
             </div>
             <!-- RIGHT COLUMN ROW #2 END -->

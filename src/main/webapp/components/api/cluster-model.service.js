@@ -13,6 +13,7 @@ angular.module('managementConsole.api')
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
                 this.caches = {};
+                this.availability = this.getAvailability();
             };
 
             Cluster.prototype.getModelController = function () {
@@ -27,6 +28,7 @@ angular.module('managementConsole.api')
                 return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
                     this.lastRefresh = new Date();
                     this.caches = {};
+                    this.getAvailability();
                     var cachePromises = [];
                     var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
                     for (var i = 0; i < cacheTypes.length; i++) {
@@ -45,7 +47,16 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
-            Cluster.prototype.getAvailability = function () {};
+            Cluster.prototype.getAvailability = function () {
+              // We are checking cluster availability on the first server
+              // Is here any was how to check cluster availability globally?
+              var resourcePathCacheContainer = this.domain.getFistServerResourceRuntimePath()
+                .concat('subsystem', 'infinispan', 'cache-container', this.name);
+
+              return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
+                this.availability = response.toUpperCase();
+              }.bind(this));
+            };
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();

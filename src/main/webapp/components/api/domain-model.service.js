@@ -26,6 +26,10 @@ angular.module('managementConsole.api')
                 return [];
             };
 
+            Domain.prototype.getFistServerResourceRuntimePath = function () {
+              return this.servers[0].getResourcePath();
+            };
+
             Domain.prototype.refresh = function () {
                 var promises = [];
                 var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {

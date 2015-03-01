@@ -15,7 +15,7 @@ angular.module('managementConsole.api')
                 this.caches = []; // desired to have caches in an array so we can filter out through their names
                 this.cachesNameMap = {}; // hashMap for fast Cache object referencing by cache name
                 this.cachesByServerName = {}; // serverName -> [caches]
-                this.clusterAvailability = this.refreshClusterAvailability();
+                this.availability = this.getAvailability();
             };
 
             Cluster.prototype.getModelController = function () {
@@ -28,7 +28,7 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.refresh = function () {
                 return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
-                    this.refreshClusterAvailability();
+                    this.getAvailability();
                     this.lastRefresh = new Date();
                     this.caches = [];
                     var cachePromises = [];
@@ -62,21 +62,19 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
-            Cluster.prototype.refreshClusterAvailability = function () {
+            Cluster.prototype.getAvailability = function () {
+              // Temporary: we are checking cluster availability on the first server
+              // Question: is here any was how to check cluster availability globally?
+              // Or we can introduce some rule cluster is available if all / at least one server are/is available
+              var resourcePathCacheContainer = this.domain.getFirstServerResourceRuntimePath()
+                .concat('subsystem', 'infinispan', 'cache-container', this.name);
 
-                // Temporary: we are checking cluster availability on the first server
-                // Question: is here any was how to check cluster availability globally?
-                var resourcePathCacheContainer = this.domain.getFistServerResourceRuntimePath()
-                        .concat('subsystem', 'infinispan', 'cache-container', this.name);
-
-                var promise = this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability');
-                promise.then(function(response) {
-                    this.clusterAvailability = response;
-                }.bind(this),
-                function(error) {
-                    console.log('Could not get cluster availability: ' + error);
-                }.bind(this));
+              return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
+                this.availability = response.toUpperCase();
+                console.log("Availability " + this.availability);
+              }.bind(this));
             };
+
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();

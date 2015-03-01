@@ -27,7 +27,7 @@ angular.module('managementConsole.api')
                 return [];
             };
 
-            Domain.prototype.getFistServerResourceRuntimePath = function () {
+            Domain.prototype.getFirstServerResourceRuntimePath = function () {
                 return this.servers[0].getResourcePath();
             };
 
@@ -108,7 +108,7 @@ angular.module('managementConsole.api')
             Domain.prototype.fetchCacheStatsForOneServer = function(serverName, cache) {
                 return this.serversNameMap[serverName].fetchCacheStats(cache);
             };
-        
+
             Domain.prototype.fetchCacheStats = function(cluster, cache) {
                 var promises = [];
                 for(var i=0; i<this.servers.length; i++) {

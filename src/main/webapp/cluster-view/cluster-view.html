@@ -41,13 +41,13 @@
 
     <!-- TOP ROW #2 START -->
     <div class="row">
-        <div class="col-md-2 text-center">
-           <div ng-show="currentCluster.clusterAvailability === 'AVAILABLE'">
-              <p class="fa fa-check-square fa-1x available"> {{currentCluster.clusterAvailability}} </p>
-           </div>
-           <div ng-show="currentCluster.clusterAvailability !== 'AVAILABLE'">
-              <p class="fa fa-times-circle fa-1x unavailable"> UNAVAILABLE </p>
-           </div>
+        <div class="col-md-2 text-left">
+            <div ng-show="currentCluster.availability === 'AVAILABLE'">
+                <p class="fa fa-1x available">AVAILABLE</p>
+            </div>
+            <div ng-show="currentCluster.availability !== 'AVAILABLE'">
+                <p class="fa fa-1x unavailable">UNAVAILABLE</p>
+            </div>
         </div>
         <div class="col-md-2 text-center">
             <span class="bigger-font"> {{currentCluster.caches.length || '?'}} </span>  <span class="smaller-font"> Caches</span>

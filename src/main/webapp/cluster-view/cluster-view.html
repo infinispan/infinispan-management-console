@@ -41,8 +41,13 @@
 
     <!-- TOP ROW #2 START -->
     <div class="row">
-        <div class="col-md-2 text-center">
-            <h4 style="color:   #009A31;">Available</h4>
+        <div class="col-md-2 text-left">
+            <div ng-show="currentCluster.availability === 'AVAILABLE'">
+                <p class="fa fa-1x available">AVAILABLE</p>
+            </div>
+            <div ng-show="currentCluster.availability !== 'AVAILABLE'">
+                <p class="fa fa-1x unavailable">UNAVAILABLE</p>
+            </div>
         </div>
         <div class="col-md-2 text-center">
             <span class="bigger-font"> {{currentCluster.caches.length || '?'}} </span>  <span class="smaller-font"> Caches</span>

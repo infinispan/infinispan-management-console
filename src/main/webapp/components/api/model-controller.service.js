@@ -90,6 +90,13 @@ angular.module('managementConsole.api')
                             deferred.reject();
                         }
                     }
+
+                    if (http.readyState === 4 && http.status === 500) {
+                        var error = http.responseText;
+                        // passing error further for particular use-case based handling
+                        // TODO: or do we want some global error handling here?
+                        deferred.reject(error);
+                    }
                 };
                 http.send(JSON.stringify(op));
                 return deferred.promise;

@@ -16,6 +16,7 @@ angular.module('managementConsole.api')
                 this.serverGroups = {};
                 this.profiles = {};
                 this.servers = [];
+                this.serversNameMap = {}; // hashMap for Server object referencing by server name (e.g.: 'server-one')
             };
 
             Domain.prototype.getModelController = function () {
@@ -24,6 +25,10 @@ angular.module('managementConsole.api')
 
             Domain.prototype.getResourcePath = function () {
                 return [];
+            };
+
+            Domain.prototype.getFirstServerResourceRuntimePath = function () {
+                return this.servers[0].getResourcePath();
             };
 
             Domain.prototype.refresh = function () {
@@ -61,6 +66,7 @@ angular.module('managementConsole.api')
                                 if (serverName !== undefined) {
                                     var server = new ServerModel(hostName, serverName, host.server[serverName]['server-group'], this);
                                     this.servers.push(server);
+                                    this.serversNameMap[serverName] = server;
                                     serverPromises.push(server.refresh());
                                 }
                             }
@@ -94,7 +100,15 @@ angular.module('managementConsole.api')
             Domain.prototype.getNodes = function () {
                 return this.servers;
             };
-        
+
+            Domain.prototype.getServersNameMap = function () {
+                return this.serversNameMap;
+            };
+
+            Domain.prototype.fetchCacheStatsForOneServer = function(serverName, cache) {
+                return this.serversNameMap[serverName].fetchCacheStats(cache);
+            };
+
             Domain.prototype.fetchCacheStats = function(cluster, cache) {
                 var promises = [];
                 for(var i=0; i<this.servers.length; i++) {
@@ -116,7 +130,7 @@ angular.module('managementConsole.api')
                 if (server.isRunning()) {
                     var serverGroup = this.serverGroups[server.group];
                     var serverProfile = this.profiles[serverGroup.profile];
-                    var caches = cluster.getCaches();
+                    var caches = cluster.getCachesNameMap();
                     for (var name in caches) {
                         var cache = caches[name];
                         promises.push(server.fetchCacheStats(cache));

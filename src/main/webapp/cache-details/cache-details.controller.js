@@ -16,7 +16,7 @@ angular.module('managementConsole')
             var server = modelController.getServer();
             var clusters = server.getClusters();
             $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
-            $scope.caches = $scope.currentCluster.getCaches();
+            $scope.caches = $scope.currentCluster.getCachesNameMap();
             $scope.currentCache = $scope.caches[$stateParams.cacheName];
             $scope.currentCacheStats = {
                 'cache-status': '',

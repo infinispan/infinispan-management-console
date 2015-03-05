@@ -19,12 +19,13 @@ angular.module('managementConsole')
             $scope.caches = $scope.currentCluster.getCaches();
             $scope.currentCache = $scope.caches[$stateParams.cacheName];
             $scope.currentCacheStats = {
-                'cache-status': '',
-                'nodeStats': []
+                'cacheStatus': '',
+                'firstServerStats': []
             };
             var p = server.fetchCacheStats($scope.currentCluster, $scope.currentCache);
             p.then(function (response) {
                 $scope.currentCacheStats.nodeStats = response;
+                $scope.currentCacheStats.firstServerStats = response[0];
             });
             
     }]);

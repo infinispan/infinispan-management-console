@@ -29,35 +29,35 @@
     <div class="cache-details">
         <div class="cache-name">{{currentCache.name}}</div>
         <div class="cache-status">
-            <span class="cache-status-label">Status:</span>  <span class="available">{{currentCacheStats['cache-status']}}</span>
+            <span class="cache-status-label">Status:</span>  <span class="available">{{currentCacheStats.firstServerStats['cache-status']}}</span>
         </div>
         <div class="cache-details row cache-information">
-            <div class="col-md-3">
-                <div class="col-md-7">
+            <div class="col-md-6">
+                <div class="col-md-8">
                     <div>Average read time:</div>
                     <div>Average write time:</div>
-                    <div>Average size of entry:</div>
+                    <div>Average remove time:</div>
                     <div>Total number of entries:</div>
                 </div>
-                <div class="col-md-5">
-                    <div>{{currentCache.data['average-read-time']}} ms</div>
-                    <div>{{currentCache.data['average-write-time']}} ms</div>
-                    <div>N/A</div>
-                    <div>{{currentCache.data['number-of-entries']}}</div>
+                <div class="col-md-4">
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-average-read-time']}} ms</div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-average-write-time']}} ms</div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-average-remove-time']}} ms</div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-number-of-entries']}}</div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="col-md-7">
+            <div class="col-md-6">
+                <div class="col-md-8">
                     <div>Total number of hits:</div>
                     <div>Total number of misses:</div>
-                    <div>Average replication time:</div>
-                    <div>Success ratio:</div>
+                    <div>Total passivations:</div>
+                    <div>Total invalidations:</div>
                 </div>
-                <div class="col-md-5">
-                    <div>{{currentCache.data['hits']}}</div>
-                    <div>{{currentCache.data['misses']}}</div>
-                    <div>{{currentCache.data['average-replication-time']}}</div>
-                    <div>{{currentCache.data['success-ratio']}}</div>
+                <div class="col-md-4">
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-hits']}}</div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-misses']}} </div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-passivations']}} </div>
+                    <div>{{currentCacheStats.firstServerStats['clusterwide-invalidations']}} </div>
                 </div>
             </div>
         </div>

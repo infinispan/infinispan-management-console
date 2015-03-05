@@ -11,6 +11,7 @@ angular.module('managementConsole.api')
                 this.modelController = cluster.getModelController();
                 this.lastRefresh = null;
                 this.data = null;
+                this.show = true;
             };
 
             Cache.prototype.getModelController = function () {

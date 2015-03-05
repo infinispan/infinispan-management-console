@@ -23,7 +23,10 @@
     <div class="node-details">
         <div class="node-name">{{currentNode.name}}</div>
         <div class="node-status">
-            <span class="node-status-label">Status:</span>  <span class="node-status-value available">{{currentNode.state}}</span>
+            <span class="node-status-label">Status:</span>
+            <span class="node-status-value"
+                  ng-class="(currentNode.isRunning()) ? 'available' : 'unavailable'">{{currentNode.state}}
+            </span>
         </div>
         <div class="node-details row node-information">
             <div class="col-md-3">
@@ -50,7 +53,7 @@
                 </div>
             </div>
             <div class="col-md-3 text-right">
-                <span class="search-text"> Search: </span> 
+                <span class="search-text"> Search: </span>
                 <input type="search" class="search-field">
             </div>
         </div>

@@ -4,13 +4,13 @@
     <!-- TOP ROW #1 START -->
     <div class="row">
         <div class="col-md-2">
-            <select class="selectpicker" ng-model="currentCluster" ng-options="cluster.name for cluster in clusters" />
+            <select class="selectpicker" ng-model="currentCluster" ng-options="cluster.name for cluster in clusters"/>
         </div>
         <div class="col-md-2 text-center">
-            <span class="bigger-font"> {{currentCluster.getNodes().length || '?'}} </span>  <span class="smaller-font"> Nodes</span>
+            <span class="bigger-font"> {{currentCluster.getNodes().length || '?'}} </span> <span class="smaller-font"> Nodes</span>
         </div>
         <div class="col-md-3 text-center">
-            <a class="bigger-font link-jobs">?</a>  <span class="smaller-font"> current execution jobs</span>
+            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> current execution jobs</span>
         </div>
         <div class="col-md-2">
         </div>
@@ -42,18 +42,16 @@
     <!-- TOP ROW #2 START -->
     <div class="row">
         <div class="col-md-2 text-left">
-            <div ng-show="currentCluster.availability === 'AVAILABLE'">
-                <p class="fa fa-1x available">AVAILABLE</p>
-            </div>
-            <div ng-show="currentCluster.availability !== 'AVAILABLE'">
-                <p class="fa fa-1x unavailable">UNAVAILABLE</p>
-            </div>
+            <p class="fa fa-1x"
+               ng-class="currentClusterAvailability() ? 'available' : 'unavailable'">
+                {{currentCluster.isAvailable() ? 'AVAILABLE' : 'UNAVAILABLE'}}
+            </p>
         </div>
         <div class="col-md-2 text-center">
-            <span class="bigger-font"> {{currentCluster.caches.length || '?'}} </span>  <span class="smaller-font"> Caches</span>
+            <span class="bigger-font"> {{currentCluster.getCachesAsArray().length || '?'}} </span> <span class="smaller-font"> Caches</span>
         </div>
         <div class="col-md-3 text-center">
-            <a class="bigger-font link-jobs">?</a>  <span class="smaller-font"> complete tasks</span>
+            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> complete tasks</span>
         </div>
         <div class="col-md-5">
         </div>
@@ -64,47 +62,38 @@
 
         <!-- LEFT COLUMN START -->
         <div class="col-md-2 borders stretch-full" style="background-color:#F0F0F0;">
+            <span>
+                <button class="slider-max button-as-link" ng-click="clearFilters()">Clear all filters</button>
+            </span>
+
             <div class="row" style="padding:10px;">
                 <div class="col-md-12">
-                    <div ng-show="shared.currentCollection == 'nodes'">
-                        <span style="font-size:16px; font-weight: bold;"> Caches</span> 
+                    <div ng-show="isNodesView()">
+                        <span style="font-size:16px; font-weight: bold;"> Caches</span>
                         <br>
+
                         <div ng-repeat="cache in currentCluster.caches">
                             <input type="checkbox" value="checkbox" name="caches">{{cache.name}}
                             <br>
                         </div>
                     </div>
-                    <div ng-show="shared.currentCollection == 'caches'">
-                        <span style="font-size:16px; font-weight: bold;"> Servers</span> 
+                    <div ng-show="isCachesView()">
+                        <span style="font-size:16px; font-weight: bold;"> Servers</span>
                         <br>
+
                         <div ng-repeat="node in currentCluster.getNodes()">
                             <input type="checkbox" value="checkbox" name="caches">{{node.name}}
                             <br>
                         </div>
                     </div>
 
-                    <br>
-                    <span class="slider-text"> Average read time </span> 
-                    <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
-                    <br>
-                    <br>
-
-                    <span class="slider-text"> Average read time </span> 
-                    <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
-                    <br>
-                    <br>
-
-                    <span class="slider-text"> Average read time </span> 
-                    <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
-                    <br>
-                    <br>
-
+                    <div ng-repeat="slider in sliders">
+                        <br>
+                        <br>
+                        <span>{{slider.name}}</span>
+                        <slider min="initialMin" max="initialMax" step=10 from="slider.from" to="slider.to"
+                                unit="'ms'"></slider>
+                    </div>
                 </div>
             </div>
         </div>
@@ -117,11 +106,14 @@
             <div class="row">
                 <div class="col-md-12" style="padding-top:20px; padding-bottom:20px;">
                     <input type="search" class="search-field">
+
                     <div style="float:left;">
-                        <span class="glyphicon glyphicon-th-large header-links-container" ng-class="{selected: shared.currentCollection == 'nodes'}">
+                        <span class="glyphicon glyphicon-th-large header-links-container"
+                              ng-class="{selected: isNodesView()}">
               <a class="header-links" ng-click="shared.currentCollection = 'nodes'"> Nodes </a>
             </span>
-                        <span class="glyphicon glyphicon-tasks header-links-container" ng-class="{selected: shared.currentCollection == 'caches'}">
+                        <span class="glyphicon glyphicon-tasks header-links-container"
+                              ng-class="{selected: isCachesView()}">
               <a class="header-links" ng-click="shared.currentCollection = 'caches'"> Caches </a>
             </span>
                     </div>
@@ -131,27 +123,46 @@
 
             <!-- RIGHT COLUMN ROW #2 START -->
             <div class="row" style="padding-left:15px !important; margin: 0px important!;">
-                <div ng-show="shared.currentCollection == 'nodes'">
-                    <div ng-show="!currentCluster.getNodes() || currentCluster.getNodes().length === 0">There are no nodes to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()">
-                        <a class="text-center" ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
-              {{node.name}} <br><br>
-            </a>
+                <div ng-show="isNodesView()">
+                    <div ng-show="!currentCluster.hasNodes()">There are no nodes to show.</div>
+                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()" ng-show="node.show">
+                        <a class="text-center"
+                           ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
+                            {{node.name}} <br>
+                            <div ng-show="isZoomedIn()">
+                                <h6>5 caches</h6>
+                                <h6>32 writes/ms</h6>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
-                <div ng-show="shared.currentCollection == 'caches'">
-                    <div ng-show="!currentCluster.caches || currentCluster.caches.length === 0">There are no caches to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.caches">
-                        <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
-                            <h4>{{cache.name}}</h4> 
+                <div ng-show="isCachesView()">
+                    <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
+                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.getCachesAsArray()" ng-show="cache.show">
 
-                            <br>
+                        <!-- from PR #7 we will have: -->
+                        <!-- prepared api for use: {{currentCluster.getCache(cName).availability}}-->
+                        <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
+                            <h4>{{cache.name}}</h4><br>
+
+                            <div ng-show="isZoomedIn()">
+                                <h6>{{currentCluster.getNodes().length}} nodes</h6>
+                                <h6>35 writes/ms</h6>
+                            </div>
                         </a>
                     </div>
                 </div>
             </div>
             <!-- RIGHT COLUMN ROW #2 END -->
+
+            <div class="row right" style="padding-right:15px !important; margin: 0px !important;">
+                <br><br><br><br><br><br>
+                <span>Zoom</span>
+                <slider min=0 max=1 value="zoomValue"></slider>
+            </div>
+
+            <!-- RIGHT COLUMN ROW #3 END -->
 
         </div>
         <!-- RIGHT COLUMN END -->

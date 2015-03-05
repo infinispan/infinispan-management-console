@@ -9,15 +9,14 @@
                 <div class="list-group-item row" ng-repeat="cluster in clusters">
                     <div class="col-md-4">
                         <a href="#/cluster/{{cluster.name}}"><h4>{{cluster.name}}</h4>
-                            <div ng-show="cluster.availability === 'AVAILABLE'">
-                                <p class="fa fa-check-square fa-1x available"> {{cluster.availability}} </p>
-                            </div>
-                            <div ng-show="cluster.availability !== 'AVAILABLE'">
-                                <p class="fa fa-times-circle fa-1x unavailable"> UNAVAILABLE </p>
+                            <div>
+                                <p class="fa fa-check-square fa-1x"
+                                   ng-class="(cluster.isAvailable())?'available':'unavailable'">
+                                    {{cluster.isAvailable()?cluster.availability:'UNAVAILABLE'}}</p>
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-4">? Nodes
+                    <div class="col-md-4">{{cluster.getNodes().length}} nodes
                     </div>
                     <div class="col-md-3 dropdown dropdown-menu-right">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">

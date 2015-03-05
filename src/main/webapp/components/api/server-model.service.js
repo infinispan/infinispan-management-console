@@ -15,6 +15,7 @@ angular.module('managementConsole.api')
                 this.domain = domain;
                 this.lastRefresh = null;
                 this.state = 'UNKNOWN';
+                this.show = true;
             };
 
             Server.prototype.getResourcePath = function () {

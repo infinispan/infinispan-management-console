@@ -98,7 +98,7 @@ angular.module('managementConsole.api')
             Domain.prototype.getNodes = function () {
                 return this.servers;
             };
-        
+
             Domain.prototype.fetchCacheStats = function(cluster, cache) {
                 var promises = [];
                 for(var i=0; i<this.servers.length; i++) {
@@ -114,7 +114,7 @@ angular.module('managementConsole.api')
                 var q = $q.all(promises);
                 return q;
             };
-        
+
             Domain.prototype.fetchNodeStats = function(cluster, server) {
                 var promises = [];
                 if (server.isRunning()) {
@@ -131,11 +131,13 @@ angular.module('managementConsole.api')
             };
 
             Domain.prototype.fetchAggregateNodeStats = function (cluster, server) {
-              var data;
+              var deferred = $q.defer();
               if (server.isRunning()) {
-                data = server.fetchAggregateNodeStats(cluster);
+                deferred.resolve(server.fetchAggregateNodeStats(cluster));
+              } else {
+                deferred.resolve(undefined);
               }
-              return data;
+              return deferred.promise;
             };
 
             return Domain;

@@ -4,7 +4,8 @@ angular.module('managementConsole.api')
     .factory('ClusterModel', [
     '$q',
     'CacheModel',
-    function ($q, CacheModel) {
+    'utils',
+    function ($q, CacheModel, utils) {
             var Cluster = function (name, profile, path, domain) {
                 this.name = name;
                 this.profile = profile;
@@ -58,6 +59,11 @@ angular.module('managementConsole.api')
               }.bind(this));
             };
 
+            Cluster.prototype.isAvailable = function () {
+              return this.availability === 'AVAILABLE';
+            };
+
+
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();
             };
@@ -66,6 +72,21 @@ angular.module('managementConsole.api')
                 return this.caches;
             };
 
+            Cluster.prototype.getCachesAsArray = function () {
+              var caches = this.getCaches();
+              return Object.keys(caches).map(function (key) {
+                return caches[key];
+              });
+            };
+
+            Cluster.prototype.hasCaches = function () {
+              return utils.isNonEmptyArray(this.getCachesAsArray());
+            };
+
+            Cluster.prototype.hasNodes = function () {
+              return utils.isNonEmptyArray(this.getNodes());
+            };
+      
             return Cluster;
     }
   ]);

@@ -64,6 +64,9 @@
 
         <!-- LEFT COLUMN START -->
         <div class="col-md-2 borders stretch-full" style="background-color:#F0F0F0;">
+            <span>
+                <button class="slider-max button-as-link" ng-click="clearFilters()">Clear all filters</button>
+            </span>
             <div class="row" style="padding:10px;">
                 <div class="col-md-12">
                     <div ng-show="shared.currentCollection == 'nodes'">
@@ -83,27 +86,35 @@
                         </div>
                     </div>
 
-                    <br>
-                    <span class="slider-text"> Average read time </span> 
-                    <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
-                    <br>
-                    <br>
 
-                    <span class="slider-text"> Average read time </span> 
                     <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
-                    <br>
-                    <br>
+                    <span>Average read time</span>
+                    <div id="average-read-time"></div>
+                    <span class="slider-min" id="average-read-time-value-lower"></span>
+                    <span class="slider-max" id="average-read-time-value-upper"></span>
 
-                    <span class="slider-text"> Average read time </span> 
-                    <br>
-                    <div class="slider-one"></div>
-                    <span class="slider-min"> 100 </span>  <span class="slider-max"> 200 </span> 
+
                     <br>
                     <br>
+                    <span>Average write time</span>
+                    <div id="average-write-time"></div>
+                    <span class="slider-min" id="average-write-time-value-lower"></span>
+                    <span class="slider-max" id="average-write-time-value-upper"></span>
+
+                    <br>
+                    <br>
+                    <span>Average remove time</span>
+
+                    <div id="average-remove-time"></div>
+                    <span class="slider-min" id="average-remove-time-value-lower"></span>
+                    <span class="slider-max" id="average-remove-time-value-upper"></span>
+
+                    <br>
+                    <br>
+                    <span>Average replication time</span>
+                    <div id="average-replication-time"></div>
+                    <span class="slider-min" id="average-replication-time-value-lower"></span>
+                    <span class="slider-max" id="average-replication-time-value-upper"></span>
 
                 </div>
             </div>
@@ -142,16 +153,19 @@
 
                 <div ng-show="shared.currentCollection == 'caches'">
                     <div ng-show="!currentCluster.caches || currentCluster.caches.length === 0">There are no caches to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.caches">
-                        <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
-                            <h4>{{cache.name}}</h4> 
-
+                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.caches" ng-show="cache.show">
+                       <!-- from PR #7 we will have: -->
+                       <!-- prepared api for use: {{currentCluster.getCache(cName).availability}}-->
+                       <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
+                            <h4>{{cache.name}}</h4>
                             <br>
                         </a>
                     </div>
                 </div>
             </div>
             <!-- RIGHT COLUMN ROW #2 END -->
+
+            <!-- RIGHT COLUMN ROW #3 END -->
 
         </div>
         <!-- RIGHT COLUMN END -->

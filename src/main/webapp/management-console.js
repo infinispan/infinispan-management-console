@@ -3,8 +3,7 @@
 angular.module('managementConsole', [
   'managementConsole.api',
   'ui.router',
-  'ui.bootstrap',
-  'ui.bootstrap-slider'
+  'ui.bootstrap'
 ])
 
 .config(['$stateProvider', '$urlRouterProvider',

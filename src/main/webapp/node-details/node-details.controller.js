@@ -33,10 +33,16 @@ angular.module('managementConsole')
             }
             $scope.currentNodeStats = {
                 'cache-status': '',
-                'cacheStats': []
+                'cacheStats': [],
+                'containerStats':[]
             };
             var p = server.fetchNodeStats($scope.currentCluster, $scope.currentNode);
             p.then(function (response) {
                 $scope.currentNodeStats.cacheStats = response;
+            });
+
+            var p2 = server.fetchAggregateNodeStats($scope.currentCluster, $scope.currentNode);
+            p2.then(function (response) {
+              $scope.currentNodeStats.containerStats = response;
             });
     }]);

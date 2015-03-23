@@ -30,7 +30,7 @@ angular.module('managementConsole.api')
                     this.state = response.toUpperCase();
                 }.bind(this));
             };
-        
+
             Server.prototype.fetchCacheStats = function(cache) {
                 return this.getModelController()
                     .readResource(this.getResourcePath().concat('subsystem', 'infinispan', 'cache-container', cache.cluster.name, cache.type, cache.name),
@@ -40,7 +40,15 @@ angular.module('managementConsole.api')
                     return response;
                 }.bind(this));
             };
-        
+
+            Server.prototype.fetchAggregateNodeStats = function (cluster) {
+              return this.getModelController()
+                .readResource(this.getResourcePath().concat('subsystem', 'infinispan', 'cache-container', cluster.name),
+                false, true).then(function (response) {
+                  return response;
+                }.bind(this));
+            };
+
             Server.prototype.isRunning = function() {
                 return this.state === 'RUNNING';
             };

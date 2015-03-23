@@ -126,6 +126,14 @@ angular.module('managementConsole.api')
                 return q;
             };
 
+            Domain.prototype.fetchAggregateNodeStats = function (cluster, server) {
+              var data;
+              if (server.isRunning()) {
+                data = server.fetchAggregateNodeStats(cluster);
+              }
+              return data;
+            };
+
             return Domain;
     }
   ]);

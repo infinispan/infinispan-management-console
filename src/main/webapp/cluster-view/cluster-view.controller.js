@@ -5,8 +5,9 @@ angular.module('managementConsole')
     '$scope',
     '$stateParams',
     '$state',
+    '$q',
     'modelController',
-    function ($scope, $stateParams, $state, modelController) {
+    function ($scope, $stateParams, $state, $q, modelController) {
       if (!modelController.isAuthenticated()) {
         $state.go('/logout');
       }
@@ -24,31 +25,66 @@ angular.module('managementConsole')
         }
       });
 
+      $scope.isNodesView = function (){
+        return $scope.shared.currentCollection === 'nodes';
+      };
+
+      $scope.isCachesView = function (){
+        return $scope.shared.currentCollection === 'caches';
+      };
+
       // define sliders
       var sliderNames = ['average-read-time', 'average-write-time', 'average-remove-time', 'average-replication-time'];
 
       $scope.clearFilters = function () {
+
+        //reset all sliders to initial values
         for (var i = 0; i < sliderNames.length; i++) {
           var slider = $("#" + sliderNames[i]);
           slider.val([0, 60000]);
         }
+
+        //show all caches
         var cachesMap = $scope.currentCluster.getCaches();
         for (var k in cachesMap) {
           var cache = cachesMap[k];
           cache.show = true;
         }
-      }
 
-      var filterOutCaches = function () {
+        //show all nodes
+        var server = modelController.getServer();
+        var nodes = server.getNodes();
+        for (var i = 0; i < nodes.length; i++) {
+          nodes[i].show = true;
+        }
+      };
+
+      var filterView = function () {
+        var filterChangedName = $(this).context.id;
+        if ($scope.isCachesView()) {
+          filterOutCaches(filterChangedName);
+        } else if ($scope.isNodesView()) {
+          filterOutNodes(filterChangedName);
+        }
+      };
+
+      var filterOutCaches = function (changedFilter) {
         var cachesMap = $scope.currentCluster.getCaches();
         for (var k in cachesMap) {
           // do checks
-          var filterChangedName = $(this).context.id; //metric i.e. statistic we are checking
-          var slid = $("#" + filterChangedName);
+          var slid = $("#" + changedFilter);
           var lowerValue = slid.val()[0];
           var upperValue = slid.val()[1];
-          filterCacheVisibility(filterChangedName, cachesMap[k], lowerValue, upperValue);
+          filterCacheVisibility(changedFilter, cachesMap[k], lowerValue, upperValue);
         }
+      };
+
+      var filterOutNodes = function (changedFilter) {
+        // do checks
+        var slid = $("#" + changedFilter);
+        var lowerValue = slid.val()[0];
+        var upperValue = slid.val()[1];
+        filterNodeVisibility(changedFilter, lowerValue, upperValue);
       };
 
 
@@ -80,7 +116,7 @@ angular.module('managementConsole')
         // e.g.: slider-avg-write-time-value-lower
         sliderElement.Link('lower').to($("#" + sliderNames[i] + "-value-lower"));
         sliderElement.Link('upper').to($("#" + sliderNames[i] + "-value-upper"));
-        sliderElement.on('change', filterOutCaches);
+        sliderElement.on('change', filterView);
       }
 
       var filterCacheVisibility = function (statisticName, cache, lowerValue, upperValue) {
@@ -88,6 +124,26 @@ angular.module('managementConsole')
         p.then(function (response) {
           var statValue = response[0][statisticName];
           cache.show = (lowerValue <= statValue && statValue <= upperValue);
+        });
+      };
+
+      var filterNodeVisibility = function (statisticName, lowerValue, upperValue) {
+        var server = modelController.getServer();
+        var nodes = server.getNodes();
+        var promises = [];
+        for (var i = 0; i < nodes.length; i++) {
+          promises.push(server.fetchAggregateNodeStats($scope.currentCluster, nodes[i]));
+        }
+        var p = $q.all(promises);
+        p.then(function (responses) {
+          var resp = undefined;
+          for (var i = 0; i < responses.length; i++) {
+            resp = responses[i];
+            if (resp) {
+              var statValue = resp[statisticName];
+              nodes[i].show = (lowerValue <= statValue && statValue <= upperValue);
+            }
+          }
         });
       };
     }]);

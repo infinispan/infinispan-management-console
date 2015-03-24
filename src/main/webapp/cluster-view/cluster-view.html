@@ -69,7 +69,7 @@
             </span>
             <div class="row" style="padding:10px;">
                 <div class="col-md-12">
-                    <div ng-show="shared.currentCollection == 'nodes'">
+                    <div ng-show="isNodesView()">
                         <span style="font-size:16px; font-weight: bold;"> Caches</span> 
                         <br>
                         <div ng-repeat="cache in currentCluster.caches">
@@ -77,7 +77,7 @@
                             <br>
                         </div>
                     </div>
-                    <div ng-show="shared.currentCollection == 'caches'">
+                    <div ng-show="isCachesView()">
                         <span style="font-size:16px; font-weight: bold;"> Servers</span> 
                         <br>
                         <div ng-repeat="node in currentCluster.getNodes()">
@@ -129,10 +129,10 @@
                 <div class="col-md-12" style="padding-top:20px; padding-bottom:20px;">
                     <input type="search" class="search-field">
                     <div style="float:left;">
-                        <span class="glyphicon glyphicon-th-large header-links-container" ng-class="{selected: shared.currentCollection == 'nodes'}">
+                        <span class="glyphicon glyphicon-th-large header-links-container" ng-class="{selected: isNodesView()}">
               <a class="header-links" ng-click="shared.currentCollection = 'nodes'"> Nodes </a>
             </span>
-                        <span class="glyphicon glyphicon-tasks header-links-container" ng-class="{selected: shared.currentCollection == 'caches'}">
+                        <span class="glyphicon glyphicon-tasks header-links-container" ng-class="{selected: isCachesView()}">
               <a class="header-links" ng-click="shared.currentCollection = 'caches'"> Caches </a>
             </span>
                     </div>
@@ -142,16 +142,16 @@
 
             <!-- RIGHT COLUMN ROW #2 START -->
             <div class="row" style="padding-left:15px !important; margin: 0px important!;">
-                <div ng-show="shared.currentCollection == 'nodes'">
+                <div ng-show="isNodesView()">
                     <div ng-show="!currentCluster.getNodes() || currentCluster.getNodes().length === 0">There are no nodes to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()">
+                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()" ng-show="node.show">
                         <a class="text-center" ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
               {{node.name}} <br><br>
             </a>
                     </div>
                 </div>
 
-                <div ng-show="shared.currentCollection == 'caches'">
+                <div ng-show="isCachesView()">
                     <div ng-show="!currentCluster.caches || currentCluster.caches.length === 0">There are no caches to show.</div>
                     <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.caches" ng-show="cache.show">
                        <!-- from PR #7 we will have: -->

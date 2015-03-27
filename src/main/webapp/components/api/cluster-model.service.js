@@ -86,7 +86,7 @@ angular.module('managementConsole.api')
             Cluster.prototype.hasNodes = function () {
               return utils.isNonEmptyArray(this.getNodes());
             };
-      
+
             return Cluster;
     }
   ]);

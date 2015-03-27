@@ -2,6 +2,7 @@
 
 angular.module('managementConsole', [
   'managementConsole.api',
+  'managementConsole.filters',
   'ui.router',
   'ui.bootstrap'
 ])

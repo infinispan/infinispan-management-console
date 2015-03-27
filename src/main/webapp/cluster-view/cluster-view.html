@@ -105,7 +105,7 @@
             <!-- RIGHT COLUMN ROW #1 START -->
             <div class="row">
                 <div class="col-md-12" style="padding-top:20px; padding-bottom:20px;">
-                    <input type="search" class="search-field">
+                    <input type="search" class="search-field" ng-model="searchNameQuery" placeholder="Search caches or nodes">
 
                     <div style="float:left;">
                         <span class="glyphicon glyphicon-th-large header-links-container"
@@ -125,7 +125,7 @@
             <div class="row" style="padding-left:15px !important; margin: 0px important!;">
                 <div ng-show="isNodesView()">
                     <div ng-show="!currentCluster.hasNodes()">There are no nodes to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes()" ng-show="node.show">
+                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes() | filter: {name: searchNameQuery}" ng-show="node.show">
                         <a class="text-center"
                            ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
                             {{node.name}} <br>
@@ -139,7 +139,7 @@
 
                 <div ng-show="isCachesView()">
                     <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.getCachesAsArray()" ng-show="cache.show">
+                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.getCachesAsArray() | filter: {name: searchNameQuery}" ng-show="cache.show">
 
                         <!-- from PR #7 we will have: -->
                         <!-- prepared api for use: {{currentCluster.getCache(cName).availability}}-->

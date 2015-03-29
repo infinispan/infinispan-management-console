@@ -23,7 +23,9 @@
     <div class="node-details">
         <div class="node-name">{{currentNode.name}}</div>
         <div class="node-status">
-            <span class="node-status-label">Status:</span>  <span class="node-status-value available">{{currentNode.state}}</span>
+            <span class="node-status-label">Status:</span>
+            <span ng-show="currentNode.isRunning()" class="node-status-value available">{{currentNode.state}}</span>
+            <span ng-show="!currentNode.isRunning()" class="node-status-value unavailable">{{currentNode.state}}</span>
         </div>
         <div class="node-details row node-information">
             <div class="col-md-3">

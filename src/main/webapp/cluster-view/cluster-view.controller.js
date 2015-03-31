@@ -33,6 +33,27 @@ angular.module('managementConsole')
         return $scope.shared.currentCollection === 'caches';
       };
 
+      $scope.zoomedIn = false;
+
+      var zoomChanged = function () {
+        var slid = $("#zoom");
+        var zoomValue = slid.val();
+        $scope.zoomedIn = parseInt(zoomValue) === 1 ? true : false;
+        $scope.$apply();
+      };
+
+      var zoomSliderElement = $("#zoom");
+      zoomSliderElement.noUiSlider({
+        start: [0],
+        step:1,
+        range: {
+          'min': [0],
+          'max': [1]
+        }
+      });
+      zoomSliderElement.Link('lower').to($("#zoom-value"));
+      zoomSliderElement.on('change', zoomChanged);
+
       // define sliders
       var sliderNames = ['average-read-time', 'average-write-time', 'average-remove-time', 'average-replication-time'];
 

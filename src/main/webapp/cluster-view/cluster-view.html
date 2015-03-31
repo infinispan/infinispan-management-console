@@ -149,7 +149,9 @@
                          ng-show="node.show">
                         <a class="text-center"
                            ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
-                            {{node.name}} <br><br>
+                            {{node.name}} <br>
+                            <h6 ng-show="zoomedIn">5 caches</h6>
+                            <h6 ng-show="zoomedIn">32 writes/ms</h6>
                         </a>
                     </div>
                 </div>
@@ -161,11 +163,22 @@
                        <!-- prepared api for use: {{currentCluster.getCache(cName).availability}}-->
                        <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
                             <h4>{{cache.name}}</h4><br>
+                           <h6 ng-show="zoomedIn">{{currentCluster.getNodes().length}} nodes</h6>
+                           <h6 ng-show="zoomedIn">35 writes/ms</h6>
                         </a>
                     </div>
                 </div>
             </div>
             <!-- RIGHT COLUMN ROW #2 END -->
+
+            <div class="row right" style="padding-right:15px !important; margin: 0px !important;">
+                <br><br><br><br><br><br>
+                <span>Zoom</span>
+
+                <div id="zoom"></div>
+                <span class="slider-min" id="0">0</span>
+                <span class="slider-max" id="1">1</span>
+            </div>
 
             <!-- RIGHT COLUMN ROW #3 END -->
 

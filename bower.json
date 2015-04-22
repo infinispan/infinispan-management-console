@@ -2,7 +2,6 @@
   "name": "managementConsole",
   "version": "0.0.0",
   "dependencies": {
-    "modernizr": "2.8.x",
     "angular": "1.2.x",
     "angular-ui-router": "0.2.x",
     "bootstrap": "3.2.x",

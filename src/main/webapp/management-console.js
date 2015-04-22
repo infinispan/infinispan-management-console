@@ -11,7 +11,7 @@ angular.module('managementConsole', [
         $stateProvider
             .state('login', {
                 url: '/login',
-                templateUrl: 'webapp/login/login.html',
+                templateUrl: 'login/login.html',
                 controller: 'LoginCtrl'
             })
             .state('logout', {
@@ -19,27 +19,27 @@ angular.module('managementConsole', [
             })
             .state('clustersView', {
                 url: '/clusters',
-                templateUrl: 'webapp/clusters-view/clusters-view.html',
+                templateUrl: 'clusters-view/clusters-view.html',
                 controller: 'ClustersViewCtrl'
             })
             .state('clusterView', {
                 url: '/cluster/:clusterName',
-                templateUrl: 'webapp/cluster-view/cluster-view.html',
+                templateUrl: 'cluster-view/cluster-view.html',
                 controller: 'ClusterViewCtrl'
             })
             .state('nodeDetails', {
                 url: '/cluster/:clusterName/node/:nodeName',
-                templateUrl: 'webapp/node-details/node-details.html',
+                templateUrl: 'node-details/node-details.html',
                 controller: 'NodeDetailsCtrl'
             })
             .state('cacheDetails', {
                 url: '/cluster/:clusterName/cache/:cacheName',
-                templateUrl: 'webapp/cache-details/cache-details.html',
+                templateUrl: 'cache-details/cache-details.html',
                 controller: 'CacheDetailsCtrl'
             })
             .state('error404', {
                 url: '/error404',
-                templateUrl: 'webapp/error404/error404.html',
+                templateUrl: 'error404/error404.html',
             });
         $urlRouterProvider
             .when('/', '/login')

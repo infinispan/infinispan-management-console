@@ -2,113 +2,128 @@
 
 var gulp = require('gulp');
 
-var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
+var plugins = require('gulp-load-plugins')({
+  pattern: ['gulp-*', 'del', 'q']
 });
+
+var es = require('event-stream');
+var bowerFiles = require('main-bower-files');
+
+var paths = {
+  bower_comps: 'src/main/bower_components',
+  bower_comps_deep: 'src/main/bower_components/**',
+  scripts: 'src/main/webapp/**/*.js',
+  styles: ['src/main/webapp/**/*.less','src/main/webapp/**/*.css'],
+  images: 'src/main/assets/images/**/*',
+  index: 'src/main/webapp/index.html',
+  partials: ['src/main/webapp/**/*.html', '!src/main/webapp/index.html'],
+  distDev: 'dist',
+  distDevBower: 'dist/bower_components'
+};
+
 
 function handleError(err) {
   console.error(err.toString());
   this.emit('end');
 }
 
-gulp.task('styles', ['clean'], function () {
-  return gulp.src('src/main/webapp/**/*.less')
-    .pipe($.less({
+var pipes = {};
+
+pipes.buildStyles = function(srcPath, destPath) {
+  srcPath = srcPath || paths.styles;
+  destPath = destPath || paths.distDev;
+
+  return gulp.src(srcPath)
+    .pipe(plugins.less({
       paths: [
-        'src/main/bower_components',
-        'src/main/webapp'
+        paths.bower_comps
       ]
     }))
     .on('error', handleError)
-    .pipe($.autoprefixer('last 1 version'))
-    .pipe(gulp.dest('target/tmp'))
-    .pipe($.size());
-});
+    .pipe(plugins.autoprefixer('last 1 version'))
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
 
-gulp.task('scripts', function () {
-  return gulp.src('src/main/webapp/**/*.js')
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'))
-    .pipe($.size());
-});
+pipes.copyBower = function (){
+  return gulp.src(bowerFiles(), { base: paths.bower_comps })
+    .pipe(gulp.dest(paths.distDevBower));
+};
 
-gulp.task('partials', ['clean'], function () {
-  return gulp.src('src/main/webapp/**/*.html')
-    .pipe($.minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe($.ngHtml2js({
-      moduleName: 'managementConsole'
-    }))
-    .pipe(gulp.dest('target/tmp'))
-    .pipe($.size());
-});
+pipes.buildScripts = function(srcPath, destPath) {
+  srcPath = srcPath || paths.scripts;
+  destPath = destPath || paths.distDev;
 
-gulp.task('html', ['clean', 'styles', 'scripts', 'partials'], function () {
-  var htmlFilter = $.filter('*.html');
-  var jsFilter = $.filter('**/*.js');
-  var cssFilter = $.filter('**/*.css');
-  var assets;
+  return gulp.src(srcPath)
+    .pipe(plugins.jshint())
+    .pipe(plugins.jshint.reporter('jshint-stylish'))
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
 
-  return gulp.src('src/main/webapp/*.html')
-    .pipe($.inject(gulp.src('target/tmp/webapp/**/*.js'), {
-      read: false,
-      starttag: '<!-- inject:partials -->',
-      addRootSlash: false,
-      addPrefix: '../'
-    }))
-    .pipe(assets = $.useref.assets())
-    .pipe($.rev())
-    .pipe(jsFilter)
-    .pipe($.ngAnnotate())
-    .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
-    .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    .pipe($.replace('bower_components/bootstrap/fonts','fonts'))
-    .pipe($.csso())
-    .pipe(cssFilter.restore())
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe($.revReplace())
-    .pipe(htmlFilter)
-    .pipe($.minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe(htmlFilter.restore())
-    .pipe(gulp.dest('dist'))
-    .pipe($.size());
-});
+pipes.buildPartials = function(srcPath, destPath) {
+  srcPath = srcPath || paths.partials;
+  destPath = destPath || paths.distDev;
 
-gulp.task('images', ['clean'], function () {
-  return gulp.src('src/main/assets/images/**/*')
-    .pipe($.cache($.imagemin({
+  return gulp.src(srcPath)
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
+
+pipes.buildIndex = function(srcPath, destPath) {
+  srcPath = srcPath || paths.index;
+  destPath = destPath || paths.distDev;
+
+  return gulp.src(srcPath)
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
+
+pipes.buildImages = function(srcPath, destPath) {
+  srcPath = srcPath || paths.images;
+  destPath = destPath || paths.distDev + '/assets/images';
+
+  return gulp.src(srcPath)
+    .pipe(plugins.cache(plugins.imagemin({
       optimizationLevel: 3,
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest('target/dist/assets/images'))
-    .pipe($.size());
-});
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
 
-gulp.task('fonts', ['clean'], function () {
-  return gulp.src($.mainBowerFiles())
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
-    .pipe($.flatten())
-    .pipe(gulp.dest('target/dist/fonts'))
-    .pipe($.size());
-});
+pipes.buildFonts = function() {
+  //grab everything in bower_components dir, find all filtered files and copy them
+  return gulp.src(paths.bower_comps_deep)
+    .pipe(plugins.filter('**/*.{eot,svg,ttf,woff}'))
+    .pipe(gulp.dest(paths.distDevBower))
+    .pipe(plugins.size());
+};
 
-gulp.task('clean', function (cb) {
-  $.del(['target/tmp/**', 'target/dist/**'], cb);
+pipes.buildApp = function () {
+  return es.merge(pipes.buildStyles(), pipes.copyBower(), pipes.buildScripts(),
+    pipes.buildPartials(), pipes.buildIndex(), pipes.buildImages(), pipes.buildFonts());
+};
+
+gulp.task('clean', function () {
+  var deferred = plugins.q.defer();
+  plugins.del(paths.distDev, function (){
+    deferred.resolve();
+  });
+  return deferred.promise;
 });
 
 gulp.task('clear-cache', function (done) {
-  return $.cache.clearAll(done);
+  return plugins.cache.clearAll(done);
 });
 
-gulp.task('build', ['html', 'partials', 'images', 'fonts']);
+gulp.task('styles', pipes.buildStyles);
+gulp.task('copy-bower', pipes.copyBower);
+gulp.task('scripts',pipes.buildScripts);
+gulp.task('partials', pipes.buildPartials);
+gulp.task('index', pipes.buildIndex);
+gulp.task('images', pipes.buildImages);
+gulp.task('fonts', pipes.buildFonts);
 
+gulp.task('build', ['clean'], pipes.buildApp);

@@ -24,8 +24,8 @@
     <link rel="stylesheet" href="components/directives/slider/jquery.nouislider.ispn.css" />
     <!-- endbuild -->
 
-    <!-- build:js(src/main) scripts/modernizr.js -->
-    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- modernizr does not provide bower.json and thus requires special treatment during build process, use CDN instead -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <!-- endbuild -->
   </head>
   <body>
@@ -55,7 +55,7 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/patternfly/dist/js/patternfly.js"></script>
-    <script src="bower_components/nouislider/distribute/jquery.nouislider.all.js"></script>
+    <script src="bower_components/nouislider/distribute/jquery.nouislider.all.min.js"></script>
 
     <!-- endbower -->
     <!-- endbuild -->

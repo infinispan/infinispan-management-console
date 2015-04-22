@@ -20,27 +20,10 @@ function browserSyncInit(baseDir, files, browser) {
 
 }
 
-gulp.task('serve', ['watch'], function () {
-  browserSyncInit([
-    'src/main',
-    'target/tmp',
-    'src/main/webapp'
-  ], [
-    'target/tmp/**/*.css',
-    'src/main/assets/images/**/*',
-    'src/main/webapp/**/*.html',
-    'src/main/webapp/**/*.js'
-  ]);
-});
-
-gulp.task('serve:dist', ['build'], function () {
-  browserSyncInit('dist');
-});
-
-gulp.task('serve:e2e', function () {
-  browserSyncInit(['src/main', 'target/tmp'], null, []);
-});
-
-gulp.task('serve:e2e-dist', ['watch'], function () {
-  browserSyncInit('dist', null, []);
+gulp.task('serve', ['build', 'watch'], function () {
+  browserSyncInit('dist',
+    ['dist/**/*.html',
+      'dist/**/*.css',
+      'dist/**/*.js',
+    ]);
 });

@@ -1,17 +1,17 @@
 <div class="container-fluid" style="margin:20px">
     <div class="row">
-        <div class="col-md-6 breadcrumbs">
+        <div class="col-md-9 breadcrumbs">
             <span> <a href="#/cluster/{{currentCluster.name}}"> {{currentCluster.name}} </a>  >>  {{currentCache.name}} </span>
         </div>
 
-        <div class="col-md-6 text-right">
+        <div class="col-md-3">
             <div class="dropdown dropdown-menu-right">
                 <button class="btn btn-default dropdown-toggle" type="button" id="cacheActionMenu" data-toggle="dropdown">
                     Actions
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Edit cache</a>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">Edit cache</a>
                     </li>
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Stop cache</a>
                     </li>
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="col-md-3 text-right">
-                <span class="search-text"> Search: </span> 
+                <span class="search-text"> Search: </span>
                 <input type="search" class="search-field">
             </div>
         </div>
@@ -83,63 +83,51 @@
                         <th>Name</th>
                         <th>Average reads</th>
                         <th>Average writes</th>
+                        <th>Average replication time</th>
                         <th>Total entries</th>
                         <th>Hits</th>
                         <th>Misses</th>
-                        <th>Read/Write ratio</th>
-                        <th>Total failed writes</th>
                     </thead>
                     <tr  ng-repeat="stats in currentCacheStats.nodeStats">
                         <td>{{stats['node-name']}}</td>
                         <td>{{stats['average-read-time']}} ms</td>
                         <td>{{stats['average-write-time']}} ms</td>
+                        <td>{{stats['average-replication-time']}}</td>
                         <td>{{stats['number-of-entries']}}</td>
                         <td>{{stats['hits']}}</td>
                         <td>{{stats['misses']}}</td>
-                        <td>{{stats['read-write-ratio']}}</td>
-                        <td>N/A</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <br>
-        <div class="row">
+      <div class="row">
             <div class="col-md-12">
                 <div class="cache-status">
-                    <span class="cache-status-label">Properties</span>
+                    <span class="cache-status-label">Configuration</span>
                 </div>
             </div>
+      </div>
+      <div class="cache-properties row">
+        <div><p><p>
         </div>
-
-        <div class="cache-properties row">
-            <div class="col-md-3">
-                <div>Cache name:</div>
-                <div>Mode:</div>
-                <div>Associated cache/loader store:</div>
-
-                <div>Write-through/Write-behind:</div>
-                <div>Isolation level:</div>
-                <div>Eviction strategy:</div>
-
-                <div>Passivation:</div>
-                <div>Expiration configuration:</div>
-                <div>Cross-site replication:</div>
-            </div>
-            <div class="col-md-9">
-                <div>{{currentCache.name}}</div>
-                <div>{{currentCache.type}}</div>
-                <div>N/A</div>
-
-                <div>Mock</div>
-                <div>{{currentCache.locking.LOCKING.isolation}}</div>
-                <div>N/A</div>
-
-                <div>N/A</div>
-                <div>N/A</div>
-                <div>N/A</div>
-            </div>
+        <div ng-if="currentCache.isDistributed()">
+          <cache-configuration cache-type="distributed-cache" metadata="currentCluster.cachesMetadata"
+                               current-cache="currentCache" init-defaults="false" read-only="true"/>
         </div>
-
+        <div ng-if="currentCache.isReplicated()">
+          <cache-configuration cache-type="replicated-cache" metadata="currentCluster.cachesMetadata"
+                               current-cache="currentCache" init-defaults="false" read-only="true"/>
+        </div>
+        <div ng-if="currentCache.isInvalidation()">
+          <cache-configuration cache-type="invalidation-cache" metadata="currentCluster.cachesMetadata"
+                               current-cache="currentCache" init-defaults="false" read-only="true"/>
+        </div>
+        <div ng-if="currentCache.isLocal()">
+          <cache-configuration cache-type="local-cache" metadata="currentCluster.cachesMetadata"
+                               current-cache="currentCache" init-defaults="false" read-only="true"/>
+        </div>
+      </div>
     </div>
 </div>

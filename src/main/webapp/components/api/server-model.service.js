@@ -51,7 +51,7 @@ angular.module('managementConsole.api')
             };
 
             Server.prototype.isRunning = function() {
-                return this.state === 'RUNNING';
+              return this.state === 'RUNNING' || this.state === 'RELOAD_REQUIRED' || this.state === 'RESTART_REQUIRED';
             };
 
             return Server;

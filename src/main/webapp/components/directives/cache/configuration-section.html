@@ -1,0 +1,18 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="form-horizontal" ng-repeat="field in fields">
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">{{resolveFieldName(field)}}</label>
+
+        <div class="col-md-6">
+          <select ng-model="data[field]" ng-options="item as item for item in metadata[field].allowed" ng-disabled="readOnly" ng-if="isMultiValue(field)"/>
+          <input type="{{resolveFieldType(field)}}" ng-model="data[field]" ng-disabled="readOnly" ng-if="isSingleValue(field)"/>
+          <i class="fa fa-info-circle" tooltip="{{metadata[field].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

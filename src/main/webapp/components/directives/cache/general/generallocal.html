@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <form class="form-horizontal" name="form" novalidate>
+    <div class="form-group">
+      <label class="col-md-2 control-label">Name</label>
+
+      <div class="col-md-10" ng-class="{ 'has-error' : form.cacheName.$invalid && !form.cacheName.$pristine }">
+        <input type="text" name="cacheName" ng-model="data.name" ng-disabled="readOnly" required/>
+        <i class="fa fa-info-circle" tooltip="The cache name" tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+      <div class="help-block" ng-messages="form.cacheName.$error" ng-if="form.cacheName.$invalid && !form.cacheName.$pristine">
+        <div ng-message="invalid">Cache name is required!</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">Type</label>
+
+      <div class="col-md-10">
+        <select ng-model="data.type" ng-options="ct as ct for ct in cacheTypes" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle" tooltip="The type of cache" tooltip-trigger tooltip-animation="true"
+           tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Auto config</label>
+
+      <div class="col-md-10">
+        <input type="checkbox" ng-model="data.data['auto-config']" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata['auto-config'].description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Batching</label>
+
+      <div class="col-md-10">
+        <input type="checkbox" ng-model="data.data.batching" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata.batching.description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">JNDI name</label>
+
+      <div class="col-md-10">
+        <input type="text" ng-model="data.data['jndi-name']" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata['jndi-name'].description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Module</label>
+
+      <div class="col-md-10">
+        <input type="text" ng-model="data.data.module" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata.module.description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Start</label>
+
+      <div class="col-md-10">
+        <select ng-model="data.data.start" ng-options="item as item for item in metadata.start.allowed" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata.start.description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Statistics</label>
+
+      <div class="col-md-10">
+        <input type="checkbox" ng-model="data.data.statistics" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="{{metadata.statistics.description}}"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+
+  </form>
+</div>
+

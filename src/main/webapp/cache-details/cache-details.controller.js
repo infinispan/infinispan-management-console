@@ -18,6 +18,7 @@ angular.module('managementConsole')
             $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
             $scope.caches = $scope.currentCluster.getCaches();
             $scope.currentCache = $scope.caches[$stateParams.cacheName];
+            $scope.currentCache.refresh();
             $scope.currentCacheStats = {
                 'cacheStatus': '',
                 'firstServerStats': []
@@ -27,5 +28,4 @@ angular.module('managementConsole')
                 $scope.currentCacheStats.nodeStats = response;
                 $scope.currentCacheStats.firstServerStats = response[0];
             });
-            
     }]);

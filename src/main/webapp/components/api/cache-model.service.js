@@ -23,10 +23,26 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.refresh = function () {
-                return this.modelController.readResource(this.getResourcePath(), false, true).then(function (response) {
+                return this.modelController.readResource(this.getResourcePath(), true, true).then(function (response) {
                     this.data = response;
                     this.lastRefresh = new Date();
                 }.bind(this));
+            };
+
+            Cache.prototype.isDistributed = function () {
+              return this.type === 'distributed-cache';
+            };
+
+            Cache.prototype.isReplicated = function () {
+              return this.type === 'replicated-cache';
+            };
+
+            Cache.prototype.isLocal = function () {
+              return this.type === 'local-cache';
+            };
+
+            Cache.prototype.isInvalidation = function () {
+              return this.type === 'invalidation-cache';
             };
 
             return Cache;

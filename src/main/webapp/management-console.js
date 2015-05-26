@@ -36,17 +36,23 @@ angular.module('managementConsole', [
                 url: '/cluster/:clusterName/cache/:cacheName',
                 templateUrl: 'cache-details/cache-details.html',
                 controller: 'CacheDetailsCtrl'
-            })
-            .state('error404', {
+            }).state('error404', {
                 url: '/error404',
-                templateUrl: 'error404/error404.html',
+                templateUrl: 'error404/error404.html'
+            }).state('createCache', {
+                url: '/cluster/:clusterName/createCache',
+                templateUrl: 'create-cache/create-cache.html',
+                controller: 'createCacheCtrl'
+            }).state('editCache', {
+                url: '/cluster/:clusterName/edit-cache/:cacheName',
+                templateUrl: 'edit-cache/edit-cache.html',
+                controller: 'editCacheCtrl'
             });
         $urlRouterProvider
             .when('/', '/login')
             .when('', '/login')
             .otherwise('/error404');
   }])
-
 /**
  * Safe apply method. It should be used when normal $scope.$apply happens to execute
  * during digest cycle which causes an error.

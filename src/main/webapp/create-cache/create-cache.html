@@ -1,0 +1,38 @@
+<!-- MAIN START -->
+<div class="container-fluid" style="margin:20px">
+
+  <!-- TOP ROW #1 START -->
+  <div class="row">
+    <div class="cache-name">1) Create new cache</div>
+    <div>
+      <general init-defaults="true" data='newlyCreatedCache'/>
+    </div>
+    <div class="cache-name">2) Cache properties</div>
+    <div>
+      <div ng-if="selectedCacheType === 'distributed-cache'">
+        <cache-configuration cache-type="distributed-cache" metadata="currentCluster.cachesMetadata"
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+      </div>
+      <div ng-if="selectedCacheType === 'replicated-cache'">
+        <cache-configuration cache-type="replicated-cache" metadata="currentCluster.cachesMetadata"
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+      </div>
+      <div ng-if="selectedCacheType === 'invalidation-cache'">
+        <cache-configuration cache-type="invalidation-cache" metadata="currentCluster.cachesMetadata"
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+      </div>
+      <div ng-if="selectedCacheType === 'local-cache'">
+        <cache-configuration cache-type="local-cache" metadata="currentCluster.cachesMetadata"
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+      </div>
+    </div>
+  </div>
+  <!-- TOP ROW #1 END -->
+  <div class="row">
+    <button type="button" class="btn btn-primary" ng-click="createCache()" ng-disabled="!isCreateEnabled">Create</button>
+    <button type="button" tooltip="cancel" class="btn btn-default" ui-sref="clusterView({clusterName: currentCluster.name})">Cancel</button>
+    <p/>
+    <!--  {{newlyCreatedCache}} -->
+  </div>
+</div>
+<!-- MAIN END -->

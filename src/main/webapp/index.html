@@ -52,11 +52,10 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/patternfly/dist/js/patternfly.js"></script>
     <script src="bower_components/nouislider/distribute/jquery.nouislider.all.min.js"></script>
-
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -67,8 +66,11 @@
     <script src="cluster-view/cluster-view.controller.js"></script>
     <script src="node-details/node-details.controller.js"></script>
     <script src="cache-details/cache-details.controller.js"></script>
+    <script src="create-cache/create-cache.controller.js"></script>
+    <script src="edit-cache/edit-cache.controller.js"></script>
 
     <script src="components/api/api.js"></script>
+    <script src="components/api/cache-creation-controller.service.js"></script>
     <script src="components/api/cache-model.service.js"></script>
     <script src="components/api/cluster-model.service.js"></script>
     <script src="components/api/domain-model.service.js"></script>
@@ -79,6 +81,15 @@
     <script src="components/navbar/navbar.controller.js"></script>
     <script src="components/services/utils.js"></script>
     <script src="components/directives/slider/slider.js"></script>
+    <script src="components/directives/cache/general/general.js"></script>
+    <script src="components/directives/cache/general/generaldist.js"></script>
+    <script src="components/directives/cache/general/generalreplicated.js"></script>
+    <script src="components/directives/cache/general/generalinvalidation.js"></script>
+    <script src="components/directives/cache/general/generallocal.js"></script>
+    <script src="components/directives/cache/jdbcstore/jdbcstore.js"></script>
+    <script src="components/directives/cache/security/security.js"></script>
+    <script src="components/directives/cache/configurationViewer.js"></script>
+    <script src="components/directives/cache/configurationSection.js"></script>
 
     <!-- inject:partials -->
     <!-- angular templates will be automaticaly converted in js and inserted here -->

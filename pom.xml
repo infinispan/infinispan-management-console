@@ -136,6 +136,7 @@
                <filesets>
                   <fileset>
                      <directory>dist</directory>
+                     <directory>src/main/bower_components</directory>
                   </fileset>
                </filesets>
             </configuration>

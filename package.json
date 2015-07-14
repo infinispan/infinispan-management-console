@@ -1,8 +1,9 @@
 {
   "name": "managementConsole",
-  "version": "0.0.0",
+  "version": "8.0.0-SNAPSHOT",
   "dependencies": {},
   "devDependencies": {
+    "bower": "^1.4.1",
     "gulp": "^3.8.0",
     "gulp-autoprefixer": "^0.0.6",
     "gulp-cache": "^0.2.0",
@@ -43,5 +44,9 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:infinispan/infinispan-management-console.git"
   }
 }

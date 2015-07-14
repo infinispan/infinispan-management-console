@@ -4,9 +4,158 @@
 
    <groupId>org.infinispan</groupId>
    <artifactId>infinispan-management-console</artifactId>
-   <version>7.1.0-SNAPSHOT</version>
+   <version>8.0.0-SNAPSHOT</version>
    <packaging>jar</packaging>
    <name>Infinispan Management Console</name>
    <description>Web Management Console for Infinispan</description>
+   <url>http://www.infinispan.org</url>
+   <organization>
+      <name>JBoss, a division of Red Hat</name>
+      <url>http://www.jboss.org</url>
+   </organization>
+   <licenses>
+      <license>
+         <name>Apache License</name>
+         <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+         <distribution>repo</distribution>
+      </license>
+   </licenses>
+   <developers>
+      <developer>
+         <id>placeholder</id>
+         <name>See http://www.infinispan.org for a complete list of contributors</name>
+      </developer>
+   </developers>
+   <mailingLists>
+      <mailingList>
+         <name>Infinispan Issues</name>
+         <subscribe>https://lists.jboss.org/mailman/listinfo/infinispan-issues</subscribe>
+         <unsubscribe>https://lists.jboss.org/mailman/listinfo/infinispan-issues</unsubscribe>
+         <post>infinispan-issues@lists.jboss.org</post>
+         <archive>http://lists.jboss.org/pipermail/infinispan-issues/</archive>
+      </mailingList>
+      <mailingList>
+         <name>Infinispan Developers</name>
+         <subscribe>https://lists.jboss.org/mailman/listinfo/infinispan-dev</subscribe>
+         <unsubscribe>https://lists.jboss.org/mailman/listinfo/infinispan-dev</unsubscribe>
+         <post>infinispan-dev@lists.jboss.org</post>
+         <archive>http://lists.jboss.org/pipermail/infinispan-dev/</archive>
+      </mailingList>
+   </mailingLists>
+   <scm>
+      <connection>scm:git:git@github.com:infinispan/infinispan-management-console.git</connection>
+      <developerConnection>scm:git:git@github.com:infinispan/infinispan-management-console.git</developerConnection>
+      <url>https://github.com/infinispan/infinispan-management-console</url>
+   </scm>
+   <issueManagement>
+      <system>jira</system>
+      <url>https://issues.jboss.org/browse/ISPN</url>
+   </issueManagement>
+   <ciManagement>
+      <system>TeamCity</system>
+      <url>http://ci.infinispan.org</url>
+      <notifiers>
+         <notifier>
+            <type>mail</type>
+            <address>infinispan-commits@lists.jboss.org</address>
+         </notifier>
+      </notifiers>
+   </ciManagement>
+   <distributionManagement>
+      <repository>
+         <id>jboss-releases-repository</id>
+         <name>JBoss Release Repository</name>
+         <url>${jboss.releases.repo.url}</url>
+      </repository>
+      <snapshotRepository>
+         <id>jboss-snapshots-repository</id>
+         <name>JBoss Snapshot Repository</name>
+         <url>${jboss.snapshots.repo.url}</url>
+      </snapshotRepository>
+   </distributionManagement>
+   
+   <properties>
+      <jboss.releases.repo.url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</jboss.releases.repo.url>
+      <jboss.snapshots.repo.url>https://repository.jboss.org/nexus/content/repositories/snapshots/</jboss.snapshots.repo.url>
+   </properties>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>0.0.24</version>
+            <executions>
+               <execution>
+                  <id>install node and npm</id>
+                  <goals>
+                     <goal>install-node-and-npm</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <nodeVersion>v0.10.25</nodeVersion>
+                     <npmVersion>2.1.10</npmVersion>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>npm install</id>
+                  <goals>
+                     <goal>npm</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <arguments>install</arguments>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>bower install</id>
+                  <goals>
+                     <goal>bower</goal>
+                  </goals>
+                  <configuration>
+                     <arguments>install</arguments>
+                  </configuration>
+               </execution>
+               <execution>
+                  <id>gulp build</id>
+                  <goals>
+                     <goal>gulp</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <arguments>build</arguments>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.6.1</version>
+            <configuration>
+               <filesets>
+                  <fileset>
+                     <directory>dist</directory>
+                  </fileset>
+               </filesets>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <classesDirectory>dist</classesDirectory>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
 </project>
 

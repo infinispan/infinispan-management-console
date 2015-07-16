@@ -34,7 +34,7 @@ angular.module('managementConsole.api')
 
             Server.prototype.fetchCacheStats = function(cache) {
                 return this.getModelController()
-                    .readResource(this.getResourcePath().concat('subsystem', 'infinispan', 'cache-container', cache.cluster.name, cache.type, cache.name),
+                    .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', cache.cluster.name, cache.type, cache.name),
                                   false, true).then(function (response) {
                     response['node-name'] = this.name;
                     response['cache'] = this;
@@ -44,7 +44,7 @@ angular.module('managementConsole.api')
 
             Server.prototype.fetchAggregateNodeStats = function (cluster) {
               return this.getModelController()
-                .readResource(this.getResourcePath().concat('subsystem', 'infinispan', 'cache-container', cluster.name),
+                .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name),
                 false, true).then(function (response) {
                   return response;
                 }.bind(this));

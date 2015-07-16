@@ -56,7 +56,7 @@ angular.module('managementConsole.api')
                 promises.push(profilePromise);
 
                 this.servers = [];
-                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 1, true, false).then(function (response) {
+                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, false).then(function (response) {
                     var serverPromises = [];
                     for (var hostName in response) {
                         if (hostName !== undefined) {

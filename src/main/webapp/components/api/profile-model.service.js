@@ -29,8 +29,8 @@ angular.module('managementConsole.api')
                     this.lastRefresh = new Date();
                     var allClusters = {};
                     var clusterPromises = [];
-                    if (response.subsystem !== undefined && response.subsystem.infinispan !== undefined) {
-                        for (var name in response.subsystem.infinispan['cache-container']) {
+                    if (response.subsystem !== undefined && response.subsystem['datagrid-infinispan'] !== undefined) {
+                        for (var name in response.subsystem['datagrid-infinispan']['cache-container']) {
                             if (name !== undefined && !(name in allClusters)) {
                                 allClusters[name] = new ClusterModel(name, this.name, this.getResourcePath(), this.domain);
                             }
@@ -45,7 +45,7 @@ angular.module('managementConsole.api')
                     return $q.all(clusterPromises);
                 }.bind(this));
             };
-        
+
             Profile.prototype.getClusters = function() {
                 return this.clusters;
             };

@@ -22,7 +22,7 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.getResourcePath = function () {
-                return this.path.concat('subsystem', 'infinispan', 'cache-container', this.name);
+                return this.path.concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
             };
 
             Cluster.prototype.refresh = function () {
@@ -52,7 +52,7 @@ angular.module('managementConsole.api')
               // We are checking cluster availability on the first server
               // Is here any was how to check cluster availability globally?
               var resourcePathCacheContainer = this.domain.getFistServerResourceRuntimePath()
-                .concat('subsystem', 'infinispan', 'cache-container', this.name);
+                .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
 
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
                 this.availability = response.toUpperCase();

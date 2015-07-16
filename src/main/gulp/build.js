@@ -50,9 +50,9 @@ pipes.copyBower = function (){
     .pipe(gulp.dest(paths.distDevBower));
 };
 
-pipes.buildScripts = function(srcPath, destPath) {
-  srcPath = srcPath || paths.scripts;
-  destPath = destPath || paths.distDev;
+pipes.buildScripts = function() {
+  var srcPath = paths.scripts;
+  var destPath = paths.distDev;
 
   return gulp.src(srcPath)
     .pipe(plugins.jshint())
@@ -61,9 +61,9 @@ pipes.buildScripts = function(srcPath, destPath) {
     .pipe(plugins.size());
 };
 
-pipes.buildPartials = function(srcPath, destPath) {
-  srcPath = srcPath || paths.partials;
-  destPath = destPath || paths.distDev;
+pipes.buildPartials = function() {
+  var srcPath = paths.partials;
+  var destPath = paths.distDev;
 
   return gulp.src(srcPath)
     .pipe(gulp.dest(destPath))

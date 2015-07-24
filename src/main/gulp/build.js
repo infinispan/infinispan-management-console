@@ -53,7 +53,6 @@ pipes.copyBower = function (){
 pipes.buildScripts = function() {
   var srcPath = paths.scripts;
   var destPath = paths.distDev;
-
   return gulp.src(srcPath)
     .pipe(plugins.jshint())
     .pipe(plugins.jshint.reporter('jshint-stylish'))
@@ -64,7 +63,6 @@ pipes.buildScripts = function() {
 pipes.buildPartials = function() {
   var srcPath = paths.partials;
   var destPath = paths.distDev;
-
   return gulp.src(srcPath)
     .pipe(gulp.dest(destPath))
     .pipe(plugins.size());

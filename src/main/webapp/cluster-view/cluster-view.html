@@ -24,7 +24,9 @@
                 </li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create node</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create cache</a>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1"
+                     ui-sref="createCache({clusterName: currentCluster.name})">Create cache</a>
                 </li>
                 <li role="presentation" class="divider"></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#">View map/reduce jobs</a>
@@ -63,7 +65,7 @@
         <!-- LEFT COLUMN START -->
         <div class="col-md-2 borders stretch-full" style="background-color:#F0F0F0;">
             <span>
-                <button class="slider-max button-as-link" ng-click="clearFilters()">Clear all filters</button>
+                <button class="slider-max button-as-link" tooltip="Clear Filters" ng-click="clearFilters()">Clear all filters</button>
             </span>
 
             <div class="row" style="padding:10px;">
@@ -161,7 +163,6 @@
                 <span>Zoom</span>
                 <slider min=0 max=1 value="zoomValue"></slider>
             </div>
-
             <!-- RIGHT COLUMN ROW #3 END -->
 
         </div>

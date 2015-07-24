@@ -7,8 +7,9 @@ angular.module('managementConsole')
     '$state',
     '$q',
     'modelController',
+    'cacheCreateController',
     'utils',
-    function ($scope, $stateParams, $state, $q, modelController, utils) {
+    function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils) {
       if (!modelController.isAuthenticated()) {
         $state.go('/logout');
       }

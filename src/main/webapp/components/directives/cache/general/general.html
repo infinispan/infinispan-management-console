@@ -18,7 +18,18 @@
            tooltip-placement="top"></i>
       </div>
     </div>
-    <div class="form-group" ng-if="!isLocalCache()">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Configuration template</label>
+
+      <div class="col-md-10">
+        <select ng-model="data.template" ng-options="ctem as ctem for ctem in confs" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle" tooltip="Configuration template to create cache" tooltip-trigger tooltip-animation="true"
+           tooltip-placement="top"></i>
+      </div>
+    </div>
+
+    <!-- <div class="form-group" ng-if="!isLocalCache()">
       <label class="col-md-2 control-label">Mode</label>
 
       <div class="col-md-10">
@@ -27,7 +38,7 @@
            tooltip="Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
       </div>
-    </div>
+    </div>  -->
   </div>
 </div>
 

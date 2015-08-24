@@ -5,25 +5,25 @@
   <div class="row">
     <div class="cache-name">1) Create new cache</div>
     <div>
-      <general init-defaults="true" data='newlyCreatedCache'/>
+      <general init-defaults="true" data='newlyCreatedCache' confs='configurationTemplates'/>
     </div>
     <div class="cache-name">2) Cache properties</div>
     <div>
       <div ng-if="selectedCacheType === 'distributed-cache'">
         <cache-configuration cache-type="distributed-cache" metadata="currentCluster.cachesMetadata"
-                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="true"/>
       </div>
       <div ng-if="selectedCacheType === 'replicated-cache'">
         <cache-configuration cache-type="replicated-cache" metadata="currentCluster.cachesMetadata"
-                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="true"/>
       </div>
       <div ng-if="selectedCacheType === 'invalidation-cache'">
         <cache-configuration cache-type="invalidation-cache" metadata="currentCluster.cachesMetadata"
-                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="true"/>
       </div>
       <div ng-if="selectedCacheType === 'local-cache'">
         <cache-configuration cache-type="local-cache" metadata="currentCluster.cachesMetadata"
-                             current-cache="newlyCreatedCache" init-defaults="true" read-only="false"/>
+                             current-cache="newlyCreatedCache" init-defaults="true" read-only="true"/>
       </div>
     </div>
   </div>

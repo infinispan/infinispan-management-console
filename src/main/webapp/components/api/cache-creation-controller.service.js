@@ -58,12 +58,49 @@ angular.module('managementConsole.api')
              * @param cacheConfiguration configuration
              * @param callback to execute at the end of create operation
              */
+            CacheCreationControllerClient.prototype.createCacheFromTemplate = function (address, template, callback) {
+              var op = {
+                'operation': 'add',
+                'configuration': template,
+                'address': address
+              };
+
+              var promise = this.execute(op);
+              promise.then(function(){
+                callback();
+              });
+            };
+
+            /**
+             *
+             * Creates a cache at a given DMR address a configuration structure cacheConfiguration
+             *
+             * @param address DMR address of the cache
+             * @param cacheConfiguration configuration
+             * @param callback to execute at the end of create operation
+             */
             CacheCreationControllerClient.prototype.createCache = function (address, cacheConfiguration, callback) {
               if (cacheConfiguration.type === 'distributed-cache' || cacheConfiguration.type === 'replicated-cache') {
                 this.createReplicatedOrDistributedCache(cacheConfiguration, address, cacheConfiguration.type, callback);
               } else if (cacheConfiguration.type === 'invalidation-cache' || cacheConfiguration.type === 'local-cache') {
                 this.createInvalidationOrLocalCache(cacheConfiguration, address, cacheConfiguration.type, callback);
               }
+            };
+
+            /**
+             * Returns defined configuration templates for the the given cache type
+             *
+             *
+             * @param cacheType One of distributed-cache, invalidation-cache, local-cache or replicated-cache
+             */
+            CacheCreationControllerClient.prototype.getConfigurationTemplates = function (cacheType) {
+              var deferred = $q.defer();
+              var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
+                'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration'];
+              modelController.readResource(dmrConfigurationsAddress, true, false).then(function (response) {
+                deferred.resolve(response);
+              }.bind(this));
+              return deferred.promise;
             };
 
 
@@ -196,7 +233,6 @@ angular.module('managementConsole.api')
               };
               return this.execute(op);
             };
-
 
             /**
              * Creates new invalidation cache with given parameters

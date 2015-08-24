@@ -30,7 +30,7 @@ angular.module('managementConsole.api')
                 this.modelController.readResourceDescription(this.getResourcePath(), true, false).then(function (response) {
                   this.cachesMetadata = response;
                 }.bind(this));
-                return this.modelController.readResource(this.getResourcePath(), false, false).then(function (response) {
+                return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
                     this.lastRefresh = new Date();
                     this.caches = {};
                     this.getAvailability();
@@ -41,7 +41,7 @@ angular.module('managementConsole.api')
                         if (typedCaches !== undefined) {
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
-                                    var cache = new CacheModel(name, cacheTypes[i], this);
+                                    var cache = new CacheModel(name, cacheTypes[i], typedCaches[name].configuration, this);
                                     this.caches[name] = cache;
                                     cachePromises.push(cache.refresh());
                                 }

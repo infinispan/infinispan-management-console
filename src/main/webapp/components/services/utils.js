@@ -107,7 +107,7 @@
       },
 
       resolveDescription: function resolveDescription(metadata, resourceDescriptionMap, elementPath, cacheType) {
-        var path = 'children.' + cacheType + '.model-description.*';
+        var path = 'children.configurations.model-description.CONFIGURATIONS.children.' + cacheType + '-configuration.model-description.*';
         var realPath = resourceDescriptionMap[elementPath];
         var resourceDescription = this.deepGet(metadata, path);
         return this.deepGet(resourceDescription, realPath);

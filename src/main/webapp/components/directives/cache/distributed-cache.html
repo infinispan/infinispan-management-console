@@ -8,14 +8,14 @@
       <!-- <locking data='currentCache.data.locking.LOCKING' metadata="resolveDescription('locking')"
                init-defaults="initDefaults" read-only="readOnly"/> -->
       <configuration-section fields="['acquire-timeout', 'concurrency-level', 'isolation', 'striping']"
-                             data='currentCache.data.locking.LOCKING' metadata="resolveDescription('locking')"
+                             data='currentCache.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="Eviction" active="false">
       <!-- <eviction data='currentCache.data.eviction.EVICTION' metadata="resolveDescription('eviction')"
                 init-defaults="initDefaults" read-only="readOnly"/> -->
 
-      <configuration-section fields="['max-entries', 'strategy']" data='currentCache.data.eviction.EVICTION'
+      <configuration-section fields="['max-entries', 'strategy']" data='currentCache.configuration.eviction.EVICTION'
                              metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="Expiration" active="false">
@@ -23,28 +23,28 @@
                   init-defaults="initDefaults" read-only="readOnly"/> -->
 
       <configuration-section fields="['lifespan', 'interval', 'max-idle']"
-                             data='currentCache.data.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
+                             data='currentCache.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="Compatibility" active="false">
 
-      <configuration-section fields="['enabled', 'marshaller']" data='currentCache.data.compatibility.COMPATIBILITY'
+      <configuration-section fields="['enabled', 'marshaller']" data='currentCache.configuration.compatibility.COMPATIBILITY'
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="TX">
       <!-- <tx data="currentCache.data.transaction.TRANSACTION" metadata="resolveDescription('tx')"
           init-defaults="initDefaults" read-only="readOnly"/> -->
 
-      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="currentCache.data.transaction.TRANSACTION"
+      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="currentCache.configuration.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="State Transfer">
-      <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="currentCache.data['state-transfer'].STATE_TRANSFER"
+      <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="currentCache.configuration['state-transfer'].STATE_TRANSFER"
                      metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
 
     <tab heading="Loader">
-      <configuration-section fields="['class', 'preload', 'shared']" data="currentCache.data['loader'].LOADER"
+      <configuration-section fields="['class', 'preload', 'shared']" data="currentCache.configuration['loader'].LOADER"
                              metadata="resolveDescription('loader')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
@@ -52,34 +52,34 @@
     <tab heading="File Store">
 
       <configuration-section fields="['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.data['file-store'].FILE_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.configuration['file-store'].FILE_STORE"
                              metadata="resolveDescription('filestore')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="Remote Store">
       <configuration-section fields="['cache', 'fetch-state', 'passivation', 'preload', 'raw-values', 'purge', 'read-only',
-              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="currentCache.data['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
+              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="currentCache.configuration['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
     <tab heading="JDBC Store">
-      <jdbcstore data="currentCache.data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
+      <jdbcstore data="currentCache.configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
                    init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
 
     <tab heading="Level DB Store">
       <configuration-section fields="['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.data['leveldb-store'].LEVEL_DB_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.configuration['leveldb-store'].LEVEL_DB_STORE"
                              metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
 
     <tab heading="Backup">
       <configuration-section fields="['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']"
-                             data="currentCache.data['backup'].BACKUP" metadata="resolveDescription('backup')"
+                             data="currentCache.configuration['backup'].BACKUP" metadata="resolveDescription('backup')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
 
     <tab heading="Security">
-      <security data="currentCache.data.security.authorization" metadata="resolveDescription('authorization')"
+      <security data="currentCache.configuration.security.authorization" metadata="resolveDescription('authorization')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </tab>
   </tabset>

@@ -29,6 +29,10 @@
           scope.$watch("form.cacheName.$valid", function (){
             scope.$emit("createEnabled", scope.form.cacheName.$valid);
           });
+
+          scope.$on('createCacheTemplateSelected', function(e, selectedCacheTemplate) {
+            scope.data.template = selectedCacheTemplate;
+          });
         }
       };
     }

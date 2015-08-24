@@ -16,11 +16,12 @@
         templateUrl: 'components/directives/cache/general/generaldist.html',
         link: function (scope, element, attrs) {
           scope.cacheTypes = ['distributed-cache', 'local-cache','replicated-cache', 'invalidation-cache'];
-
+          scope.data.template = scope.data.configurationTemplate;
           if (scope.initDefaults) {
             scope.data.type = 'distributed-cache';
             scope.data.data = {};
             scope.data.data.mode = 'SYNC';
+
             ['auto-config', 'remote-timeout', 'capacity-factor', 'l1-lifespan',
               'queue-flush-interval', 'queue-size', 'batching', 'segments', 'owners', 'start', 'statistics'].forEach(function (attrName) {
                 scope.data.data[attrName] = scope.metadata[attrName].default;

@@ -9,10 +9,14 @@
         <div class="col-md-2 text-center">
             <span class="bigger-font"> {{currentCluster.getNodes().length || '?'}} </span> <span class="smaller-font"> Nodes</span>
         </div>
-        <div class="col-md-3 text-center">
-            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> current execution jobs</span>
+
+        <div class="col-md-2 text-center">
+          <span class="bigger-font"> {{currentCluster.getCachesAsArray().length || '?'}} </span> <span class="smaller-font"> Caches</span>
         </div>
-        <div class="col-md-2">
+        <!-- <div class="col-md-3 text-center">
+            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> current execution jobs</span>
+        </div> -->
+        <div class="col-md-3">
         </div>
         <div class="col-md-3 dropdown dropdown-menu-right">
             <button class="btn btn-default dropdown-toggle" type="button" id="clusterActionMenu" data-toggle="dropdown">
@@ -20,21 +24,21 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Configure clusters</a>
+                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Configure clusters</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create node</a>
+                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Create node</a>
                 </li>
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1"
                      ui-sref="createCache({clusterName: currentCluster.name})">Create cache</a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">View map/reduce jobs</a>
+                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">View map/reduce jobs</a>
                 </li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">View split/merge history</a>
+                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">View split/merge history</a>
                 </li>
                 <li role="presentation" class="divider"></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shutdown cluster</a>
+                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Shutdown cluster</a>
                 </li>
             </ul>
         </div>
@@ -49,13 +53,13 @@
                 {{currentCluster.isAvailable() ? 'AVAILABLE' : 'UNAVAILABLE'}}
             </p>
         </div>
-        <div class="col-md-2 text-center">
+        <!-- <div class="col-md-2 text-center">
             <span class="bigger-font"> {{currentCluster.getCachesAsArray().length || '?'}} </span> <span class="smaller-font"> Caches</span>
         </div>
         <div class="col-md-3 text-center">
             <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> complete tasks</span>
-        </div>
-        <div class="col-md-5">
+        </div> -->
+        <div class="col-md-8">
         </div>
     </div>
     <!-- TOP ROW #2 END -->

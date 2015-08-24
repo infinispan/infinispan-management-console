@@ -21,10 +21,20 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="col-md-2 control-label">Configuration template</label>
+
+      <div class="col-md-10">
+        <input type="text" ng-model="data.template" ng-disabled="readOnly"/>
+        <i class="fa fa-info-circle"
+           tooltip="Configuration template used to create this cache instance"
+           tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="col-md-2 control-label">Mode</label>
 
       <div class="col-md-10">
-        <select ng-model="data.data.mode" ng-options="item as item for item in metadata.mode.allowed" ng-disabled="readOnly"/>
+        <select ng-model="data.configuration.mode" ng-options="item as item for item in metadata.mode.allowed" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -35,7 +45,7 @@
       <label class="col-md-2 control-label">Auto config</label>
 
       <div class="col-md-10">
-        <input type="checkbox" ng-model="data.data['auto-config']" ng-disabled="readOnly"/>
+        <input type="checkbox" ng-model="data.configuration['auto-config']" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata['auto-config'].description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -46,7 +56,7 @@
       <label class="col-md-2 control-label">Batching</label>
 
       <div class="col-md-10">
-        <input type="checkbox" ng-model="data.data.batching" ng-disabled="readOnly"/>
+        <input type="checkbox" ng-model="data.configuration.batching" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.batching.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -57,7 +67,7 @@
       <label class="col-md-2 control-label">Capacity factor</label>
 
       <div class="col-md-10">
-        <input type="text" ng-model="data.data['capacity-factor']" ng-disabled="readOnly"/>
+        <input type="text" ng-model="data.configuration['capacity-factor']" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata['capacity-factor'].description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -68,7 +78,7 @@
       <label class="col-md-2 control-label">JNDI name</label>
 
       <div class="col-md-10">
-        <input type="text" ng-model="data.data['jndi-name']" ng-disabled="readOnly"/>
+        <input type="text" ng-model="data.configuration['jndi-name']" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata['jndi-name'].description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -78,7 +88,7 @@
     <div class="form-group" ng-class="{'has-error': !form.lifespan.$pristine && form.lifespan.$invalid }">
       <label class="col-md-2 control-label">L1 lifespan</label>
       <div class="col-md-10">
-        <input type="text" name="lifespan" ng-model="data.data['l1-lifespan']" ng-disabled="readOnly" positive-integer/>
+        <input type="text" name="lifespan" ng-model="data.configuration['l1-lifespan']" ng-disabled="readOnly" positive-integer/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata['l1-lifespan'].description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -92,7 +102,7 @@
       <label class="col-md-2 control-label">Module</label>
 
       <div class="col-md-10">
-        <input type="text" ng-model="data.data.module" ng-disabled="readOnly"/>
+        <input type="text" ng-model="data.configuration.module" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.module.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -103,7 +113,7 @@
       <label class="col-md-2 control-label">Owners</label>
 
       <div class="col-md-10">
-        <input type="text" name="owners" ng-model="data.data.owners" ng-disabled="readOnly" positive-integer/>
+        <input type="text" name="owners" ng-model="data.configuration.owners" ng-disabled="readOnly" positive-integer/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.owners.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -117,7 +127,7 @@
       <label class="col-md-2 control-label">Segments</label>
 
       <div class="col-md-10">
-        <input type="text" name="segments" ng-model="data.data.segments" ng-disabled="readOnly" positive-integer/>
+        <input type="text" name="segments" ng-model="data.configuration.segments" ng-disabled="readOnly" positive-integer/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.segments.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -131,7 +141,7 @@
       <label class="col-md-2 control-label">Start</label>
 
       <div class="col-md-10">
-        <select ng-model="data.data.start" ng-options="item as item for item in metadata.start.allowed" ng-disabled="readOnly"/>
+        <select ng-model="data.configuration.start" ng-options="item as item for item in metadata.start.allowed" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.start.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
@@ -142,7 +152,7 @@
       <label class="col-md-2 control-label">Statistics</label>
 
       <div class="col-md-10">
-        <input type="checkbox" ng-model="data.data.statistics" ng-disabled="readOnly"/>
+        <input type="checkbox" ng-model="data.configuration.statistics" ng-disabled="readOnly"/>
         <i class="fa fa-info-circle"
            tooltip="{{metadata.statistics.description}}"
            tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>

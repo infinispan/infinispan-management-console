@@ -46,7 +46,7 @@ pipes.buildStyles = function(srcPath, destPath) {
 };
 
 pipes.copyBower = function (){
-  return gulp.src(bowerFiles(), { base: paths.bower_comps })
+  return gulp.src(bowerFiles({ "overrides" : { "patternfly" : { "main" : [ "dist/js/patternfly.js", "dist/css/patternfly.css", "dist/css/patternfly-additions.css" ] } } }), { base: paths.bower_comps })
     .pipe(gulp.dest(paths.distDevBower));
 };
 
@@ -95,6 +95,8 @@ pipes.buildFonts = function() {
   //grab everything in bower_components dir, find all filtered files and copy them
   return gulp.src(paths.bower_comps_deep)
     .pipe(plugins.filter('**/*.{eot,svg,ttf,woff}'))
+//    .pipe(plugins.flatten())
+//    .pipe(gulp.dest(paths.distDev + '/fonts'))
     .pipe(gulp.dest(paths.distDevBower))
     .pipe(plugins.size());
 };
@@ -125,3 +127,4 @@ gulp.task('images', pipes.buildImages);
 gulp.task('fonts', pipes.buildFonts);
 
 gulp.task('build', ['clean'], pipes.buildApp);
+

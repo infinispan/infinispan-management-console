@@ -66,4 +66,5 @@ angular.module('managementConsole', [
                 scope.$apply(f);
             });
         };
+        $rootScope.page = { htmlClass: '' };
   }]);

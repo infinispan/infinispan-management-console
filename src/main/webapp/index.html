@@ -1,27 +1,19 @@
 <!doctype html>
-<html class="no-js" ng-app="managementConsole">
+<html class="no-js" ng-app="managementConsole" ng-class="[page.htmlClass]">
   <head>
     <meta charset="utf-8">
-    <title>Management Console</title>
+    <title>Infinispan Server Management Console</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-    <!-- build:css({target/tmp,src/main}) styles/vendor.css -->
-    <link rel="stylesheet" type="text/css" href="vendor.css">
+    <link rel="stylesheet" href="bower_components/nouislider/distribute/jquery.nouislider.min.css" />
+    <!-- build:css({src/main}) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly.css" />
-    <link rel="stylesheet" href="bower_components/nouislider/distribute/jquery.nouislider.min.css" />
-    <!-- slight modifications to fit our style and sizes -->
-
-    <!-- TODO: delete these links probably, we use nouislider -->
-    <!--<link rel="stylesheet" href="bower_components/seiyria-bootstrap-slider/dist/css/bootstrap-slider.css" />-->
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:css({target/tmp,src/main}) styles/managementConsole.css -->
+    <link rel="stylesheet" href="bower_components/patternfly/dist/css/patternfly-additions.css" />
     <link rel="stylesheet" href="management-console.css">
     <link rel="stylesheet" href="components/directives/slider/jquery.nouislider.ispn.css" />
+    <!-- endbower -->
     <!-- endbuild -->
 
     <!-- modernizr does not provide bower.json and thus requires special treatment during build process, use CDN instead -->
@@ -59,7 +51,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:js({src/main/webapp,target/tmp}) scripts/main.js -->
+    <!-- build:js({src/main/webapp}) scripts/main.js -->
     <script src="management-console.js"></script>
     <script src="login/login.controller.js"></script>
     <script src="clusters-view/clusters-view.controller.js"></script>

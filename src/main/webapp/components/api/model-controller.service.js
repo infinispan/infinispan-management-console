@@ -28,6 +28,10 @@ angular.module('managementConsole.api')
             ModelControllerClient.prototype.getServer = function() {
                 return this.server;
             };
+      
+            ModelControllerClient.prototype.serverInfo = function() {
+                return this.execute();
+            };
 
             /**
              * Logs into the management endpoint and determines the launch type
@@ -77,8 +81,13 @@ angular.module('managementConsole.api')
             ModelControllerClient.prototype.execute = function (op) {
                 var deferred = $q.defer();
                 var http = new XMLHttpRequest();
-                http.withCredentials = true;
-                http.open('POST', this.url, true, this.credentials.username, this.credentials.password);
+                if (this.credentials.username) {
+                    http.withCredentials = true;
+                    http.open('POST', this.url, true, this.credentials.username, this.credentials.password);
+                } else {
+                    http.open('POST', this.url, true);
+                }
+                
                 http.setRequestHeader('Content-type', 'application/json');
                 http.setRequestHeader('Accept', 'application/json');
                 http.onreadystatechange = function () {

@@ -49,25 +49,25 @@ angular.module('managementConsole')
       $scope.initialMax = 1000;
       $scope.sliders = [
         {
-          name: "Average read time",
+          name: 'Average read time',
           id: 'average-read-time',
           from: $scope.initialMin,
           to: $scope.initialMax
         },
         {
-          name: "Average write time",
+          name: 'Average write time',
           id: 'average-write-time',
           from: $scope.initialMin,
           to: $scope.initialMax
         },
         {
-          name: "Average remove time",
+          name: 'Average remove time',
           id: 'average-remove-time',
           from: $scope.initialMin,
           to: $scope.initialMax
         },
         {
-          name: "Average replication time",
+          name: 'Average replication time',
           id: 'average-replication-time',
           from: $scope.initialMin,
           to: $scope.initialMax
@@ -131,7 +131,7 @@ angular.module('managementConsole')
           if (utils.isNotNullOrUndefined(statValue)) {
             return (slider.from <= statValue && statValue <= slider.to);
           } else {
-            console.log("Unknown metric " + statName);
+            console.log('Unknown metric ' + statName);
             return true;
           }
         });

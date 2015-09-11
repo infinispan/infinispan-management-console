@@ -20,15 +20,15 @@ angular.module('managementConsole.api')
                 };
                 this.server = null;
             };
-        
+
             ModelControllerClient.prototype.isAuthenticated = function() {
                 return this.authenticated;
             };
-        
+
             ModelControllerClient.prototype.getServer = function() {
                 return this.server;
             };
-      
+
             ModelControllerClient.prototype.serverInfo = function() {
                 return this.execute();
             };
@@ -51,11 +51,11 @@ angular.module('managementConsole.api')
                     }
                 }.bind(this));
             };
-        
+
             ModelControllerClient.prototype.refresh = function() {
                 return this.server.refresh();
             };
-        
+
             ModelControllerClient.prototype.logout = function() {
                 this.credentials = {
                     username: null,
@@ -64,7 +64,7 @@ angular.module('managementConsole.api')
                 this.authenticated = false;
                 this.server = null;
             };
-        
+
             ModelControllerClient.prototype.getUser = function() {
                 if (this.authenticated) {
                     return this.credentials.username;
@@ -87,7 +87,7 @@ angular.module('managementConsole.api')
                 } else {
                     http.open('POST', this.url, true);
                 }
-                
+
                 http.setRequestHeader('Content-type', 'application/json');
                 http.setRequestHeader('Accept', 'application/json');
                 http.onreadystatechange = function () {
@@ -103,7 +103,7 @@ angular.module('managementConsole.api')
                 http.send(JSON.stringify(op));
                 return deferred.promise;
             };
-        
+
             ModelControllerClient.prototype.readAttribute = function (address, name) {
                 var op = {
                     'operation': 'read-attribute',
@@ -111,6 +111,16 @@ angular.module('managementConsole.api')
                     'address': address
                 };
                 return this.execute(op);
+            };
+
+            ModelControllerClient.prototype.readAttributeAndResolveExpressions = function (address, name, resolveExpressions) {
+              var op = {
+                'operation': 'read-attribute',
+                'name': name,
+                'address': address,
+                'resolve-expressions': resolveExpressions
+              };
+              return this.execute(op);
             };
 
             ModelControllerClient.prototype.readChildrenNames = function (address, type) {

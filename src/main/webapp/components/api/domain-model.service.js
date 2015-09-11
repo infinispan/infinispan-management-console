@@ -26,19 +26,26 @@ angular.module('managementConsole.api')
                 return [];
             };
 
-            Domain.prototype.getFistServerResourceRuntimePath = function () {
+            Domain.prototype.getFirstServerResourceRuntimePath = function () {
               return this.servers[0].getResourcePath();
+            };
+
+            Domain.prototype.getFirstServer = function () {
+              return this.servers[0];
             };
 
             Domain.prototype.refresh = function () {
                 var promises = [];
                 var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {
                     this.serverGroups = {};
+                    var serverGroupPromises = [];
                     for (var name in response) {
                         if (name !== undefined) {
                             this.serverGroups[name] = new ServerGroupModel(name, response[name].profile, this);
+                            serverGroupPromises.push(this.serverGroups[name].refresh());
                         }
                     }
+                    return $q.all(serverGroupPromises);
                 }.bind(this));
                 promises.push(serverGroupPromise);
 
@@ -76,6 +83,7 @@ angular.module('managementConsole.api')
                 return $q.all(promises);
             };
 
+
             Domain.prototype.getClusters = function () {
                 var clusters = [];
                 for (var name in this.profiles) {
@@ -98,6 +106,20 @@ angular.module('managementConsole.api')
             Domain.prototype.getNodes = function () {
                 return this.servers;
             };
+
+
+            Domain.prototype.getServerGroupName = function () {
+              return this.getNodes()[0].group;
+            };
+
+            Domain.prototype.getServerGroup = function () {
+              return this.serverGroups[this.getServerGroupName()];
+            };
+
+            Domain.prototype.getProfile = function (profileName) {
+              return this.profiles[profileName];
+            };
+
 
             Domain.prototype.fetchCacheStats = function(cluster, cache) {
                 var promises = [];

@@ -13,6 +13,8 @@ angular.module('managementConsole.api')
                 this.domain = domain;
                 this.lastRefresh = null;
                 this.clusters = [];
+                this.endpoints = {};
+                this.jgroups = {};
             };
 
             Profile.prototype.getModelController = function () {
@@ -36,6 +38,12 @@ angular.module('managementConsole.api')
                             }
                         }
                     }
+                    if (response.subsystem !== undefined && response.subsystem['datagrid-infinispan-endpoint'] !== undefined) {
+                      this.endpoints = response.subsystem['datagrid-infinispan-endpoint'];
+                    }
+                    if (response.subsystem !== undefined && response.subsystem['datagrid-jgroups'] !== undefined) {
+                      this.jgroups = response.subsystem['datagrid-jgroups'];
+                    }
                     for(var i in allClusters) {
                         if (i !== undefined) {
                             this.clusters.push(allClusters[i]);
@@ -48,6 +56,14 @@ angular.module('managementConsole.api')
 
             Profile.prototype.getClusters = function() {
                 return this.clusters;
+            };
+
+            Profile.prototype.getEndpoints = function() {
+              return this.endpoints;
+            };
+
+            Profile.prototype.getJGroups = function() {
+              return this.jgroups;
             };
 
             return Profile;

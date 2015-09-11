@@ -16,6 +16,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.state = 'UNKNOWN';
                 this.show = true;
+                this.defaultStack = 'N/A';
             };
 
             Server.prototype.getResourcePath = function () {
@@ -26,9 +27,17 @@ angular.module('managementConsole.api')
                 return this.domain.getModelController();
             };
 
+            Server.prototype.getDefaultStack = function () {
+              return this.defaultStack;
+            };
+
             Server.prototype.refresh = function () {
-                return this.getModelController().readAttribute(this.getResourcePath(), 'server-state').then(function (response) {
+                this.getModelController().readAttribute(this.getResourcePath(), 'server-state').then(function (response) {
                     this.state = response.toUpperCase();
+                }.bind(this));
+                this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
+                  'default-stack', true).then(function (response) {
+                  this.defaultStack = response.toUpperCase();
                 }.bind(this));
             };
 

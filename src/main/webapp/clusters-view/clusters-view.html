@@ -1,46 +1,75 @@
-<!-- MAIN START -->
-<div class="container-fluid" style="margin:20px">
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-8 col-md-9">
+      <ol class="breadcrumb">
+        <li>Cache containers</li>
+      </ol>
+      <h1>Cache containers</h1>
+      <br>
+      <table class="table ispn-aligned">
+        <tr>
+          <th>Status</th>
+          <th>Name</th>
+          <th># Caches</th>
+          <th>Clustering info <span class="icon-class pficon-info"></span></th>
+          <th>Endpoints <span class="icon-class pficon-info"></span></th>
+          <th>Sites <span class="icon-class pficon-info"></span></th>
+        </tr>
 
-    <!-- TOP ROW #1 START -->
-    <div class="row">
-        <div class="panel panel-default">
-            <div class="panel-heading">Clusters</div>
-            <div class="list-group">
-                <div class="list-group-item row" ng-repeat="cluster in clusters">
-                    <div class="col-md-4">
-                        <a href="#/cluster/{{cluster.name}}"><h4>{{cluster.name}}</h4>
-                            <div>
-                                <p class="fa fa-check-square fa-1x"
-                                   ng-class="(cluster.isAvailable())?'available':'unavailable'">
-                                    {{cluster.isAvailable()?cluster.availability:'UNAVAILABLE'}}</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-4">{{cluster.getNodes().length}} nodes
-                    </div>
-                    <div class="col-md-3 dropdown dropdown-menu-right">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
-                            Actions
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">View cluster</a>
-                            </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Configure cluster</a>
-                            </li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create cache</a>
-                            </li>
-                            <li role="presentation" class="divider"></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shutdown cluster</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <tr ng-repeat="cluster in clusters track by $index">
+          <td><span class="label"
+                    ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
+            {{cluster.isAvailable()?cluster.availability:'UNAVAILABLE'}}</span></td>
+          <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
+          <td><span class="label label-default">{{cluster.getCachesAsArray().length}}</span></td>
+          <td><a href="clustering.html">{{group}}</a><br>
+            <small>{{stack}}</small>
+          </td>
+          <td>
+            <span ng-repeat="e in endpoints[$index]">
+                 {{e.name}}:{{e.port}} {{e.encryption}}</br>
+            </span>
+          </td>
+          <td>
+
+            <span ng-repeat="r in relays[cluster.name]">
+                 {{r}}</br>
+            </span>
+          </td>
+        </tr>
+      </table>
     </div>
-    <!-- TOP ROW #1 END -->
+    <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height: 923px;">
+      <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
+        <h2 class="h5">Latest Grid Events:</h2>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-warning-triangle-o"></span> Split
+            brain detected.</h3>
 
+          <p class="list-group-item-text">Nulla lacinia lorem quis enim posuere dictum.</p>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-history"></span> Degraded mode
+            entered.</h3>
 
+          <p class="list-group-item-text">Nulla lacinia lorem quis enim posuere dictum.</p>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading">Nunc viverra purus libero</h3>
+
+          <p class="list-group-item-text">Nulla lacinia lorem quis enim posuere dictum.</p>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+
+      </ul>
+      <p><a href="#">See all events</a></p>
+    </div>
+    <!-- /col -->
+  </div>
+  <!-- /row -->
 </div>
-<!-- MAIN END -->
+<!-- /container -->

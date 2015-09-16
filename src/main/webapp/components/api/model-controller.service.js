@@ -49,7 +49,9 @@ angular.module('managementConsole.api')
                     } else if (launchType === 'STANDALONE') {
                         //TODO
                     }
-                }.bind(this));
+                }.bind(this)).catch(function(e){
+                  throw e;
+                });
             };
 
             ModelControllerClient.prototype.refresh = function() {
@@ -98,6 +100,9 @@ angular.module('managementConsole.api')
                         } else {
                             deferred.reject();
                         }
+                    }
+                    else if (http.status === 401){
+                      deferred.reject(http.statusText);
                     }
                 };
                 http.send(JSON.stringify(op));

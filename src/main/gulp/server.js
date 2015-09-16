@@ -27,3 +27,12 @@ gulp.task('serve', ['build', 'watch'], function () {
       'dist/**/*.js',
     ]);
 });
+
+gulp.task('serve:e2e', function () {
+    browserSyncInit(['src/main', 'target/tmp'], null, []);
+});
+
+gulp.task('serve:e2e-dist', ['watch'], function () {
+    browserSyncInit('dist', null, []);
+});
+

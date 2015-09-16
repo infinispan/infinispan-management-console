@@ -20,7 +20,7 @@
           <td><span class="label"
                     ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
             {{cluster.isAvailable()?cluster.availability:'UNAVAILABLE'}}</span></td>
-          <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
+          <td><strong><a href="#/cluster/{{cluster.name}}" id="cluster-link-{{cluster.name}}">{{cluster.name}}</a></strong></td>
           <td><span class="label label-default">{{cluster.getCachesAsArray().length}}</span></td>
           <td><a href="clustering.html">{{group}}</a><br>
             <small>{{stack}}</small>

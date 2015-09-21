@@ -1,178 +1,262 @@
-<!-- MAIN START -->
-<div class="container-fluid" style="margin:20px">
-
-    <!-- TOP ROW #1 START -->
-    <div class="row">
-        <div class="col-md-2">
-            <select class="selectpicker" ng-model="currentCluster" ng-options="cluster.name for cluster in clusters"/>
-        </div>
-        <div class="col-md-2 text-center">
-            <span class="bigger-font"> {{currentCluster.getNodes().length || '?'}} </span> <span class="smaller-font"> Nodes</span>
-        </div>
-
-        <div class="col-md-2 text-center">
-          <span class="bigger-font"> {{currentCluster.getCachesAsArray().length || '?'}} </span> <span class="smaller-font"> Caches</span>
-        </div>
-        <!-- <div class="col-md-3 text-center">
-            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> current execution jobs</span>
-        </div> -->
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-3 dropdown dropdown-menu-right">
-            <button class="btn btn-default dropdown-toggle" type="button" id="clusterActionMenu" data-toggle="dropdown">
-                Actions
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Configure clusters</a>
-                </li>
-                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Create node</a>
-                </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1"
-                     ui-sref="createCache({clusterName: currentCluster.name})">Create cache</a>
-                </li>
-                <li role="presentation" class="divider"></li>
-                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">View map/reduce jobs</a>
-                </li>
-                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">View split/merge history</a>
-                </li>
-                <li role="presentation" class="divider"></li>
-                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Shutdown cluster</a>
-                </li>
-            </ul>
-        </div>
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li class="active"><strong>{{currentCluster.name}}</strong></li>
+      </ol>
+      <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                data-toggle="dropdown">
+          ACTIONS
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Stop</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Start</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Delete</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable partition handling</a>
+          <li role="presentation" ><a role="menuitem" href="#">Disable partition handling</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a role="menuitem" href="cache-container-configuration-schemas.html">View / Edit configuration</a>
+          </li>
+        </ul>
+      </div>
+      <h1><span class="label"
+         ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
+        {{currentCluster.isAvailable() ? 'AVAILABLE' : 'UNAVAILABLE'}}
+      </span> {{currentCluster.name}}</h1>
     </div>
-    <!-- TOP ROW #1 END -->
+  </div>
 
-    <!-- TOP ROW #2 START -->
-    <div class="row">
-        <div class="col-md-2 text-left">
-            <p class="fa fa-1x"
-               ng-class="currentClusterAvailability() ? 'available' : 'unavailable'">
-                {{currentCluster.isAvailable() ? 'AVAILABLE' : 'UNAVAILABLE'}}
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="cache-container-caches.html">Caches</a></li>
+        <li><a href="cache-container-tasks-execution.html">Tasks execution</a></li>
+        <li><a href="cache-container-endpoints.html">Endpoints</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
+      <br />
+
+      <div class="alert alert-info" ng-show="filtered.length < currentCluster.getCachesAsArray().length">
+        <span class="fa fa-filter"></span> Showing {{filtered.length}} caches out of {{currentCluster.getCachesAsArray().length}} total.
+      </div>
+
+      <div class="col-xs-6 col-sm-4 col-md-2">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status">
+          <h2 class="card-pf-title">Add Cache
+          </h2>
+          <div style="height: 50px;" class="card-pf-body">
+            <p class="card-pf-aggregate-status-notifications">
+                    <span class="card-pf-aggregate-status-notification">
+                      <a data-original-title="Add Cache" data-toggle="modal" data-target="#myModal"
+                         href="#" class="add" data-toggle="tooltip" data-placement="top" title="">
+                        <span class="pficon pficon-add-circle-o"></span>
+                      </a>
+                    </span>
             </p>
+          </div>
         </div>
-        <!-- <div class="col-md-2 text-center">
-            <span class="bigger-font"> {{currentCluster.getCachesAsArray().length || '?'}} </span> <span class="smaller-font"> Caches</span>
+      </div>
+      <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
+      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray()| filter: {name: searchNameQuery})" ng-show="cache.show">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="pficon pficon-ok"></span><a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">{{cache.name}}</a>
+          </h2>
+
+          <div class="card-pf-body">
+            <p ng-show="cache.isReplicated()">Replicated</p>
+            <p ng-show="cache.isDistributed()">Distributed</p>
+            <p ng-show="cache.isLocal()">Local</p>
+            <p ng-show="cache.isInvalidation()">Invalidation</p>
+            <p class="card-pf-aggregate-status-notifications">
+              <span class="card-pf-aggregate-status-notification">
+                  <span class="fa fa-database" title="Persistent"></span>
+                  <span class="fa fa-stack-overflow" title="Bounded"></span>
+                  <span class="fa fa-arrow-circle-o-down" title="Transactional"></span>
+                  <span class="fa fa-lock" title="Security enabled"></span>
+                  <div class="progress progress-xs">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                         aria-valuemax="100" style="width: 10%;">
+                      <span class="sr-only">10%</span>
+                    </div>
+                  </div>
+              </span>
+            </p>
+          </div>
         </div>
-        <div class="col-md-3 text-center">
-            <a class="bigger-font link-jobs">?</a> <span class="smaller-font"> complete tasks</span>
-        </div> -->
-        <div class="col-md-8">
-        </div>
-    </div>
-    <!-- TOP ROW #2 END -->
-
-    <div class="row stretch" style="margin-top:20px;">
-
-        <!-- LEFT COLUMN START -->
-        <div class="col-md-2 borders stretch-full" style="background-color:#F0F0F0;">
-            <span>
-                <button class="slider-max button-as-link" tooltip="Clear Filters" ng-click="clearFilters()">Clear all filters</button>
-            </span>
-
-            <div class="row" style="padding:10px;">
-                <div class="col-md-12">
-                    <div ng-show="isNodesView()">
-                        <span style="font-size:16px; font-weight: bold;"> Caches</span>
-                        <br>
-
-                        <div ng-repeat="cache in currentCluster.caches">
-                            <input type="checkbox" value="checkbox" name="caches">{{cache.name}}
-                            <br>
-                        </div>
-                    </div>
-                    <div ng-show="isCachesView()">
-                        <span style="font-size:16px; font-weight: bold;"> Servers</span>
-                        <br>
-
-                        <div ng-repeat="node in currentCluster.getNodes()">
-                            <input type="checkbox" value="checkbox" name="caches">{{node.name}}
-                            <br>
-                        </div>
-                    </div>
-
-                    <div ng-repeat="slider in sliders">
-                        <br>
-                        <br>
-                        <span>{{slider.name}}</span>
-                        <slider min="initialMin" max="initialMax" step=10 from="slider.from" to="slider.to"
-                                unit="'ms'"></slider>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- LEFT COLUMN END -->
-
-        <!-- RIGHT COLUMN START -->
-        <div class="col-md-10 borders-top-only">
-
-            <!-- RIGHT COLUMN ROW #1 START -->
-            <div class="row">
-                <div class="col-md-12" style="padding-top:20px; padding-bottom:20px;">
-                    <input type="search" class="search-field" ng-model="searchNameQuery" placeholder="Search caches or nodes">
-
-                    <div style="float:left;">
-                        <span class="glyphicon glyphicon-th-large header-links-container"
-                              ng-class="{selected: isNodesView()}">
-              <a class="header-links" ng-click="shared.currentCollection = 'nodes'"> Nodes </a>
-            </span>
-                        <span class="glyphicon glyphicon-tasks header-links-container"
-                              ng-class="{selected: isCachesView()}">
-              <a class="header-links" ng-click="shared.currentCollection = 'caches'"> Caches </a>
-            </span>
-                    </div>
-                </div>
-            </div>
-            <!-- RIGHT COLUMN ROW #1 END -->
-
-            <!-- RIGHT COLUMN ROW #2 START -->
-            <div class="row" style="padding-left:15px !important; margin: 0px important!;">
-                <div ng-show="isNodesView()">
-                    <div ng-show="!currentCluster.hasNodes()">There are no nodes to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="node in currentCluster.getNodes() | filter: {name: searchNameQuery}" ng-show="node.show">
-                        <a class="text-center"
-                           ui-sref="nodeDetails({clusterName: currentCluster.name, nodeName: node.name})">
-                            {{node.name}} <br>
-                            <div ng-show="isZoomedIn()">
-                                <h6>5 caches</h6>
-                                <h6>32 writes/ms</h6>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div ng-show="isCachesView()">
-                    <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
-                    <div class="box col-md-2 nopadding" ng-repeat="cache in currentCluster.getCachesAsArray() | filter: {name: searchNameQuery}" ng-show="cache.show">
-
-                        <!-- from PR #7 we will have: -->
-                        <!-- prepared api for use: {{currentCluster.getCache(cName).availability}}-->
-                        <a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">
-                            <h4>{{cache.name}}</h4><br>
-
-                            <div ng-show="isZoomedIn()">
-                                <h6>{{currentCluster.getNodes().length}} nodes</h6>
-                                <h6>35 writes/ms</h6>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- RIGHT COLUMN ROW #2 END -->
-
-            <div class="row right" style="padding-right:15px !important; margin: 0px !important;">
-                <br><br><br><br><br><br>
-                <span>Zoom</span>
-                <slider min=0 max=1 value="zoomValue"></slider>
-            </div>
-            <!-- RIGHT COLUMN ROW #3 END -->
-
-        </div>
-        <!-- RIGHT COLUMN END -->
-
+      </div>
     </div>
 
+    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left">
+      <br>
+      <small>Quick search:</small>
+      <form role="form" class="search-pf has-button">
+        <div class="form-group has-clear">
+          <div class="search-pf-input-group">
+            <label for="search5" class="sr-only">Name</label>
+            <input id="search5" class="form-control" ng-model="searchNameQuery" placeholder="Type name, data center, ..."
+                   type="search">
+            <button style="display: none;" type="button" class="clear" aria-hidden="true"><span
+              class="pficon pficon-close"></span></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
+        </div>
+      </form>
+      <hr>
+      <div class="panel-group" id="filter-accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#filter-type-accordion" href="#filter-type-accordion" class="collapsed">
+                Type
+              </a>
+            </h4>
+          </div>
+          <div id="filter-type-accordion" class="panel-collapse collapse">
+            <div class="panel-body">
+              <fieldset>
+                <label><input type="checkbox" name="cache-type" value="local" checked/> Local</label>
+                <label><input type="checkbox" name="cache-type" value="replicated" checked/> Replicated</label>
+                <label><input type="checkbox" name="cache-type" value="distributed" checked/>
+                  Distributed</label>
+                <label><input type="checkbox" name="cache-type"
+                              value="invalidation" checked/> Invalidation</label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#filter-trait-accordion" href="#filter-trait-accordion"
+                 class="collapsed">
+                Trait
+              </a>
+            </h4>
+          </div>
+          <div id="filter-trait-accordion" class="panel-collapse collapse">
+            <div class="panel-body">
+              <fieldset>
+                <label><input type="checkbox" name="cache-trait" value="bounded" checked/> Bounded <span class="fa fa-stack-overflow" title="Bounded"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="compatible" checked/> Compatible <span class="fa fa-puzzle-piece" title="Compatible"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="indexed" checked/> Indexed <span class="fa fa-list-ol" title="Indexed"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="persistent" checked/> Persistent <span class="fa fa-database" title="Persistent"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="remotebackup" checked/> Remote
+                  backup <span class="pficon pficon-history" title="Remote backup"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="secure" checked/> Secure <span class="fa fa-lock" title="Indexed"></span></label>
+                <label><input type="checkbox" name="cache-trait"
+                              value="transactional" checked/> Transactional <span class="fa fa-arrow-circle-o-down" title="Transactional"></span></label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#filter-status-accordion" href="#filter-status-accordion"
+                 class="collapsed">
+                Status
+              </a>
+            </h4>
+          </div>
+          <div id="filter-status-accordion" class="panel-collapse collapse">
+            <div class="panel-body">
+              <fieldset>
+                <label><input type="checkbox" name="cache-status" value="indexing" checked/> Indexing</label>
+                <label><input type="checkbox" name="cache-status"
+                              value="maintenance" checked/> Offline</label>
+                <label><input type="checkbox" name="cache-status"
+                              value="rebalancing" checked/> Rebalancing</label>
+                <label><input type="checkbox" name="cache-status" value="splitbrain" checked/> Split</label>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- MAIN END -->
+
+<!---------------
+
+  Create new cache modal
+
+---------------->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Add new cache</h4>
+      </div>
+      <div class="modal-body">
+
+        <h4><b>Step 1</b>: Please, enter the required cache properties:</h4>
+        <br>
+
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-4 control-label">* Name:</label>
+            <div class="col-md-6" >
+              <input type="text" class="form-control" name="cacheName" ng-model="data.name" ng-disabled="readOnly" required="" >
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+            <!-- ngIf: form.cacheName.$invalid && !form.cacheName.$pristine -->
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">* Base configuration:</label>
+            <div class="col-md-6">
+              <select ng-model="data.type" class="form-control"
+                      onchange="if( this.value=='-- NONE --') {document.getElementById('type').style.display='block';} else {document.getElementById('type').style.display='none';}"
+                >
+                <option selected="selected">-- Select base configuration --</option>
+                <option>-- NONE --</option>
+                <option label="My template 1">My template 1</option><option value="string:local-cache" label="local-cache">My template 2</option><option value="string:replicated-cache" label="replicated-cache">replicated-cache</option><option value="string:invalidation-cache" label="invalidation-cache">My template 3</option></select>
+
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+          </div>
+          <div class="form-group" id="type" style="display: none">
+            <label class="col-md-4 control-label">* Type:</label>
+
+            <div class="col-md-6">
+              <select ng-model="data.type" ng-options="ct as ct for ct in cacheTypes" ng-disabled="readOnly" class="form-control"  ><option value="string:distributed-cache" label="distributed-cache" selected="selected">distributed-cache</option><option value="string:local-cache" label="local-cache">local-cache</option><option value="string:replicated-cache" label="replicated-cache">replicated-cache</option><option value="string:invalidation-cache" label="invalidation-cache">invalidation-cache</option></select>
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary"
+                onclick="document.location='cache-configuration.html'"
+          >Save and Continue</button>
+      </div>
+    </div>
+  </div>
+</div>

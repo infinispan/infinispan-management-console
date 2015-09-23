@@ -60,8 +60,8 @@
           <div style="height: 50px;" class="card-pf-body">
             <p class="card-pf-aggregate-status-notifications">
                     <span class="card-pf-aggregate-status-notification">
-                      <a data-original-title="Add Cache" data-toggle="modal" data-target="#myModal"
-                         href="#" class="add" data-toggle="tooltip" data-placement="top" title="">
+                      <a data-original-title="Add Cache" data-toggle="modal" ng-click="openModal()"
+                         href="#" class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
                         <span class="pficon pficon-add-circle-o"></span>
                       </a>
                     </span>
@@ -70,7 +70,7 @@
         </div>
       </div>
       <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
-      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray()| filter: {name: searchNameQuery})" ng-show="cache.show">
+      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() | filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
             <span class="pficon pficon-ok"></span><a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">{{cache.name}}</a>
@@ -83,16 +83,11 @@
             <p ng-show="cache.isInvalidation()">Invalidation</p>
             <p class="card-pf-aggregate-status-notifications">
               <span class="card-pf-aggregate-status-notification">
-                  <span class="fa fa-database" title="Persistent"></span>
-                  <span class="fa fa-stack-overflow" title="Bounded"></span>
-                  <span class="fa fa-arrow-circle-o-down" title="Transactional"></span>
-                  <span class="fa fa-lock" title="Security enabled"></span>
-                  <div class="progress progress-xs">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                         aria-valuemax="100" style="width: 10%;">
-                      <span class="sr-only">10%</span>
-                    </div>
-                  </div>
+                  <span class="fa fa-database" title="Persistent" ng-show="cache.isPersistent()"></span>
+                  <span class="fa fa-stack-overflow" title="Bounded" ng-show="cache.isBounded()"></span>
+                  <span class="fa fa-arrow-circle-o-down" title="Transactional" ng-show="cache.isTransactional()"></span>
+                  <span class="fa fa-lock" title="Security enabled" ng-show="cache.hasSecurityEnabled()"></span>
+                  <span class="fa"></span>
               </span>
             </p>
           </div>
@@ -122,20 +117,20 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#filter-type-accordion" href="#filter-type-accordion" class="collapsed">
+              <a data-toggle="collapse" data-parent="#filter-type-accordion" href="#" ng-click="isCollapsedType = !isCollapsedType" class="collapsed">
                 Type
               </a>
             </h4>
           </div>
-          <div id="filter-type-accordion" class="panel-collapse collapse">
+          <div id="filter-type-accordion" class="panel-collapse" ng-class="isCollapsedType?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-type" value="local" checked/> Local</label>
-                <label><input type="checkbox" name="cache-type" value="replicated" checked/> Replicated</label>
-                <label><input type="checkbox" name="cache-type" value="distributed" checked/>
+                <label><input type="checkbox" name="cache-type" value="local" ng-model="typeCheckboxes.local"/> Local</label>
+                <label><input type="checkbox" name="cache-type" value="replicated" ng-model="typeCheckboxes.replicated"/> Replicated</label>
+                <label><input type="checkbox" name="cache-type" value="distributed" ng-model="typeCheckboxes.distributed"/>
                   Distributed</label>
                 <label><input type="checkbox" name="cache-type"
-                              value="invalidation" checked/> Invalidation</label>
+                              value="invalidation" ng-model="typeCheckboxes.invalidation"/> Invalidation</label>
               </fieldset>
             </div>
           </div>
@@ -143,24 +138,24 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#filter-trait-accordion" href="#filter-trait-accordion"
+              <a data-toggle="collapse" href="#" data-parent="#filter-trait-accordion" ng-click="isCollapsedTrait = !isCollapsedTrait"
                  class="collapsed">
                 Trait
               </a>
             </h4>
           </div>
-          <div id="filter-trait-accordion" class="panel-collapse collapse">
+          <div id="filter-trait-accordion" class="panel-collapse" ng-class="isCollapsedTrait?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-trait" value="bounded" checked/> Bounded <span class="fa fa-stack-overflow" title="Bounded"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="compatible" checked/> Compatible <span class="fa fa-puzzle-piece" title="Compatible"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="indexed" checked/> Indexed <span class="fa fa-list-ol" title="Indexed"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="persistent" checked/> Persistent <span class="fa fa-database" title="Persistent"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="remotebackup" checked/> Remote
+                <label><input type="checkbox" name="cache-trait" value="bounded" ng-model="traitCheckboxes.bounded"/> Bounded <span class="fa fa-stack-overflow" title="Bounded"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="compatible" ng-model="traitCheckboxes.compatible"/> Compatible <span class="fa fa-puzzle-piece" title="Compatible"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="indexed" ng-model="traitCheckboxes.indexed"/> Indexed <span class="fa fa-list-ol" title="Indexed"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="persistent" ng-model="traitCheckboxes.persistent"/> Persistent <span class="fa fa-database" title="Persistent"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> Remote
                   backup <span class="pficon pficon-history" title="Remote backup"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="secure" checked/> Secure <span class="fa fa-lock" title="Indexed"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="secure" ng-model="traitCheckboxes.secure"/> Secure <span class="fa fa-lock" title="Indexed"></span></label>
                 <label><input type="checkbox" name="cache-trait"
-                              value="transactional" checked/> Transactional <span class="fa fa-arrow-circle-o-down" title="Transactional"></span></label>
+                              value="transactional" ng-model="traitCheckboxes.transactional"/> Transactional <span class="fa fa-arrow-circle-o-down" title="Transactional"></span></label>
               </fieldset>
             </div>
           </div>
@@ -168,21 +163,19 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#filter-status-accordion" href="#filter-status-accordion"
+              <a data-toggle="collapse" data-parent="#filter-status-accordion" href="#" ng-click="isCollapsedStatus = !isCollapsedStatus"
                  class="collapsed">
                 Status
               </a>
             </h4>
           </div>
-          <div id="filter-status-accordion" class="panel-collapse collapse">
+          <div id="filter-status-accordion" class="panel-collapse" ng-class="isCollapsedStatus?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-status" value="indexing" checked/> Indexing</label>
-                <label><input type="checkbox" name="cache-status"
-                              value="maintenance" checked/> Offline</label>
-                <label><input type="checkbox" name="cache-status"
-                              value="rebalancing" checked/> Rebalancing</label>
-                <label><input type="checkbox" name="cache-status" value="splitbrain" checked/> Split</label>
+                <label><input type="checkbox" name="cache-status" value="indexing" ng-model="statusCheckboxes.indexing"/> Indexing</label>
+                <label><input type="checkbox" name="cache-status" value="maintenance" ng-model="statusCheckboxes.offline"/> Offline</label>
+                <label><input type="checkbox" name="cache-status" value="rebalancing" ng-model="statusCheckboxes.rebalancing"/> Rebalancing</label>
+                <label><input type="checkbox" name="cache-status" value="splitbrain" ng-model="statusCheckboxes.splitbrain"/> Split</label>
               </fieldset>
             </div>
           </div>
@@ -197,66 +190,3 @@
   Create new cache modal
 
 ---------------->
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          <span class="pficon pficon-close"></span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">Add new cache</h4>
-      </div>
-      <div class="modal-body">
-
-        <h4><b>Step 1</b>: Please, enter the required cache properties:</h4>
-        <br>
-
-        <form class="form-horizontal">
-          <div class="form-group">
-            <label class="col-md-4 control-label">* Name:</label>
-            <div class="col-md-6" >
-              <input type="text" class="form-control" name="cacheName" ng-model="data.name" ng-disabled="readOnly" required="" >
-            </div>
-            <div class="col-md-2 pull-left" style="padding-left: 0">
-              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-            <!-- ngIf: form.cacheName.$invalid && !form.cacheName.$pristine -->
-          </div>
-          <div class="form-group">
-            <label class="col-md-4 control-label">* Base configuration:</label>
-            <div class="col-md-6">
-              <select ng-model="data.type" class="form-control"
-                      onchange="if( this.value=='-- NONE --') {document.getElementById('type').style.display='block';} else {document.getElementById('type').style.display='none';}"
-                >
-                <option selected="selected">-- Select base configuration --</option>
-                <option>-- NONE --</option>
-                <option label="My template 1">My template 1</option><option value="string:local-cache" label="local-cache">My template 2</option><option value="string:replicated-cache" label="replicated-cache">replicated-cache</option><option value="string:invalidation-cache" label="invalidation-cache">My template 3</option></select>
-
-            </div>
-            <div class="col-md-2 pull-left" style="padding-left: 0">
-              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-          <div class="form-group" id="type" style="display: none">
-            <label class="col-md-4 control-label">* Type:</label>
-
-            <div class="col-md-6">
-              <select ng-model="data.type" ng-options="ct as ct for ct in cacheTypes" ng-disabled="readOnly" class="form-control"  ><option value="string:distributed-cache" label="distributed-cache" selected="selected">distributed-cache</option><option value="string:local-cache" label="local-cache">local-cache</option><option value="string:replicated-cache" label="replicated-cache">replicated-cache</option><option value="string:invalidation-cache" label="invalidation-cache">invalidation-cache</option></select>
-            </div>
-            <div class="col-md-2 pull-left" style="padding-left: 0">
-              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary"
-                onclick="document.location='cache-configuration.html'"
-          >Save and Continue</button>
-      </div>
-    </div>
-  </div>
-</div>

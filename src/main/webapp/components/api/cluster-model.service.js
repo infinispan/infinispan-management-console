@@ -16,7 +16,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.caches = {};
                 this.cachesMetadata = null;
-                this.availability = this.getAvailability();
+                this.availability = null;
                 this.endpoints = [];
             };
 

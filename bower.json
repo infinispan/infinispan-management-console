@@ -2,11 +2,12 @@
   "name": "managementConsole",
   "version": "0.0.0",
   "dependencies": {
+    "jquery": "2.1.4",
     "angular": "1.4.4",
     "angular-ui-router": "0.2.13",
-    "bootstrap": "3.2.x",
+    "bootstrap": "3.3.5",
     "angular-ui-bootstrap-bower": "0.11.2",
     "patternfly": "2.2.x",
-    "nouislider": "7.0.10"
+    "matchHeight": "0.6.0"
   }
 }

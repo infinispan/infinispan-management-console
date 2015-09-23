@@ -1,33 +1,40 @@
 'use strict';
 
 angular.module('managementConsole')
-    .controller('LoginCtrl', [
+  .controller('LoginCtrl', [
     '$scope',
     '$state',
     'modelController',
     function ($scope, $state, modelController) {
 
-            $scope.credentials = {
-                username: '',
-                password: ''
-            };
+      $scope.credentials = {
+        username: '',
+        password: ''
+      };
 
-            $scope.authenticated = false;
-            
-            $scope.page.htmlClass = 'login-pf';
+      $scope.authenticated = false;
+      $scope.showLoginSpinner = false;
 
-            $scope.login = function (credentials) {
-                modelController.login(credentials.username, credentials.password).then(function () {
-                    $scope.authenticated = true;
-                    $scope.page.htmlClass = '';
-                    var modelPromise = modelController.refresh();
-                    modelPromise.then(function() {
-                        $state.go('clustersView');
-                    });
-                });
-            };
+      $scope.page.htmlClass = 'login-pf';
 
-            $scope.isAuthenticated = function () {
-                return $scope.authenticated;
-            };
-  }]);
+      $scope.login = function (credentials) {
+        $scope.showLoginSpinner = true;
+        modelController.login(credentials.username, credentials.password).then(function () {
+          $scope.authenticated = true;
+          $scope.page.htmlClass = '';
+          var modelPromise = modelController.refresh();
+          modelPromise.then(function () {
+            $scope.showLoginSpinner = false;
+            $state.go('clustersView');
+          });
+        }).catch(function (e) {
+          console.log("Login error", e);
+          $scope.loginError = true;
+          $scope.showLoginSpinner = false;
+        })
+      };
+
+      $scope.isAuthenticated = function () {
+        return $scope.authenticated;
+      };
+    }]);

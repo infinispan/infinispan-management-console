@@ -32,8 +32,8 @@ angular.module('managementConsole')
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
 
-      $scope.isCollapsedTrait = true;
-      $scope.isCollapsedType = true;
+      $scope.isCollapsedTrait = false;
+      $scope.isCollapsedType = false;
       $scope.isCollapsedStatus = true;
 
       $scope.traitCheckboxes = {

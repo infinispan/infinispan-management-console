@@ -1,0 +1,305 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li>
+          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+        </li>
+        <li class="active"><strong>{{currentCache.name}}</strong> <small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
+      </ol>
+      <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                data-toggle="dropdown">
+          ACTIONS
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Disable</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Purge cache data</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Start rebalance</a>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Stop rebalance</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Reset statistics</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
+          </li>
+        </ul>
+      </div>
+      <h1><span class="label"
+                ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
+        {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
+      </span> {{currentCache.name}}</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <!--ul class="nav nav-tabs nav-tabs-pf"-->
+      <ul class="nav nav-tabs nav-tabs">
+        <li class="active"><a href="#">General status</a></li>
+        <li><a ui-sref="cacheNodes({clusterName: currentCluster.name, cacheName: currentCache.name})">Nodes</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!--div class="cards-pf" style="padding:20px"-->
+  <div style="padding-top: 20px">
+    <div class="row row-cards-pf">
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isPersistent()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action"
+             style="height: 40px;">
+          <h2 class="card-pf-title" style="height: 17px;">
+            <span class="fa fa-database" title="Persistent"></span> Persistent
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isTransactional()">
+        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
+             style="height: 40px;">
+          <h2 class="card-pf-title" style="height: 17px;">
+            <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isBounded()">
+        <div class="card-pf    card-pf-accented card-pf-aggregate-status card-pf-with-action"
+             style="height: 40px;">
+          <h2 class="card-pf-title" style="height: 17px;">
+            <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isIndexed()">
+        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
+             style="height: 40px;">
+          <h2 class="card-pf-title" style="height: 17px;">
+            <span class="fa fa-list-ol" title="Indexed"></span> Indexed
+          </h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-cards-pf">
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Cache content</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th># Entries</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-entries']}}</td>
+                  </tr>
+                  <tr>
+                    <th>READ / WRITE ratio</th>
+                    <td><td>{{currentCacheStats.firstServerStats['clusterwide-read-write-ratio']}}</td></td>
+                  </tr>
+                  <tr>
+                    <th>HIT ratio</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-hit-ratio']}}</td>
+                  </tr>
+                  <tr>
+                    <th>Max capacity:</th>
+                    <td>TODO</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="padding-top: 10px">
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="50"
+                             aria-valuemin="0"
+                             aria-valuemax="100" style="width: 50%;">
+                          <span>340 / 680 - 50%</span>
+                        </div>
+                      </div>
+
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Operations performance</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th>Avg Reads</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-read-time']}}</td>
+                  </tr>
+                  <tr>
+                    <th>Avg Writes</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-write-time']}}</td>
+                  </tr>
+                  <tr>
+                    <th>Avg Removes</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-remove-time']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Caching activity</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th># READ Hits</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-hits']}}</td>
+                  </tr>
+                  <tr>
+                    <th># READ misses</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                  </tr>
+                  <tr>
+                    <th># REMOVE hits</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-hits']}}</td>
+                  </tr>
+                  <tr>
+                    <th># REMOVE misses</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-misses']}}</td>
+                  </tr>
+                  <tr>
+                    <th># PUTS</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+    </div>
+
+    <div class="row row-cards-pf">
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Entries lifecycle</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th># Activations</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-activations']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Evictions</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-evictions']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Invalidations</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-invalidations']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Passivations</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Cache loader</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th># Loads</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Misses</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Stores</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Locking</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th># Locks available</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-available']}}</td>
+                  </tr>
+                  <tr>
+                    <th># Locks held</th>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-held']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+
+    </div>
+  </div>
+</div>
+
+

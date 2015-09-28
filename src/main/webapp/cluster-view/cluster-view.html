@@ -29,7 +29,7 @@
       </div>
       <h1><span class="label"
          ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
-        {{currentCluster.isAvailable() ? 'AVAILABLE' : 'UNAVAILABLE'}}
+        {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
       </span> {{currentCluster.name}}</h1>
     </div>
   </div>
@@ -73,7 +73,7 @@
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() | filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="pficon pficon-ok"></span><a ui-sref="cacheDetails({clusterName: currentCluster.name, cacheName: cache.name})">{{cache.name}}</a>
+            <span class="pficon pficon-ok"></span><a ui-sref="cacheStatus({clusterName: currentCluster.name, cacheName: cache.name})">{{cache.name}}<span class="card-link"></span></a>
           </h2>
 
           <div class="card-pf-body">
@@ -147,15 +147,15 @@
           <div id="filter-trait-accordion" class="panel-collapse" ng-class="isCollapsedTrait?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-trait" value="bounded" ng-model="traitCheckboxes.bounded"/> Bounded <span class="fa fa-stack-overflow" title="Bounded"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="compatible" ng-model="traitCheckboxes.compatible"/> Compatible <span class="fa fa-puzzle-piece" title="Compatible"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="indexed" ng-model="traitCheckboxes.indexed"/> Indexed <span class="fa fa-list-ol" title="Indexed"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="persistent" ng-model="traitCheckboxes.persistent"/> Persistent <span class="fa fa-database" title="Persistent"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> Remote
-                  backup <span class="pficon pficon-history" title="Remote backup"></span></label>
-                <label><input type="checkbox" name="cache-trait" value="secure" ng-model="traitCheckboxes.secure"/> Secure <span class="fa fa-lock" title="Indexed"></span></label>
+                <label><input type="checkbox" name="cache-trait" value="bounded" ng-model="traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow" title="Bounded"> Bounded</span></label>
+                <label><input type="checkbox" name="cache-trait" value="compatible" ng-model="traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible</label>
+                <label><input type="checkbox" name="cache-trait" value="indexed" ng-model="traitCheckboxes.indexed"/> <span class="fa fa-list-ol" title="Indexed"></span> Indexed</label>
+                <label><input type="checkbox" name="cache-trait" value="persistent" ng-model="traitCheckboxes.persistent"/> <span class="fa fa-database" title="Persistent"></span> Persistent</label>
+                <label><input type="checkbox" name="cache-trait" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> <span class="pficon pficon-history" title="Remote backup"> Remote
+                  backup</span></label>
+                <label><input type="checkbox" name="cache-trait" value="secure" ng-model="traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span> Secure</label>
                 <label><input type="checkbox" name="cache-trait"
-                              value="transactional" ng-model="traitCheckboxes.transactional"/> Transactional <span class="fa fa-arrow-circle-o-down" title="Transactional"></span></label>
+                              value="transactional" ng-model="traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional</label>
               </fieldset>
             </div>
           </div>

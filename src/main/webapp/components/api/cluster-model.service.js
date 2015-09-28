@@ -35,7 +35,6 @@ angular.module('managementConsole.api')
                 return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
                     this.lastRefresh = new Date();
                     this.caches = {};
-                    this.getAvailability();
                     var cachePromises = [];
                     var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
                     for (var i = 0; i < cacheTypes.length; i++) {
@@ -51,6 +50,8 @@ angular.module('managementConsole.api')
                         }
                     }
                     return $q.all(cachePromises);
+                }.bind(this)).then(function (){
+                  this.getAvailability();
                 }.bind(this));
             };
 

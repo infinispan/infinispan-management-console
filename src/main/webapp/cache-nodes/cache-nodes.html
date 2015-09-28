@@ -1,0 +1,81 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li>
+          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+        </li>
+        <li class="active"><strong>{{currentCache.name}}</strong>
+      </ol>
+      <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                data-toggle="dropdown">
+          ACTIONS
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Disable</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Purge cache data</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Start rebalance</a>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Stop rebalance</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
+          </li>
+        </ul>
+      </div>
+      <h1><span class="label"
+                ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
+        {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
+      </span> {{currentCache.name}}</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <!--ul class="nav nav-tabs nav-tabs-pf"-->
+      <ul class="nav nav-tabs nav-tabs">
+        <li ><a ui-sref="cacheStatus({clusterName: currentCluster.name, cacheName: currentCache.name})">General status</a></li>
+        <li class="active"><a href="#">Nodes</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="col-md-12">
+
+    <br>
+    <table class="datatable table table-striped table-bordered display" id="cachesTable">
+      <thead>
+      <tr><th>Name</th>
+        <th>Average reads</th>
+        <th>Average writes</th>
+        <th>Total entries</th>
+        <th>Total reads</th>
+        <th>Total failed reads</th>
+        <th>Total writes</th>
+        <th>Total failed writes</th>
+      </tr></thead>
+      <tbody>
+        <tr ng-repeat="stats in currentCacheStats.nodeStats">
+          <td>{{stats['node-name']}}</td>
+          <td>{{stats['average-read-time']}}</td>
+          <td>{{stats['average-write-time']}}</td>
+          <td>{{stats['number-of-entries']}}</td>
+          <td>{{stats['average-read-time']}}</td>
+          <td>{{stats['average-read-time']}}</td>
+          <td>{{stats['average-read-time']}}</td>
+          <td>{{stats['average-read-time']}}</td>
+        </tr>
+      </tbody></table>
+  </div>
+</div>

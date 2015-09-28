@@ -36,7 +36,18 @@ angular.module('managementConsole', [
                 url: '/cluster/:clusterName/cache/:cacheName',
                 templateUrl: 'cache-details/cache-details.html',
                 controller: 'CacheDetailsCtrl'
-            }).state('error404', {
+            })
+            .state('cacheStatus', {
+              url: '/cluster/:clusterName/cache/:cacheName',
+              templateUrl: 'cache-status/cache-status.html',
+              controller: 'CacheStatusCtrl'
+            })
+            .state('cacheNodes', {
+              url: '/cluster/:clusterName/cache/:cacheName',
+              templateUrl: 'cache-nodes/cache-nodes.html',
+              controller: 'CacheNodesCtrl'
+            })
+            .state('error404', {
                 url: '/error404',
                 templateUrl: 'error404/error404.html'
             }).state('createCache', {

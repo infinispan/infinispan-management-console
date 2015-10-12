@@ -24,6 +24,21 @@ angular.module('managementConsole')
       $scope.currentCache = $scope.caches[$stateParams.cacheName];
       $scope.currentCache.refresh();
 
+      $scope.currentCacheAvailability = function () {
+        return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
+      };
+
+      $scope.currentCacheType = function () {
+        return utils.getCacheType($scope.currentCache);
+      };
+
+      $scope.currentCacheNumOwners = function () {
+        return $scope.currentCache.isDistributed() &&
+        utils.isNotNullOrUndefined($scope.currentCache.configuration.owners) ? $scope.currentCache.configuration.owners + ' owners' : '';
+      };
+
+      $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
+
 
       $scope.saveCache = function (){
           var address = ['profile', 'clustered', 'subsystem', 'infinispan', 'cache-container', $scope.currentCluster.name];
@@ -31,4 +46,6 @@ angular.module('managementConsole')
           address.push($scope.newlyCreatedCache.name);
           //save changes
       };
+
+
     }]);

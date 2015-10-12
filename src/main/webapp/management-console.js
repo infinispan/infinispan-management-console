@@ -78,4 +78,17 @@ angular.module('managementConsole', [
             });
         };
         $rootScope.page = { htmlClass: '' };
+  }]).run(["$templateCache", function($templateCache) {
+    $templateCache.put("template/tabs/tabset.html",
+      "<div>\n" +
+      "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +
+      "  <div class=\"tab-content col-md-10\">\n" +
+      "    <div class=\"tab-pane\" \n" +
+      "         ng-repeat=\"tab in tabs\" \n" +
+      "         ng-class=\"{active: tab.active}\"\n" +
+      "         uib-tab-content-transclude=\"tab\">\n" +
+      "    </div>\n" +
+      "  </div>\n" +
+      "</div>\n" +
+      "");
   }]);

@@ -35,20 +35,10 @@ angular.module('managementConsole')
             };
 
             $scope.currentCacheType = function () {
-              var cacheType = 'Distributed';
-              if ($scope.currentCache.isReplicated()){
-                cacheType = 'Replicated';
-              }
-              else if ($scope.currentCache.isInvalidation()){
-                cacheType = 'Invalidation';
-              }
-              else if ($scope.currentCache.isLocal()){
-                cacheType = 'Local';
-              }
-              return cacheType;
+              return utils.getCacheType($scope.currentCache);
             };
 
-            $scope.currentCacheMode = $scope.currentCache.configuration.mode === 'SYNC'? 'Sync':'Async';
+            $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
 
             $scope.currentCacheNumOwners = function () {
               return $scope.currentCache.isDistributed() &&

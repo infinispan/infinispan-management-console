@@ -4,8 +4,8 @@
             <span> <a href="#/cluster/{{currentCluster.name}}"> {{currentCluster.name}} </a> >> {{currentNode.name}} </span>
         </div>
 
-        <div class="col-md-6 dropdown dropdown-menu-right">
-            <button class="btn btn-default dropdown-toggle" type="button" id="nodeActionMenu" data-toggle="dropdown">
+        <div class="col-md-6 dropdown dropdown-menu-right" uib-dropdown>
+            <button class="btn btn-default dropdown-toggle" type="button" id="nodeActionMenu" data-toggle="dropdown" uib-dropdown-toggle>
                 Actions
                 <span class="caret"></span>
             </button>

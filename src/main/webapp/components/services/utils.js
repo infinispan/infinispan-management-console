@@ -133,6 +133,24 @@
             break;
         }
         return fieldType;
+      },
+
+      getCacheMode: function getCacheMode (cacheModel) {
+        return cacheModel.configuration.mode === 'SYNC'? 'Sync':'Async';
+      },
+
+      getCacheType: function getCacheType(cacheModel) {
+        var cacheType = 'Distributed';
+        if (cacheModel.isReplicated()) {
+          cacheType = 'Replicated';
+        }
+        else if (cacheModel.isInvalidation()) {
+          cacheType = 'Invalidation';
+        }
+        else if (cacheModel.isLocal()) {
+          cacheType = 'Local';
+        }
+        return cacheType;
       }
     };
   });

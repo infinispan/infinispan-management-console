@@ -36,6 +36,27 @@ angular.module('managementConsole.api')
 
             Domain.prototype.refresh = function () {
                 var promises = [];
+
+                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, false).then(function (response) {
+                  var serverPromises = [];
+                  for (var hostName in response) {
+                    if (hostName !== undefined) {
+                      var host = response[hostName];
+                      for (var serverName in host.server) {
+                        if (serverName !== undefined) {
+                          var server = new ServerModel(hostName, serverName, host.server[serverName]['server-group'], this);
+                          this.servers.push(server);
+                          serverPromises.push(server.refresh());
+                        }
+                      }
+                    }
+                  }
+                  return $q.all(serverPromises);
+                }.bind(this));
+
+                promises.push(hostsPromise);
+
+
                 var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {
                     this.serverGroups = {};
                     var serverGroupPromises = [];
@@ -62,24 +83,7 @@ angular.module('managementConsole.api')
                 }.bind(this));
                 promises.push(profilePromise);
 
-                this.servers = [];
-                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, false).then(function (response) {
-                    var serverPromises = [];
-                    for (var hostName in response) {
-                        if (hostName !== undefined) {
-                            var host = response[hostName];
-                            for (var serverName in host.server) {
-                                if (serverName !== undefined) {
-                                    var server = new ServerModel(hostName, serverName, host.server[serverName]['server-group'], this);
-                                    this.servers.push(server);
-                                    serverPromises.push(server.refresh());
-                                }
-                            }
-                        }
-                    }
-                    return $q.all(serverPromises);
-                }.bind(this));
-                promises.push(hostsPromise);
+
                 return $q.all(promises);
             };
 

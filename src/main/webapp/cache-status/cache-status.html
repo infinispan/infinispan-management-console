@@ -10,9 +10,9 @@
         </li>
         <li class="active"><strong>{{currentCache.name}}</strong> <small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
       </ol>
-      <div class="dropdown pull-right">
+      <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                data-toggle="dropdown">
+                data-toggle="dropdown" uib-dropdown-toggle>
           ACTIONS
           <span class="caret"></span>
         </button>
@@ -30,7 +30,8 @@
           <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
           <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Reset statistics</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View / Edit configuration</a>
           </li>
         </ul>
       </div>

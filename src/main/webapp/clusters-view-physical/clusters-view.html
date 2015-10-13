@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-8 col-md-9">
+      <ol class="breadcrumb">
+        <li>Domain</li>
+      </ol>
+      <h1>Clusters</h1>
+      <br>
+      <table class="table ispn-aligned">
+        <tr>
+          <th>Status</th>
+          <th>Name</th>
+          <th># Hosts</th>
+          <th># Nodes</span>
+          </th>
+        </tr>
+
+        <tr ng-repeat="cluster in groups track by $index">
+          <td><span class="label"
+                    ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span></td>
+          <td style="padding: 10px"><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
+          <td style="padding: 10px"><span class="label label-default">{{cluster.hostCount}}</span></td>
+          <td style="padding: 10px"><span class="label label-default">{{cluster.nodeCount}}</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height: 923px;">
+      <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
+        <h2 class="h5">Latest status Events:</h2>
+      </div>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-warning-triangle-o"></span> Cluster 'Cluster #1': Split
+            detected.</h3>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-info"></span> Cluster 'Cluster #1': Rebalancing started.</h3>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-warning-triangle-o"></span> Site 'New York': Status is down.</h3>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-warning-triangle-o"></span> Node 'MyNode#1': Joining cluster.</h3>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+        <li class="list-group-item">
+          <h3 class="list-group-item-heading"><span class="icon-class pficon-info"></span> Task 'Do dome calculations': Completed without errors.</h3>
+          <small>Thu Sep 3 16:10:02 CEST 2015</small>
+        </li>
+
+      </ul>
+      <p><a href="events.html">See all events</a></p>
+    </div>
+    <!-- /col -->
+  </div>
+  <!-- /row -->
+</div>

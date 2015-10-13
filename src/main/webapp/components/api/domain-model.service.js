@@ -120,6 +120,10 @@ angular.module('managementConsole.api')
               return this.serverGroups[this.getServerGroupName()];
             };
 
+            Domain.prototype.getServerGroups = function () {
+              return this.serverGroups;
+            };
+
             Domain.prototype.getProfile = function (profileName) {
               return this.profiles[profileName];
             };

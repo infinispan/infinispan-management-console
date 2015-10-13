@@ -27,6 +27,11 @@ angular.module('managementConsole', [
                 templateUrl: 'cluster-view/cluster-view.html',
                 controller: 'ClusterViewCtrl'
             })
+            .state('clustersViewPhysical', {
+              url: '/clusters-view-physical',
+              templateUrl: 'clusters-view-physical/clusters-view.html',
+              controller: 'ClustersViewPhysicalCtrl'
+            })
             .state('nodeDetails', {
                 url: '/cluster/:clusterName/node/:nodeName',
                 templateUrl: 'node-details/node-details.html',

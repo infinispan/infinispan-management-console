@@ -151,6 +151,37 @@
           cacheType = 'Local';
         }
         return cacheType;
+      },
+
+      //credits to https://gist.github.com/ralphcrisostomo/3141412
+      countOccurrences: function countOccurrences(anArray) {
+
+        var compressed = [];
+        // make a copy of the input array
+        var copy = anArray.slice(0);
+
+        // first loop goes over every element
+        for (var i = 0; i < anArray.length; i++) {
+
+          var myCount = 0;
+          // loop over every element in the copy and see if it's the same
+          for (var w = 0; w < copy.length; w++) {
+            if (anArray[i] == copy[w]) {
+              // increase amount of times duplicate is found
+              myCount++;
+              // sets item to undefined
+              delete copy[w];
+            }
+          }
+
+          if (myCount > 0) {
+            var a = new Object();
+            a.value = anArray[i];
+            a.count = myCount;
+            compressed.push(a);
+          }
+        }
+        return compressed;
       }
     };
   });

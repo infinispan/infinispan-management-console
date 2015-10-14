@@ -16,6 +16,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.show = true;
                 this.defaultStack = 'N/A';
+                this.inetAddress = '';
             };
 
             Server.prototype.getResourcePath = function () {
@@ -38,10 +39,23 @@ angular.module('managementConsole.api')
               return this.root['server-state'].toUpperCase();
             };
 
+            Server.prototype.getInetAddress = function () {
+              return this.inetAddress;
+            };
+
+            Server.prototype.getName = function () {
+              return this.name;
+            };
+
             Server.prototype.refresh = function () {
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
                   'default-stack', true).then(function (response) {
                   this.defaultStack = response.toUpperCase();
+                }.bind(this));
+
+                this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('interface', 'public'),
+                  'inet-address', true).then(function (response) {
+                  this.inetAddress = response;
                 }.bind(this));
             };
 

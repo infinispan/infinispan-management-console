@@ -15,6 +15,7 @@ angular.module('managementConsole.api')
                 this.name = this.info.name;
                 this.serverGroups = {};
                 this.profiles = {};
+                this.hosts = [];
                 this.servers = [];
             };
 
@@ -26,15 +27,22 @@ angular.module('managementConsole.api')
                 return [];
             };
 
+            Domain.prototype.getHosts = function () {
+              return this.hosts;
+            };
+
             Domain.prototype.getFirstServer = function () {
               return this.servers[0];
             };
 
             Domain.prototype.refreshServers = function () {
+              this.servers = [];
+              this.hosts = [];
               return this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, true).then(function (response) {
                 var serverPromises = [];
                 for (var hostName in response) {
                   if (hostName !== undefined) {
+                    this.hosts.push(hostName);
                     var host = response[hostName];
                     for (var serverName in host.server) {
                       if (serverName !== undefined) {
@@ -119,7 +127,11 @@ angular.module('managementConsole.api')
             };
 
             Domain.prototype.getServerGroup = function () {
-              return this.serverGroups[this.getServerGroupName()];
+              return this.getServerGroupByName(this.getServerGroupName());
+            };
+
+            Domain.prototype.getServerGroupByName = function (serverGroupName) {
+              return this.serverGroups[serverGroupName];
             };
 
             Domain.prototype.getServerGroups = function () {

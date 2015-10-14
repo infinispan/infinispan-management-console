@@ -1,0 +1,137 @@
+.stretch-full {
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+}
+.bigger-font {
+    font-size: 20px;
+}
+.smaller-font {
+    font-size: 15px;
+}
+html,
+body {
+    color: #505459;
+}
+.stretch {
+    height: 100%;
+    overflow: hidden;
+}
+.borders {
+    border: 1px solid #D8D8D8;
+}
+.borders-top-only {
+    border-top: 1px solid #D8D8D8;
+}
+.box {
+    width: 15em;
+    font-size: 12px;
+}
+
+.card-pf-body table td {
+  text-align: right;
+}
+
+.card-pf-body table {
+  margin-bottom: 0.5em;
+}
+
+.sidebar-pf fieldset label {
+  display: block;
+}
+
+.navbar-pf .navbar-brand img {
+  height: 20px;
+}
+
+
+.col-md-2 a {
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.nopadding {
+    padding: 5px !important;
+    margin: 0 !important;
+}
+.search-field {
+    float: right;
+    border: 1px solid #D8D8D8;
+}
+.header-links {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+.header-links-container {
+    margin-left: 30px;
+    font-size: 18px;
+}
+.header-links-container.selected {
+    color: #006FFF;
+    .header-links {
+        cursor: default;
+    }
+}
+.header-links-container a:hover {
+    text-decoration: none;
+}
+.slider-min {
+    float: left;
+    font-size: 10px;
+}
+.slider-max {
+    float: right;
+    font-size: 10px;
+}
+.slider-text {
+    font-size: 16px;
+    font-weight: bold;
+}
+.no-border {
+    border: 0px;
+    outline: 0px;
+    background: inherit;
+    cursor: hand;
+}
+.link-jobs {
+    cursor: hand;
+}
+
+.button-as-link {
+  background:none!important;
+  border:none;
+  color: #006fff;
+  padding:0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.right {
+  position: absolute;
+  right: 0px;
+}
+
+.bottom-right
+{
+  right: 0px;
+  bottom: 0px;
+  position: absolute;
+}
+
+.card-link {
+  //credit http://stackoverflow.com/questions/796087/make-a-div-into-a-link
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+
+/* edit: added z-index */
+  z-index: 1;
+
+/* edit: fixes overlap error in IE7/8,
+   make sure you have an empty gif */
+  background-image: url('empty.gif');
+}

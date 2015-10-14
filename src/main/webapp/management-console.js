@@ -52,6 +52,11 @@ angular.module('managementConsole', [
               templateUrl: 'cache-nodes/cache-nodes.html',
               controller: 'CacheNodesCtrl'
             })
+            .state('clusterNodes', {
+              url: '/clusters-view-physical/:clusterName/',
+              templateUrl: 'cluster-nodes/cluster-nodes.html',
+              controller: 'ClusterNodesCtrl'
+            })
             .state('error404', {
                 url: '/error404',
                 templateUrl: 'error404/error404.html'

@@ -22,7 +22,7 @@
             {{cluster.isAvailable()?cluster.availability:'UNAVAILABLE'}}</span></td>
           <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
           <td><span class="label label-default">{{cluster.getCachesAsArray().length}}</span></td>
-          <td><a href="clustering.html">{{group}}</a><br>
+          <td><a ui-sref="clusterNodes({clusterName: group})">{{group}}</a><br>
             <small>{{stack}}</small>
           </td>
           <td>

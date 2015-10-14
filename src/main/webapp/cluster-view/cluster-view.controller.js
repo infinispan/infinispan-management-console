@@ -60,6 +60,24 @@ angular.module('managementConsole')
         splitbrain: false
       };
 
+      $scope.openWIPModal = function () {
+        var modalInstance = $modal.open({
+          templateUrl: 'workinprogress.html',
+          controller: WIPModalInstanceCtrl,
+          resolve: {
+            items: function () {
+              return null;
+            }
+          }
+        });
+
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
+
       $scope.openModal = function () {
 
         var modalInstance = $modal.open({
@@ -157,5 +175,16 @@ var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheC
       }
     });
   });
+
+  $scope.cancel = function () {
+    $modalInstance.close();
+  };
+};
+
+var WIPModalInstanceCtrl = function ($scope, $modalInstance) {
+
+  $scope.cancel = function () {
+    $modalInstance.close();
+  };
 };
 

@@ -1,0 +1,99 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="cache-containers.html">Clusters</a>
+        </li>
+        <li class="active"><strong>{{cluster.name}}</strong></li>
+      </ol>
+      <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+          ACTIONS
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Stop</a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Start</a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable manual rebalancing</a>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Enable automatic rebalancing</a>
+          </li>
+        </ul>
+      </div>
+      <h1>Cluster: {{cluster.name}} <span class="label"
+                                          ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="cluster-nodes.html">Nodes</a></li>
+        <li><a ng-click="openWIPModal()">Performance</a></li>
+        <li><a ng-click="openWIPModal()">Configuration</a></li>
+        <li><a ng-click="openWIPModal()">Deployments</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
+      <br />
+
+      <div class="col-xs-6 col-sm-4 col-md-2">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status">
+          <h2 class="card-pf-title">Add Node
+          </h2>
+
+          <div style="height: 50px;" class="card-pf-body">
+            <p class="card-pf-aggregate-status-notifications">
+              <span class="card-pf-aggregate-status-notification">
+                <a data-original-title="Add Node" ng-click="openModal()"
+                   data-toggle="modal"
+                   href="#" class="add" data-toggle="tooltip" data-placement="top" title="">
+                  <span class="pficon pficon-add-circle-o"></span>
+                </a>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster() | inetAddressFilter:searchNameQuery | nameFilter:searchNameQuery) " ng-show="server.show">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="pficon pficon-ok"></span><a ng-click="openWIPModal()">{{server.name}}</a>
+          </h2>
+
+          <div class="card-pf-body">
+            <p> </p>
+            <p class="card-pf-aggregate-status-notifications">
+              <span class="card-pf-aggregate-status-notification">{{server.getInetAddress()}}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left">
+      <br>
+      <small>Quick search:</small>
+      <form role="form" class="search-pf has-button">
+        <div class="form-group has-clear">
+          <div class="search-pf-input-group">
+            <label for="search5" class="sr-only">Name</label>
+            <input id="search5" class="form-control" ng-model="searchNameQuery" placeholder="Type name, IP address, ..." type="search">
+            <button style="display: none;" type="button" class="clear" aria-hidden="true"><span class="pficon pficon-close"></span></button>
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
+        </div>
+      </form>
+      <hr>
+    </div>
+  </div>
+</div>

@@ -30,57 +30,63 @@ angular.module('managementConsole.api')
               return this.servers[0];
             };
 
-            Domain.prototype.refresh = function () {
-                var promises = [];
-
-                var hostsPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, false).then(function (response) {
-                  var serverPromises = [];
-                  for (var hostName in response) {
-                    if (hostName !== undefined) {
-                      var host = response[hostName];
-                      for (var serverName in host.server) {
-                        if (serverName !== undefined) {
-                          var server = new ServerModel(hostName, serverName, host.server[serverName]['server-group'], this);
-                          this.servers.push(server);
-                          serverPromises.push(server.refresh());
-                        }
+            Domain.prototype.refreshServers = function () {
+              return this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, true).then(function (response) {
+                var serverPromises = [];
+                for (var hostName in response) {
+                  if (hostName !== undefined) {
+                    var host = response[hostName];
+                    for (var serverName in host.server) {
+                      if (serverName !== undefined) {
+                        var server = new ServerModel(hostName, serverName, host.server[serverName], this);
+                        this.servers.push(server);
+                        serverPromises.push(server.refresh());
                       }
                     }
                   }
-                  return $q.all(serverPromises);
-                }.bind(this));
+                }
+                return $q.all(serverPromises);
+              }.bind(this));
+            };
 
-                promises.push(hostsPromise);
+            Domain.prototype.refresh = function () {
+              //first need to refresh servers and then everything else (we need the two to be synchronous)
+              return this.refreshServers().then(function (){
+                return this.refreshOther();
+              }.bind(this));
+            };
+
+            Domain.prototype.refreshOther = function () {
+              var promises = [];
+
+              var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {
+                this.serverGroups = {};
+                var serverGroupPromises = [];
+                for (var name in response) {
+                  if (name !== undefined) {
+                    this.serverGroups[name] = new ServerGroupModel(name, response[name].profile, this);
+                    serverGroupPromises.push(this.serverGroups[name].refresh());
+                  }
+                }
+                return $q.all(serverGroupPromises);
+              }.bind(this));
+              promises.push(serverGroupPromise);
+
+              var profilePromise = this.modelController.readChildrenResources(this.getResourcePath(), 'profile', 1, true, false).then(function (response) {
+                this.profiles = {};
+                var profilePromises = [];
+                for (var name in response) {
+                  if (name !== undefined) {
+                    this.profiles[name] = new ProfileModel(name, this);
+                    profilePromises.push(this.profiles[name].refresh());
+                  }
+                }
+                return $q.all(profilePromises);
+              }.bind(this));
+              promises.push(profilePromise);
 
 
-                var serverGroupPromise = this.modelController.readChildrenResources(this.getResourcePath(), 'server-group', 1, true, false).then(function (response) {
-                    this.serverGroups = {};
-                    var serverGroupPromises = [];
-                    for (var name in response) {
-                        if (name !== undefined) {
-                            this.serverGroups[name] = new ServerGroupModel(name, response[name].profile, this);
-                            serverGroupPromises.push(this.serverGroups[name].refresh());
-                        }
-                    }
-                    return $q.all(serverGroupPromises);
-                }.bind(this));
-                promises.push(serverGroupPromise);
-
-                var profilePromise = this.modelController.readChildrenResources(this.getResourcePath(), 'profile', 1, true, false).then(function (response) {
-                    this.profiles = {};
-                    var profilePromises = [];
-                    for (var name in response) {
-                        if (name !== undefined) {
-                            this.profiles[name] = new ProfileModel(name, this);
-                            profilePromises.push(this.profiles[name].refresh());
-                        }
-                    }
-                    return $q.all(profilePromises);
-                }.bind(this));
-                promises.push(profilePromise);
-
-
-                return $q.all(promises);
+              return $q.all(promises);
             };
 
 

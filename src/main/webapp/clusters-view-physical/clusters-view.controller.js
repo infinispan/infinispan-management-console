@@ -20,7 +20,7 @@ angular.module('managementConsole')
               cluster.nodeCount = 0;
               var hosts = [];
               angular.forEach($scope.servers, function(server, key){
-                if (server.group === cluster.name) {
+                if (server.getGroup() === cluster.name) {
                   hosts.push(server.host);
                   if (!server.isRunning()){
                     cluster.status = 'DEGRADED';

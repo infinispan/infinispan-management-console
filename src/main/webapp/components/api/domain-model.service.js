@@ -26,10 +26,6 @@ angular.module('managementConsole.api')
                 return [];
             };
 
-            Domain.prototype.getFirstServerResourceRuntimePath = function () {
-              return this.servers[0].getResourcePath();
-            };
-
             Domain.prototype.getFirstServer = function () {
               return this.servers[0];
             };
@@ -113,7 +109,7 @@ angular.module('managementConsole.api')
 
 
             Domain.prototype.getServerGroupName = function () {
-              return this.getNodes()[0].group;
+              return this.getNodes()[0].getGroup();
             };
 
             Domain.prototype.getServerGroup = function () {
@@ -134,7 +130,7 @@ angular.module('managementConsole.api')
                 for(var i=0; i<this.servers.length; i++) {
                     var server = this.servers[i];
                     if (server.isRunning()) {
-                        var serverGroup = this.serverGroups[server.group];
+                        var serverGroup = this.serverGroups[server.getGroup()];
                         var serverProfile = this.profiles[serverGroup.profile];
                         if (serverProfile.name === cluster.profile) {
                             promises.push(server.fetchCacheStats(cache));
@@ -148,7 +144,7 @@ angular.module('managementConsole.api')
             Domain.prototype.fetchNodeStats = function(cluster, server) {
                 var promises = [];
                 if (server.isRunning()) {
-                    var serverGroup = this.serverGroups[server.group];
+                    var serverGroup = this.serverGroups[server.getGroup()];
                     var serverProfile = this.profiles[serverGroup.profile];
                     var caches = cluster.getCaches();
                     for (var name in caches) {

@@ -7,14 +7,13 @@ angular.module('managementConsole.api')
             /**
              * Represents a Server
              */
-            var Server = function (host, server, group, domain) {
+            var Server = function (host, server, rootOfServer, domain) {
                 this.host = host;
                 this.server = server;
                 this.name = (server === null) ? host : host + '/' + server;
-                this.group = group;
+                this.root = rootOfServer;
                 this.domain = domain;
                 this.lastRefresh = null;
-                this.state = 'UNKNOWN';
                 this.show = true;
                 this.defaultStack = 'N/A';
             };
@@ -31,10 +30,15 @@ angular.module('managementConsole.api')
               return this.defaultStack;
             };
 
+            Server.prototype.getGroup = function () {
+              return this.root['server-group'];
+            };
+
+            Server.prototype.getState = function () {
+              return this.root['server-state'].toUpperCase();
+            };
+
             Server.prototype.refresh = function () {
-                this.getModelController().readAttribute(this.getResourcePath(), 'server-state').then(function (response) {
-                    this.state = response.toUpperCase();
-                }.bind(this));
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
                   'default-stack', true).then(function (response) {
                   this.defaultStack = response.toUpperCase();
@@ -60,7 +64,8 @@ angular.module('managementConsole.api')
             };
 
             Server.prototype.isRunning = function() {
-              return this.state === 'RUNNING' || this.state === 'RELOAD_REQUIRED' || this.state === 'RESTART_REQUIRED';
+              var state = this.getState();
+              return state === 'RUNNING' || state === 'RELOAD_REQUIRED' || state === 'RESTART_REQUIRED';
             };
 
             return Server;

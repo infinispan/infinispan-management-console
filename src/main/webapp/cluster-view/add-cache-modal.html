@@ -15,7 +15,7 @@
         <label class="col-md-4 control-label">* Name:</label>
 
         <div class="col-md-6">
-          <input type="text" class="form-control" name="cacheName" ng-model="data.name" ng-disabled="readOnly"
+          <input type="text" class="form-control" name="cacheName" ng-model="cacheName" ng-disabled="readOnly"
                  required="">
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
@@ -40,9 +40,10 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button type="button" class="btn btn-primary"
+    <!-- <button type="button" class="btn btn-primary"
             onclick="document.location='cache-configuration.html'"
       >Save and Continue
-    </button>
+    </button> -->
+    <button type="button" class="btn btn-primary" ng-click="createCache()">Create</button>
   </div>
 </div>

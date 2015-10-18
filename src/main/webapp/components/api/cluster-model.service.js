@@ -38,11 +38,14 @@ angular.module('managementConsole.api')
                     var cachePromises = [];
                     var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
                     for (var i = 0; i < cacheTypes.length; i++) {
-                        var typedCaches = response[cacheTypes[i]];
+                        var cacheType = cacheTypes[i];
+                        var typedCaches = response[cacheType];
                         if (typedCaches !== undefined) {
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
-                                    var cache = new CacheModel(name, cacheTypes[i], typedCaches[name].configuration, this);
+                                    var configurationName = typedCaches[name].configuration;
+                                    var confModel = this.getConfigurationModel(response, cacheType, configurationName);
+                                    var cache = new CacheModel(name, cacheTypes[i], configurationName, confModel, this);
                                     this.caches[name] = cache;
                                     cachePromises.push(cache.refresh());
                                 }
@@ -53,6 +56,10 @@ angular.module('managementConsole.api')
                 }.bind(this)).then(function (){
                   this.getAvailability();
                 }.bind(this));
+            };
+
+            Cluster.prototype.getConfigurationModel = function (cacheModel, cacheType, name) {
+              return cacheModel['configurations']['CONFIGURATIONS'][cacheType + '-configuration'][name];
             };
 
             Cluster.prototype.getAvailability = function () {

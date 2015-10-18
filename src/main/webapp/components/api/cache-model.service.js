@@ -4,7 +4,7 @@ angular.module('managementConsole.api')
     .factory('CacheModel', [
     'utils',
     function (utils) {
-            var Cache = function (name, type, configurationTemplate, cluster) {
+            var Cache = function (name, type, configurationTemplate, confModel, cluster) {
                 this.name = name;
                 this.type = type;
                 this.configurationTemplate = configurationTemplate;
@@ -13,7 +13,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.data = null;
                 this.show = true;
-                this.configuration = null;
+                this.configuration = confModel;
             };
 
             Cache.prototype.getModelController = function () {
@@ -25,17 +25,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.refresh = function () {
-                this.modelController.readResource(this.getConfigurationPath(), true, false).then(function(response){
-                  this.configuration = response;
-                }.bind(this));
-                this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
-                    this.data = response;
-                    this.lastRefresh = new Date();
-                }.bind(this));
-            };
-
-            Cache.prototype.getConfigurationPath = function () {
-              return this.cluster.getResourcePath().concat('configurations', 'CONFIGURATIONS', this.type + '-configuration', this.configurationTemplate);
+              //TODO avoid doing anything here
             };
 
             Cache.prototype.isDistributed = function () {

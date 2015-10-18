@@ -64,12 +64,8 @@ angular.module('managementConsole')
 
         var modalInstance = $modal.open({
           templateUrl: 'cluster-view/add-cache-modal.html',
-          controller: ModalInstanceCtrl,
-          resolve: {
-            items: function () {
-              return null;
-            }
-          }
+          controller: AddCacheModalInstanceCtrl,
+          scope: $scope
         });
 
         modalInstance.result.then(function (selectedItem) {
@@ -125,10 +121,29 @@ angular.module('managementConsole')
     };
   });
 
-var ModalInstanceCtrl = function ($scope, $modalInstance, cacheCreateController, items) {
+var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
-  $scope.configurationTemplates = [];
+  $scope.cacheName = null;
   $scope.selectedTemplate = null;
+  $scope.configurationTemplates = [];
+  $scope.configurationTemplatesMap = {};
+
+  $scope.createCache = function () {
+    var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+    var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
+    address.push(cacheType);
+    address.push($scope.cacheName);
+    cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
+      $modalInstance.close();
+      $scope.currentCluster.refresh().then(function(){
+        $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+      });
+    });
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.close();
+  };
 
   angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
     var p = cacheCreateController.getConfigurationTemplates(cacheType);
@@ -137,12 +152,10 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, cacheCreateController,
       for (var key in p) {
         if (p.hasOwnProperty(key)) {
           $scope.configurationTemplates.push(key);
+          $scope.configurationTemplatesMap[key] = cacheType;
         }
       }
     });
   });
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
 };
+

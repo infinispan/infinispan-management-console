@@ -7,9 +7,6 @@ angular.module('managementConsole')
     '$state',
     'modelController',
     function ($scope, $stateParams, $state, modelController) {
-            if (!modelController.isAuthenticated()) {
-                $state.go('/logout');
-            }
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }

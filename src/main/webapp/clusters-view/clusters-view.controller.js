@@ -7,9 +7,7 @@ angular.module('managementConsole')
     'modelController',
     'utils',
     function ($scope, $state, modelController, utils) {
-            if (!modelController.isAuthenticated()) {
-                $state.go('/logout');
-            }
+
             $scope.clusters = modelController.getServer().getClusters();
             $scope.group = modelController.getServer().getServerGroupName();
             $scope.stack = modelController.getServer().getFirstServer().getDefaultStack();

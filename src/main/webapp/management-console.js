@@ -79,16 +79,23 @@ angular.module('managementConsole', [
  * during digest cycle which causes an error.
  * Use it just like normal apply: $scope.safeApply(myFunc).
  */
-.run(['$rootScope', '$timeout',
-    function ($rootScope, $timeout) {
-        $rootScope.safeApply = function (f) {
-            var scope = this;
-            $timeout(function () {
-                scope.$apply(f);
-            });
-        };
-        $rootScope.page = { htmlClass: '' };
-  }]).run(["$templateCache", function($templateCache) {
+  .run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
+      $rootScope.safeApply = function (f) {
+        var scope = this;
+        $timeout(function () {
+          scope.$apply(f);
+        });
+      };
+      $rootScope.page = {htmlClass: ''};
+    }]).run(['$rootScope', '$location', 'modelController', function ($rootScope, $location, modelController) {
+
+      $rootScope.$on('$locationChangeStart', function () {
+        // redirect to login page if not logged in
+        if ($location.path() !== '/login' && !modelController.isAuthenticated()) {
+          $location.path('/login');
+        }
+      });
+    }]).run(["$templateCache", function ($templateCache) {
     $templateCache.put("template/tabs/tabset.html",
       "<div>\n" +
       "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +

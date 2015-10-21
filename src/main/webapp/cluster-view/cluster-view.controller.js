@@ -11,9 +11,6 @@ angular.module('managementConsole')
     'utils',
     '$modal',
     function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
-      if (!modelController.isAuthenticated()) {
-        $state.go('/logout');
-      }
       $scope.shared = {
         currentCollection: 'caches'
       };

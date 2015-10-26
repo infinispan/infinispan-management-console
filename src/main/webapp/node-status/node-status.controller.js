@@ -14,17 +14,6 @@ angular.module('managementConsole')
       $scope.inetAddress = $stateParams.inetAddress;
 
 
-      /*var server = modelController.getServer();
-      var clusters = server.getClusters();
-
-      $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
-
-      $scope.currentNode = server.getNode($stateParams.nodeName);
-      $scope.currentNodeStats = {
-        'cache-status': '',
-        'cacheStats': [],
-        'containerStats': []
-      };*/
 
       $scope.currentCacheAvailability = function () {
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();

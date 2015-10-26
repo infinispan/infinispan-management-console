@@ -139,7 +139,7 @@
       </div>
       <!-- END CARD -->
 
-      <div class="col-xs-6 col-sm-6 col-md-6">
+      <div class="col-xs-6 col-sm-6 col-md-6" match-height="ispn-card">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title"><a href="cache.html">Node #2</a></h2>
@@ -150,6 +150,7 @@
                 <h4>Memory Usage</h4>
 
                 <c3chart bindto-id="pie-plot1-chart">
+                  <chart-size chart-height="220" chart-width="220"/>
                   <chart-column column-id="Data 1"
                                 column-values="70"
                                 column-type="donut"/>
@@ -159,7 +160,7 @@
                   <chart-column column-id="Data 3"
                                 column-values="60"
                                 column-type="donut"/>
-                  <chart-donut title="Memory" width="60"/>
+                  <chart-donut title="Memory" width="30"/>
                 </c3chart>
               </div>
               <div class="col-md-4">

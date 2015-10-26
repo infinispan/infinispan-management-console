@@ -2,6 +2,7 @@
 
 - Install node.js and npm
 - Install gulp globally (use sudo if needed): `npm install gulp -g`
+- Install bower globally (use sudo if needed): `npm install bower -g`
 - run `build.sh` to instal local packages and client dependencies
 - NOTE: you will need to repeat the step above if there are some changes to package.json or bower.json
 

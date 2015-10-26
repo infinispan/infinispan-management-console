@@ -2,6 +2,7 @@
 
 angular.module('managementConsole', [
   'managementConsole.api',
+  'gridshore.c3js.chart',
   'ui.router',
   'ui.bootstrap'
 ])
@@ -56,6 +57,16 @@ angular.module('managementConsole', [
               url: '/clusters-view-physical/:clusterName/',
               templateUrl: 'cluster-nodes/cluster-nodes.html',
               controller: 'ClusterNodesCtrl'
+            })
+            .state('nodeStatus', {
+              url: '/cluster/:clusterName/:nodeName/',
+              params: {
+                clusterName: null,
+                nodeName: null,
+                inetAddress: null
+              },
+              templateUrl: 'node-status/node-status.html',
+              controller: 'NodeStatusCtrl'
             })
             .state('error404', {
                 url: '/error404',

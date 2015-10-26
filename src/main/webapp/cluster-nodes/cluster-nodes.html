@@ -44,6 +44,10 @@
     <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
       <br />
 
+      <div class="alert alert-info" ng-show="filtered.length < getServersInCluster().length">
+        <span class="fa fa-filter"></span> Showing {{filtered.length}} nodes out of {{getServersInCluster().length}} total.
+      </div>
+
       <div class="col-xs-6 col-sm-4 col-md-2">
         <div class="card-pf card-pf-accented card-pf-aggregate-status">
           <h2 class="card-pf-title">Add Node
@@ -65,7 +69,10 @@
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster() | inetAddressFilter:searchNameQuery | nameFilter:searchNameQuery) " ng-show="server.show">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="pficon pficon-ok"></span><a ng-click="openWIPModal()">{{server.name}}</a>
+            <span class="pficon pficon-ok"></span><a ui-sref="nodeStatus({
+            clusterName:cluster.name,
+            nodeName:server.name,
+            inetAddress:server.getInetAddress()})">{{server.name}}</a>
           </h2>
 
           <div class="card-pf-body">

@@ -122,6 +122,18 @@ angular.module('managementConsole.api')
             };
 
 
+            Domain.prototype.getNode = function (serverNodeName) {
+              var serverNode;
+              var serverNodes = this.getNodes();
+              for (var i = 0, len = serverNodes.length; i < len; i++) {
+                if (serverNodes[i].getName() === serverNodeName) {
+                  serverNode = serverNodes[i];
+                  break;
+                }
+              }
+              return serverNode;
+            };
+
             Domain.prototype.getServerGroupName = function () {
               return this.getNodes()[0].getGroup();
             };

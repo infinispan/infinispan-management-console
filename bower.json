@@ -8,6 +8,7 @@
     "bootstrap": "3.3.5",
     "angular-ui-bootstrap-bower": "0.14.0",
     "patternfly": "2.4.0",
-    "matchHeight": "0.6.0"
+    "matchHeight": "0.6.0",
+    "c3-angular": "~0.7.1"
   }
 }

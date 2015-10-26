@@ -14,6 +14,15 @@ angular.module('managementConsole')
       $scope.inetAddress = $stateParams.inetAddress;
 
 
+      var controller = modelController.getServer();
+      var serverNode = controller.getNode($stateParams.nodeName);
+      var p = serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode);
+      p.then(function (response) {
+        $scope.nodeStats = response;
+        console.log(response);
+      });
+
+
 
       $scope.currentCacheAvailability = function () {
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();

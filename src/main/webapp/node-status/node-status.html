@@ -47,15 +47,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td>35 ms</td>
+                    <td>{{nodeStats['average-read-time']}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td>55 ms</td>
+                    <td>{{nodeStats['average-write-time']}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td>65 ms</td>
+                    <td>{{nodeStats['average-remove-time']}} ms</td>
                   </tr>
                 </table>
               </div>
@@ -78,23 +78,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th># READ Hits</th>
-                    <td>3.343</td>
+                    <td>{{nodeStats['hits']}}</td>
                   </tr>
                   <tr>
                     <th># READ misses</th>
-                    <td>544</td>
+                    <td>{{nodeStats['misses']}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE hits</th>
-                    <td>4.454</td>
+                    <td>{{nodeStats['remove-hits']}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE misses</th>
-                    <td>4.454</td>
+                    <td>{{nodeStats['remove-misses']}}</td>
                   </tr>
                   <tr>
                     <th># PUTS</th>
-                    <td>4.454</td>
+                    <td>{{nodeStats['stores']}}</td>
                   </tr>
                 </table>
               </div>

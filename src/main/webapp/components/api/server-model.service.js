@@ -70,8 +70,12 @@ angular.module('managementConsole.api')
             };
 
             Server.prototype.fetchAggregateNodeStats = function (cluster) {
+              return this.fetchAggregateNodeStatsByClusterName(cluster.name);
+            };
+
+            Server.prototype.fetchAggregateNodeStatsByClusterName = function (clusterName) {
               return this.getModelController()
-                .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name),
+                .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', clusterName),
                 false, true).then(function (response) {
                   return response;
                 }.bind(this));

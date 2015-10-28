@@ -7,7 +7,7 @@
       return {
         restrict: 'E',
         scope: {
-          currentCache: '=',
+          data: '=',
           metadata: '=',
           initDefaults: '=',
           readOnly: '=',

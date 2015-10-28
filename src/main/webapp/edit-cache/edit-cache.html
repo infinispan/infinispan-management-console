@@ -24,26 +24,26 @@
   <h2>View / Edit cache configuration:</h2>
 
         <div ng-if="currentCache.isDistributed()">
-          <cache-configuration cache-type="distributed-cache" metadata="currentCluster.cachesMetadata"
-                               current-cache="currentCache" init-defaults="false" read-only="false"/>
+          <cache-configuration cache-type="distributed-cache" data="currentCache" metadata="currentCluster.cachesMetadata"
+                               init-defaults="false" read-only="false"/>
         </div>
         <div ng-if="currentCache.isReplicated()">
-          <cache-configuration cache-type="replicated-cache" metadata="currentCluster.cachesMetadata"
-                               current-cache="currentCache" init-defaults="false" read-only="false"/>
+          <cache-configuration cache-type="replicated-cache" data="currentCache" metadata="currentCluster.cachesMetadata"
+                               init-defaults="false" read-only="false"/>
         </div>
         <div ng-if="currentCache.isInvalidation()">
-          <cache-configuration cache-type="invalidation-cache" metadata="currentCluster.cachesMetadata"
-                               current-cache="currentCache" init-defaults="false" read-only="false"/>
+          <cache-configuration cache-type="invalidation-cache" data="currentCache" metadata="currentCluster.cachesMetadata"
+                               init-defaults="false" read-only="false"/>
         </div>
         <div ng-if="currentCache.isLocal()">
-          <cache-configuration cache-type="local-cache" metadata="currentCluster.cachesMetadata"
-                               current-cache="currentCache" init-defaults="false" read-only="false"/>
+          <cache-configuration cache-type="local-cache" data="currentCache" metadata="currentCluster.cachesMetadata"
+                               init-defaults="false" read-only="false"/>
         </div>
 
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-2">
-            <button type="button" class="btn btn-primary">Apply changes</button>
+            <button type="button" class="btn btn-primary" ng-click="saveCacheConfigurationTemplate()">Apply changes</button>
             <button type="button" class="btn btn-default">Cancel</button>
           </div>
         </div>

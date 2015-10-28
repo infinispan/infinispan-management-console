@@ -1,79 +1,79 @@
 <div>
   <uib-tabset>
     <uib-tab heading="General" active="true">
-      <generalinvalidation data='currentCache.configuation' metadata="resolveDescription('general')"
+      <generalinvalidation data='data.configuation' metadata="resolveDescription('general')"
                    init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Locking" active="false">
-      <!-- <locking data='currentCache.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
+      <!-- <locking data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
                init-defaults="initDefaults" read-only="readOnly"/> -->
       <configuration-section fields="['acquire-timeout', 'concurrency-level', 'isolation', 'striping']"
-                             data='currentCache.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
+                             data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Eviction" active="false">
-      <!-- <eviction data='currentCache.configuration.eviction.EVICTION' metadata="resolveDescription('eviction')"
+      <!-- <eviction data='data.configuration.eviction.EVICTION' metadata="resolveDescription('eviction')"
                 init-defaults="initDefaults" read-only="readOnly"/> -->
 
-      <configuration-section fields="['max-entries', 'strategy']" data='currentCache.configuration.eviction.EVICTION'
+      <configuration-section fields="['max-entries', 'strategy']" data='data.configuration.eviction.EVICTION'
                              metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Expiration" active="false">
-      <!-- <expiration data='currentCache.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
+      <!-- <expiration data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
                   init-defaults="initDefaults" read-only="readOnly"/> -->
 
       <configuration-section fields="['lifespan', 'interval', 'max-idle']"
-                             data='currentCache.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
+                             data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Compatibility" active="false">
 
-      <configuration-section fields="['enabled', 'marshaller']" data='currentCache.configuration.compatibility.COMPATIBILITY'
+      <configuration-section fields="['enabled', 'marshaller']" data='data.configuration.compatibility.COMPATIBILITY'
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="TX">
-      <!-- <tx data="currentCache.configuration.transaction.TRANSACTION" metadata="resolveDescription('tx')"
+      <!-- <tx data="data.configuration.transaction.TRANSACTION" metadata="resolveDescription('tx')"
           init-defaults="initDefaults" read-only="readOnly"/> -->
 
-      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="currentCache.configuration.transaction.TRANSACTION"
+      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.configuration.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Loader">
-      <configuration-section fields="['class', 'preload', 'shared']" data="currentCache.configuration['loader'].LOADER"
+      <configuration-section fields="['class', 'preload', 'shared']" data="data.configuration['loader'].LOADER"
                              metadata="resolveDescription('loader')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="File Store">
 
       <configuration-section fields="['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.configuration['file-store'].FILE_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data.configuration['file-store'].FILE_STORE"
                              metadata="resolveDescription('filestore')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Remote Store">
       <configuration-section fields="['cache', 'fetch-state', 'passivation', 'preload', 'raw-values', 'purge', 'read-only',
-              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="currentCache.configuration['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
+              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="data.configuration['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="JDBC Store">
-      <jdbcstore data="currentCache.configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
+      <jdbcstore data="data.configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
                    init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Level DB Store">
       <configuration-section fields="['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="currentCache.configuration['leveldb-store'].LEVEL_DB_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data.configuration['leveldb-store'].LEVEL_DB_STORE"
                              metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Backup">
       <configuration-section fields="['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']"
-                             data="currentCache.configuration['backup'].BACKUP" metadata="resolveDescription('backup')"
+                             data="data.configuration['backup'].BACKUP" metadata="resolveDescription('backup')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Security">
-      <security data="currentCache.configuration.security.authorization" metadata="resolveDescription('authorization')"
+      <security data="data.configuration.security.authorization" metadata="resolveDescription('authorization')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
   </uib-tabset>

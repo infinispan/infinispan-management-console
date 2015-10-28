@@ -34,7 +34,8 @@
         };
 
         scope.isMultiValue = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field].allowed);
+          var hasField = utils.has(scope.metadata[field], 'allowed');
+          return hasField ? utils.isNotNullOrUndefined(scope.metadata[field].allowed) : false;
         };
 
         scope.resolveFieldName = function (field) {

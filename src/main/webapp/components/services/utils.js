@@ -19,6 +19,36 @@
       isString: function (str) {
         return (typeof str === "string");
       },
+
+      /**
+       *
+       * @param str
+       * @returns {boolean}
+       */
+      isBoolean: function (b) {
+        return (typeof b === "boolean");
+      },
+
+      /**
+       *
+       * @param str
+       * @returns {boolean}
+       */
+      isNumber: function (n) {
+        return (typeof n === "number");
+      },
+
+      /**
+       *
+       * @param str
+       * @returns {boolean}
+       */
+      isObject: function (o) {
+        return this.isNotNullOrUndefined(o) &&
+               !this.isBoolean(o) &&
+               !this.isString(o) &&
+               !this.isNumber(o);
+      },
       /**
        *
        * @param value
@@ -121,22 +151,36 @@
       },
 
       resolveFieldType: function resolveFieldType(metadata, field) {
-        var fieldType;
-        switch (metadata[field].type.TYPE_MODEL_VALUE) {
-          case 'LONG':
-          case 'INT':
-          case 'STRING':
-            fieldType = 'text';
-            break;
-          case 'BOOLEAN':
-            fieldType = 'checkbox';
-            break;
+        if (this.isNotNullOrUndefined(metadata) && this.isNotNullOrUndefined(field)) {
+          var resolvedField = metadata[field];
+          if (this.isNotNullOrUndefined(resolvedField)) {
+            var fieldType;
+            switch (resolvedField.type.TYPE_MODEL_VALUE) {
+              case 'LONG':
+              case 'INT':
+              case 'STRING':
+                fieldType = 'text';
+                break;
+              case 'BOOLEAN':
+                fieldType = 'checkbox';
+                break;
+            }
+            return fieldType;
+          } else {
+            throw new this.ISPNException("Unresolved field for " + metadata + " and field " + field);
+          }
+        } else {
+            throw new this.ISPNException("Invalid metadata " + metadata + " or field " + field);
         }
-        return fieldType;
       },
 
       getCacheMode: function getCacheMode (cacheModel) {
         return cacheModel.configuration.mode === 'SYNC'? 'Sync':'Async';
+      },
+
+      ISPNException: function ISPNException(message) {
+        this.message = message;
+        this.name = "ISPNException";
       },
 
       getCacheType: function getCacheType(cacheModel) {
@@ -186,6 +230,10 @@
 
       getRandomInt: function getRandomInt (min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+      },
+
+      has: function has(object, key) {
+        return object ? hasOwnProperty.call(object, key) : false;
       }
     };
   });

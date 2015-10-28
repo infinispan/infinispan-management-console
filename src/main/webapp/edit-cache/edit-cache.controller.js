@@ -7,7 +7,8 @@ angular.module('managementConsole')
     '$stateParams',
     'utils',
     'modelController',
-    function ($scope, $state, $stateParams, utils, modelController) {
+    'cacheCreateController',
+    function ($scope, $state, $stateParams, utils, modelController, cacheCreateController) {
       //-- Variables --//
 
       if (!modelController.isAuthenticated()) {
@@ -40,11 +41,20 @@ angular.module('managementConsole')
       $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
 
 
-      $scope.saveCache = function (){
-          var address = ['profile', 'clustered', 'subsystem', 'infinispan', 'cache-container', $scope.currentCluster.name];
-          address.push($scope.newlyCreatedCache.type);
-          address.push($scope.newlyCreatedCache.name);
-          //save changes
+      $scope.saveCacheConfigurationTemplate = function (){
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container',
+            $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
+          address.push($scope.currentCache.type + '-configuration');
+          address.push($scope.currentCache.template);
+
+          cacheCreateController.createCacheConfigurationTemplate(address,
+            $scope.currentCache.configuration,
+            $scope.currentCache.type,
+            $scope.logCacheConfigurationTemplate);
+      };
+
+      $scope.logCacheConfigurationTemplate = function (){
+        console.log("Created cache configuration template");
       };
 
 

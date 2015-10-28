@@ -5,7 +5,8 @@ angular.module('managementConsole.api')
     '$http',
     '$q',
     'modelController',
-    function ($http, $q, modelController) {
+    'utils',
+    function ($http, $q, modelController, utils) {
 
             /**
              * Represents a client to the cacheCreateController
@@ -49,6 +50,12 @@ angular.module('managementConsole.api')
                 return deferred.promise;
             };
 
+            CacheCreationControllerClient.prototype.emptyPromise = function (op) {
+              var deferred = $q.defer();
+              return deferred.promise;
+            };
+
+
 
             /**
              *
@@ -79,11 +86,11 @@ angular.module('managementConsole.api')
              * @param cacheConfiguration configuration
              * @param callback to execute at the end of create operation
              */
-            CacheCreationControllerClient.prototype.createCache = function (address, cacheConfiguration, callback) {
-              if (cacheConfiguration.type === 'distributed-cache' || cacheConfiguration.type === 'replicated-cache') {
-                this.createReplicatedOrDistributedCache(cacheConfiguration, address, cacheConfiguration.type, callback);
+            CacheCreationControllerClient.prototype.createCacheConfigurationTemplate = function (address, cacheConfiguration, cacheType, callback) {
+              if (cacheType === 'distributed-cache' || cacheType === 'replicated-cache') {
+                this.createReplicatedOrDistributedCacheConfigurationTemplate(cacheConfiguration, address, cacheType, callback);
               } else if (cacheConfiguration.type === 'invalidation-cache' || cacheConfiguration.type === 'local-cache') {
-                this.createInvalidationOrLocalCache(cacheConfiguration, address, cacheConfiguration.type, callback);
+                this.createInvalidationOrLocalCacheConfigurationTemplate(cacheConfiguration, address, cacheType, callback);
               }
             };
 
@@ -113,23 +120,22 @@ angular.module('managementConsole.api')
              * @param cacheType cache type to create
              * @param callback to execute at the end of create operation
              */
-            CacheCreationControllerClient.prototype.createReplicatedOrDistributedCache = function (cache, address, cacheType, callback) {
+            CacheCreationControllerClient.prototype.createReplicatedOrDistributedCacheConfigurationTemplate = function (configuration, address, cacheType, callback) {
               var promise = null;
               if (cacheType === 'distributed-cache') {
-                promise = this.createDistributedCache(address, cache.data);
+                promise = this.createDistributedCacheConfigurationTemplate(address, configuration);
               } else if (cacheType === 'replicated-cache') {
-                promise = this.createReplicatedCache(address, cache.data);
+                promise = this.createReplicatedCacheConfigurationTemplate(address, configuration);
               }
               promise.then(function () {
-                this.createLockingNode(address.concat('locking', 'LOCKING'), cache.data.locking.LOCKING);
-                this.createEvictionNode(address.concat('eviction', 'EVICTION'), cache.data.eviction.EVICTION);
-                this.createExpirationNode(address.concat('expiration', 'EXPIRATION'), cache.data.expiration.EXPIRATION);
-                this.createCompatibilityNode(address.concat('compatibility', 'COMPATIBILITY'), cache.data.compatibility.COMPATIBILITY);
-                this.createTransactionNode(address.concat('transaction', 'TRANSACTION'), cache.data.transaction.TRANSACTION);
-                this.createStateTransferNode(address.concat('state-transfer', 'STATE_TRANSFER'), cache.data['state-transfer'].STATE_TRANSFER);
-                this.createFileStoreNode(address.concat('file-store', 'FILE_STORE'), cache.data['file-store'].FILE_STORE);
-                this.createJDBCStoreNode(address.concat('string-keyed-jdbc-store', 'STRING_KEYED_JDBC_STORE'),
-                  cache.data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE);
+                this.createLockingNode(address.concat('locking', 'LOCKING'), configuration.locking);
+                this.createEvictionNode(address.concat('eviction', 'EVICTION'), configuration.eviction);
+                this.createExpirationNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+                this.createCompatibilityNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
+                this.createTransactionNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction);
+                this.createStateTransferNode(address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
+                this.createFileStoreNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
+                this.createJDBCStoreNode(address.concat('string-keyed-jdbc-store', 'STRING_KEYED_JDBC_STORE'), configuration['string-keyed-jdbc-store']);
               }.bind(this)).then(function () {
                 callback();
               })
@@ -144,22 +150,22 @@ angular.module('managementConsole.api')
              * @param cacheType cache type to create
              * @param callback to execute at the end of create operation
              */
-            CacheCreationControllerClient.prototype.createInvalidationOrLocalCache = function (cache, address, cacheType, callback) {
+            CacheCreationControllerClient.prototype.createInvalidationOrLocalCacheConfigurationTemplate = function (configuration, address, cacheType, callback) {
               var promise = null;
               if (cacheType === 'invalidation-cache') {
-                promise = this.createInvalidationCache(address, cache.data);
+                promise = this.createInvalidationCacheConfigurationTemplate(address, configuration);
               } else if (cacheType === 'local-cache') {
-                promise = this.createLocalCache(address, cache.data);
+                promise = this.createLocalCacheConfigurationTemplate(address, configuration);
               }
               promise.then(function () {
-                this.createLockingNode(address.concat('locking', 'LOCKING'), cache.data.locking.LOCKING);
-                this.createEvictionNode(address.concat('eviction', 'EVICTION'), cache.data.eviction.EVICTION);
-                this.createExpirationNode(address.concat('expiration', 'EXPIRATION'), cache.data.expiration.EXPIRATION);
-                this.createCompatibilityNode(address.concat('compatibility', 'COMPATIBILITY'), cache.data.compatibility.COMPATIBILITY);
-                this.createTransactionNode(address.concat('transaction', 'TRANSACTION'), cache.data.transaction.TRANSACTION);
-                this.createFileStoreNode(address.concat('file-store', 'FILE_STORE'), cache.data['file-store'].FILE_STORE);
+                this.createLockingNode(address.concat('locking', 'LOCKING'), configuration.locking.LOCKING);
+                this.createEvictionNode(address.concat('eviction', 'EVICTION'), configuration.eviction.EVICTION);
+                this.createExpirationNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration.EXPIRATION);
+                this.createCompatibilityNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility.COMPATIBILITY);
+                this.createTransactionNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction.TRANSACTION);
+                this.createFileStoreNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store'].FILE_STORE);
                 this.createJDBCStoreNode(address.concat('string-keyed-jdbc-store', 'STRING_KEYED_JDBC_STORE'),
-                  cache.data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE);
+                  configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE);
               }.bind(this)).then(function () {
                 callback();
               })
@@ -207,31 +213,8 @@ angular.module('managementConsole.api')
              *
              *
              */
-            CacheCreationControllerClient.prototype.createDistributedCache = function (address, prop) {
-
-
-              var op = {
-                'operation': 'add',
-                'mode': prop.mode,
-                'module': prop.module,
-                'remote-cache': prop['remote-cache'],
-                'segments': prop.segments,
-                'indexing': prop.indexing,
-                'auto-config': prop['auto-config'],
-                'statistics': prop.statistics,
-                'remote-timeout': prop['remote-timeout'],
-                'capacity-factor': prop['capacity-factor'],
-                'batching': prop.batching,
-                'start': prop.start,
-                'l1-lifespan': prop['l1-lifespan'],
-                'remote-site': prop['remote-site'],
-                'jndi-name': prop['jndi-name'],
-                'queue-size': prop['queue-size'],
-                'queue-flush-interval': prop['queue-flush-interval'],
-                'owners': prop['owners'],
-                'address': address
-              };
-              return this.execute(op);
+            CacheCreationControllerClient.prototype.createDistributedCacheConfigurationTemplate = function (address, prop) {
+              return this.executeSimpleAddOperation(address, prop);
             };
 
             /**
@@ -265,7 +248,7 @@ angular.module('managementConsole.api')
              *
              */
 
-            CacheCreationControllerClient.prototype.createInvalidationCache = function (address, prop) {
+            CacheCreationControllerClient.prototype.createInvalidationCacheConfigurationTemplate = function (address, prop) {
               var op = {
                 'operation': 'add',
                 'mode': prop.mode,
@@ -311,7 +294,7 @@ angular.module('managementConsole.api')
              * jndi-name	STRING	The jndi-name to which to bind this cache instance.
              *
              */
-            CacheCreationControllerClient.prototype.createLocalCache = function (address, prop) {
+            CacheCreationControllerClient.prototype.createLocalCacheConfigurationTemplate = function (address, prop) {
               var op = {
                 'operation': 'add',
                 'module': prop.module,
@@ -359,7 +342,7 @@ angular.module('managementConsole.api')
              * replication queue runs. This should be a positive integer which represents thread wakeup time in milliseconds.
              *
              */
-            CacheCreationControllerClient.prototype.createReplicatedCache = function (address, prop) {
+            CacheCreationControllerClient.prototype.createReplicatedCacheConfigurationTemplate = function (address, prop) {
               var op = {
                 'operation': 'add',
                 'mode': prop.mode,
@@ -491,13 +474,7 @@ angular.module('managementConsole.api')
              *
              */
             CacheCreationControllerClient.prototype.createCompatibilityNode = function (address, prop) {
-              var op = {
-                'operation': 'add',
-                'enabled': prop.enabled,
-                'marshaller': prop.marshaller,
-                'address': address
-              };
-              return this.execute(op);
+              return this.executeAddOperation(address, prop, 'COMPATIBILITY');
             };
 
             /**
@@ -517,13 +494,14 @@ angular.module('managementConsole.api')
              *
              */
             CacheCreationControllerClient.prototype.createEvictionNode = function (address, prop) {
-              var op = {
+              /*var op = {
                 'operation': 'add',
                 'strategy': prop.strategy,
                 'max-entries': prop['max-entries'],
                 'address': address
               };
-              return this.execute(op);
+              return this.execute(op);*/
+              return this.executeAddOperation(address, prop, 'EVICTION');
             };
 
             /**
@@ -546,14 +524,7 @@ angular.module('managementConsole.api')
              *
              */
             CacheCreationControllerClient.prototype.createExpirationNode = function (address, prop ) {
-              var op = {
-                'operation': 'add',
-                'lifespan': prop.lifespan,
-                'max-idle': prop['max-idle'],
-                'interval': prop.interval,
-                'address': address
-              };
-              return this.execute(op);
+              return this.executeAddOperation(address, prop, 'EXPIRATION');
             };
 
 
@@ -603,21 +574,7 @@ angular.module('managementConsole.api')
              *
              */
             CacheCreationControllerClient.prototype.createFileStoreNode = function (address, prop) {
-              var op = {
-                'operation': 'add',
-                'shared': prop.shared,
-                'preload': prop.preload,
-                'passivation': prop.passivation,
-                'fetch-state': prop['fetch-state'],
-                'purge' : prop.purge,
-                'read-only' : prop['read-only'],
-                'singleton' : prop.singleton,
-                'max-entries' : prop['max-entries'],
-                'relative-to' : prop['relative-to'],
-                'path' : prop.path,
-                'address': address
-              };
-              return this.execute(op);
+              return this.executeAddOperation(address, prop, 'FILE_STORE');
             };
 
 
@@ -745,15 +702,7 @@ angular.module('managementConsole.api')
            *
            */
           CacheCreationControllerClient.prototype.createLockingNode = function (address, prop) {
-            var op = {
-              'operation': 'add',
-              'acquire-timeout': prop['acquire-timeout'],
-              'isolation': prop.isolation,
-              'striping': prop.striping,
-              'concurrency-level': prop['concurrency-level'],
-              'address': address
-            };
-            return this.execute(op);
+            return this.executeAddOperation(address, prop, 'LOCKING');
           };
 
           /**
@@ -860,24 +809,7 @@ angular.module('managementConsole.api')
            *
            */
           CacheCreationControllerClient.prototype.createRemoteStoreNode = function (address, prop) {
-            var op = {
-              'operation': 'add',
-              'shared': prop.shared,
-              'preload': prop.preload,
-              'passivation': prop.passivation,
-              'fetch-state': prop['fetch-state'],
-              'purge' : prop.purge,
-              'read-only' : prop['read-only'],
-              'singleton' : prop.singleton,
-              'cache' : prop.cache,
-              'hotrod-wrapping' : prop['hotrod-wrapping'],
-              'raw-values' :prop['raw-values'],
-              'tcp-no-delay' : prop['tcp-no-delay'],
-              'socket-timeout' : prop['socket-timeout'],
-              'remote-servers': prop['remote-servers'],
-              'address': address
-            };
-            return this.execute(op);
+            return this.executeAddOperation(address, prop, 'TODO');
           };
 
 
@@ -969,15 +901,7 @@ angular.module('managementConsole.api')
            *
            */
           CacheCreationControllerClient.prototype.createStateTransferNode = function (address, prop) {
-            var op = {
-              'operation': 'add',
-              'enabled': prop.enabled,
-              'await-initial-transfer': prop['await-initial-transfer'],
-              'chunk-size': prop['chunk-size'],
-              'timeout': prop.timeout,
-              'address': address
-            };
-            return this.execute(op);
+            return this.executeAddOperation(address, prop, 'STATE_TRANSFER');
           };
 
 
@@ -1085,22 +1009,7 @@ angular.module('managementConsole.api')
            *
            */
           CacheCreationControllerClient.prototype.createJDBCStoreNode = function (address, prop) {
-            var op = {
-              'operation': 'add',
-              'shared': prop.shared,
-              'preload': prop.preload,
-              'passivation': prop.passivation,
-              'fetch-state': prop['fetch-state'],
-              'purge' : prop.purge,
-              'read-only' : prop['read-only'],
-              'singleton' : prop.singleton,
-              'datasource' : prop.datasource,
-              'dialect' : prop.dialect,
-              'string-keyed-table': prop['string-keyed-table'],
-              'binary-keyed-table': prop['binary-keyed-table'],
-              'address': address
-            };
-            return this.execute(op);
+            return this.executeAddOperation(address, prop, 'STRING_KEYED_JDBC_STORE');
           };
 
           /**
@@ -1120,14 +1029,53 @@ angular.module('managementConsole.api')
            *
            */
           CacheCreationControllerClient.prototype.createTransactionNode = function (address, prop) {
-            var op = {
-              'operation': 'add',
-              'mode': prop.mode,
-              'locking': prop.locking,
-              'stop-timeout': prop['stop-timeout'],
-              'address': address
-            };
-            return this.execute(op);
+            return this.executeAddOperation(address, prop, 'TRANSACTION');
+          };
+
+
+          CacheCreationControllerClient.prototype.executeAddOperation = function (address, prop, propertyOfProp) {
+            if (utils.isNotNullOrUndefined(prop) && utils.isNotNullOrUndefined(prop[propertyOfProp])) {
+              var opProp = prop[propertyOfProp];
+              var op = {
+                'operation': 'add',
+                'address': address
+              };
+
+              var keys = Object.keys(opProp);
+              for (var i = 0; i < keys.length; i++){
+                var propKey = keys[i];
+                var propValue = opProp[keys[i]];
+                if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
+                  //only primitives here strings, numbers, integers
+                  op[propKey] = propValue;
+                }
+              }
+              return this.execute(op);
+            } else {
+              return this.emptyPromise();
+            }
+          };
+
+          CacheCreationControllerClient.prototype.executeSimpleAddOperation = function (address, prop) {
+            if (utils.isNotNullOrUndefined(prop)) {
+              var op = {
+                'operation': 'add',
+                'address': address
+              };
+
+              var keys = Object.keys(prop);
+              for (var i = 0; i < keys.length; i++){
+                var propKey = keys[i];
+                var propValue = prop[keys[i]];
+                if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
+                  //only primitives here strings, numbers, integers
+                  op[propKey] = propValue;
+                }
+              }
+              return this.execute(op);
+            } else {
+              return this.emptyPromise();
+            }
           };
           return new CacheCreationControllerClient(window.location.origin);
     }

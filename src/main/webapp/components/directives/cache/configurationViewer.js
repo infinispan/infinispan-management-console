@@ -18,13 +18,38 @@
           return 'components/directives/cache/'.concat(attrs.cacheType).concat('.html');
         },
         link: function (scope, element, attrs) {
-
+          var rootMetadataObjectPath = 'children.configurations.model-description.CONFIGURATIONS.children.' + attrs.cacheType + '-configuration.model-description.*.attributes';
           if (!scope.readOnly) {
             scope.readOnly = false;
           }
           if (!scope.initDefaults){
             scope.initDefaults = false;
           }
+
+
+          //These three fields do not exist in DMR model so let's add them :-)
+          var metadataRoot = utils.deepGet(scope.metadata, rootMetadataObjectPath);
+          metadataRoot['name'] = {
+            description: 'Cache name',
+            type: {
+              TYPE_MODEL_VALUE: 'STRING'
+            }
+          };
+
+          metadataRoot['type'] = {
+            description: 'The cache configuration type',
+            allowed:['distributed-cache','invalidation-cache','local-cache','replicated-cache'],
+            type: {
+              TYPE_MODEL_VALUE: 'STRING'
+            }
+          };
+
+          metadataRoot['template'] = {
+            description: 'The cache configuration template',
+            type: {
+              TYPE_MODEL_VALUE: 'STRING'
+            }
+          };
 
           scope.resourceDescriptionMap = {};
           utils.makeResourceDescriptionMap(scope.resourceDescriptionMap);

@@ -48,6 +48,14 @@ angular.module('managementConsole.api')
               return utils.isNotNullOrUndefined(this.configuration.indexing);
             };
 
+            Cache.prototype.getType = function () {
+              return this.type;
+            };
+
+            Cache.prototype.getConfigurationTemplate = function () {
+              return this.configurationTemplate;
+            };
+
             Cache.prototype.isPersistent = function () {
               return utils.isNotNullOrUndefined(this.configuration['file-store'])
                 || utils.isNotNullOrUndefined(this.configuration['leveldb-store'])

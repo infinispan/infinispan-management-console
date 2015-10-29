@@ -156,6 +156,21 @@ var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheC
     });
   };
 
+  $scope.configureTemplate = function () {
+    var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+    var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
+    address.push(cacheType);
+    address.push($scope.cacheName);
+    $modalInstance.close();
+    $state.go('editCache', {
+      clusterName: $scope.currentCluster.name,
+      cacheName: $scope.cacheName,
+      cacheConfigurationTemplate: $scope.selectedTemplate,
+      cacheConfigurationType:cacheType,
+      newCacheCreation:true
+    });
+  };
+
   $scope.cancel = function () {
     $modalInstance.close();
   };

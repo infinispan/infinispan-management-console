@@ -77,6 +77,13 @@ angular.module('managementConsole', [
                 controller: 'createCacheCtrl'
             }).state('editCache', {
                 url: '/cluster/:clusterName/edit-cache/:cacheName',
+                params: {
+                  clusterName: null,
+                  cacheName: null,
+                  cacheConfigurationType: null,
+                  cacheConfigurationTemplate: null,
+                  newCacheCreation: false
+                },
                 templateUrl: 'edit-cache/edit-cache.html',
                 controller: 'editCacheCtrl'
             });

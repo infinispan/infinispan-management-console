@@ -33,16 +33,6 @@ angular.module('managementConsole', [
               templateUrl: 'clusters-view-physical/clusters-view.html',
               controller: 'ClustersViewPhysicalCtrl'
             })
-            .state('nodeDetails', {
-                url: '/cluster/:clusterName/node/:nodeName',
-                templateUrl: 'node-details/node-details.html',
-                controller: 'NodeDetailsCtrl'
-            })
-            .state('cacheDetails', {
-                url: '/cluster/:clusterName/cache/:cacheName',
-                templateUrl: 'cache-details/cache-details.html',
-                controller: 'CacheDetailsCtrl'
-            })
             .state('cacheStatus', {
               url: '/cluster/:clusterName/cache/:cacheName',
               templateUrl: 'cache-status/cache-status.html',
@@ -71,10 +61,6 @@ angular.module('managementConsole', [
             .state('error404', {
                 url: '/error404',
                 templateUrl: 'error404/error404.html'
-            }).state('createCache', {
-                url: '/cluster/:clusterName/createCache',
-                templateUrl: 'create-cache/create-cache.html',
-                controller: 'createCacheCtrl'
             }).state('editCache', {
                 url: '/cluster/:clusterName/edit-cache/:cacheName',
                 params: {

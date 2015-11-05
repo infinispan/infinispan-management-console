@@ -9,11 +9,6 @@ angular.module('managementConsole')
     'modelController',
     'cacheCreateController',
     function ($scope, $state, $stateParams, utils, modelController, cacheCreateController) {
-      //-- Variables --//
-
-      if (!modelController.isAuthenticated()) {
-        $state.go('/logout');
-      }
       if (!$stateParams.clusterName && !$stateParams.cacheName) {
         $state.go('error404');
       }

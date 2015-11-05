@@ -17,6 +17,7 @@ angular.module('managementConsole.api')
                 this.show = true;
                 this.defaultStack = 'N/A';
                 this.inetAddress = '';
+                this.stats = {};
             };
 
             Server.prototype.getResourcePath = function () {
@@ -66,6 +67,15 @@ angular.module('managementConsole.api')
                     response['node-name'] = this.name;
                     response['cache'] = this;
                     return response;
+                }.bind(this));
+            };
+
+            Server.prototype.fetchStats = function (cache) {
+              return this.getModelController()
+                .readChildrenResources(this.getResourcePath().concat('core-service', 'platform-mbean'),
+                'type', 2, true, true).then(function (response) {
+                  this.stats = response;
+                  return response;
                 }.bind(this));
             };
 

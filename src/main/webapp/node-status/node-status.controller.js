@@ -5,9 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$stateParams',
     '$state',
+    '$interval',
     'modelController',
     'utils',
-    function ($scope, $stateParams, $state, modelController, utils) {
+    function ($scope, $stateParams, $state, $interval, modelController, utils) {
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
@@ -22,6 +23,40 @@ angular.module('managementConsole')
         console.log(response);
       });
 
+
+      $scope.dataPoints = [];
+      $scope.dataColumns = [
+        {"id": "d1", "type": "donut", "name": "Used"},
+        {"id": "d2", "type": "donut", "name": "Free"}
+      ];
+
+      $interval(function(){
+        serverNode.fetchStats().then(function (response) {
+          //memory
+          var memory = response['memory']['heap-memory-usage'];
+          var used = (memory.used / 1024) / 1024;
+          var max = (memory.max / 1024) / 1024;
+
+          $scope.dataPoints = [{"d1": used}, {"d2": max}];
+
+          //threading
+
+          var threading = response['threading'];
+          $scope.threadCount = threading['thread-count'];
+          $scope.threadPeakCount = threading['peak-thread-count'];
+          $scope.threadDaemonCount = threading['daemon-thread-count'];
+
+          var directBufferPool = utils.deepGet(response, 'buffer-pool.name.direct');
+          var mappedBufferPool = utils.deepGet(response,'buffer-pool.name.mapped');
+
+          $scope.directBufferPoolCount =  directBufferPool.count;
+          $scope.directBufferPoolMemoryUsed= directBufferPool['memory-used'];
+
+          $scope.mappedBufferPoolCount =  mappedBufferPool.count;
+          $scope.mappedBufferPoolMemoryUsed= mappedBufferPool['memory-used'];
+
+        });
+      }, 500, 1);
 
 
       $scope.currentCacheAvailability = function () {

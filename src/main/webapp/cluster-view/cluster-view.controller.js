@@ -33,6 +33,10 @@ angular.module('managementConsole')
       $scope.isCollapsedType = false;
       $scope.isCollapsedStatus = true;
 
+      $scope.matchHeight = function () {
+        utils.matchHeight(document, '.card-pf');
+      };
+
       $scope.traitCheckboxes = {
         bounded: false,
         remotebackup: false,

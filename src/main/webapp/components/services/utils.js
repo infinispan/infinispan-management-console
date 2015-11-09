@@ -234,6 +234,16 @@
 
       has: function has(object, key) {
         return object ? hasOwnProperty.call(object, key) : false;
+      },
+
+      matchHeight: function matchHeight(elem, selector) {
+        var elements = $(elem).find(selector);
+        elements.matchHeight({
+          byRow: false,
+          property: 'height',
+          target: null,
+          remove: false
+        });
       }
     };
   });

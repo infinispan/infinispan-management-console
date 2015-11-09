@@ -41,6 +41,10 @@ angular.module('managementConsole')
         });
       };
 
+      $scope.matchHeight = function () {
+        utils.matchHeight(document, '.card-pf');
+      };
+
       $scope.openBootingModal = function () {
         $modal.open({
           templateUrl: 'cluster-nodes/booting.html',

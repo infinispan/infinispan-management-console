@@ -70,24 +70,24 @@
         </div>
       </div>
       <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
-      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() | filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show">
+      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() |
+      filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show" on-finish-render="matchHeight()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
             <span class="pficon pficon-ok"></span><a ui-sref="cacheStatus({clusterName: currentCluster.name, cacheName: cache.name})">{{cache.name}}<span class="card-link"></span></a>
           </h2>
 
           <div class="card-pf-body">
-            <p ng-show="cache.isReplicated()">Replicated</p>
-            <p ng-show="cache.isDistributed()">Distributed</p>
-            <p ng-show="cache.isLocal()">Local</p>
-            <p ng-show="cache.isInvalidation()">Invalidation</p>
+            <p ng-if="cache.isReplicated()">Replicated</p>
+            <p ng-if="cache.isDistributed()">Distributed</p>
+            <p ng-if="cache.isLocal()">Local</p>
+            <p ng-if="cache.isInvalidation()">Invalidation</p>
             <p class="card-pf-aggregate-status-notifications">
               <span class="card-pf-aggregate-status-notification">
-                  <span class="fa fa-database" title="Persistent" ng-show="cache.isPersistent()"></span>
-                  <span class="fa fa-stack-overflow" title="Bounded" ng-show="cache.isBounded()"></span>
-                  <span class="fa fa-arrow-circle-o-down" title="Transactional" ng-show="cache.isTransactional()"></span>
-                  <span class="fa fa-lock" title="Security enabled" ng-show="cache.hasSecurityEnabled()"></span>
-                  <span class="fa"></span>
+                  <span class="fa fa-database" title="Persistent" ng-if="cache.isPersistent()"></span>
+                  <span class="fa fa-stack-overflow" title="Bounded" ng-if="cache.isBounded()"></span>
+                  <span class="fa fa-arrow-circle-o-down" title="Transactional" ng-if="cache.isTransactional()"></span>
+                  <span class="fa fa-lock" title="Security enabled" ng-if="cache.hasSecurityEnabled()"></span>
               </span>
             </p>
           </div>

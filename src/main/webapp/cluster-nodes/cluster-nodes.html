@@ -66,7 +66,8 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster() | inetAddressFilter:searchNameQuery | nameFilter:searchNameQuery) " ng-show="server.show">
+      <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster()
+      | inetAddressFilter:searchNameQuery | nameFilter:searchNameQuery)" ng-show="server.show" on-finish-render="matchHeight()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
             <span class="pficon pficon-ok"></span><a ui-sref="nodeStatus({

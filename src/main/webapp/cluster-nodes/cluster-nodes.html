@@ -59,7 +59,7 @@
                 <a data-original-title="Add Node" ng-click="openModal()"
                    data-toggle="modal"
                    href="#" class="add" data-toggle="tooltip" data-placement="top" title="">
-                  <span class="pficon pficon-add-circle-o"></span>
+                  <span class="pficon pficon-add-circle-o"></span><span class="card-link"></span>
                 </a>
               </span>
             </p>
@@ -73,7 +73,7 @@
             <span class="pficon pficon-ok"></span><a ui-sref="nodeStatus({
             clusterName:cluster.name,
             nodeName:server.name,
-            inetAddress:server.getInetAddress()})">{{server.name}}</a>
+            inetAddress:server.getInetAddress()})">{{server.name}}<span class="card-link"></span></a>
           </h2>
 
           <div class="card-pf-body">

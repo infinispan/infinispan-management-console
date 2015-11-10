@@ -91,6 +91,39 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
+            Server.prototype.start = function (){
+              return this.executeServerOp('start');
+            };
+
+            Server.prototype.stop = function (){
+              return this.executeServerOp('stop');
+            };
+
+            Server.prototype.restart = function (){
+              return this.executeServerOp('restart');
+            };
+
+            Server.prototype.reload = function (){
+              return this.executeServerOp('reload');
+            };
+
+            Server.prototype.suspend = function (){
+              return this.executeServerOp('suspend');
+            };
+
+            Server.prototype.resume = function (){
+              return this.executeServerOp('resume');
+            };
+
+            Server.prototype.executeServerOp = function (operationName){
+              var address = ['host', this.host, 'server-config', this.server];
+              var op = {
+                'operation': operationName,
+                'address': address
+              };
+              return this.getModelController().execute(op);
+            };
+
             Server.prototype.isRunning = function() {
               var state = this.getState();
               return state === 'RUNNING' || state === 'RELOAD_REQUIRED' || state === 'RESTART_REQUIRED';

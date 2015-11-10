@@ -72,4 +72,20 @@ angular.module('managementConsole')
         utils.isNotNullOrUndefined($scope.currentCache.configuration.owners) ? $scope.currentCache.configuration.owners + ' owners' : '';
       };
 
+      $scope.suspendNode = function () {
+        serverNode.suspend();
+      };
+
+      $scope.resumeNode = function () {
+        serverNode.resume();
+      };
+
+      $scope.restartNode = function () {
+        serverNode.restart();
+      };
+
+      $scope.serverNodeAvailable = function (){
+        return serverNode.isRunning();
+      };
+
     }]);

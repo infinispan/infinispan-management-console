@@ -55,7 +55,7 @@
   <!--div class="cards-pf" style="padding:20px"-->
   <div style="padding-top: 20px">
     <div class="row row-cards-pf">
-      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isPersistent()">
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isPersistent()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action"
              style="height: 40px;">
           <h2 class="card-pf-title" style="height: 17px;">
@@ -63,7 +63,7 @@
           </h2>
         </div>
       </div>
-      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isTransactional()">
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isTransactional()">
         <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
              style="height: 40px;">
           <h2 class="card-pf-title" style="height: 17px;">
@@ -71,7 +71,7 @@
           </h2>
         </div>
       </div>
-      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isBounded()">
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isBounded()">
         <div class="card-pf    card-pf-accented card-pf-aggregate-status card-pf-with-action"
              style="height: 40px;">
           <h2 class="card-pf-title" style="height: 17px;">
@@ -79,7 +79,7 @@
           </h2>
         </div>
       </div>
-      <div class="col-xs-1 col-sm-1 col-md-1" ng-show="currentCache.isIndexed()">
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isIndexed()">
         <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
              style="height: 40px;">
           <h2 class="card-pf-title" style="height: 17px;">
@@ -91,7 +91,7 @@
 
     <div class="row row-cards-pf">
       <!-- BEGIN CARD -->
-      <div class="col-xs-2 col-sm-2 col-md-2">
+      <div class="col-xs-2 col-sm-2 col-md-2" match-height="ispn-card">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Cache content</h2>
@@ -297,8 +297,6 @@
         </div>
       </div>
       <!-- END CARD -->
-
-
     </div>
   </div>
 </div>

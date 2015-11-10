@@ -5,11 +5,17 @@
       <div class="form-group">
         <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
 
-        <div class="col-md-4">
+        <div class="col-md-4" ng-init="elementType = resolveFieldType(field)">
           <select class="form-control" ng-style="getStyle(field)" ng-model="data[field]" ng-options="item as item for item in metadata[field].allowed"
                   ng-disabled="readOnly" ng-if="isMultiValue(field)" ng-change="fieldValueModified(field)"/>
-          <input class="form-control" ng-style="getStyle(field)" type="{{resolveFieldType(field)}}" ng-model="data[field]" ng-disabled="readOnly"
-                 ng-if="isSingleValue(field)" ng-change="fieldValueModified(field)"/>
+          <input class="form-control" ng-style="getStyle(field)" type="{{elementType}}" ng-model="data[field]" ng-disabled="readOnly"
+                 ng-if="isSingleValue(field) && elementType !== 'checkbox'" ng-change="fieldValueModified(field)"/>
+
+          <div class="checkbox" ng-if="elementType === 'checkbox'">
+            <label>
+              <input type="checkbox" ng-style="getStyle(field)" ng-model="data[field]" ng-disabled="readOnly" ng-change="fieldValueModified(field)">
+            </label>
+          </div>
         </div>
         <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle " tooltip="{{metadata[field].description}}"

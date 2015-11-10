@@ -21,11 +21,15 @@ angular.module('managementConsole')
                 'cacheStatus': '',
                 'firstServerStats': []
             };
-            var p = server.fetchCacheStats($scope.currentCluster, $scope.currentCache);
-            p.then(function (response) {
+
+            $scope.refresh = function (){
+              server.fetchCacheStats($scope.currentCluster, $scope.currentCache).then(function (response) {
                 $scope.currentCacheStats.nodeStats = response;
                 $scope.currentCacheStats.firstServerStats = response[0];
-            });
+              });
+            };
+
+            $scope.refresh();
 
             $scope.currentCacheAvailability = function () {
               return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();

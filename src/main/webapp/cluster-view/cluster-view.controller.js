@@ -29,6 +29,12 @@ angular.module('managementConsole')
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
 
+      $scope.refresh = function () {
+        if (this.currentClusterAvailability()) {
+          $scope.currentCluster.refresh();
+        }
+      };
+
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;
       $scope.isCollapsedStatus = true;
@@ -74,8 +80,6 @@ angular.module('managementConsole')
 
         modalInstance.result.then(function (selectedItem) {
           $scope.selected = selectedItem;
-        }, function () {
-          //$log.info('Modal dismissed at: ' + new Date());
         });
       };
 
@@ -89,8 +93,6 @@ angular.module('managementConsole')
 
         modalInstance.result.then(function (selectedItem) {
           $scope.selected = selectedItem;
-        }, function () {
-          //$log.info('Modal dismissed at: ' + new Date());
         });
       };
     }]).filter('cacheTrait', function (){

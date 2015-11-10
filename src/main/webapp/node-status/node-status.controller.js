@@ -17,11 +17,6 @@ angular.module('managementConsole')
 
       var controller = modelController.getServer();
       var serverNode = controller.getNode($stateParams.nodeName);
-      var p = serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode);
-      p.then(function (response) {
-        $scope.nodeStats = response;
-        console.log(response);
-      });
 
 
       $scope.dataPoints = [];
@@ -30,7 +25,7 @@ angular.module('managementConsole')
         {"id": "d2", "type": "donut", "name": "Free"}
       ];
 
-      $interval(function(){
+      $scope.fetchStats = function (){
         serverNode.fetchStats().then(function (response) {
           //memory
           var memory = response['memory']['heap-memory-usage'];
@@ -56,6 +51,17 @@ angular.module('managementConsole')
           $scope.mappedBufferPoolMemoryUsed= mappedBufferPool['memory-used'];
 
         });
+      };
+
+      $scope.refresh = function (){
+        serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode).then(function (response) {
+          $scope.nodeStats = response;
+        });
+        $scope.fetchStats();
+      };
+
+      $interval(function(){
+        $scope.refresh()
       }, 500, 1);
 
 

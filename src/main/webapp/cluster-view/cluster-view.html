@@ -14,16 +14,16 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Stop</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Start</a></li>
+          <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Delete</a>
+          <li role="presentation" class="disabled"><a role="menuitem">Delete</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable partition handling</a>
-          <li role="presentation" ><a role="menuitem" href="#">Disable partition handling</a>
+          <li role="presentation" class="disabled"><a role="menuitem">Enable partition handling</a>
+          <li role="presentation" class="disabled"><a role="menuitem">Disable partition handling</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a role="menuitem" href="cache-container-configuration-schemas.html">View / Edit configuration</a>
+          <li role="presentation" ><a role="menuitem" href="#">View / Edit configuration</a>
           </li>
         </ul>
       </div>
@@ -61,7 +61,7 @@
             <p class="card-pf-aggregate-status-notifications">
                     <span class="card-pf-aggregate-status-notification">
                       <a data-original-title="Add Cache" data-toggle="modal" ng-click="openModal()"
-                         href="#" class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
+                          class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
                         <span class="pficon pficon-add-circle-o"></span><span class="card-link"></span>
                       </a>
                     </span>
@@ -117,7 +117,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#filter-type-accordion" href="#" ng-click="isCollapsedType = !isCollapsedType" class="collapsed">
+              <a data-toggle="collapse" data-parent="#filter-type-accordion"  ng-click="isCollapsedType = !isCollapsedType" class="collapsed">
                 Type
               </a>
             </h4>
@@ -138,7 +138,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" href="#" data-parent="#filter-trait-accordion" ng-click="isCollapsedTrait = !isCollapsedTrait"
+              <a data-toggle="collapse"  data-parent="#filter-trait-accordion" ng-click="isCollapsedTrait = !isCollapsedTrait"
                  class="collapsed">
                 Trait
               </a>
@@ -161,7 +161,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#filter-status-accordion" href="#" ng-click="isCollapsedStatus = !isCollapsedStatus"
+              <a data-toggle="collapse" data-parent="#filter-status-accordion"  ng-click="isCollapsedStatus = !isCollapsedStatus"
                  class="collapsed">
                 Status
               </a>

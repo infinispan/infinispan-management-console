@@ -13,16 +13,6 @@ angular.module('managementConsole')
     'utils',
     '$modal',
     function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, utils, $modal) {
-      $scope.shared = {
-        currentCollection: 'caches'
-      };
-
-      $scope.hosts = modelController.getServer().getHosts();
-      $scope.groups = modelController.getServer().getServerGroups();
-      $scope.servers = modelController.getServer().getNodes();
-      $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-
-
       $scope.getServersInCluster = function () {
         var clusters = [];
         angular.forEach($scope.servers, function (server, key) {
@@ -32,6 +22,19 @@ angular.module('managementConsole')
         });
         return clusters;
       };
+
+      $scope.refresh = function (refreshDomain) {
+        refreshDomain = (typeof refreshDomain === 'undefined') ? true : false;
+        if (refreshDomain) {
+          modelController.getServer().refresh();
+        }
+        $scope.hosts = modelController.getServer().getHosts();
+        $scope.groups = modelController.getServer().getServerGroups();
+        $scope.servers = modelController.getServer().getNodes();
+        $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+      };
+
+      $scope.refresh(false);
 
       $scope.openModal = function () {
         var modalInstance = $modal.open({

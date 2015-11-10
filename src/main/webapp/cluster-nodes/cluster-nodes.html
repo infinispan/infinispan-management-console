@@ -7,18 +7,17 @@
         </li>
         <li class="active"><strong>{{cluster.name}}</strong></li>
       </ol>
-      <div class="dropdown pull-right">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-          ACTIONS
-          <span class="caret"></span>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default dropdown-toggle" type="button"
+                id="dropdownMenu1" data-toggle="dropdown" uib-dropdown-toggle>ACTIONS<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Refresh</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Stop</a></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Start</a></li>
+          <li role="presentation" ng-click="refresh()"><a role="menuitem">Refresh</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable manual rebalancing</a>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Enable automatic rebalancing</a>
+          <li role="presentation" class="disabled"><a role="menuitem">Enable manual rebalancing</a>
+          <li role="presentation" class="disabled"><a role="menuitem">Enable automatic rebalancing</a>
           </li>
         </ul>
       </div>

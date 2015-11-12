@@ -46,6 +46,22 @@ angular.module('managementConsole.api')
               }.bind(this));
             };
 
+            ServerGroup.prototype.startServers = function (){
+              return this.executeOp('start-servers');
+            };
+
+            ServerGroup.prototype.stopServers = function (){
+              return this.executeOp('stop-servers');
+            };
+
+            ServerGroup.prototype.executeOp = function (operationName){
+              var op = {
+                'operation': operationName,
+                'address': this.getResourcePath()
+              };
+              return this.getModelController().execute(op);
+            };
+
             return ServerGroup;
     }
   ]);

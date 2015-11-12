@@ -16,9 +16,8 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
           <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation"><a role="menuitem" ng-click="suspendNode()">Disable</a></li>
-          <li role="presentation"><a role="menuitem" ng-click="restartNode()">Restart</a></li>
-          <li role="presentation" ng-class="serverNodeAvailable()?'disabled':''"><a role="menuitem" ng-click="resumeNode()">Enable</a></li>
+          <li role="presentation" ng-class="serverNodeAvailable()?'disabled':''"><a role="menuitem" ng-click="startNode()">Start</a></li>
+          <li role="presentation"><a role="menuitem" ng-click="stopNode()">Stop</a></li>
         </ul>
       </div>
       <h1><span class="label label-success">Available</span> {{nodeName}}

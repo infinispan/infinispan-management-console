@@ -36,6 +36,16 @@ angular.module('managementConsole')
 
       $scope.refresh(false);
 
+      $scope.start = function () {
+        var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+        cluster.startServers();
+      };
+
+      $scope.stop = function () {
+        var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+        cluster.stopServers();
+      };
+
       $scope.openModal = function () {
         var modalInstance = $modal.open({
           templateUrl: 'cluster-nodes/add-node-modal.html',

@@ -8,13 +8,15 @@
         <li class="active"><strong>{{currentCluster.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
+          <span class="pficon pficon-refresh"></span> Refresh
+        </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
                 data-toggle="dropdown" uib-dropdown-toggle>
-          ACTIONS
+          Actions
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
           <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
           <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
           <li role="presentation" class="divider"></li>

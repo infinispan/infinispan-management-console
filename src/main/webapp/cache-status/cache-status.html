@@ -39,7 +39,7 @@
       <h1><span class="label"
                 ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
         {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
-      </span> {{currentCache.name}}</h1>
+      </span>&nbsp;{{currentCache.name}}</h1>
     </div>
   </div>
 
@@ -55,35 +55,31 @@
 
   <!--div class="cards-pf" style="padding:20px"-->
   <div style="padding-top: 20px">
-    <div class="row row-cards-pf">
+    <div class="row row-cards-pf" on-finish-render="matchHeight()">
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isPersistent()">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action"
-             style="height: 40px;">
-          <h2 class="card-pf-title" style="height: 17px;">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
             <span class="fa fa-database" title="Persistent"></span> Persistent
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isTransactional()">
-        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
-             style="height: 40px;">
-          <h2 class="card-pf-title" style="height: 17px;">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
             <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isBounded()">
-        <div class="card-pf    card-pf-accented card-pf-aggregate-status card-pf-with-action"
-             style="height: 40px;">
-          <h2 class="card-pf-title" style="height: 17px;">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
             <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isIndexed()">
-        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action"
-             style="height: 40px;">
-          <h2 class="card-pf-title" style="height: 17px;">
+        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
             <span class="fa fa-list-ol" title="Indexed"></span> Indexed
           </h2>
         </div>

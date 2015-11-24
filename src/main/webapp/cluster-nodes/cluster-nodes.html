@@ -75,7 +75,7 @@
             inetAddress:server.getInetAddress()})">
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
             <h2 class="card-pf-title">
-              <span class="pficon pficon-ok"></span>{{server.name}}
+              <span class="pficon" ng-class="server.isStopped()?'fa fa-power-off':'pficon-ok'"></span>{{server.name}}
             </h2>
 
             <div class="card-pf-body">

@@ -14,13 +14,20 @@ angular.module('managementConsole')
     '$modal',
     function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, utils, $modal) {
       $scope.getServersInCluster = function () {
-        var clusters = [];
+        var serversInCluster = [];
         angular.forEach($scope.servers, function (server, key) {
           if (server.getGroup() === $stateParams.clusterName) {
-            clusters.push(server);
+            serversInCluster.push(server);
           }
         });
-        return clusters;
+
+        //now add stopped servers
+        angular.forEach($scope.servers, function (server, key) {
+          if (server.isStopped()) {
+            serversInCluster.push(server);
+          }
+        });
+        return serversInCluster;
       };
 
       $scope.refresh = function (refreshDomain) {

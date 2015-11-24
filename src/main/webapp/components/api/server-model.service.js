@@ -16,7 +16,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.show = true;
                 this.defaultStack = 'N/A';
-                this.inetAddress = '';
+                this.inetAddress = 'N/A';
                 this.stats = {};
             };
 
@@ -38,6 +38,10 @@ angular.module('managementConsole.api')
 
             Server.prototype.getState = function () {
               return this.root['server-state'].toUpperCase();
+            };
+
+            Server.prototype.isStopped = function () {
+              return this.getState() === 'STOPPED';
             };
 
             Server.prototype.getInetAddress = function () {

@@ -6,9 +6,10 @@ angular.module('managementConsole')
     '$stateParams',
     '$state',
     '$interval',
+    '$modal',
     'modelController',
     'utils',
-    function ($scope, $stateParams, $state, $interval, modelController, utils) {
+    function ($scope, $stateParams, $state, $interval, $modal, modelController, utils) {
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
@@ -53,6 +54,7 @@ angular.module('managementConsole')
         });
       };
 
+
       $scope.refresh = function (){
         serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode).then(function (response) {
           $scope.nodeStats = response;
@@ -94,4 +96,25 @@ angular.module('managementConsole')
         return serverNode.isRunning();
       };
 
+      $scope.openModal = function (mode) {
+        $scope.mode = mode;
+        $modal.open({
+          templateUrl: 'node-status/confirmation-node-modal.html',
+          controller: NodeModalInstanceCtrl,
+          scope: $scope
+        });
+      };
+
     }]);
+
+var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
+
+  $scope.serverNode = $stateParams.nodeName;
+
+  $scope.cancelModal = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+};
+
+

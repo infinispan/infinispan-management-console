@@ -23,8 +23,9 @@
           </li>
         </ul>
       </div>
-      <h1>Cluster: {{cluster.name}} <span class="label"
-                                          ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>
+      <h1>
+        <span class="label" ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>
+        &nbsp;{{cluster.name}} 
       </h1>
     </div>
   </div>
@@ -50,29 +51,29 @@
       </div>
 
       <div class="col-xs-6 col-sm-4 col-md-2">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
-          <h2 class="card-pf-title">Add Node
-          </h2>
-
-          <div style="height: 50px;" class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
-              <span class="card-pf-aggregate-status-notification">
-                <a data-original-title="Add Node" ng-click="openModal()"
+        <a data-original-title="Add Node" ng-click="openModal()"
                    data-toggle="modal"
-                   href="#" class="add" data-toggle="tooltip" data-placement="top" title="">
-                  <span class="pficon pficon-add-circle-o"></span><span class="card-link"></span>
-                </a>
-              </span>
-            </p>
+                   href="#" class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
+          <div class="card-pf card-pf-accented card-pf-aggregate-status">
+            <h2 class="card-pf-title">Add Node
+            </h2>
+
+            <div style="height: 50px;" class="card-pf-body">
+              <p class="card-pf-aggregate-status-notifications">
+                <span class="card-pf-aggregate-status-notification">
+                    <span class="pficon pficon-add-circle-o"></span>
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster()
       | inetAddressFilter:searchNameQuery | nameFilter:searchNameQuery)" ng-show="server.show" on-finish-render="matchHeight()">
         <a ui-sref="nodeStatus({
             clusterName:cluster.name,
             nodeName:server.name,
-            inetAddress:server.getInetAddress()})">
+            inetAddress:server.getInetAddress()})" title="View Node Details">
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
             <h2 class="card-pf-title">
               <span class="pficon" ng-class="server.isStopped()?'fa fa-power-off':'pficon-ok'"></span>{{server.name}}

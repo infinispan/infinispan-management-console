@@ -20,10 +20,10 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
           <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Disable</a></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Enable</a></li>
+          <li role="presentation" class="enabled"><a role="menuitem" ng-click="openModal('disable')">Disable</a></li>
+          <li role="presentation" class="enabled"><a role="menuitem" ng-click="openModal('enable')">Enable</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Purge cache data</a>
+          <li role="presentation" class="enabled"><a role="menuitem" ng-click="openModal('purge')">Purge cache data</a>
           <li role="presentation" class="divider"></li>
           <li role="presentation" class="disabled"><a role="menuitem" href="#">Start rebalance</a>
           <li role="presentation" class="disabled"><a role="menuitem" href="#">Stop rebalance</a>

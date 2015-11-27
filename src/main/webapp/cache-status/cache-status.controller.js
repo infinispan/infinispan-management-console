@@ -5,9 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$stateParams',
     '$state',
+    '$modal',
     'modelController',
     'utils',
-    function ($scope, $stateParams, $state, modelController, utils) {
+    function ($scope, $stateParams, $state, $modal, modelController, utils) {
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }
@@ -39,6 +40,18 @@ angular.module('managementConsole')
               utils.matchHeight(document, '.card-pf');
             };
 
+            $scope.enable = function () {
+              $scope.currentCache.enable();
+            };
+
+            $scope.disable = function () {
+              $scope.currentCache.disable();
+            };
+
+            $scope.purge = function () {
+              $scope.currentCache.flush();
+            };
+
             $scope.currentCacheType = function () {
               return utils.getCacheType($scope.currentCache);
             };
@@ -50,4 +63,23 @@ angular.module('managementConsole')
               utils.isNotNullOrUndefined($scope.currentCache.configuration.owners) ? $scope.currentCache.configuration.owners + ' owners' : '';
             };
 
+            $scope.openModal = function (mode) {
+              $scope.mode = mode;
+              $modal.open({
+                templateUrl: 'cache-status/confirmation-cache-modal.html',
+                controller: CacheModalInstanceCtrl,
+                scope: $scope
+              });
+            };
+
     }]);
+
+var CacheModalInstanceCtrl = function ($scope, $modalInstance) {
+
+  $scope.cacheName = $scope.currentCache.name;
+
+  $scope.cancelModal = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+};

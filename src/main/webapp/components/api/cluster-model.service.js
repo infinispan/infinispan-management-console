@@ -77,7 +77,7 @@ angular.module('managementConsole.api')
               var socketEndpoints = [];
               var socketBindings = this.domain.getServerGroup().getSocketBindings();
               var offset = this.domain.getServerGroup().getSocketPortBindingOffset();
-              var endpoints = this.domain.getProfile(this.profile).getEndpoints();
+              var endpoints = this.getProfile().getEndpoints();
               angular.forEach(endpoints, function(value, key, obj){
                  var endpoint = value[key];
                  var bindingName = endpoint['socket-binding'];
@@ -92,7 +92,7 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.getRelays = function () {
               var relays = [];
-              var stacks = this.domain.getProfile(this.profile).getJGroups()['stack'];
+              var stacks = this.getProfile().getJGroups()['stack'];
               angular.forEach(stacks, function(stack, key){
                 if (utils.isNotNullOrUndefined(stack['relay']) && utils.isNotNullOrUndefined(stack['relay']['RELAY'])){
                   relays.push(stack['relay']['RELAY']);
@@ -108,6 +108,10 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();
+            };
+
+            Cluster.prototype.getProfile = function () {
+              return this.domain.getProfile(this.profile);
             };
 
             Cluster.prototype.getCaches = function () {

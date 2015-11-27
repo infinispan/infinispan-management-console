@@ -125,6 +125,7 @@
         map['eviction'] = 'children.eviction.model-description.EVICTION.attributes';
         map['expiration'] = 'children.expiration.model-description.EXPIRATION.attributes';
         map['compatibility'] = 'children.compatibility.model-description.*.attributes';
+        map['partition-handling'] = 'children.partition-handling.model-description.PARTITION_HANDLING.attributes';
         map['tx'] = 'children.transaction.model-description.TRANSACTION.attributes';
         map['statetransfer'] = 'children.state-transfer.model-description.STATE_TRANSFER.attributes';
         map['filestore'] = 'children.file-store.model-description.*.attributes';

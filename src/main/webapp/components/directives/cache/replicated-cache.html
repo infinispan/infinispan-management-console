@@ -2,26 +2,21 @@
   <uib-tabset>
     <uib-tab heading="General" active="true">
       <configuration-section fields="['name','type','template','mode', 'auto-config', 'batching',
-      'jndi-name', 'module', 'start', 'statistics']" data='data.configuration'
+      'jndi-name', 'indexing', 'indexing-properties', 'module', 'start', 'statistics']" data='data.configuration'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Locking" active="false">
-      <!-- <locking data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
-               init-defaults="initDefaults" read-only="readOnly"/> -->
+
       <configuration-section fields="['acquire-timeout', 'concurrency-level', 'isolation', 'striping']"
                              data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Eviction" active="false">
-      <!-- <eviction data='data.configuration.eviction.EVICTION' metadata="resolveDescription('eviction')"
-                init-defaults="initDefaults" read-only="readOnly"/> -->
 
       <configuration-section fields="['max-entries', 'strategy']" data='data.configuration.eviction.EVICTION'
                              metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Expiration" active="false">
-      <!-- <expiration data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
-                  init-defaults="initDefaults" read-only="readOnly"/> -->
 
       <configuration-section fields="['lifespan', 'interval', 'max-idle']"
                              data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
@@ -33,8 +28,6 @@
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="TX">
-      <!-- <tx data="data.configuration.transaction.TRANSACTION" metadata="resolveDescription('tx')"
-          init-defaults="initDefaults" read-only="readOnly"/> -->
 
       <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.configuration.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
@@ -78,8 +71,9 @@
     </uib-tab>
 
     <uib-tab heading="Security">
-      <security data="data.configuration.security.authorization" metadata="resolveDescription('authorization')"
-                 init-defaults="initDefaults" read-only="readOnly"/>
+      <configuration-section fields="['enabled', 'roles']" data="data.security.authorization"
+                             metadata="resolveDescription('authorization')"
+                             init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
   </uib-tabset>
 </div>

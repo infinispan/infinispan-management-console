@@ -3,7 +3,7 @@
     <uib-tab heading="General" active="true">
 
       <configuration-section fields="['name','type','template','mode', 'auto-config', 'batching',
-      'capacity-factor', 'jndi-name','l1-lifespan', 'module', 'owners','segments', 'start', 'statistics']" data='data'
+      'capacity-factor', 'jndi-name','l1-lifespan', 'indexing', 'indexing-properties', 'module', 'owners','segments', 'start', 'statistics']" data='data'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Locking" active="false">
@@ -27,6 +27,12 @@
 
       <configuration-section fields="['enabled', 'marshaller']" data='data.compatibility.COMPATIBILITY'
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
+
+    <uib-tab heading="Partition Handling" active="false">
+
+      <configuration-section fields="['enabled']" data="data['partition-handling'].PARTITION_HANDLING"
+                             metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="TX">
 
@@ -73,9 +79,10 @@
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <!-- <uib-tab heading="Security">
-      <security data="data.security.authorization" metadata="resolveDescription('authorization')"
-                 init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab> -->
+    <uib-tab heading="Security">
+      <configuration-section fields="['enabled', 'roles']" data="data.security.authorization"
+                             metadata="resolveDescription('authorization')"
+                             init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
   </uib-tabset>
 </div>

@@ -53,7 +53,8 @@
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-6">
-            <button type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Create</button>
+            <button type="button" class="btn btn-primary" ng-if="isAddNewCacheWorkflow()" ng-click="openModal('cache')">Create</button>
+            <button type="button" class="btn btn-primary" ng-if="isViewExistingCacheWorkflow()" ng-click="openModal('template')">Update</button>
             <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
           </div>
         </div>

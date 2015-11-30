@@ -132,6 +132,8 @@
         map['remotestore'] = 'children.remote-store.model-description.*.attributes';
         map['jdbcstore'] = 'children.string-keyed-jdbc-store.model-description.*.attributes';
         map['leveldbstore'] = 'children.leveldb-store.model-description.*.attributes';
+        map['store'] = 'children.store.model-description.*.attributes';
+        map['rest-store'] = 'children.rest-store.model-description.*.attributes';
         map['backup'] = 'children.backup.model-description.*.attributes';
         map['loader'] = 'children.loader.model-description.*.attributes';
         map['authorization'] = 'children.security.model-description.*.children.authorization.model-description.*.attributes';

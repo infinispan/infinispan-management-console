@@ -36,6 +36,10 @@ angular.module('managementConsole')
               return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
             };
 
+            $scope.currentClusterAvailabilityAsString = function () {
+              return utils.clusterAvailability($scope.currentCluster);
+            };
+
             $scope.matchHeight = function () {
               utils.matchHeight(document, '.card-pf');
             };

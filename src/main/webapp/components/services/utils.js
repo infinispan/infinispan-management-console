@@ -245,6 +245,26 @@
           target: null,
           remove: false
         });
+      },
+
+      toCamelCase: function toCamelCase(inputText) {
+        var text = inputText.toLowerCase();
+        var split = text.split(' ');
+
+        //iterate through each of the "words" and capitalize them
+        for (var i = 0, len = split.length; i < len; i++) {
+          split[i] = split[i].charAt(0).toUpperCase() + split[i].slice(1);
+        }
+
+        return split.join(' ');
+      },
+
+      clusterAvailability: function clusterAvailability(cluster){
+        if(this.isNotNullOrUndefined(cluster)){
+          return this.toCamelCase(cluster.getAvailable());
+        } else {
+          return "Unavailable";
+        }
       }
     };
   });

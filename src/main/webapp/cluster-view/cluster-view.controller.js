@@ -29,6 +29,10 @@ angular.module('managementConsole')
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
 
+      $scope.currentClusterAvailabilityAsString = function () {
+        return utils.clusterAvailability($scope.currentCluster);
+      };
+
       $scope.refresh = function () {
         if (this.currentClusterAvailability()) {
           $scope.currentCluster.refresh();

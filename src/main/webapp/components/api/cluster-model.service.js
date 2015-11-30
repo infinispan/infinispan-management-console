@@ -105,6 +105,10 @@ angular.module('managementConsole.api')
               return this.availability === 'AVAILABLE';
             };
 
+            Cluster.prototype.getAvailable = function () {
+              return this.availability;
+            };
+
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();

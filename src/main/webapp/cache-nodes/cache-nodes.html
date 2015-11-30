@@ -37,8 +37,8 @@
       </div>
       <h1><span class="label"
                 ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
-        {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
-      </span> {{currentCache.name}}</h1>
+        {{currentClusterAvailabilityAsString()}}
+      </span>&nbsp;{{currentCache.name}}</h1>
     </div>
   </div>
 

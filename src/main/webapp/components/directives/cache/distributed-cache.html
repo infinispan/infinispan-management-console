@@ -50,6 +50,12 @@
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
+    <uib-tab heading="Generic Store">
+      <configuration-section fields="['class', 'fetch-state', 'passivation', 'preload', 'purge', 'read-only', 'shared', 'singleton']"
+                             data="data['store'].STORE"
+                             metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
+
     <uib-tab heading="File Store">
 
       <configuration-section fields="['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
@@ -62,15 +68,22 @@
               'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="data['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <!--<uib-tab heading="JDBC Store">
-      <jdbcstore data="data.configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
+    <uib-tab heading="JDBC Store">
+      <jdbcstore data="data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
                    init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab> -->
+    </uib-tab>
 
     <uib-tab heading="Level DB Store">
       <configuration-section fields="['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
             'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data['leveldb-store'].LEVEL_DB_STORE"
                              metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
+
+    <uib-tab heading="Rest Store">
+      <configuration-section fields="['remote-servers', 'append-cache-name-to-path', 'fetch-state', 'passivation', 'path',
+      'preload', 'purge', 'read-only', 'shared', 'singleton']"
+                             data="data['rest-store'].REST_STORE"
+                             metadata="resolveDescription('rest-store')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Backup">

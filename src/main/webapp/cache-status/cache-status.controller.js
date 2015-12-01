@@ -56,6 +56,10 @@ angular.module('managementConsole')
               $scope.currentCache.flush();
             };
 
+            $scope.resetStats = function () {
+              $scope.currentCache.resetStats();
+            };
+
             $scope.currentCacheType = function () {
               return utils.getCacheType($scope.currentCache);
             };

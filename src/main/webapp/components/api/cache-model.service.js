@@ -124,6 +124,10 @@ angular.module('managementConsole.api')
               return this.executeOp('flush-cache');
             };
 
+            Cache.prototype.resetStats = function () {
+              return this.executeOp('reset-statistics');
+            };
+
             Cache.prototype.executeOp = function (operationName){
               var address = this.getResourcePath();
               var op = {

@@ -17,7 +17,7 @@ angular.module('managementConsole')
 
 
       var controller = modelController.getServer();
-      var serverNode = controller.getNode($stateParams.nodeName);
+      $scope.serverNode = controller.getNode($stateParams.nodeName);
 
 
       $scope.dataPoints = [];
@@ -27,7 +27,7 @@ angular.module('managementConsole')
       ];
 
       $scope.fetchStats = function (){
-        serverNode.fetchStats().then(function (response) {
+        $scope.serverNode.fetchStats().then(function (response) {
           //memory
           var memory = response['memory']['heap-memory-usage'];
           var used = (memory.used / 1024) / 1024;
@@ -36,7 +36,6 @@ angular.module('managementConsole')
           $scope.dataPoints = [{"d1": used}, {"d2": max}];
 
           //threading
-
           var threading = response['threading'];
           $scope.threadCount = threading['thread-count'];
           $scope.threadPeakCount = threading['peak-thread-count'];
@@ -56,7 +55,9 @@ angular.module('managementConsole')
 
 
       $scope.refresh = function (){
-        serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode).then(function (response) {
+        $scope.serverNode.refresh();
+        $scope.serverNode.refreshState();
+        $scope.serverNode.fetchAggregateNodeStatsByClusterName("clustered").then(function (response) {
           $scope.nodeStats = response;
         });
         $scope.fetchStats();
@@ -81,19 +82,11 @@ angular.module('managementConsole')
       };
 
       $scope.startNode = function () {
-        serverNode.start();
+        $scope.serverNode.start();
       };
 
       $scope.stopNode = function () {
-        serverNode.stop();
-      };
-
-      $scope.restartNode = function () {
-        serverNode.restart();
-      };
-
-      $scope.serverNodeAvailable = function (){
-        return serverNode.isRunning();
+        $scope.serverNode.stop();
       };
 
       $scope.openModal = function (mode) {

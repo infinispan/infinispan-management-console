@@ -56,12 +56,22 @@ angular.module('managementConsole.api')
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
                   'default-stack', true).then(function (response) {
                   this.defaultStack = response.toUpperCase();
-                }.bind(this));
+                }.bind(this)).catch(function(error){
+                    this.defaultStack = 'N/A';
+                  });;
 
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('interface', 'public'),
                   'inet-address', true).then(function (response) {
                   this.inetAddress = response;
-                }.bind(this));
+                }.bind(this)).catch(function(error){
+                    this.inetAddress = 'N/A';
+                  });
+            };
+
+            Server.prototype.refreshState = function () {
+              this.getModelController().readResource(this.getResourcePath(), false, true).then(function(response){
+                this.root = response;
+              }.bind(this));
             };
 
             Server.prototype.fetchCacheStats = function(cache) {

@@ -101,7 +101,7 @@ angular.module('managementConsole.api')
                             deferred.reject();
                         }
                     }
-                    else if (http.status === 401){
+                    else if (http.status === 401 || http.status === 500){
                       deferred.reject(http.statusText);
                     }
                 };

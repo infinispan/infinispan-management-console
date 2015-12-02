@@ -23,9 +23,9 @@
           </li>
         </ul>
       </div>
-      <h1>
-        <span class="label" ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>
-        &nbsp;{{cluster.name}} 
+
+      <h1><span class="label"
+                ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>&nbsp;Cluster: {{cluster.name}}
       </h1>
     </div>
   </div>

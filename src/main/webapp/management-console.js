@@ -8,7 +8,7 @@ angular.module('managementConsole', [
 ])
 
 .config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+    function ($stateProvider, $urlRouterProvider, modelController) {
         $stateProvider
             .state('login', {
                 url: '/login',
@@ -34,7 +34,39 @@ angular.module('managementConsole', [
             .state('clustersViewPhysical', {
               url: '/clusters-view-physical',
               templateUrl: 'clusters-view-physical/clusters-view.html',
-              controller: 'ClustersViewPhysicalCtrl'
+              controller: 'ClustersViewPhysicalCtrl',
+              resolve:{
+                serverGroups:function (modelController, utils) {
+
+                  var groups = modelController.getServer().getServerGroups();
+                  var servers = modelController.getServer().getNodes();
+
+                  angular.forEach(groups, function(cluster, key){
+                    cluster.status = 'STOPPED';
+                    cluster.hostCount = 0;
+                    cluster.nodeCount = 0;
+                    var hosts = [];
+                    angular.forEach(servers, function(server, key){
+                      if (server.getGroup() === cluster.name) {
+                        hosts.push(server.host);
+                        if (!server.isRunning()){
+                          cluster.status = 'DEGRADED';
+                        }
+                      }
+                    });
+                    var hosts = utils.countOccurrences(hosts);
+                    cluster.hostCount = hosts.length;
+                    angular.forEach(hosts, function(host, key) {
+                      cluster.nodeCount += host.count;
+                    });
+
+                    if (cluster.nodeCount > 0 && cluster.status != 'DEGRADED'){
+                      cluster.status = 'STARTED';
+                    }
+                  });
+                  return groups;
+              }
+              }
             })
             .state('cacheStatus', {
               url: '/cluster/:clusterName/cache/:cacheName',
@@ -49,7 +81,38 @@ angular.module('managementConsole', [
             .state('clusterNodes', {
               url: '/clusters-view-physical/:clusterName/',
               templateUrl: 'cluster-nodes/cluster-nodes.html',
-              controller: 'ClusterNodesCtrl'
+              controller: 'ClusterNodesCtrl',
+              resolve:{
+                serverGroup:function (modelController, utils, $stateParams) {
+
+                  var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+                  var servers = modelController.getServer().getNodes();
+
+
+                  cluster.status = 'STOPPED';
+                  cluster.hostCount = 0;
+                  cluster.nodeCount = 0;
+                  var hosts = [];
+                  angular.forEach(servers, function (server, key) {
+                    if (server.getGroup() === cluster.name) {
+                      hosts.push(server.host);
+                      if (!server.isRunning()) {
+                        cluster.status = 'DEGRADED';
+                      }
+                    }
+                  });
+                  var hosts = utils.countOccurrences(hosts);
+                  cluster.hostCount = hosts.length;
+                  angular.forEach(hosts, function (host, key) {
+                    cluster.nodeCount += host.count;
+                  });
+
+                  if (cluster.nodeCount > 0 && cluster.status != 'DEGRADED') {
+                    cluster.status = 'STARTED';
+                  }
+                  return cluster;
+                }
+              }
             })
             .state('nodeStatus', {
               url: '/cluster/:clusterName/:nodeName/',
@@ -74,7 +137,20 @@ angular.module('managementConsole', [
                   newCacheCreation: false
                 },
                 templateUrl: 'edit-cache/edit-cache.html',
-                controller: 'editCacheCtrl'
+                controller: 'editCacheCtrl',
+                resolve: {
+                  configurationModel: function (cacheCreateController, modelController, $stateParams) {
+                    if ($stateParams.newCacheCreation) {
+                      return cacheCreateController.getConfigurationTemplate($stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                    } else {
+                      var server = modelController.getServer();
+                      var clusters = server.getClusters();
+                      var currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+                      var currentCache = currentCluster.getCaches()[$stateParams.cacheName];
+                      return cacheCreateController.getConfigurationTemplate(currentCache.getType(), currentCache.getConfigurationTemplate());
+                    }
+                  }
+                }
             });
         $urlRouterProvider
             .when('/', '/login')

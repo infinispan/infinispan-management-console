@@ -1,8 +1,9 @@
 <div>
-  <uib-tabset>
+  <uib-tabset vertical="true" type="pills">
     <uib-tab heading="General" active="true">
-      <configuration-section fields="['name','type','template','mode', 'auto-config', 'batching',
-      'jndi-name', 'indexing', 'indexing-properties', 'module', 'start', 'statistics']" data='data'
+
+      <configuration-section fields="['name','type','template', 'auto-config', 'batching',
+      'jndi-name', 'indexing', 'indexing-properties', 'module', 'remote-cache', 'remote-site', 'start', 'statistics']" data='data'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
     <uib-tab heading="Locking">
@@ -28,21 +29,11 @@
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <uib-tab heading="Partition handling">
-
-      <configuration-section fields="['enabled']" data="data['partition-handling'].PARTITION_HANDLING"
-                             metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab>
     <uib-tab heading="Transactions">
 
       <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="State transfer">
-      <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="data['state-transfer'].STATE_TRANSFER"
-                             metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab>
-
     <uib-tab heading="Loader">
       <configuration-section fields="['class', 'preload', 'shared']" data="data['loader'].LOADER"
                              metadata="resolveDescription('loader')"

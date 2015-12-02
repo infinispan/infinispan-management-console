@@ -36,7 +36,6 @@ angular.module('managementConsole')
           modelController.getServer().refresh();
         }
         $scope.hosts = modelController.getServer().getHosts();
-        $scope.groups = modelController.getServer().getServerGroups();
         $scope.servers = modelController.getServer().getNodes();
         $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
       };

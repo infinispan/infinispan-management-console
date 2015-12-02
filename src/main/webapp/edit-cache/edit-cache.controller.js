@@ -9,7 +9,8 @@ angular.module('managementConsole')
     '$modal',
     'modelController',
     'cacheCreateController',
-    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController) {
+    'configurationModel',
+    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationModel) {
       if (!$stateParams.clusterName && !$stateParams.cacheName) {
         $state.go('error404');
       }
@@ -32,24 +33,16 @@ angular.module('managementConsole')
       $scope.selectedTemplate = $stateParams.cacheConfigurationTemplate;
       $scope.cacheConfigurationType = $stateParams.cacheConfigurationType;
 
-      if($scope.isViewExistingCacheWorkflow()){
-        $scope.caches = $scope.currentCluster.getCaches();
-        $scope.currentCache = $scope.caches[$scope.currentCacheName];
-        $scope.currentCache.refresh();
+      if ($scope.isViewExistingCacheWorkflow()) {
+        $scope.currentCache = $scope.currentCluster.getCaches()[$scope.currentCacheName];
         $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
         $scope.selectedTemplate = $scope.currentCache.getConfigurationTemplate();
         $scope.cacheConfigurationType = $scope.currentCache.getType();
       }
-      $scope.configurationModel = {};
-      //load configuration template
-      var promise = cacheCreateController.getConfigurationTemplate($scope.cacheConfigurationType, $scope.selectedTemplate);
-      promise.then(function (response) {
-        $scope.configurationModel = response;
-        $scope.configurationModel.name = $scope.currentCacheName;
-        $scope.configurationModel.type = $scope.cacheConfigurationType;
-        $scope.configurationModel.template = $scope.selectedTemplate;
-      });
-
+      $scope.configurationModel = configurationModel;
+      $scope.configurationModel.name = $scope.currentCacheName;
+      $scope.configurationModel.type = $scope.cacheConfigurationType;
+      $scope.configurationModel.template = $scope.selectedTemplate;
 
 
       $scope.currentCacheAvailability = function () {

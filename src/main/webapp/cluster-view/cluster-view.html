@@ -90,7 +90,9 @@
                       <span class="fa fa-database" title="Persistent" ng-if="cache.isPersistent()"></span>
                       <span class="fa fa-stack-overflow" title="Bounded" ng-if="cache.isBounded()"></span>
                       <span class="fa fa-arrow-circle-o-down" title="Transactional" ng-if="cache.isTransactional()"></span>
-                      <span class="fa fa-lock" title="Security enabled" ng-if="cache.hasSecurityEnabled()"></span>
+                      <span class="fa fa-lock" title="Secured" ng-if="cache.hasSecurityEnabled()"></span>
+                      <span class="fa fa-list-ol" title="Indexed" ng-if="cache.isIndexed()"></span>
+                      <span class="fa fa-puzzle-piece" title="Compatible" ng-if="cache.hasCompatibility()"></span>
                   </span>
                 </p>
               </div>

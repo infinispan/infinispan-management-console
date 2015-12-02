@@ -84,6 +84,13 @@
           </h2>
         </div>
       </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.hasCompatibility()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible
+          </h2>
+        </div>
+      </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isSecured()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">

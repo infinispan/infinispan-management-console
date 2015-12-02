@@ -58,14 +58,14 @@ angular.module('managementConsole.api')
                   this.defaultStack = response.toUpperCase();
                 }.bind(this)).catch(function(error){
                     this.defaultStack = 'N/A';
-                  });;
+                  }.bind(this));;
 
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('interface', 'public'),
                   'inet-address', true).then(function (response) {
                   this.inetAddress = response;
                 }.bind(this)).catch(function(error){
                     this.inetAddress = 'N/A';
-                  });
+                  }.bind(this));
             };
 
             Server.prototype.refreshState = function () {

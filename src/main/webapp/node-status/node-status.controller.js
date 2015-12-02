@@ -13,7 +13,6 @@ angular.module('managementConsole')
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
-      $scope.inetAddress = $stateParams.inetAddress;
 
 
       var controller = modelController.getServer();
@@ -103,6 +102,7 @@ angular.module('managementConsole')
 var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
 
   $scope.serverNode = $stateParams.nodeName;
+  $scope.clusterName = $stateParams.clusterName;
 
   $scope.cancelModal = function () {
     $modalInstance.dismiss('cancel');

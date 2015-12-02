@@ -7,13 +7,14 @@
   </div>
   <div class="modal-body">
 
-    <h3 ng-if="mode === 'cache'">Are you sure you want to create {{configurationModel.name}} cache using {{configurationModel.template}} configuration template?</h3>
-    <h3 ng-if="mode === 'template'">Are you sure you want to update configuration template {{configurationModel.template}}?</h3>
+    <h3 ng-if="mode === 'cache'">Create {{configurationModel.name}} cache using {{configurationModel.template}} configuration template?</h3>
+    <h3 ng-if="mode === 'template'">Update configuration template {{configurationModel.template}}?</h3>
   </div>
   <div class="modal-footer">
 
-    <button ng-if="mode === 'cache'" type="button" class="btn btn-default" ng-click="createCacheWithTemplate()">Ok</button>
-    <button ng-if="mode === 'template'" type="button" class="btn btn-default" ng-click="createCacheWithTemplate()">Ok</button>
-    <button type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
+    <button type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+    <button ng-if="mode === 'cache'" type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Create</button>
+    <button ng-if="mode === 'template'" type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Update</button>
+
   </div>
 </div>

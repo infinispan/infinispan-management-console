@@ -18,11 +18,11 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ng-class="serverNodeAvailable()?'disabled':''"><a role="menuitem" ng-click="openModal('start')">Start</a></li>
-          <li role="presentation"><a role="menuitem" ng-click="openModal('stop')">Stop</a></li>
+          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a role="menuitem" ng-click="openModal('start')">Start</a></li>
+          <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a role="menuitem" ng-click="openModal('stop')">Stop</a></li>
         </ul>
       </div>
-      <h1><span class="label label-success">Available</span> {{nodeName}}
+      <h1><span class="label" ng-class="serverNode.isRunning()?'label-success':'label-danger'">{{serverNode.getState()}}</span> {{nodeName}}
         <small>IP: {{inetAddress}}</small>
       </h1>
     </div>

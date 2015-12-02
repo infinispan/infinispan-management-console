@@ -7,13 +7,13 @@
   </div>
   <div class="modal-body">
 
-    <h3 ng-if="mode === 'start'">Are you sure you want to start {{serverNode}}?</h3>
-    <h3 ng-if="mode === 'stop'">Are you sure you want to stop {{serverNode}}?</h3>
+    <h3 ng-if="mode === 'start'">Starting {{serverNode}} will add it to {{clusterName}} cluster. Start {{serverNode}}?</h3>
+    <h3 ng-if="mode === 'stop'">Stopping {{serverNode}} will remove it from {{clusterName}} cluster. Stop {{serverNode}}?</h3>
   </div>
   <div class="modal-footer">
 
-    <button ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Ok</button>
-    <button ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Ok</button>
     <button type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
+    <button ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Start</button>
+    <button ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Stop</button>
   </div>
 </div>

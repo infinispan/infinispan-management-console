@@ -43,20 +43,29 @@ angular.module('managementConsole')
 
       $scope.refresh(false);
 
-      $scope.start = function () {
+      $scope.startCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
         cluster.startServers();
       };
 
-      $scope.stop = function () {
+      $scope.stopCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
         cluster.stopServers();
       };
 
       $scope.openModal = function () {
-        var modalInstance = $modal.open({
+        $modal.open({
           templateUrl: 'cluster-nodes/add-node-modal.html',
           controller: AddNodeModalInstanceCtrl,
+          scope: $scope
+        });
+      };
+
+      $scope.openClusterModal = function (mode) {
+        $scope.clusterStartStopMode = mode;
+        $modal.open({
+          templateUrl: 'cluster-nodes/confirmation-node-modal.html',
+          controller: ClusterModalInstanceCtrl,
           scope: $scope
         });
       };
@@ -153,6 +162,16 @@ var AddNodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $state, 
   };
 
   $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+};
+
+
+var ClusterModalInstanceCtrl = function ($scope, $modalInstance, $stateParams) {
+  $scope.clusterName = $stateParams.clusterName;
+
+  $scope.cancelModal = function () {
     $modalInstance.dismiss('cancel');
   };
 

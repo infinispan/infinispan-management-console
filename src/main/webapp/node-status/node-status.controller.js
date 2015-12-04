@@ -56,8 +56,14 @@ angular.module('managementConsole')
       $scope.refresh = function (){
         $scope.serverNode.refresh();
         $scope.serverNode.refreshState();
-        $scope.serverNode.fetchAggregateNodeStatsByClusterName("clustered").then(function (response) {
-          $scope.nodeStats = response;
+        $scope.serverNode.fetchAggregateNodeStats().then(function (response) {
+          //TODO here we need to loop through all cache containers and add all stats up
+          //but for now just use the first container found
+          var containersRoot = response['cache-container'];
+          for (var prop in containersRoot) {
+            $scope.nodeStats = containersRoot[prop]
+            break;
+          }
         });
         $scope.fetchStats();
       };

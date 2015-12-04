@@ -39,6 +39,12 @@ angular.module('managementConsole')
         }
       };
 
+      if ($stateParams.refresh){
+        $scope.refresh();
+      }
+
+
+
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;
       $scope.isCollapsedStatus = true;

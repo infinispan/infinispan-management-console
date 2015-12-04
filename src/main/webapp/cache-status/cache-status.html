@@ -32,7 +32,7 @@
           <li role="presentation" class="enabled"><a role="menuitem" ng-click="resetStats">Reset statistics</a>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View / Edit configuration</a>
+            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View configuration</a>
           </li>
         </ul>
       </div>
@@ -78,9 +78,16 @@
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isIndexed()">
-        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
             <span class="fa fa-list-ol" title="Indexed"></span> Indexed
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isSecured()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="fa fa-lock" title="Secured"></span> Secured
           </h2>
         </div>
       </div>

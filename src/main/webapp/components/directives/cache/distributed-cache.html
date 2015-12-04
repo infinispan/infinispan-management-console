@@ -6,40 +6,40 @@
       'capacity-factor', 'jndi-name','l1-lifespan', 'indexing', 'indexing-properties', 'module', 'owners','segments', 'start', 'statistics']" data='data'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Locking" active="false">
+    <uib-tab heading="Locking">
 
       <configuration-section fields="['acquire-timeout', 'concurrency-level', 'isolation', 'striping']"
                              data='data.locking.LOCKING' metadata="resolveDescription('locking')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Eviction" active="false">
+    <uib-tab heading="Eviction">
 
       <configuration-section fields="['type', 'strategy', 'size']" data='data.eviction.EVICTION'
                              metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Expiration" active="false">
+    <uib-tab heading="Expiration">
 
       <configuration-section fields="['lifespan', 'interval', 'max-idle']"
                              data='data.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Compatibility" active="false">
+    <uib-tab heading="Compatibility">
 
       <configuration-section fields="['enabled', 'marshaller']" data='data.compatibility.COMPATIBILITY'
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <uib-tab heading="Partition Handling" active="false">
+    <uib-tab heading="Partition handling">
 
       <configuration-section fields="['enabled']" data="data['partition-handling'].PARTITION_HANDLING"
                              metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="TX">
+    <uib-tab heading="Transactions">
 
       <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="State Transfer">
+    <uib-tab heading="State transfer">
       <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="data['state-transfer'].STATE_TRANSFER"
                      metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
@@ -50,40 +50,28 @@
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <uib-tab heading="Generic Store">
+    <uib-tab heading="Generic store">
       <configuration-section fields="['class', 'fetch-state', 'passivation', 'preload', 'purge', 'read-only', 'shared', 'singleton']"
                              data="data['store'].STORE"
                              metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <uib-tab heading="File Store">
+    <uib-tab heading="File store">
 
       <configuration-section fields="['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
             'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data['file-store'].FILE_STORE"
                              metadata="resolveDescription('filestore')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Remote Store">
-      <configuration-section fields="['cache', 'fetch-state', 'passivation', 'preload', 'raw-values', 'purge', 'read-only',
-              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="data['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
-                 init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab>
-    <uib-tab heading="JDBC Store">
+    <uib-tab heading="JDBC store">
       <jdbcstore data="data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
                    init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
-    <uib-tab heading="Level DB Store">
+    <uib-tab heading="LevelDB store">
       <configuration-section fields="['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
             'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data['leveldb-store'].LEVEL_DB_STORE"
                              metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab>
-
-    <uib-tab heading="Rest Store">
-      <configuration-section fields="['remote-servers', 'append-cache-name-to-path', 'fetch-state', 'passivation', 'path',
-      'preload', 'purge', 'read-only', 'shared', 'singleton']"
-                             data="data['rest-store'].REST_STORE"
-                             metadata="resolveDescription('rest-store')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Backup">
@@ -93,7 +81,7 @@
     </uib-tab>
 
     <uib-tab heading="Security">
-      <configuration-section fields="['enabled', 'roles']" data="data.security.authorization"
+      <configuration-section fields="['enabled', 'roles']" data="data.security.SECURITY.authorization.AUTHORIZATION"
                              metadata="resolveDescription('authorization')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>

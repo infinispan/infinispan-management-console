@@ -75,7 +75,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.hasSecurityEnabled = function () {
-              return utils.isNotNullOrUndefined(this.configuration.security);
+              return this.isSecured();
             };
 
             Cache.prototype.hasRemoteBackup = function () {
@@ -88,6 +88,10 @@ angular.module('managementConsole.api')
 
             Cache.prototype.isTransactional = function () {
               return utils.isNotNullOrUndefined(this.configuration.transaction);
+            };
+
+            Cache.prototype.isSecured = function () {
+              return utils.isNotNullOrUndefined(this.configuration.security) && utils.isNotNullOrUndefined(this.configuration.security.SECURITY.authorization);
             };
 
             Cache.prototype.start = function () {

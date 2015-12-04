@@ -16,6 +16,7 @@
       replace: true,
       templateUrl: 'components/directives/cache/configuration-section.html',
       link: function (scope, element, attrs) {
+
         scope.cleanFieldMetadata = function (field) {
           scope.metadata[field].uiModified = false;
           scope.metadata[field].style = null;
@@ -48,6 +49,7 @@
 
         //now clean any previous metadata and record field values in model so they can be reverted (undo)
         scope.fields.forEach(function (attrName) {
+          scope.cleanFieldMetadata(attrName);
           if(utils.isNotNullOrUndefined(scope.data[attrName])){
             scope.prevData[attrName] = scope.data[attrName];
           } else {
@@ -71,7 +73,9 @@
           if (scope.prevData[field] != scope.data[field]) {
             scope.metadata[field].uiModified = true;
             scope.metadata[field].style = {'background-color': '#fbeabc'};
+            scope.$emit('configurationFieldDirty', field);
           } else {
+            scope.$emit('configurationFieldClean', field);
             scope.metadata[field].uiModified = false;
             scope.metadata[field].style = null;
           }
@@ -93,4 +97,23 @@
     };
   }
   ]);
+
+  /***
+   * TODO Hook JSON to text conversion so objects can be displayed to users
+   *
+   * module.directive('jsonify', ['utils', function (utils) {
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function (scope, element, attrs, ngModel) {
+        ngModel.$formatters.push(function (object) {
+          if (utils.isObject(object)) {
+            return angular.toJson(object, true);
+          } else {
+            return object;
+          }
+        });
+      }
+    }
+  }]);*/
 }());

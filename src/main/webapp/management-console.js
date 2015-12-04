@@ -25,6 +25,9 @@ angular.module('managementConsole', [
             })
             .state('clusterView', {
                 url: '/cluster/:clusterName',
+                params:{
+                  refresh:false
+                },
                 templateUrl: 'cluster-view/cluster-view.html',
                 controller: 'ClusterViewCtrl'
             })

@@ -2,124 +2,158 @@
   <div class="row">
     <div class="form-horizontal">
       <div class="form-group">
-        <label class="col-md-2 control-label">Type</label>
+        <label class="col-md-4 control-label">Type</label>
 
-        <div class="col-md-10">
-          <select ng-model="data.type" ng-options="item as item for item in metadata.storeTypes" ng-disabled="readOnly"/>
+        <div class="col-md-4">
+          <select class="form-control" ng-model="data.type" ng-options="item as item for item in metadata.storeTypes" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="The type of JDBC store" tooltip-trigger tooltip-animation="true"
              tooltip-placement="top"></i>
         </div>
       </div>
       <div class="form-group">
-        <label class="col-md-2 control-label">Datasource</label>
+        <label class="col-md-4 control-label">Datasource</label>
 
-        <div class="col-md-6">
-          <input type="text" ng-model="data.datasource" ng-disabled="readOnly"/>
+        <div class="col-md-4">
+          <input class="form-control" type="text" ng-model="data.datasource" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.datasource.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Dialect</label>
+        <label class="col-md-4 control-label">Dialect</label>
 
-        <div class="col-md-6">
-          <select ng-model="data.dialect" ng-options="item as item for item in metadata.dialect.allowed" ng-disabled="readOnly"/>
+        <div class="col-md-4">
+          <select class="form-control" ng-model="data.dialect" ng-options="item as item for item in metadata.dialect.allowed" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.dialect.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
-      <div class="form-group" ng-if="data.type === 'string-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store'">
-        <label class="col-md-2 control-label">String keyed table</label>
+      <div class="form-group" ng-if="data.type === 'string-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store' || hasStringKeyedTable()">
+        <label class="col-md-4 control-label">String keyed table</label>
 
-        <div class="col-md-6">
-          <input type="text" ng-model="data['string-keyed-table']" ng-disabled="readOnly"/>
+        <div class="col-md-4">
+          <input class="form-control" type="text" ng-model="data['string-keyed-table']" ng-disabled="readOnly"/>
+        </div>
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata['string-keyed-table'].description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
-      <div class="form-group" ng-if="data.type === 'binary-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store'">
-        <label class="col-md-2 control-label">Binary keyed table</label>
+      <div class="form-group" ng-if="data.type === 'binary-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store' || hasBinaryKeyedTable()">
+        <label class="col-md-4 control-label">Binary keyed table</label>
 
-        <div class="col-md-6">
-          <input type="text" ng-model="data['binary-keyed-table']" ng-disabled="readOnly"/>
+        <div class="col-md-4">
+          <input class="form-control" type="text" ng-model="data['binary-keyed-table']" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata['-keyed-table'].description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Fetch state</label>
+        <label class="col-md-4 control-label">Fetch state</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data['fetch-state']" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata['fetch-state'].description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Passivation</label>
+        <label class="col-md-4 control-label">Passivation</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data.passivation" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.passivation.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Preload</label>
+        <label class="col-md-4 control-label">Preload</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data.preload" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.preload.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Purge</label>
+        <label class="col-md-4 control-label">Purge</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data.purge" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.purge.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Read only</label>
+        <label class="col-md-4 control-label">Read only</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data['read-only']" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata['read-only'].description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Shared</label>
+        <label class="col-md-4 control-label">Shared</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data.shared" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.shared.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">Singleton</label>
+        <label class="col-md-4 control-label">Singleton</label>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <input type="checkbox" ng-model="data.singleton" ng-disabled="readOnly"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
           <i class="fa fa-info-circle" tooltip="{{metadata.singleton.description}}"
              tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
         </div>
       </div>
-
     </div>
   </div>
 </div>

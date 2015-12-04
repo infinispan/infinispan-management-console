@@ -14,6 +14,8 @@ angular.module('managementConsole')
         $state.go('error404');
       }
 
+      $scope.changedFields = [];
+
       $scope.isAddNewCacheWorkflow = function () {
         return $stateParams.newCacheCreation === true;
       };
@@ -67,18 +69,31 @@ angular.module('managementConsole')
         var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
         address.push($scope.configurationModel.type);
         address.push($scope.currentCacheName);
-        cacheCreateController.createCacheFromTemplate(address,
-          $scope.configurationModel.template)
-          .then(function () {
-          $scope.currentCluster.refresh()
-            .then(function(){
-            $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+        cacheCreateController.createCacheFromTemplate(address, $scope.configurationModel.template).then(function () {
+            $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true});
           });
-        });
       };
 
       $scope.cancel = function () {
         $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+      };
+
+
+      $scope.$on('configurationFieldDirty', function (event, field){
+        if($scope.changedFields.indexOf(field) === -1){
+          $scope.changedFields.push(field);
+        }
+      });
+
+      $scope.$on('configurationFieldClean', function (event, field){
+        var index = $scope.changedFields.indexOf(field);
+        if(index > -1){
+          $scope.changedFields.splice(index, 1);
+        }
+      });
+
+      $scope.isConfigurationFormDirty = function () {
+        return  $scope.changedFields.length > 0;
       };
 
       $scope.isTemplateNameEdited = function () {
@@ -103,6 +118,20 @@ angular.module('managementConsole')
           });
         } else {
           $scope.createCache();
+        }
+      };
+
+      $scope.onCacheCreateClick = function () {
+        if($scope.isConfigurationFormDirty() && !$scope.isTemplateNameEdited()){
+          $scope.openModal('dirty');
+        } else {
+          $scope.openModal('cache');
+        }
+      };
+
+      $scope.onTemplateUpdateClick = function () {
+        if($scope.isConfigurationFormDirty()){
+          $scope.saveCacheConfigurationTemplate();
         }
       };
 

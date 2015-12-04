@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository>${user.home}/.m2/jdg-mead-repository</localRepository>
+
+  <pluginGroups />
+  <proxies />
+  <servers />
+  <mirrors>
+    <mirror>
+      <id>jdg7-mirror-setting</id>
+      <mirrorOf>
+         *,!mead-jdg7,!mead-jdg7-plugins,!jboss-public-jdg7,!jboss-public-jdg7-plugins,!central-jdg7,!central-jdg7-plugins
+      </mirrorOf>
+      <name>Mirror Settings for JDG 7 build</name>
+      <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-dg-7-rhel-7-build/latest/maven/</url>
+    </mirror>
+  </mirrors>
+
+  <profiles>
+    <!--  Mead repository profile must be placed after public repository profile
+     |    and before public plugin repository profile.  This allows the Mead repository
+     |    to be prioritized over public repositories and public plugin repositories
+     |    when all repository profiles are active.
+     -->
+    <profile>
+      <id>jdg-mead-repository</id>
+      <activation>
+        <property>
+          <name>!jdg-mead-repository</name>
+        </property>
+      </activation>
+      <repositories>
+        <repository>
+          <id>mead-jdg7</id>
+          <name>MEAD JDG7 Maven Repository</name>
+          <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-dg-7-rhel-7-build/latest/maven/</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+
+      <!-- Note: plugin repositories have non-matching IDs to dependency repositories.
+       |   This allows plugin repos to be mirrored separately.
+       -->
+      <pluginRepositories>
+        <pluginRepository>
+          <id>mead-jdg7-plugins</id>
+          <name>MEAD JDG7 Maven Plugin Repository</name>
+          <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-dg-7-rhel-7-build/latest/maven/</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+
+  </profiles>
+
+</settings>

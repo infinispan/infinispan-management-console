@@ -84,7 +84,7 @@
          <plugin>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
-            <version>0.0.24</version>
+            <version>0.0.24.redhat-001</version>
             <executions>
                <execution>
                   <id>install node and npm</id>

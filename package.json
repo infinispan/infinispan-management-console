@@ -40,7 +40,8 @@
     "protractor": "^1.1.1",
     "uglify-save-license": "^0.4.1",
     "gulp-less": "^3.0.3",
-    "q": "^1.1.2"
+    "q": "^1.1.2",
+    "jshint": "2.8.0"
   },
   "engines": {
     "node": ">=0.10.0"

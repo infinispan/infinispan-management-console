@@ -105,6 +105,14 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
+            Server.prototype.fetchAggregateNodeStats = function () {
+              return this.getModelController()
+                .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container'),
+                true, true).then(function (response) {
+                  return response;
+                }.bind(this));
+            };
+
             Server.prototype.start = function (){
               return this.executeServerOp('start');
             };

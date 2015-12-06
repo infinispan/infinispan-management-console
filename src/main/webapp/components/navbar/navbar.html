@@ -12,17 +12,16 @@
   </div>
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-utility">
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <span class="pficon pficon-user"></span>
+      <span uib-dropdown>
+        <a uib-dropdown-toggle>
           Admin <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu">
+        <ul class="uib-dropdown-menu">
           <li>
-            <a href="#" ng-click="logout()">Logout</a>
+            <a ng-click="logout()">Logout</a>
           </li>
         </ul>
-      </li>
+      </span>
     </ul>
     <ul class="nav navbar-nav navbar-primary">
       <li>

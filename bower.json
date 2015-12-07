@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "jquery": "2.1.4",
-    "angular": "1.4.8",
+    "angular": "1.4.4",
     "angular-ui-router": "0.2.13",
     "bootstrap": "3.3.5",
     "angular-ui-bootstrap-bower": "0.14.0",
@@ -12,6 +12,6 @@
     "c3-angular": "~0.7.1"
   },
   "resolutions": {
-    "angular": "1.4.8"
+    "angular": "1.4.4"
   }
 }

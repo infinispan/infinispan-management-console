@@ -70,13 +70,13 @@
       <tbody>
         <tr ng-repeat="stats in currentCacheStats.nodeStats">
           <td>{{stats['node-name']}}</td>
-          <td>{{stats['average-read-time']}}</td>
-          <td>{{stats['average-write-time']}}</td>
-          <td>{{stats['number-of-entries']}}</td>
-          <td>{{stats['average-read-time']}}</td>
-          <td>{{stats['average-read-time']}}</td>
-          <td>{{stats['average-read-time']}}</td>
-          <td>{{stats['average-read-time']}}</td>
+          <td>{{stats['average-read-time'] | number}}</td>
+          <td>{{stats['average-write-time'] | number}}</td>
+          <td>{{stats['number-of-entries'] | number}}</td>
+          <td>{{stats['average-read-time'] | number}}</td>
+          <td>{{stats['average-read-time'] | number}}</td>
+          <td>{{stats['average-read-time'] | number}}</td>
+          <td>{{stats['average-read-time'] | number}}</td>
         </tr>
       </tbody></table>
   </div>

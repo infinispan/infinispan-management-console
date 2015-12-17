@@ -113,15 +113,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Entries</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-entries']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-entries'] | number}}</td>
                   </tr>
                   <tr>
                     <th>READ / WRITE ratio</th>
-                    <td><td>{{currentCacheStats.firstServerStats['clusterwide-read-write-ratio']}}</td></td>
+                    <td><td>{{currentCacheStats.firstServerStats['clusterwide-read-write-ratio'] | number}}</td></td>
                   </tr>
                   <tr>
                     <th>HIT ratio</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-hit-ratio']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-hit-ratio'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Max capacity:</th>
@@ -159,15 +159,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-read-time']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-read-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-write-time']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-write-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-remove-time']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-remove-time'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -189,23 +189,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th># READ Hits</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-hits']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># READ misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE hits</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-hits']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-misses']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># PUTS</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -231,19 +231,19 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Activations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-activations']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-activations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Evictions</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-evictions']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-evictions'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Invalidations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-invalidations']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-invalidations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Passivations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -265,15 +265,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Loads</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Stores</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -295,11 +295,11 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Locks available</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-available']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-available'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Locks held</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-held']}}</td>
+                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-held'] | number}}</td>
                   </tr>
                 </table>
               </div>

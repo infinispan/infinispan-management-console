@@ -87,7 +87,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.isTransactional = function () {
-              return utils.isNotNullOrUndefined(this.configuration.transaction);
+              return utils.isNotNullOrUndefined(this.configuration.transaction) && (this.configuration.transaction.TRANSACTION.mode !== "NONE");
             };
 
             Cache.prototype.isSecured = function () {

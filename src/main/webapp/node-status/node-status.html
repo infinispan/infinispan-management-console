@@ -43,15 +43,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td>{{nodeStats['average-read-time']}} ms</td>
+                    <td>{{nodeStats['average-read-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td>{{nodeStats['average-write-time']}} ms</td>
+                    <td>{{nodeStats['average-write-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td>{{nodeStats['average-remove-time']}} ms</td>
+                    <td>{{nodeStats['average-remove-time'] | number}} ms</td>
                   </tr>
                 </table>
               </div>
@@ -74,23 +74,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th># READ Hits</th>
-                    <td>{{nodeStats['hits']}}</td>
+                    <td>{{nodeStats['hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># READ misses</th>
-                    <td>{{nodeStats['misses']}}</td>
+                    <td>{{nodeStats['misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE hits</th>
-                    <td>{{nodeStats['remove-hits']}}</td>
+                    <td>{{nodeStats['remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE misses</th>
-                    <td>{{nodeStats['remove-misses']}}</td>
+                    <td>{{nodeStats['remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># PUTS</th>
-                    <td>{{nodeStats['stores']}}</td>
+                    <td>{{nodeStats['stores'] | number}}</td>
                   </tr>
                 </table>
               </div>

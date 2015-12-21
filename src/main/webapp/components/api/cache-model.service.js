@@ -61,13 +61,13 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.isPersistent = function () {
-              return utils.isNotNullOrUndefined(this.configuration['file-store'])
-                || utils.isNotNullOrUndefined(this.configuration['leveldb-store'])
-                || utils.isNotNullOrUndefined(this.configuration['rest-store'])
-                || utils.isNotNullOrUndefined(this.configuration['store'])
-                || utils.isNotNullOrUndefined(this.configuration['binary-keyed-jdbc-store'])
-                || utils.isNotNullOrUndefined(this.configuration['string-keyed-jdbc-store'])
-                || utils.isNotNullOrUndefined(this.configuration['mixed-keyed-jdbc-store']);
+              return (utils.isNotNullOrUndefined(this.configuration['file-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['leveldb-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['rest-store']) ||
+              utils.isNotNullOrUndefined(this.configuration.store) ||
+              utils.isNotNullOrUndefined(this.configuration['binary-keyed-jdbc-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['string-keyed-jdbc-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['mixed-keyed-jdbc-store']));
             };
 
             Cache.prototype.hasCompatibility = function () {

@@ -75,19 +75,15 @@ angular.module('managementConsole')
               $scope.mode = mode;
               $modal.open({
                 templateUrl: 'cache-status/confirmation-cache-modal.html',
-                controller: CacheModalInstanceCtrl,
+                controller: function ($scope, $modalInstance) {
+
+                  $scope.cacheName = $scope.currentCache.name;
+
+                  $scope.cancelModal = function () {
+                    $modalInstance.dismiss('cancel');
+                  };
+                },
                 scope: $scope
               });
             };
-
     }]);
-
-var CacheModalInstanceCtrl = function ($scope, $modalInstance) {
-
-  $scope.cacheName = $scope.currentCache.name;
-
-  $scope.cancelModal = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};

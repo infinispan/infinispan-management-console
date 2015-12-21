@@ -2,8 +2,7 @@
 
 angular.module('managementConsole.api')
     .factory('ServerGroupModel', [
-    '$q',
-    function ($q) {
+    function () {
             /**
              * Represents a ServerGroup
              */

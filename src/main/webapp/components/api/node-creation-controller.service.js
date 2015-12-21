@@ -73,14 +73,14 @@ angular.module('managementConsole.api')
                 'address': address
               };
 
-              var op_start = {
+              var opStart = {
                 'operation': 'start',
                 'address': address
               };
 
               //add and start server
               var promise = this.execute(op).then(function(){
-                this.execute(op_start);
+                this.execute(opStart);
               }.bind(this));
 
               promise.then(function(){

@@ -21,21 +21,21 @@ angular.module('managementConsole')
 
       $scope.dataPoints = [];
       $scope.dataColumns = [
-        {"id": "d1", "type": "donut", "name": "Used"},
-        {"id": "d2", "type": "donut", "name": "Free"}
+        {'id': 'd1', 'type': 'donut', 'name': 'Used'},
+        {'id': 'd2', 'type': 'donut', 'name': 'Free'}
       ];
 
       $scope.fetchStats = function (){
         $scope.serverNode.fetchStats().then(function (response) {
           //memory
-          var memory = response['memory']['heap-memory-usage'];
+          var memory = response.memory['heap-memory-usage'];
           var used = (memory.used / 1024) / 1024;
           var max = (memory.max / 1024) / 1024;
 
-          $scope.dataPoints = [{"d1": used}, {"d2": max}];
+          $scope.dataPoints = [{'d1': used}, {'d2': max}];
 
           //threading
-          var threading = response['threading'];
+          var threading = response.threading;
           $scope.threadCount = threading['thread-count'];
           $scope.threadPeakCount = threading['peak-thread-count'];
           $scope.threadDaemonCount = threading['daemon-thread-count'];
@@ -61,7 +61,7 @@ angular.module('managementConsole')
           //but for now just use the first container found
           var containersRoot = response['cache-container'];
           for (var prop in containersRoot) {
-            $scope.nodeStats = containersRoot[prop]
+            $scope.nodeStats = containersRoot[prop];
             break;
           }
         });
@@ -69,7 +69,7 @@ angular.module('managementConsole')
       };
 
       $interval(function(){
-        $scope.refresh()
+        $scope.refresh();
       }, 500, 1);
 
 
@@ -94,6 +94,17 @@ angular.module('managementConsole')
         $scope.serverNode.stop();
       };
 
+      var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
+
+        $scope.serverNode = $stateParams.nodeName;
+        $scope.clusterName = $stateParams.clusterName;
+
+        $scope.cancelModal = function () {
+          $modalInstance.dismiss('cancel');
+        };
+
+      };
+
       $scope.openModal = function (mode) {
         $scope.mode = mode;
         $modal.open({
@@ -105,15 +116,5 @@ angular.module('managementConsole')
 
     }]);
 
-var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
-
-  $scope.serverNode = $stateParams.nodeName;
-  $scope.clusterName = $stateParams.clusterName;
-
-  $scope.cancelModal = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};
 
 

@@ -8,7 +8,7 @@ angular.module('managementConsole', [
 ])
 
 .config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider, modelController) {
+    function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('login', {
                 url: '/login',
@@ -41,12 +41,12 @@ angular.module('managementConsole', [
                   var groups = modelController.getServer().getServerGroups();
                   var servers = modelController.getServer().getNodes();
 
-                  angular.forEach(groups, function(cluster, key){
+                  angular.forEach(groups, function(cluster){
                     cluster.status = 'STOPPED';
                     cluster.hostCount = 0;
                     cluster.nodeCount = 0;
                     var hosts = [];
-                    angular.forEach(servers, function(server, key){
+                    angular.forEach(servers, function(server){
                       if (server.getGroup() === cluster.name) {
                         hosts.push(server.host);
                         if (!server.isRunning()){
@@ -54,13 +54,13 @@ angular.module('managementConsole', [
                         }
                       }
                     });
-                    var hosts = utils.countOccurrences(hosts);
-                    cluster.hostCount = hosts.length;
-                    angular.forEach(hosts, function(host, key) {
+                    var hostsUnique = utils.countOccurrences(hosts);
+                    cluster.hostCount = hostsUnique.length;
+                    angular.forEach(hostsUnique, function(host) {
                       cluster.nodeCount += host.count;
                     });
 
-                    if (cluster.nodeCount > 0 && cluster.status != 'DEGRADED'){
+                    if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED'){
                       cluster.status = 'STARTED';
                     }
                   });
@@ -93,7 +93,7 @@ angular.module('managementConsole', [
                   cluster.hostCount = 0;
                   cluster.nodeCount = 0;
                   var hosts = [];
-                  angular.forEach(servers, function (server, key) {
+                  angular.forEach(servers, function (server) {
                     if (server.getGroup() === cluster.name) {
                       hosts.push(server.host);
                       if (!server.isRunning()) {
@@ -101,13 +101,13 @@ angular.module('managementConsole', [
                       }
                     }
                   });
-                  var hosts = utils.countOccurrences(hosts);
-                  cluster.hostCount = hosts.length;
-                  angular.forEach(hosts, function (host, key) {
+                  var hostsUnique = utils.countOccurrences(hosts);
+                  cluster.hostCount = hostsUnique.length;
+                  angular.forEach(hostsUnique, function (host) {
                     cluster.nodeCount += host.count;
                   });
 
-                  if (cluster.nodeCount > 0 && cluster.status != 'DEGRADED') {
+                  if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
                     cluster.status = 'STARTED';
                   }
                   return cluster;
@@ -178,17 +178,16 @@ angular.module('managementConsole', [
           $location.path('/login');
         }
       });
-    }]).run(["$templateCache", function ($templateCache) {
-    $templateCache.put("template/tabs/tabset.html",
-      "<div>\n" +
+    }]).run(['$templateCache', function ($templateCache) {
+    $templateCache.put('template/tabs/tabset.html',
+      '<div>\n' +
       "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +
-      "  <div class=\"tab-content col-md-10\">\n" +
-      "    <div class=\"tab-pane\" \n" +
-      "         ng-repeat=\"tab in tabs\" \n" +
-      "         ng-class=\"{active: tab.active}\"\n" +
-      "         uib-tab-content-transclude=\"tab\">\n" +
-      "    </div>\n" +
-      "  </div>\n" +
-      "</div>\n" +
-      "");
+      '  <div class=\"tab-content col-md-10\">\n' +
+      '    <div class=\"tab-pane\" \n' +
+      '         ng-repeat=\"tab in tabs\" \n' +
+      '         ng-class=\"{active: tab.active}\"\n' +
+      '         uib-tab-content-transclude=\"tab\">\n' +
+      '    </div>\n' +
+      '  </div>\n' +
+      '</div>\n');
   }]);

@@ -15,7 +15,7 @@
       },
       replace: true,
       templateUrl: 'components/directives/cache/configuration-section.html',
-      link: function (scope, element, attrs) {
+      link: function (scope) {
 
         scope.cleanFieldMetadata = function (field) {
           scope.metadata[field].uiModified = false;
@@ -70,7 +70,7 @@
         };
 
         scope.fieldValueModified = function (field) {
-          if (scope.prevData[field] != scope.data[field]) {
+          if (scope.prevData[field] !== scope.data[field]) {
             scope.metadata[field].uiModified = true;
             scope.metadata[field].style = {'background-color': '#fbeabc'};
             scope.$emit('configurationFieldDirty', field);

@@ -14,7 +14,7 @@
         },
         replace: true,
         templateUrl: 'components/directives/cache/jdbcstore/jdbcstore.html',
-        link: function (scope, element, attrs, ngModelCtrl) {
+        link: function (scope) {
 
           scope.hasStringKeyedTable = function () {
             return utils.isNotNullOrUndefined(scope.data) && utils.isNotNullOrUndefined(scope.data['string-keyed-table']);
@@ -36,7 +36,7 @@
           } else if (scope.hasBinaryKeyedTable()) {
             scope.data.type = 'binary-keyed-jdbc-store';
           } else {
-            scope.data.type = "";
+            scope.data.type = '';
           }
 
           if (scope.initDefaults){

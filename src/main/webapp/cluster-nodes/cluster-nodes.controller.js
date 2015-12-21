@@ -13,16 +13,70 @@ angular.module('managementConsole')
     'utils',
     '$modal',
     function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, utils, $modal) {
+      var ModalInstanceCtrl = function ($scope, $modalInstance) {
+
+        $scope.cancel = function () {
+          $modalInstance.dismiss('cancel');
+        };
+      };
+
+      var BootingInstanceCtrl = function ($scope, $modalInstance, modelController, $state, $timeout, $interval) {
+
+        $scope.countDown = 30;
+        $timeout(function(){$scope.refreshServers();}, $scope.countDown * 1000);
+
+        $scope.refreshServers = function () {
+          $modalInstance.close();
+          modelController.getServer().refreshServers().then(function () {
+            $state.go($state.current, {}, {reload: true});
+          });
+        };
+
+        $interval(function() {$scope.countDown--;}, 1000, false);
+      };
+
+      var AddNodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $state, modelController, nodeCreateController) {
+
+        $scope.host = $scope.hosts[0];
+        $scope.serverName = '';
+        $scope.portOffset = utils.getRandomInt(0, 1000);
+
+
+        $scope.createServerNode = function () {
+          var address = ['host', $scope.host, 'server-config'];
+          address.push($scope.serverName);
+          nodeCreateController.createServerNode(address, true, $scope.cluster.name, 'clustered-sockets', $scope.portOffset, function () {
+            $modalInstance.close();
+            $scope.openBootingModal();
+          });
+        };
+
+        $scope.cancel = function () {
+          $modalInstance.dismiss('cancel');
+        };
+
+      };
+
+
+      var ClusterModalInstanceCtrl = function ($scope, $modalInstance, $stateParams) {
+        $scope.clusterName = $stateParams.clusterName;
+
+        $scope.cancelModal = function () {
+          $modalInstance.dismiss('cancel');
+        };
+
+      };
+
       $scope.getServersInCluster = function () {
         var serversInCluster = [];
-        angular.forEach($scope.servers, function (server, key) {
+        angular.forEach($scope.servers, function (server) {
           if (server.getGroup() === $stateParams.clusterName) {
             serversInCluster.push(server);
           }
         });
 
         //now add stopped servers
-        angular.forEach($scope.servers, function (server, key) {
+        angular.forEach($scope.servers, function (server) {
           if (server.isStopped()) {
             serversInCluster.push(server);
           }
@@ -121,57 +175,3 @@ angular.module('managementConsole')
       }
     };
   });
-
-var ModalInstanceCtrl = function ($scope, $modalInstance) {
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-};
-
-var BootingInstanceCtrl = function ($scope, $modalInstance, modelController, $state, $timeout, $interval) {
-
-  $scope.countDown = 30;
-  $timeout(function(){$scope.refreshServers();}, $scope.countDown * 1000);
-
-  $scope.refreshServers = function () {
-    $modalInstance.close();
-    modelController.getServer().refreshServers().then(function () {
-      $state.go($state.current, {}, {reload: true});
-    })
-  };
-
-  $interval(function() {$scope.countDown--;}, 1000, false);
-};
-
-var AddNodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $state, modelController, nodeCreateController) {
-
-  $scope.host = $scope.hosts[0];
-  $scope.serverName;
-  $scope.portOffset = utils.getRandomInt(0, 1000);
-
-
-  $scope.createServerNode = function () {
-    var address = ['host', $scope.host, 'server-config'];
-    address.push($scope.serverName);
-    nodeCreateController.createServerNode(address, true, $scope.cluster.name, 'clustered-sockets', $scope.portOffset, function () {
-      $modalInstance.close();
-      $scope.openBootingModal();
-    });
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};
-
-
-var ClusterModalInstanceCtrl = function ($scope, $modalInstance, $stateParams) {
-  $scope.clusterName = $stateParams.clusterName;
-
-  $scope.cancelModal = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};

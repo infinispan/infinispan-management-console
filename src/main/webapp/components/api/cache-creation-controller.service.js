@@ -52,7 +52,7 @@ angular.module('managementConsole.api')
         return deferred.promise;
       };
 
-      CacheCreationControllerClient.prototype.emptyPromise = function (op) {
+      CacheCreationControllerClient.prototype.emptyPromise = function () {
         var deferred = $q.defer();
         return deferred.promise;
       };
@@ -196,12 +196,12 @@ angular.module('managementConsole.api')
       CacheCreationControllerClient.prototype.executeBatch = function (f) {
         return this.execute('batch').then(f).
           catch(function (e) {
-            console.log("got an error in batched function processing", e);
+            console.log('got an error in batched function processing', e);
             throw e;
             // in $q it's better to `return $q.reject(e)` here
-          }).then(function (res) {
+          }).then(function () {
             this.execute('run-batch');
-          }.bind(this)).catch(function (e) {
+          }.bind(this)).catch(function () {
             // handle errors in processing or in error.
           });
       };
@@ -314,7 +314,7 @@ angular.module('managementConsole.api')
                     op[propKey] = JSON.parse(propValue);
                   }
                   catch (e) {
-                    console.log("Invalid JSON value " + propValue + " for field " + propKey);
+                    console.log('Invalid JSON value ' + propValue + ' for field ' + propKey);
                   }
                 }
                 //simple strings

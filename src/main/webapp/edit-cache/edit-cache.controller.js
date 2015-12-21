@@ -90,7 +90,7 @@ angular.module('managementConsole')
       };
 
       $scope.isTemplateNameEdited = function () {
-        return $scope.configurationModel.template != $scope.selectedTemplate;
+        return $scope.configurationModel.template !== $scope.selectedTemplate;
       };
 
       $scope.saveCacheConfigurationTemplate = function (){
@@ -128,6 +128,15 @@ angular.module('managementConsole')
         }
       };
 
+      var CacheTemplateModalInstanceCtrl = function ($scope, utils, $modalInstance) {
+
+
+        $scope.cancelModal = function () {
+          $modalInstance.dismiss('cancel');
+        };
+
+      };
+
       $scope.openModal = function (mode) {
         $scope.mode = mode;
         $modal.open({
@@ -138,12 +147,3 @@ angular.module('managementConsole')
       };
 
     }]);
-
-var CacheTemplateModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
-
-
-  $scope.cancelModal = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};

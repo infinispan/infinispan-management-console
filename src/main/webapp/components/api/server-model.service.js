@@ -56,14 +56,14 @@ angular.module('managementConsole.api')
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
                   'default-stack', true).then(function (response) {
                   this.defaultStack = response.toUpperCase();
-                }.bind(this)).catch(function(error){
+                }.bind(this)).catch(function(){
                     this.defaultStack = 'N/A';
-                  }.bind(this));;
+                  }.bind(this));
 
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('interface', 'public'),
                   'inet-address', true).then(function (response) {
                   this.inetAddress = response;
-                }.bind(this)).catch(function(error){
+                }.bind(this)).catch(function(){
                     this.inetAddress = 'N/A';
                   }.bind(this));
             };
@@ -79,12 +79,12 @@ angular.module('managementConsole.api')
                     .readResource(this.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', cache.cluster.name, cache.type, cache.name),
                                   false, true).then(function (response) {
                     response['node-name'] = this.name;
-                    response['cache'] = this;
+                    response.cache = this;
                     return response;
                 }.bind(this));
             };
 
-            Server.prototype.fetchStats = function (cache) {
+            Server.prototype.fetchStats = function () {
               return this.getModelController()
                 .readChildrenResources(this.getResourcePath().concat('core-service', 'platform-mbean'),
                 'type', 2, true, true).then(function (response) {

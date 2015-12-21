@@ -1,3 +1,4 @@
+'use strict';
 angular.module('ispn.directives.finishrender', [])
   .directive('onFinishRender', ['utils', function (utils) {
     return {
@@ -10,5 +11,6 @@ angular.module('ispn.directives.finishrender', [])
           }
         }
       }
-    }
+    };
   }]);
+

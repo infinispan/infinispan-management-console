@@ -11,21 +11,21 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>
           Actions
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
-          <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" class="disabled"><a id="dropdownMenuStart" role="menuitem">Start</a></li>
+          <li role="presentation" class="disabled"><a id="dropdownMenuStop" role="menuitem">Stop</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem">Delete</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuDelete" role="menuitem">Delete</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem">Enable partition handling</a>
-          <li role="presentation" class="disabled"><a role="menuitem">Disable partition handling</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuEnablePartition" role="menuitem">Enable partition handling</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuDisablePartition" role="menuitem">Disable partition handling</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a role="menuitem" ng-click="openWIPModal()">View / Edit configuration</a>
+          <li role="presentation" ><a role="menuitem" id="dropdownMenuViewEditConfiguration" ng-click="openWIPModal()">View / Edit configuration</a>
           </li>
         </ul>
       </div>
@@ -108,15 +108,15 @@
       <form role="form" class="search-pf has-button">
         <div class="form-group has-clear">
           <div class="search-pf-input-group">
-            <label for="search5" class="sr-only">Name</label>
-            <input id="search5" class="form-control" ng-model="searchNameQuery" placeholder="Type name, data center, ..."
+            <label for="searchTextField" class="sr-only">Name</label>
+            <input class="form-control" id="searchTextField" ng-model="searchNameQuery" placeholder="Type name, data center, ..."
                    type="search">
             <button style="display: none;" type="button" class="clear" aria-hidden="true"><span
               class="pficon pficon-close"></span></button>
           </div>
         </div>
         <div class="form-group">
-          <button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
+          <button class="btn btn-default" id="searchCacheButton" type="submit"><span class="fa fa-search"></span></button>
         </div>
       </form>
       <hr>
@@ -132,12 +132,10 @@
           <div id="filter-type-accordion" class="panel-collapse" ng-class="isCollapsedType?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-type" value="local" ng-model="typeCheckboxes.local"/> Local</label>
-                <label><input type="checkbox" name="cache-type" value="replicated" ng-model="typeCheckboxes.replicated"/> Replicated</label>
-                <label><input type="checkbox" name="cache-type" value="distributed" ng-model="typeCheckboxes.distributed"/>
-                  Distributed</label>
-                <label><input type="checkbox" name="cache-type"
-                              value="invalidation" ng-model="typeCheckboxes.invalidation"/> Invalidation</label>
+                <label><input type="checkbox" id="typeCheckboxLocal" value="local" ng-model="typeCheckboxes.local"/> Local</label>
+                <label><input type="checkbox" id="typeCheckboxReplicated" value="replicated" ng-model="typeCheckboxes.replicated"/> Replicated</label>
+                <label><input type="checkbox" id="typeCheckboxDistributed" value="distributed" ng-model="typeCheckboxes.distributed"/>Distributed</label>
+                <label><input type="checkbox" id="typeCheckboxInvalidation" value="invalidation" ng-model="typeCheckboxes.invalidation"/> Invalidation</label>
               </fieldset>
             </div>
           </div>
@@ -154,13 +152,13 @@
           <div id="filter-trait-accordion" class="panel-collapse" ng-class="isCollapsedTrait?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-trait" value="bounded" ng-model="traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded</label>
-                <label><input type="checkbox" name="cache-trait" value="compatible" ng-model="traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible</label>
-                <label><input type="checkbox" name="cache-trait" value="indexed" ng-model="traitCheckboxes.indexed"/> <span class="fa fa-list-ol" title="Indexed"></span> Indexed</label>
-                <label><input type="checkbox" name="cache-trait" value="persistent" ng-model="traitCheckboxes.persistent"/> <span class="fa fa-database" title="Persistent"></span> Persistent</label>
-                <label><input type="checkbox" name="cache-trait" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> <span class="pficon pficon-history" title="Remote backup"></span> Remote Backup</label>
-                <label><input type="checkbox" name="cache-trait" value="secure" ng-model="traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span> Secure</label>
-                <label><input type="checkbox" name="cache-trait" value="transactional" ng-model="traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional</label>
+                <label><input type="checkbox" id="traitCheckboxBounded" value="bounded" ng-model="traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded</label>
+                <label><input type="checkbox" id="traitCheckboxBompatible" value="compatible" ng-model="traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible</label>
+                <label><input type="checkbox" id="traitCheckboxIndexed" value="indexed" ng-model="traitCheckboxes.indexed"/> <span class="fa fa-list-ol" title="Indexed"></span> Indexed</label>
+                <label><input type="checkbox" id="traitCheckboxPersistent" value="persistent" ng-model="traitCheckboxes.persistent"/> <span class="fa fa-database" title="Persistent"></span> Persistent</label>
+                <label><input type="checkbox" id="traitCheckboxRemotebackup" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> <span class="pficon pficon-history" title="Remote backup"></span> Remote Backup</label>
+                <label><input type="checkbox" id="traitCheckboxSecure" value="secure" ng-model="traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span> Secure</label>
+                <label><input type="checkbox" id="traitCheckboxTransactional" value="transactional" ng-model="traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional</label>
               </fieldset>
             </div>
           </div>
@@ -177,10 +175,10 @@
           <div id="filter-status-accordion" class="panel-collapse" ng-class="isCollapsedStatus?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" name="cache-status" value="indexing" ng-model="statusCheckboxes.indexing"/> Indexing</label>
-                <label><input type="checkbox" name="cache-status" value="maintenance" ng-model="statusCheckboxes.offline"/> Offline</label>
-                <label><input type="checkbox" name="cache-status" value="rebalancing" ng-model="statusCheckboxes.rebalancing"/> Rebalancing</label>
-                <label><input type="checkbox" name="cache-status" value="splitbrain" ng-model="statusCheckboxes.splitbrain"/> Split</label>
+                <label><input type="checkbox" id="statusCheckboxIndexing" value="indexing" ng-model="statusCheckboxes.indexing"/> Indexing</label>
+                <label><input type="checkbox" id="statusCheckboxMaintenance" value="maintenance" ng-model="statusCheckboxes.offline"/> Offline</label>
+                <label><input type="checkbox" id="statusCheckboxRebalancing" value="rebalancing" ng-model="statusCheckboxes.rebalancing"/> Rebalancing</label>
+                <label><input type="checkbox" id="statusCheckboxSplitbrain" value="splitbrain" ng-model="statusCheckboxes.splitbrain"/> Split</label>
               </fieldset>
             </div>
           </div>

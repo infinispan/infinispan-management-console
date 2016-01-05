@@ -14,28 +14,28 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>
           Actions
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Disable</a></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Enable</a></li>
+          <li role="presentation" ><a id="dropdownMenuDisable" role="menuitem" tabindex="-1" href="#">Disable</a></li>
+          <li role="presentation" class="disabled"><a id="dropdownMenuEnable" role="menuitem" tabindex="-1" href="#">Enable</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Purge cache data</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuPurgeCache" role="menuitem" tabindex="-1" href="#">Purge cache data</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1" href="#">Start rebalance</a>
-          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Stop rebalance</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuStartRebalance" role="menuitem" tabindex="-1" href="#">Start rebalance</a>
+          <li role="presentation" ><a id="dropdownMenuStopRebalance" role="menuitem" tabindex="-1" href="#">Stop rebalance</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
+          <li role="presentation" ><a id="dropdownMenuStartMassIndex" role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
+          <li role="presentation"><a id="dropdownMenuViewCacheConfiguration" role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
           </li>
         </ul>
       </div>
-      <h1><span class="label"
+      <h1><span id="currentCacheAvailability" class="label"
                 ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{currentCache.name}}</h1>
@@ -69,14 +69,14 @@
       </tr></thead>
       <tbody>
         <tr ng-repeat="stats in currentCacheStats.nodeStats">
-          <td>{{stats['node-name']}}</td>
-          <td>{{stats['average-read-time'] | number}}</td>
-          <td>{{stats['average-write-time'] | number}}</td>
-          <td>{{stats['number-of-entries'] | number}}</td>
-          <td>{{stats['average-read-time'] | number}}</td>
-          <td>{{stats['average-read-time'] | number}}</td>
-          <td>{{stats['average-read-time'] | number}}</td>
-          <td>{{stats['average-read-time'] | number}}</td>
+          <td class="NodeName">{{stats['node-name']}}</td>
+          <td class="AverageReadTime">{{stats['average-read-time'] | number}}</td>
+          <td class="AverageWriteTime">{{stats['average-write-time'] | number}}</td>
+          <td class="TotalEntries">{{stats['number-of-entries'] | number}}</td>
+          <td class="TotalReads">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalFailedReads">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalWrites">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalFailedWrites">{{stats['average-read-time'] | number}}</td>
         </tr>
       </tbody></table>
   </div>

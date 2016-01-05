@@ -12,8 +12,8 @@
   </div>
   <div class="modal-footer">
 
-    <button type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
-    <button ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Start</button>
-    <button ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Stop</button>
+    <button id="cancelButton" type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
+    <button id="startNodeButton" ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Start</button>
+    <button id="stopNodeButton" ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Stop</button>
   </div>
 </div>

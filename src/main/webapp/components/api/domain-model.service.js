@@ -117,6 +117,16 @@ angular.module('managementConsole.api')
                 return null;
             };
 
+            Domain.prototype.getClusterByName = function (name) {
+              var clusters = this.getClusters();
+              for (var i = 0; i < clusters.length; i++) {
+                if (clusters[i].name === name) {
+                  return clusters[i];
+                }
+              }
+              return null;
+            };
+
             Domain.prototype.getNodes = function () {
                 return this.servers;
             };

@@ -118,6 +118,16 @@ angular.module('managementConsole.api')
                 return this.execute(op);
             };
 
+            ModelControllerClient.prototype.writeAttribute = function (address, name, value) {
+              var op = {
+                'operation': 'write-attribute',
+                'name': name,
+                'value':value,
+                'address': address
+              };
+              return this.execute(op);
+            };
+
             ModelControllerClient.prototype.readAttributeAndResolveExpressions = function (address, name, resolveExpressions) {
               var op = {
                 'operation': 'read-attribute',

@@ -151,7 +151,94 @@ angular.module('managementConsole', [
                     }
                   }
                 }
-            });
+            }).state('editCacheTemplate', {
+                url: '/cluster/:clusterName/edit-cache-template/:cacheConfigurationTemplate',
+                params: {
+                  clusterName: null,
+                  templateName: null,
+                  cacheConfigurationType: null,
+                  cacheConfigurationTemplate: null
+                },
+                templateUrl: 'edit-cache-template/edit-cache-template.html',
+                controller: 'editCacheTemplateCtrl',
+                resolve: {
+                  configurationModel: function (cacheCreateController, modelController, $stateParams) {
+                    var cacheTemplateModel = cacheCreateController.getConfigurationTemplate($stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                    cacheTemplateModel.template = $stateParams.templateName;
+                    return cacheTemplateModel;
+                  }
+                }
+            }).state('editCacheContainerSchemas', {
+                url: '/cluster/:clusterName/',
+                params: {
+                  clusterName: null
+                },
+                templateUrl: 'cache-container/configuration-schemas/schemas.html',
+                controller: 'editContainerSchemasCtrl',
+                resolve: {}
+            }).state('editCacheContainerTransport', {
+                url: '/cluster/:clusterName/',
+                params: {
+                  clusterName: null
+                },
+                templateUrl: 'cache-container/configuration-transport/transport.html',
+                controller: 'editContainerTransportCtrl',
+                resolve: {
+
+                }
+          }).state('editCacheContainerThreadpools', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-threadpools/threadpools.html',
+            controller: 'editContainerThreadpoolsCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerSecurity', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-security/security.html',
+            controller: 'editContainerSecurityCtrl',
+            resolve: {
+              securityConfig: function (modelController, $stateParams){
+                var clusters = modelController.getServer().getClusters();
+                var currentCluster = modelController.getServer().getCluster(clusters, $stateParams.clusterName);
+                if (currentCluster.hasSecurityConfiguration()) {
+                  return currentCluster.getSecurityConfiguration();
+                } else {
+                  return undefined;
+                }
+              }
+            }
+          }).state('editCacheContainerDeploy', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-deploy/deploy.html',
+            controller: 'editContainerTransportCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerTemplates', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-templates/templates.html',
+            controller: 'editContainerTemplatesCtrl',
+            resolve: {
+              configurationTemplates: function (modelController, $stateParams){
+                var currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                return currentCluster.getConfigurations();
+              }
+            }
+          });
+
         $urlRouterProvider
             .when('/', '/login')
             .when('', '/login')

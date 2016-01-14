@@ -25,7 +25,8 @@
           <li role="presentation" class="disabled"><a id="dropdownMenuEnablePartition" role="menuitem">Enable partition handling</a>
           <li role="presentation" class="disabled"><a id="dropdownMenuDisablePartition" role="menuitem">Disable partition handling</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a role="menuitem" id="dropdownMenuViewEditConfiguration" ng-click="openWIPModal()">View / Edit configuration</a>
+          <li role="presentation" >
+            <a role="menuitem" id="dropdownMenuViewEditConfiguration" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">View / Edit configuration</a>
           </li>
         </ul>
       </div>

@@ -1,0 +1,51 @@
+<!-- MAIN START -->
+
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li>
+          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+        </li>
+        <li>
+          <a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Configuration</a>
+        </li>
+        <li>{{configurationModel.template}}</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>View/Edit cache template:</h2>
+
+
+
+        <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
+          <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
+                               init-defaults="false" read-only="false"/>
+        </div>
+        <div id="replicatedCacheConfiguration" ng-if="cacheConfigurationType == 'replicated-cache'">
+          <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
+                               init-defaults="false" read-only="false"/>
+        </div>
+        <div id="invalidationCacheConfiguration" ng-if="cacheConfigurationType == 'invalidation-cache'">
+          <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
+                               init-defaults="false" read-only="false"/>
+        </div>
+        <div id="localCacheConfiguration" ng-if="cacheConfigurationType == 'local-cache'">
+          <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
+                               init-defaults="false" read-only="false"/>
+        </div>
+
+        <br>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-6">
+            <button id="saveCacheTemplateButton" type="button" class="btn btn-primary" ng-click="saveCacheTemplate()">Apply changes</button>
+            <button id="cancelCacheTemplateButton" type="button" class="btn btn-default" ng-click="goToTemplateView()">Cancel</button>
+          </div>
+        </div>
+
+</div>
+

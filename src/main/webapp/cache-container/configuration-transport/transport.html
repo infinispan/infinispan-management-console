@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li><a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">Schemas</a></li>
+        <li class="active"><a href="#">Transport</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({clusterName: currentCluster.name})">Thread pools</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({clusterName: currentCluster.name})">Security</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+      <br>
+
+      <configuration-section fields="['channel', 'lock-timeout', 'strict-peer-to-peer']" data="transport"
+                             metadata="metadata.TRANSPORT.attributes" init-defaults="false" read-only="false"
+                             outside-controller="configurationHandle"/>
+
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-6">
+      <button id="createCacheButton" type="button" class="btn btn-primary" ng-click="save()">Save</button>
+      <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+

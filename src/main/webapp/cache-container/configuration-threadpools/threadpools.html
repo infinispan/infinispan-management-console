@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li><a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">Schemas</a></li>
+        <li><a ui-sref="editCacheContainerTransport({clusterName: currentCluster.name})">Transport</a></li>
+        <li class="active"><a href="#">Thread pools</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({clusterName: currentCluster.name})">Security</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+      <br/>
+      <div>
+        <uib-tabset vertical="true" type="pills">
+          <uib-tab heading="Async Operations" active="true">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['async-operations']"
+                metadata="metadata['async-operations'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+          </uib-tab>
+          <uib-tab heading="Expiration">
+            <configuration-section fields="['max-threads', 'keepalive-time']" data='threadpool.expiration'
+                                   metadata="metadata.expiration.attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+          </uib-tab>
+          <uib-tab heading="Listener">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool.listener"
+                                   metadata="metadata['listener'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+          </uib-tab>
+          <uib-tab heading="Persistence">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool.persistence"
+                                   metadata="metadata['persistence'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+          </uib-tab>
+          <uib-tab heading="Remote commands">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['remote-command']"
+                                   metadata="metadata['remote-command'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+
+          </uib-tab>
+          <uib-tab heading="Replication queue">
+            <configuration-section fields="['max-threads', 'keepalive-time']" data="threadpool['replication-queue']"
+                                   metadata="metadata['replication-queue'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+
+          </uib-tab>
+          <uib-tab heading="State transfer">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['state-transfer']"
+                                   metadata="metadata['state-transfer'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+
+          </uib-tab>
+          <uib-tab heading="Transport">
+            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['transport']"
+                                   metadata="metadata['transport'].attributes" init-defaults="false" read-only="false"
+                                   outside-controller="configurationSectionHandles"/>
+          </uib-tab>
+        </uib-tabset>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-6">
+      <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="hasDirtyFields()" ng-click="save()">Save</button>
+      <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+  </div>
+</div>
+

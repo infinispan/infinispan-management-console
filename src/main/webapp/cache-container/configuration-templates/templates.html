@@ -1,0 +1,167 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="cache-containers.html">Cache containers</a>
+        </li>
+        <li><a href="cache-container-caches.html">My cache container 1</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">Schemas</a></li>
+        <li><a ui-sref="editCacheContainerTransport({clusterName: currentCluster.name})">Transport</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({clusterName: currentCluster.name})">Thread pools</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({clusterName: currentCluster.name})">Security</a></li>
+        <li class="active"><a href="#">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+
+      <table class="datatable table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th colspan="6" class="text-right">
+            <div class="btn-group" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal" data-target="#myModal"><span
+                class="pficon pficon-add-circle-o"></span> Create new template</a>
+            </div>
+
+          </th>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Mode</th>
+          <th>Traits</th>
+          <th class="col-sm-1">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>My config template #1</td>
+          <td>Distributed</td>
+          <td>ASYNC</td>
+          <td>Transactional, Persistant</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="cache-container-configuration-templates-config.html" role="button" class="btn btn-default" >Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Another config template</td>
+          <td>Replicated</td>
+          <td>SYNC</td>
+          <td>Transactional, Persistant</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Configuration #3</td>
+          <td>Distributed</td>
+          <td>ASYNC</td>
+          <td>Transactional, Persistant</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<!---------------
+
+  Create new template modal
+
+---------------->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <h4 cass="modal-title" id="myModalLabel">Create new configuration template</h4>
+      </div>
+      <div class="modal-body">
+
+        <h4>Please, enter the required template properties:</h4>
+        <br>
+
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-4 control-label">* Template name:</label>
+            <div class="col-md-6" >
+              <input type="text" class="form-control" name="cacheName" ng-model="data.name" ng-disabled="readOnly" required="" >
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+          </div>
+          <div class="form-group" id="type" >
+            <label class="col-md-4 control-label">* Cache type:</label>
+
+            <div class="col-md-6">
+              <select  class="form-control"
+                ><option value="string:distributed-cache" label="distributed-cache" selected="selected">distributed-cache</option><option value="string:local-cache" label="local-cache">local-cache</option><option value="string:replicated-cache" label="replicated-cache">replicated-cache</option><option value="string:invalidation-cache" label="invalidation-cache">invalidation-cache</option></select>
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+          </div>
+          <div class="form-group" id="type" >
+            <label class="col-md-4 control-label">Base template:</label>
+
+            <div class="col-md-6">
+              <select  class="form-control"
+                >
+                <option>My Template 1</option>
+                <option>My Template 2</option>
+                <option>My Template 3</option>
+                <option>My Template 4</option>
+              </select>
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary"
+                onclick="document.location='cache-container-configuration-templates-config.html'"
+          >Save and Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+

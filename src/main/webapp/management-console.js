@@ -151,7 +151,68 @@ angular.module('managementConsole', [
                     }
                   }
                 }
-            });
+            }).state('editCacheContainerSchemas', {
+                url: '/cluster/:clusterName/',
+                params: {
+                  clusterName: null
+                },
+                templateUrl: 'cache-container/configuration-schemas/schemas.html',
+                controller: 'editContainerSchemasCtrl',
+                resolve: {
+
+                }
+          }).state('editCacheContainerTransport', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-transport/transport.html',
+            controller: 'editContainerTransportCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerThreadpools', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-threadpools/threadpools.html',
+            controller: 'editContainerThreadpoolsCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerSecurity', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-security/security.html',
+            controller: 'editContainerSecurityCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerDeploy', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-deploy/deploy.html',
+            controller: 'editContainerTransportCtrl',
+            resolve: {
+
+            }
+          }).state('editCacheContainerTemplates', {
+            url: '/cluster/:clusterName/',
+            params: {
+              clusterName: null
+            },
+            templateUrl: 'cache-container/configuration-templates/templates.html',
+            controller: 'editContainerTemplatesCtrl',
+            resolve: {
+
+            }
+          });
+
         $urlRouterProvider
             .when('/', '/login')
             .when('', '/login')

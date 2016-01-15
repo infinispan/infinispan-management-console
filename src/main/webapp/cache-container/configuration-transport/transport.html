@@ -3,9 +3,9 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a href="cache-containers.html">Cache containers</a>
+          <a ui-sref="clustersView">Cache containers</a>
         </li>
-        <li><a href="cache-container-caches.html">My cache container 1</a></li>
+        <li><a href="#">{{currentCluster.name}}</a></li>
         <li class="active"><strong>Configuration</strong></li>
       </ol>
       <h1>Cache container configuration</h1>
@@ -25,18 +25,15 @@
       <br>
       <form class="form-horizontal">
         <div class="form-group">
-          <label class="col-md-2 control-label" for="container-transport-channel">Channel</label>
+          <label class="col-md-2 control-label" for="containerTransportChannel">Channel</label>
           <div class="col-md-10">
-            <select class="selectpicker"  id="container-transport-channel">
-              <option data-subtext="Default">cluster</option>
-              <option>xsite</option>
-            </select>
+            <select id="containerTransportChannel"  ng-model="transport.channel" ng-options="item as item for item in transports"/>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label" for="container-transport-locktimeout">Lock timeout</label>
+          <label class="col-md-2 control-label" for="containerTransportLockTimeout">Lock timeout</label>
           <div class="col-md-1">
-            <input type="text" name="container-transport-locktimeout" accept=""id="container-transport-locktimeout" class="form-control">
+            <input type="text" id="containerTransportLockTimeout" class="form-control" ng-model="transport['lock-timeout']">
           </div>
         </div>
         <div class="form-group">
@@ -44,7 +41,7 @@
           <div class="col-md-6">
             <div class="checkbox">
               <label>
-                <input type="checkbox" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                <input type="checkbox" id="containerTransportStrictPeerToPeer" ng-model="transport['strict-peer-to-peer']">
               </label>
             </div>
           </div>
@@ -52,7 +49,7 @@
 
         <div class="form-group">
           <div class="col-md-10 col-md-offset-2">
-            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-primary" ng-click="saveTransport()">Save</button>
             <button type="button" class="btn btn-default">Cancel</button>
           </div>
         </div>

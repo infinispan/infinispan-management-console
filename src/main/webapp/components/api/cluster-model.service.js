@@ -18,6 +18,9 @@ angular.module('managementConsole.api')
                 this.cachesMetadata = null;
                 this.availability = null;
                 this.endpoints = [];
+                this.security = null;
+                this.threadpool = null;
+                this.transport = null;
             };
 
             Cluster.prototype.getModelController = function () {
@@ -52,6 +55,9 @@ angular.module('managementConsole.api')
                             }
                         }
                     }
+                    this.threadpool = response['thread-pool'];
+                    this.security = response.security;
+                    this.transport = response.transport;
                     return $q.all(cachePromises);
                 }.bind(this)).then(function (){
                   this.getAvailability();
@@ -135,6 +141,22 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.hasNodes = function () {
               return utils.isNonEmptyArray(this.getNodes());
+            };
+
+            Cluster.prototype.getTransportConfiguration = function () {
+              if (utils.isNotNullOrUndefined(this.transport)) {
+                return this.transport.TRANSPORT;
+              } else {
+                return this.transport;
+              }
+            };
+
+            Cluster.prototype.getSecurityConfiguration = function () {
+              return this.security;
+            };
+
+            Cluster.prototype.getThreadpoolConfiguration = function () {
+              return this.threadpool;
             };
 
             return Cluster;

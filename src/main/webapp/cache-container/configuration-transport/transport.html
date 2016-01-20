@@ -5,7 +5,7 @@
         <li>
           <a ui-sref="clustersView">Cache containers</a>
         </li>
-        <li><a href="#">{{currentCluster.name}}</a></li>
+        <li><a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
         <li class="active"><strong>Configuration</strong></li>
       </ol>
       <h1>Cache container configuration</h1>
@@ -50,7 +50,7 @@
         <div class="form-group">
           <div class="col-md-10 col-md-offset-2">
             <button type="button" class="btn btn-primary" ng-click="saveTransport()">Save</button>
-            <button type="button" class="btn btn-default">Cancel</button>
+            <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
           </div>
         </div>
       </form>

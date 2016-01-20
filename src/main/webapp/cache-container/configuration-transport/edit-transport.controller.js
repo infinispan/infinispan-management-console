@@ -24,4 +24,8 @@ angular.module('managementConsole')
         modelController.writeAttribute(address,'strict-peer-to-peer', $scope.transport['strict-peer-to-peer']);
       };
 
+      $scope.backToClusterView = function(){
+        $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
+      }
+
     }]);

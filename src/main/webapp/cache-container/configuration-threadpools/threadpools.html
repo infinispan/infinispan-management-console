@@ -5,7 +5,7 @@
         <li>
           <a ui-sref="clustersView">Cache containers</a>
         </li>
-        <li><a href="#">{{currentCluster.name}}</a></li>
+        <li><a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
         <li class="active"><strong>Configuration</strong></li>
       </ol>
       <h1>Cache container configuration</h1>
@@ -22,54 +22,326 @@
         <li><a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Templates</a></li>
         <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
       </ul>
-      <br />
-      <form class="form-horizontal">
-        <div class="col-md-2">
-          <ul class="nav nav-pills nav-stacked">
-            <li class="active" role="presentation"><a href="#">Async Operations</a></li>
-            <li role="presentation"><a href="#">Expiration</a></li>
-            <li role="presentation"><a href="#">Listener</a></li>
-            <li role="presentation"><a href="#">Persistence</a></li>
-            <li role="presentation"><a href="#">Remote commands</a></li>
-            <li role="presentation"><a href="#">Replication queue</a></li>
-            <li role="presentation"><a href="#">State transfer</a></li>
-            <li role="presentation"><a href="#">Transport</a></li>
-          </ul>
-        </div>
-        <div class="col-md-10">
-          <div class="form-group">
-            <label class="col-md-2 control-label" for="container-threadpool-min">Min thread count</label>
-            <div class="col-md-1">
-              <input type="text" name="container-threadpool-min" accept="" id="container-threadpool-min" class="form-control">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-2 control-label" for="container-threadpool-max">Max thread count</label>
-            <div class="col-md-1">
-              <input type="text" name="container-threadpool-max" accept="" id="container-threadpool-max" class="form-control">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-2 control-label" for="container-threadpool-queuelength">Queue length</label>
-            <div class="col-md-1">
-              <input type="text" name="container-threadpool-queuelength" accept="" id="container-threadpool-queuelength" class="form-control">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-2 control-label" for="container-threadpool-keepalive">Keepalive time</label>
-            <div class="col-md-1">
-              <input type="text" name="container-threadpool-keepalive" accept="" id="container-threadpool-keepalive" class="form-control">
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-md-10 col-md-offset-2">
-            <button type="button" class="btn btn-primary">Save</button>
-            <button type="button" class="btn btn-default">Cancel</button>
-          </div>
-        </div>
-      </form>
+      <br/>
+      <div>
+        <uib-tabset vertical="true" type="pills">
+          <uib-tab heading="Async Operations" active="true">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerAsyncThreadpoolMin">Min thread count</label>
 
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerAsyncThreadpoolMin" ng-model="threadpool['async-operations']['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerAsyncThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerAsyncThreadpoolMax" ng-model="threadpool['async-operations']['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerAsyncThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerAsyncThreadpoolQueueLength" ng-model="threadpool['async-operations']['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerAsyncThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerAsyncThreadpoolKeepAlive" ng-model="threadpool['async-operations']['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveAsync()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </uib-tab>
+          <uib-tab heading="Expiration">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerExpirationThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerExpirationThreadpoolMax" ng-model="threadpool.expiration['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerExpirationKeepaliveTime">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerExpirationKeepaliveTime" ng-model="threadpool.expiration['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveExpiration()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </uib-tab>
+          <uib-tab heading="Listener">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerListenerThreadpoolMin">Min thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerListenerThreadpoolMin" ng-model="threadpool.listener['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerListenerThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerListenerThreadpoolMax" ng-model="threadpool.listener['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerListenerThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerListenerThreadpoolQueueLength" ng-model="threadpool.listener['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerListenerThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerListenerThreadpoolKeepAlive" ng-model="threadpool.listener['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveListener()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </uib-tab>
+          <uib-tab heading="Persistence">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerPersistenceThreadpoolMin">Min thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerPersistenceThreadpoolMin" ng-model="threadpool.persistence['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerPersistenceThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerPersistenceThreadpoolMax" ng-model="threadpool.persistence['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerPersistenceThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerPersistenceThreadpoolQueueLength" ng-model="threadpool.persistence['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerPersistenceThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerPersistenceThreadpoolKeepAlive" ng-model="threadpool.persistence['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="savePersistence()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </uib-tab>
+          <uib-tab heading="Remote commands">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerRemoteCommandsThreadpoolMin">Min thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerRemoteCommandsThreadpoolMin" ng-model="threadpool['remote-command']['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerRemoteCommandsThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerRemoteCommandsThreadpoolMax" ng-model="threadpool['remote-command']['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerRemoteCommandsThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerRemoteCommandsThreadpoolQueueLength" ng-model="threadpool['remote-command']['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerRemoteCommandsThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerRemoteCommandsThreadpoolKeepAlive" ng-model="threadpool['remote-command']['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveRemoteCommands()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </uib-tab>
+          <uib-tab heading="Replication queue">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerReplicationQueueThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" id="containerReplicationQueueThreadpoolMax" ng-model="threadpool['replication-queue']['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerReplicationQueueKeepaliveTime">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerReplicationQueueKeepaliveTime" ng-model="threadpool['replication-queue']['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveReplicationQueue()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </uib-tab>
+          <uib-tab heading="State transfer">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerStrateTransferThreadpoolMin">Min thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerStrateTransferThreadpoolMin" ng-model="threadpool['state-transfer']['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerStrateTransferThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerStrateTransferThreadpoolMax" ng-model="threadpool['state-transfer']['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerStrateTransferThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerStrateTransferThreadpoolQueueLength" ng-model="threadpool['state-transfer']['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerStrateTransferThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerStrateTransferThreadpoolKeepAlive" ng-model="threadpool['state-transfer']['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveStateTransfer()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </uib-tab>
+          <uib-tab heading="Transport">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerTransportThreadpoolMin">Min thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerTransportThreadpoolMin" ng-model="threadpool.transport['min-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerTransportThreadpoolMax">Max thread count</label>
+
+                    <div class="col-md-1">
+                      <input type="text" class="form-control" id="containerTransportThreadpoolMax" ng-model="threadpool.transport['max-threads']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerTransportThreadpoolQueueLength">Queue length</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerTransportThreadpoolQueueLength" ng-model="threadpool.transport['queue-length']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="containerTransportThreadpoolKeepAlive">Keepalive time</label>
+
+                    <div class="col-md-1">
+                      <input class="form-control" type="text" id="containerTransportThreadpoolKeepAlive" ng-model="threadpool.transport['keepalive-time']">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-10 col-md-offset-2">
+                      <button type="button" class="btn btn-primary" ng-click="saveTransport()">Save</button>
+                      <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </uib-tab>
+        </uib-tabset>
+      </div>
     </div>
   </div>
 </div>
+

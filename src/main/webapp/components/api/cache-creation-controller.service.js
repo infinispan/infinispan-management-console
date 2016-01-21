@@ -266,6 +266,17 @@ angular.module('managementConsole.api')
         return this.executeAddOperation(address, prop, ['name','type','template']);
       };
 
+      CacheCreationControllerClient.prototype.removeCacheConfigurationNode = function (cacheType, templateName) {
+        var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
+          'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', templateName];
+        // remove DMR attributes we added when we loaded the model
+        var op = {
+          'operation': 'remove',
+          'address': dmrConfigurationsAddress
+        };
+        return this.execute(op);
+      };
+
       CacheCreationControllerClient.prototype.addNode = function (address, prop, excludeAttributeList, forceOp) {
         //peek the last element of the address array but do not pop it
         var modelNode = address.slice(-1).pop();

@@ -21,6 +21,7 @@ angular.module('managementConsole.api')
                 this.security = null;
                 this.threadpool = null;
                 this.transport = null;
+                this.configurations;
             };
 
             Cluster.prototype.getModelController = function () {
@@ -36,6 +37,7 @@ angular.module('managementConsole.api')
                   this.cachesMetadata = response;
                 }.bind(this));
                 return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
+                    this.configurations = response.configurations.CONFIGURATIONS;
                     this.lastRefresh = new Date();
                     this.caches = {};
                     var cachePromises = [];
@@ -47,7 +49,7 @@ angular.module('managementConsole.api')
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
                                     var configurationName = typedCaches[name].configuration;
-                                    var confModel = this.getConfigurationModel(response, cacheType, configurationName);
+                                    var confModel = this.getConfigurationModel(cacheType, configurationName);
                                     var cache = new CacheModel(name, cacheTypes[i], configurationName, confModel, this);
                                     this.caches[name] = cache;
                                     cachePromises.push(cache.refresh());
@@ -64,8 +66,39 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
-            Cluster.prototype.getConfigurationModel = function (cacheModel, cacheType, name) {
-              return cacheModel.configurations.CONFIGURATIONS[cacheType + '-configuration'][name];
+            Cluster.prototype.getConfigurationModel = function (cacheType, name) {
+              return this.getConfigurationsByTypeAndName(cacheType, name);
+            };
+
+            Cluster.prototype.getConfigurations = function () {
+              return this.modelController.readResource(this.getResourcePath().concat('configurations', 'CONFIGURATIONS'), true, false).then(function (response) {
+                this.configurations = response;
+                return response;
+              }.bind(this));
+            };
+
+            Cluster.prototype.getConfigurationsByTypeAndName = function (cacheType, name) {
+              return this.configurations[cacheType + '-configuration'][name];
+            };
+
+            Cluster.prototype.getConfigurationsByType = function (cacheType) {
+              return this.configurations[cacheType + '-configuration'];
+            };
+
+            Cluster.prototype.getConfigurationsTemplates = function () {
+              return this.getConfigurationTemplatesFromModel(this.configurations);
+            };
+
+            Cluster.prototype.getConfigurationTemplatesFromModel = function (inputConfigurationTemplates) {
+              var configurationTemplates = [];
+              angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+                var templatesForType = inputConfigurationTemplates[cacheType + '-configuration'];
+                angular.forEach(templatesForType, function (template, templateName) {
+                  template.name = templateName;
+                  template.type = cacheType;
+                  configurationTemplates.push(template);
+                })}.bind(this));
+              return configurationTemplates;
             };
 
             Cluster.prototype.getAvailability = function () {

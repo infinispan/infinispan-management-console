@@ -151,6 +151,23 @@ angular.module('managementConsole', [
                     }
                   }
                 }
+            }).state('editCacheTemplate', {
+                url: '/cluster/:clusterName/edit-cache-template/:cacheConfigurationTemplate',
+                params: {
+                  clusterName: null,
+                  templateName: null,
+                  cacheConfigurationType: null,
+                  cacheConfigurationTemplate: null
+                },
+                templateUrl: 'edit-cache-template/edit-cache-template.html',
+                controller: 'editCacheTemplateCtrl',
+                resolve: {
+                  configurationModel: function (cacheCreateController, modelController, $stateParams) {
+                    var cacheTemplateModel = cacheCreateController.getConfigurationTemplate($stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                    cacheTemplateModel.template = $stateParams.templateName;
+                    return cacheTemplateModel;
+                  }
+                }
             }).state('editCacheContainerSchemas', {
                 url: '/cluster/:clusterName/',
                 params: {
@@ -158,19 +175,17 @@ angular.module('managementConsole', [
                 },
                 templateUrl: 'cache-container/configuration-schemas/schemas.html',
                 controller: 'editContainerSchemasCtrl',
+                resolve: {}
+            }).state('editCacheContainerTransport', {
+                url: '/cluster/:clusterName/',
+                params: {
+                  clusterName: null
+                },
+                templateUrl: 'cache-container/configuration-transport/transport.html',
+                controller: 'editContainerTransportCtrl',
                 resolve: {
 
                 }
-          }).state('editCacheContainerTransport', {
-            url: '/cluster/:clusterName/',
-            params: {
-              clusterName: null
-            },
-            templateUrl: 'cache-container/configuration-transport/transport.html',
-            controller: 'editContainerTransportCtrl',
-            resolve: {
-
-            }
           }).state('editCacheContainerThreadpools', {
             url: '/cluster/:clusterName/',
             params: {
@@ -209,7 +224,12 @@ angular.module('managementConsole', [
             templateUrl: 'cache-container/configuration-templates/templates.html',
             controller: 'editContainerTemplatesCtrl',
             resolve: {
-
+              configurationTemplates: function (modelController, $stateParams){
+                var server = modelController.getServer();
+                var clusters = server.getClusters();
+                var currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+                return currentCluster.getConfigurations();
+              }
             }
           });
 

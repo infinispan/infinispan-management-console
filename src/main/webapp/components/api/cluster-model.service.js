@@ -22,6 +22,7 @@ angular.module('managementConsole.api')
                 this.threadpool = null;
                 this.transport = null;
                 this.configurations;
+                this.securityConfiguration;
             };
 
             Cluster.prototype.getModelController = function () {
@@ -38,6 +39,7 @@ angular.module('managementConsole.api')
                 }.bind(this));
                 return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
                     this.configurations = response.configurations.CONFIGURATIONS;
+                    this.securityConfiguration = response.security;
                     this.lastRefresh = new Date();
                     this.caches = {};
                     var cachePromises = [];
@@ -87,6 +89,21 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.getConfigurationsTemplates = function () {
               return this.getConfigurationTemplatesFromModel(this.configurations);
+            };
+
+            Cluster.prototype.getSecurityConfiguration = function () {
+              return this.modelController.readResource(this.getResourcePath().concat('security', 'SECURITY'), true, false).then(function (response) {
+                this.securityConfiguration = response;
+                return response;
+              }.bind(this));
+            };
+
+            Cluster.prototype.hasSecurityConfiguration = function () {
+              return utils.isNotNullOrUndefined(this.securityConfiguration);
+            };
+
+            Cluster.prototype.hasSecurityAuthorizationConfiguration = function () {
+              return this.hasSecurityConfiguration() && utils.isNotNullOrUndefined(this.securityConfiguration.authorization);
             };
 
             Cluster.prototype.getConfigurationTemplatesFromModel = function (inputConfigurationTemplates) {
@@ -182,10 +199,6 @@ angular.module('managementConsole.api')
               } else {
                 return this.transport;
               }
-            };
-
-            Cluster.prototype.getSecurityConfiguration = function () {
-              return this.security;
             };
 
             Cluster.prototype.getThreadpoolConfiguration = function () {

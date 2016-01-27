@@ -27,7 +27,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="containerTransportChannel">Channel</label>
           <div class="col-md-10">
-            <select id="containerTransportChannel"  ng-model="transport.channel" ng-options="item as item for item in transports"/>
+            <select id="containerTransportChannel"  ng-model="transport.channel" ng-options="transport.channel as transport for transport in transports"/>
           </div>
         </div>
         <div class="form-group">

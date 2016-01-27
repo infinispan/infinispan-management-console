@@ -23,122 +23,38 @@
         <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
       </ul>
       <br />
-
-      <!-- Modal -->
-      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Permissions</h4>
-            </div>
-            <div class="modal-body">
-              <h5>Role: myRole</h5>
-              <form class="form-horizontal">
-                <div class="form-group">
-                  <div class="col-md-2 col-md-offset-2">
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> READ
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> WRITE
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> BULK_READ
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> BULK_WRITE
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> EXEC
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> LISTEN
-                      </label>
-                    </div>
-                    <div class="checkbox">
-                      <label>
-                        <input type="checkbox"> ADMIN
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <form class="form-horizontal">
+      <form class="form-horizontal" ng-if="securityAuthorizationDefined">
         <div class="form-group">
-          <label class="col-md-2 control-label" for="container-security-rolemapper">Role Mapper</label>
+          <label class="col-md-2 control-label" for="roleMapper">Role Mapper</label>
           <div class="col-md-10">
-            <select class="selectpicker" id="container-transport-rolemapper">
-              <option data-subtext="Default">Identity</option>
-              <option>Common Name</option>
-              <option>Cache</option>
-              <option>Custom</option>
-            </select>
+            <select id="roleMapper"  ng-model="mapper" ng-options="mapper as item for item in mappers"/>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-md-2 control-label" for="container-security-roles">Roles</label>
+          <label class="col-md-2 control-label">Roles</label>
           <div class="col-md-3">
             <table class="datatable table table-striped table-bordered">
               <thead>
               <tr>
                 <th colspan="2" class="text-right">
                   <div class="btn-group" role="group">
-                    <a href="#" role="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Add</a>
+                    <a role="button" class="btn btn-default" ng-click="openAddRoleModal()">Add</a>
                   </div>
                 </th>
               </tr>
               <tr>
                 <th>Role</th>
-                <th width="35%">Actions</th>
+                <th>Actions</th>
               </tr>
               </thead>
               <tbody>
-              <tr>
-                <td>user</td>
+              <tr ng-repeat="role in roles">
+                <td>{{role.name}}</td>
                 <td>
                   <div class="btn-group btn-group-justified" role="group">
-                    <a href="#" role="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Edit</a>
-                    <a href="#" role="button" class="btn btn-default">Remove</a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>supervisor</td>
-                <td>
-                  <div class="btn-group btn-group-justified" role="group">
-                    <a href="#" role="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Edit</a>
-                    <a href="#" role="button" class="btn btn-default">Remove</a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>manager</td>
-                <td>
-                  <div class="btn-group btn-group-justified" role="group">
-                    <a href="#" role="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Edit</a>
-                    <a href="#" role="button" class="btn btn-default">Remove</a>
+                    <a role="button" class="btn btn-default" ng-click="openEditRoleModal(role)">Edit</a>
+                    <a role="button" class="btn btn-default" ng-click="removeRole(role)">Remove</a>
                   </div>
                 </td>
               </tr>
@@ -154,7 +70,17 @@
           </div>
         </div>
       </form>
-
+      <div ng-if="!securityAuthorizationDefined">
+        <div class="form-group">
+          <label class="col-md-12 control-label" for="roleMapper">Authorization has not been defined for this cache container. Do you want to define it now?</label>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+            <button type="button" class="btn btn-primary" ng-click="defineAuthorization()">Yes</button>
+            <button type="button" class="btn btn-default">No</button>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 </div>

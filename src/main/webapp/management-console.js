@@ -204,7 +204,15 @@ angular.module('managementConsole', [
             templateUrl: 'cache-container/configuration-security/security.html',
             controller: 'editContainerSecurityCtrl',
             resolve: {
-
+              securityConfig: function (modelController, $stateParams){
+                var clusters = modelController.getServer().getClusters();
+                var currentCluster = modelController.getServer().getCluster(clusters, $stateParams.clusterName);
+                if (currentCluster.hasSecurityConfiguration()) {
+                  return currentCluster.getSecurityConfiguration();
+                } else {
+                  return undefined;
+                }
+              }
             }
           }).state('editCacheContainerDeploy', {
             url: '/cluster/:clusterName/',

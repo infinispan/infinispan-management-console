@@ -29,7 +29,9 @@ angular.module('managementConsole')
       $scope.configurationModel.template = $stateParams.templateName;
 
       $scope.goToTemplateView = function () {
-        $state.go('editCacheContainerSchemas', {clusterName: $scope.currentCluster.name});
+        $state.go('editCacheContainerTemplates', {
+          clusterName: $scope.currentCluster.name
+        });
       };
 
 
@@ -65,8 +67,14 @@ angular.module('managementConsole')
           $scope.configurationModel.type);
       };
 
-      $scope.saveCacheTemplateAndShowTemplates = function (){
-        $scope.addCacheTemplate().then($scope.goToTemplateView());
+      $scope.saveCacheTemplate = function (){
+        $scope.addCacheTemplate().then(function(){
+          $state.go('editCacheContainerTemplates', {
+            clusterName: $scope.currentCluster.name
+          });
+        }).catch(function(){
+          //TODO error handling
+        });
       };
 
       $scope.onTemplateUpdateClick = function () {

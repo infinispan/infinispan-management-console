@@ -7,21 +7,20 @@ angular.module('managementConsole')
     '$stateParams',
     'utils',
     'modelController',
-    function ($scope, $state, $stateParams, utils, modelController) {
-      if (!$stateParams.clusterName && !$stateParams.cacheName) {
+    'cacheContainerConfigurationService',
+    function ($scope, $state, $stateParams, utils, modelController, cacheContainerConfigurationService) {
+      if (!$stateParams.clusterName) {
         $state.go('error404');
       }
-      $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+
+      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
 
       $scope.transports = ['default','undefined']; //TODO where to get available transports
       $scope.transport = $scope.currentCluster.getTransportConfiguration();
 
       $scope.saveTransport = function(){
         var address = $scope.currentCluster.getResourcePath().concat('transport','TRANSPORT');
-        modelController.writeAttribute(address,'channel', $scope.transport.channel);
-        modelController.writeAttribute(address,'lock-timeout', $scope.transport['lock-timeout']);
-        modelController.writeAttribute(address,'strict-peer-to-peer', $scope.transport['strict-peer-to-peer']);
+        cacheContainerConfigurationService.saveTransport(address, $scope.transport);
       };
 
       $scope.backToClusterView = function(){

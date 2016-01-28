@@ -7,21 +7,18 @@ angular.module('managementConsole')
     '$stateParams',
     'utils',
     'modelController',
-    function ($scope, $state, $stateParams, utils, modelController) {
-      if (!$stateParams.clusterName && !$stateParams.cacheName) {
+    'cacheContainerConfigurationService',
+    function ($scope, $state, $stateParams, utils, modelController, cacheContainerConfigurationService) {
+      if (!$stateParams.clusterName) {
         $state.go('error404');
       }
-      $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
 
+      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
       $scope.threadpool = $scope.currentCluster.getThreadpoolConfiguration();
 
       $scope.saveGeneric = function(resourceName){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool',resourceName);
-        modelController.writeAttribute(address,'max-threads', $scope.threadpool[resourceName]['max-threads']);
-        modelController.writeAttribute(address,'min-threads', $scope.threadpool[resourceName]['min-threads']);
-        modelController.writeAttribute(address,'queue-length', $scope.threadpool[resourceName]['queue-length']);
-        modelController.writeAttribute(address,'keepalive-time', $scope.threadpool[resourceName]['keepalive-time']);
+        cacheContainerConfigurationService.writeGenericThreadpool(address, $scope.threadpool[resourceName]);
       };
 
       $scope.saveAsync = function(){
@@ -30,8 +27,7 @@ angular.module('managementConsole')
 
       $scope.saveExpiration = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','expiration');
-        modelController.writeAttribute(address,'max-threads', $scope.threadpool.expiration['max-threads']);
-        modelController.writeAttribute(address,'keepalive-time', $scope.threadpool.expiration['keepalive-time']);
+        cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['expiration']);
       };
 
       $scope.saveListener = function(){
@@ -48,8 +44,7 @@ angular.module('managementConsole')
 
       $scope.saveReplicationQueue = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','replication-queue');
-        modelController.writeAttribute(address,'max-threads', $scope.threadpool['replication-queue']['max-threads']);
-        modelController.writeAttribute(address,'keepalive-time', $scope.threadpool['replication-queue']['keepalive-time']);
+        cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['replication-queue']);
       };
 
       $scope.saveStateTransfer = function(){

@@ -49,7 +49,7 @@ angular.module('managementConsole')
 
       //start of editContainerSecurityCtrl controller
 
-      if (!$stateParams.clusterName && !$stateParams.cacheName) {
+      if (!$stateParams.clusterName) {
         $state.go('error404');
       }
 

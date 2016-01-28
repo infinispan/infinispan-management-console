@@ -233,9 +233,7 @@ angular.module('managementConsole', [
             controller: 'editContainerTemplatesCtrl',
             resolve: {
               configurationTemplates: function (modelController, $stateParams){
-                var server = modelController.getServer();
-                var clusters = server.getClusters();
-                var currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+                var currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
                 return currentCluster.getConfigurations();
               }
             }

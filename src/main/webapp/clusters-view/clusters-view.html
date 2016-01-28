@@ -31,10 +31,10 @@
             </span>
           </td>
           <td>
-
-            <span class="relay" ng-repeat="r in relays[cluster.name]">
-                 {{r}}</br>
-            </span>
+              <div ng-repeat="site in onlineSites[cluster.name]"><span class="pficon pficon-ok"></span> {{site}}</div>
+              <div ng-repeat="site in mixedSites[cluster.name]"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
+              <div ng-repeat="site in offlineSites[cluster.name]"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
+              <div ng-if="(mixedSites[cluster.name].length + onlineSites[cluster.name].length + offlineSites[cluster.name].length) == 0">N/A</div>
           </td>
         </tr>
       </table>

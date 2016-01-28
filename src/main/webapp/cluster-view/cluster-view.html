@@ -97,6 +97,11 @@
                       <span class="pficon pficon-history" title="Remotely backed up" ng-if="cache.hasRemoteBackup()"></span>
                   </span>
                 </p>
+                <p ng-if="cache.hasRemoteBackup()">
+                  <span ng-repeat="site in offlineSites[cache.name]"><span class="pficon pficon-error-circle-o"></span> {{site}} &nbsp;</span>
+                  <span ng-repeat="site in mixedSites[cache.name]"><span class="pficon pficon-warning-triangle-o"></span> {{site}} &nbsp;</span>
+                  <span ng-repeat="site in onlineSites[cache.name]"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
+                </p>
               </div>
             </div>
         </a>

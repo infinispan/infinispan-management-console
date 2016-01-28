@@ -100,6 +100,7 @@ angular.module('managementConsole')
       $scope.refresh = function () {
         if (this.currentClusterAvailability()) {
           $scope.currentCluster.refresh();
+          $scope.refreshBackupSiteStatus();
         }
       };
 
@@ -107,7 +108,27 @@ angular.module('managementConsole')
         $scope.refresh();
       }
 
+      // For caches with backup sites, we need to retrieve their status to look into their site status
+      // We don't do it for every cache to avoid costly remote calls in the general case
+      $scope.refreshBackupSiteStatus = function() {
+            $scope.offlineSites = {};
+            $scope.onlineSites  = {};
+            $scope.mixedSites   = {};
 
+            angular.forEach($scope.currentCluster.getCachesAsArray(), function(cache) {
+               if( cache.hasRemoteBackup()) {
+                  modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
+                    function (response) {
+                      $scope.offlineSites[cache.name] = response[0]['offline-sites'];
+                      $scope.onlineSites[cache.name]  = response[0]['online-sites'];
+                      $scope.mixedSites[cache.name]   = response[0]['mixed-sites'];
+                    }
+                  )
+              }
+            });
+      }
+
+      $scope.refreshBackupSiteStatus();
 
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;

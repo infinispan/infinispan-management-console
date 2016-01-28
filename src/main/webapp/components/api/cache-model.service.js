@@ -79,7 +79,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.hasRemoteBackup = function () {
-              return utils.isNotNullOrUndefined(this.configuration.remotebackup);
+              return utils.isNotNullOrUndefined(this.configuration.backup);
             };
 
             Cache.prototype.isBounded = function () {

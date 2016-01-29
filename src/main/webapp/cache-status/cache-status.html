@@ -55,7 +55,7 @@
 
   <!--div class="cards-pf" style="padding:20px"-->
   <div style="padding-top: 20px">
-    <div class="row row-cards-pf" on-finish-render="matchHeight()">
+    <div class="row row-cards-pf">
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="currentCache.isPersistent()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
@@ -110,9 +110,9 @@
     <div class="row row-cards-pf">
       <!-- BEGIN CARD -->
       <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card"
-           ng-if="currentCacheStats.firstServerStats['offline-sites'].length > 0
-               || currentCacheStats.firstServerStats['online-sites'].length > 0
-               || currentCacheStats.firstServerStats['mixed-sites'].length > 0 ">
+           ng-if="currentCacheStats.firstServerStats['sites-offline'].length > 0
+               || currentCacheStats.firstServerStats['sites-online'].length > 0
+               || currentCacheStats.firstServerStats['sites-mixed'].length > 0 ">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Backup sites</h2>
@@ -122,9 +122,9 @@
               <div class="col-md-12">
                 <table class="col-sm-12 col-xs-12 col-md-12">
                   <tbody>
-                  <tr ng-repeat="site in currentCacheStats.firstServerStats['offline-sites']"><th><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></th></tr>
-                  <tr ng-repeat="site in currentCacheStats.firstServerStats['mixed-sites']"><th><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></th></tr>
-                  <tr ng-repeat="site in currentCacheStats.firstServerStats['online-sites']"><th><span class="pficon pficon-ok"></span> {{site}}</th></tr>
+                  <tr ng-repeat="site in currentCacheStats.firstServerStats['sites-offline']"><th><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></th></tr>
+                  <tr ng-repeat="site in currentCacheStats.firstServerStats['sites-mixed']"><th><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></th></tr>
+                  <tr ng-repeat="site in currentCacheStats.firstServerStats['sites-online']"><th><span class="pficon pficon-ok"></span> {{site}}</th></tr>
                   </tbody></table>
               </div>
             </div>

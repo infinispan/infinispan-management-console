@@ -119,9 +119,9 @@ angular.module('managementConsole')
                if( cache.hasRemoteBackup()) {
                   modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
                     function (response) {
-                      $scope.offlineSites[cache.name] = response[0]['offline-sites'];
-                      $scope.onlineSites[cache.name]  = response[0]['online-sites'];
-                      $scope.mixedSites[cache.name]   = response[0]['mixed-sites'];
+                      $scope.offlineSites[cache.name] = response[0]['sites-offline'];
+                      $scope.onlineSites[cache.name]  = response[0]['sites-online'];
+                      $scope.mixedSites[cache.name]   = response[0]['sites-mixed'];
                     }
                   )
               }

@@ -24,7 +24,7 @@ angular.module('managementConsole')
                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
 
                 // Refresh list of offline sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'offline-sites').then(
+                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
                   function (response){
                       if( response != null && response.constructor === Array) {
                         $scope.offlineSites[cluster.name] = response
@@ -35,7 +35,7 @@ angular.module('managementConsole')
                 );
 
                 // Refresh list of online sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'online-sites').then(
+                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
                   function (response){
                       if( response != null && response.constructor === Array) {
                         $scope.onlineSites[cluster.name] = response
@@ -46,7 +46,7 @@ angular.module('managementConsole')
                 );
 
                 // Refresh list of mixed sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'mixed-sites').then(
+                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
                   function (response){
                     if( response != null && response.constructor === Array) {
                       $scope.mixedSites[cluster.name] = response

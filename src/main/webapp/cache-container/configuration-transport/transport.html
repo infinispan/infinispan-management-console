@@ -23,38 +23,17 @@
         <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
       </ul>
       <br>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <label class="col-md-2 control-label" for="containerTransportChannel">Channel</label>
-          <div class="col-md-10">
-            <select id="containerTransportChannel"  ng-model="transport.channel" ng-options="transport.channel as transport for transport in transports"/>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-md-2 control-label" for="containerTransportLockTimeout">Lock timeout</label>
-          <div class="col-md-1">
-            <input type="text" id="containerTransportLockTimeout" class="form-control" ng-model="transport['lock-timeout']">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-md-2 control-label">Strict peer-to-peer</label>
-          <div class="col-md-6">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" id="containerTransportStrictPeerToPeer" ng-model="transport['strict-peer-to-peer']">
-              </label>
-            </div>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <div class="col-md-10 col-md-offset-2">
-            <button type="button" class="btn btn-primary" ng-click="saveTransport()">Save</button>
-            <button type="button" class="btn btn-default" ng-click="backToClusterView()">Cancel</button>
-          </div>
-        </div>
-      </form>
+      <configuration-section fields="['channel', 'lock-timeout', 'strict-peer-to-peer']" data="transport"
+                             metadata="metadata.TRANSPORT.attributes" init-defaults="false" read-only="false"/>
 
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-6">
+      <button id="createCacheButton" type="button" class="btn btn-primary" ng-click="save()">Save</button>
+      <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
     </div>
   </div>
 </div>

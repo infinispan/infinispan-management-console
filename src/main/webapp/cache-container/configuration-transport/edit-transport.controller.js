@@ -14,16 +14,15 @@ angular.module('managementConsole')
       }
 
       $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
-
-      $scope.transports = ['default','undefined']; //TODO where to get available transports
       $scope.transport = $scope.currentCluster.getTransportConfiguration();
+      $scope.metadata = $scope.currentCluster.getMetadata().children['transport']['model-description'];
 
-      $scope.saveTransport = function(){
+      $scope.save = function(){
         var address = $scope.currentCluster.getResourcePath().concat('transport','TRANSPORT');
         cacheContainerConfigurationService.saveTransport(address, $scope.transport);
       };
 
-      $scope.backToClusterView = function(){
+      $scope.cancel = function(){
         $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
       }
 

@@ -23,19 +23,19 @@
 
 
         <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
-          <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
+          <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
                                init-defaults="false" read-only="false"/>
         </div>
         <div id="replicatedCacheConfiguration" ng-if="cacheConfigurationType == 'replicated-cache'">
-          <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
+          <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
                                init-defaults="false" read-only="false"/>
         </div>
         <div id="invalidationCacheConfiguration" ng-if="cacheConfigurationType == 'invalidation-cache'">
-          <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
+          <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
                                init-defaults="false" read-only="false"/>
         </div>
         <div id="localCacheConfiguration" ng-if="cacheConfigurationType == 'local-cache'">
-          <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
+          <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
                                init-defaults="false" read-only="false"/>
         </div>
 

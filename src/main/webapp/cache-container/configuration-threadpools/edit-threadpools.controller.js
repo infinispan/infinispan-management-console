@@ -16,13 +16,11 @@ angular.module('managementConsole')
       $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
       $scope.threadpool = $scope.currentCluster.getThreadpoolConfiguration();
 
+      $scope.metadata = $scope.currentCluster.getMetadata().children['thread-pool']['model-description'];
+
       $scope.saveGeneric = function(resourceName){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool',resourceName);
         cacheContainerConfigurationService.writeGenericThreadpool(address, $scope.threadpool[resourceName]);
-      };
-
-      $scope.saveAsync = function(){
-        $scope.saveGeneric('async-operations');
       };
 
       $scope.saveExpiration = function(){
@@ -30,32 +28,24 @@ angular.module('managementConsole')
         cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['expiration']);
       };
 
-      $scope.saveListener = function(){
-        $scope.saveGeneric('listener');
-      };
-
-      $scope.savePersistence = function(){
-        $scope.saveGeneric('persistence');
-      };
-
-      $scope.saveRemoteCommands = function(){
-        $scope.saveGeneric('remote-command');
-      };
 
       $scope.saveReplicationQueue = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','replication-queue');
         cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['replication-queue']);
       };
 
-      $scope.saveStateTransfer = function(){
+      $scope.save = function(){
+        $scope.saveGeneric('async-operations');
+        $scope.saveGeneric('listener');
+        $scope.saveGeneric('persistence');
+        $scope.saveGeneric('remote-command');
         $scope.saveGeneric('state-transfer');
-      };
-
-      $scope.saveTransport = function(){
         $scope.saveGeneric('transport');
+        $scope.saveExpiration();
+        $scope.saveReplicationQueue();
       };
 
-      $scope.backToClusterView = function(){
+      $scope.cancel = function(){
         $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
       }
 

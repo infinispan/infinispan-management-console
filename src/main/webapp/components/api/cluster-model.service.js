@@ -15,7 +15,7 @@ angular.module('managementConsole.api')
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
                 this.caches = {};
-                this.cachesMetadata = null;
+                this.metadata = null;
                 this.availability = null;
                 this.endpoints = [];
                 this.security = null;
@@ -35,7 +35,7 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.refresh = function () {
                 this.modelController.readResourceDescription(this.getResourcePath(), true, false).then(function (response) {
-                  this.cachesMetadata = response;
+                  this.metadata = response;
                 }.bind(this));
                 return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
                     this.configurations = response.configurations.CONFIGURATIONS;
@@ -165,6 +165,9 @@ angular.module('managementConsole.api')
               return this.availability;
             };
 
+            Cluster.prototype.getMetadata = function () {
+              return this.metadata;
+            };
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();

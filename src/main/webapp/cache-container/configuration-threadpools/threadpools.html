@@ -27,7 +27,7 @@
         <uib-tabset vertical="true" type="pills">
           <uib-tab heading="Async Operations" active="true">
             <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['async-operations']"
-                metadata="metadata['async-operations'].attributes" init-defaults="false" read-only="false"/>
+                metadata="metadata['async-operations'].attributes" init-defaults="false" read-only="false" outside-controller="directiveHandle"/>
           </uib-tab>
           <uib-tab heading="Expiration">
             <configuration-section fields="['max-threads', 'keepalive-time']" data='threadpool.expiration'

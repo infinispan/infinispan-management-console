@@ -6,17 +6,30 @@ angular.module('managementConsole')
     '$state',
     '$stateParams',
     'utils',
+    '$modal',
     'modelController',
     'cacheContainerConfigurationService',
-    function ($scope, $state, $stateParams, utils, modelController, cacheContainerConfigurationService) {
+    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheContainerConfigurationService) {
       if (!$stateParams.clusterName) {
         $state.go('error404');
       }
+
+      var RequiresRestartModalInstanceCtrl = function ($scope, $modalInstance) {
+
+        $scope.ok = function () {
+          $modalInstance.close(true);
+        };
+
+        $scope.cancel = function () {
+          $modalInstance.dismiss();
+        };
+      };
 
       $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
       $scope.threadpool = $scope.currentCluster.getThreadpoolConfiguration();
 
       $scope.metadata = $scope.currentCluster.getMetadata().children['thread-pool']['model-description'];
+      $scope.directiveHandle = {};
 
       $scope.saveGeneric = function(resourceName){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool',resourceName);
@@ -34,7 +47,7 @@ angular.module('managementConsole')
         cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['replication-queue']);
       };
 
-      $scope.save = function(){
+      $scope.executeSave = function(){
         $scope.saveGeneric('async-operations');
         $scope.saveGeneric('listener');
         $scope.saveGeneric('persistence');
@@ -43,6 +56,25 @@ angular.module('managementConsole')
         $scope.saveGeneric('transport');
         $scope.saveExpiration();
         $scope.saveReplicationQueue();
+      };
+
+      $scope.save = function (){
+        var rr = $scope.directiveHandle.requiresRestart();
+        if(rr){
+          var dialog = $modal.open({
+            templateUrl: 'components/dialogs/requires-restart.html',
+            controller: RequiresRestartModalInstanceCtrl,
+            scope: $scope
+          });
+
+          dialog.result.then(function (requiresRestart) {
+            if (requiresRestart){
+               $scope.executeSave();
+            }
+          }, function () {});
+        } else {
+          $scope.executeSave();
+        }
       };
 
       $scope.cancel = function(){

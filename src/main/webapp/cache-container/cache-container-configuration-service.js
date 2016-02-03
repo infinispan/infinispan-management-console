@@ -82,21 +82,45 @@ angular.module('managementConsole')
       }
 
       function writeGenericThreadpool (address, valueMap){
-        modelController.writeAttribute(address,'max-threads', valueMap['max-threads']);
-        modelController.writeAttribute(address,'min-threads', valueMap['min-threads']);
-        modelController.writeAttribute(address,'queue-length', valueMap['queue-length']);
-        modelController.writeAttribute(address,'keepalive-time', valueMap['keepalive-time']);
+        //we don't have a DMR op to write multiple atts at once
+        var deferred = $q.defer();
+        try {
+          modelController.writeAttribute(address, 'max-threads', valueMap['max-threads']);
+          modelController.writeAttribute(address, 'min-threads', valueMap['min-threads']);
+          modelController.writeAttribute(address, 'queue-length', valueMap['queue-length']);
+          modelController.writeAttribute(address, 'keepalive-time', valueMap['keepalive-time']);
+          deferred.resolve(true);
+        } catch (err){
+          deferred.reject();
+        }
+        return deferred.promise;
       }
 
-      function writeThreadPool (address, valueMap){
-        modelController.writeAttribute(address,'max-threads', valueMap['max-threads']);
-        modelController.writeAttribute(address,'keepalive-time', valueMap['keepalive-time']);
+      function writeThreadPool(address, valueMap) {
+        //we don't have a DMR op to write multiple atts at once
+        var deferred = $q.defer();
+        try {
+          modelController.writeAttribute(address, 'max-threads', valueMap['max-threads']);
+          modelController.writeAttribute(address, 'keepalive-time', valueMap['keepalive-time']);
+          deferred.resolve(true);
+        } catch (err) {
+          deferred.reject();
+        }
+        return deferred.promise;
       }
 
-      function saveTransport (address, transport){
-        modelController.writeAttribute(address,'channel', transport.channel);
-        modelController.writeAttribute(address,'lock-timeout', transport['lock-timeout']);
-        modelController.writeAttribute(address,'strict-peer-to-peer', transport['strict-peer-to-peer']);
+      function saveTransport(address, transport) {
+        //we don't have a DMR op to write multiple atts at once
+        var deferred = $q.defer();
+        try {
+          modelController.writeAttribute(address, 'channel', transport.channel);
+          modelController.writeAttribute(address, 'lock-timeout', transport['lock-timeout']);
+          modelController.writeAttribute(address, 'strict-peer-to-peer', transport['strict-peer-to-peer']);
+          deferred.resolve(true);
+        } catch (err) {
+          deferred.reject();
+        }
+        return deferred.promise;
       }
 
       return {

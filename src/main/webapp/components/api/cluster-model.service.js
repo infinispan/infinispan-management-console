@@ -165,6 +165,10 @@ angular.module('managementConsole.api')
               return this.availability;
             };
 
+            Cluster.prototype.getName = function () {
+              return this.name;
+            };
+
             Cluster.prototype.getMetadata = function () {
               return this.metadata;
             };

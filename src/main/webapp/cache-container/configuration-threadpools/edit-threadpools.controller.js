@@ -3,13 +3,16 @@
 angular.module('managementConsole')
   .controller('editContainerThreadpoolsCtrl', [
     '$scope',
+    '$q',
     '$state',
     '$stateParams',
     'utils',
     '$modal',
     'modelController',
     'cacheContainerConfigurationService',
-    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheContainerConfigurationService) {
+    'clusterNodesService',
+    function ($scope, $q, $state, $stateParams, utils, $modal, modelController,
+              cacheContainerConfigurationService, clusterNodesService) {
       if (!$stateParams.clusterName) {
         $state.go('error404');
       }
@@ -29,55 +32,96 @@ angular.module('managementConsole')
       $scope.threadpool = $scope.currentCluster.getThreadpoolConfiguration();
 
       $scope.metadata = $scope.currentCluster.getMetadata().children['thread-pool']['model-description'];
-      $scope.directiveHandle = {};
+      $scope.configurationSectionHandles = []; //assigned to a configuration section through HTML attribute
+
+      $scope.requiresRestart = function (){
+        return $scope.configurationSectionHandles.some(function (handle) {
+          return handle.requiresRestart();
+        });
+      };
+
+      $scope.hasDirtyFields = function (){
+        return $scope.configurationSectionHandles.some(function (confSection) {
+          return confSection.isAnyFieldModified();
+        });
+      };
+
+      $scope.cleanMetadata = function (){
+        $scope.configurationSectionHandles.forEach(function (confSection) {
+          confSection.cleanMetadata();
+        });
+      };
 
       $scope.saveGeneric = function(resourceName){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool',resourceName);
-        cacheContainerConfigurationService.writeGenericThreadpool(address, $scope.threadpool[resourceName]);
+        return cacheContainerConfigurationService.writeGenericThreadpool(address, $scope.threadpool[resourceName]);
       };
 
       $scope.saveExpiration = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','expiration');
-        cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['expiration']);
+        return cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['expiration']);
       };
 
 
       $scope.saveReplicationQueue = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','replication-queue');
-        cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['replication-queue']);
+        return cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['replication-queue']);
       };
 
       $scope.executeSave = function(){
-        $scope.saveGeneric('async-operations');
-        $scope.saveGeneric('listener');
-        $scope.saveGeneric('persistence');
-        $scope.saveGeneric('remote-command');
-        $scope.saveGeneric('state-transfer');
-        $scope.saveGeneric('transport');
-        $scope.saveExpiration();
-        $scope.saveReplicationQueue();
+        return $scope.saveGeneric('async-operations').then(function () {
+          $scope.saveGeneric('listener')
+        }).then(function () {
+          $scope.saveGeneric('persistence')
+        }).then(function () {
+          $scope.saveGeneric('remote-command')
+        }).then(function () {
+          $scope.saveGeneric('state-transfer')
+        }).then(function () {
+          $scope.saveGeneric('transport')
+        }).then(function () {
+          $scope.saveExpiration();
+        }).then(function () {
+          $scope.saveReplicationQueue();
+        });
       };
 
-      $scope.save = function (){
-        var rr = $scope.directiveHandle.requiresRestart();
-        if(rr){
-          var dialog = $modal.open({
-            templateUrl: 'components/dialogs/requires-restart.html',
-            controller: RequiresRestartModalInstanceCtrl,
-            scope: $scope
-          });
+      $scope.saveWithRestart = function (){
+        $scope.executeSave().then(function () {
+          clusterNodesService.restartCluster();
+        });
+      };
 
-          dialog.result.then(function (requiresRestart) {
-            if (requiresRestart){
-               $scope.executeSave();
-            }
-          }, function () {});
-        } else {
-          $scope.executeSave();
+      $scope.saveWithoutRestart = function (){
+        $scope.executeSave();
+      };
+
+      $scope.save = function () {
+        if ($scope.hasDirtyFields()) {
+          var rr = $scope.requiresRestart();
+          if (rr) {
+            var dialog = $modal.open({
+              templateUrl: 'components/dialogs/requires-restart.html',
+              controller: RequiresRestartModalInstanceCtrl,
+              scope: $scope
+            });
+
+            dialog.result.then(function (requiresRestart) {
+              if (requiresRestart) {
+                $scope.saveWithRestart();
+              } else {
+                $scope.saveWithoutRestart();
+              }
+            });
+          } else {
+            $scope.saveWithoutRestart();
+          }
+          $scope.cleanMetadata();
         }
       };
 
       $scope.cancel = function(){
+        $scope.cleanMetadata();
         $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
       }
 

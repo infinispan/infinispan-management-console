@@ -58,30 +58,8 @@ angular.module('managementConsole')
             };
 
 
-            //
-            // Loads latest grid events
-            //
-            $scope.refreshGridEvents = function() {
-                $scope.gridEvents = [];
-                angular.forEach($scope.clusters, function(cluster){
-                  $scope.refreshClusterEvents(cluster, 10);
-                });
-            }
-
-            $scope.refreshClusterEvents = function(cluster, maxLines) {
-                    cluster.fetchClusterEvents(maxLines).then(
-                       function (response) {
-                          angular.forEach(response, function ( event ) {
-                            $scope.gridEvents.push(event);
-                            });
-                       }
-                    );
-               }
-
-
             //endpoints for each cache container
             $scope.endpoints = [];
-
 
             angular.forEach($scope.clusters, function(cluster){
 
@@ -99,7 +77,4 @@ angular.module('managementConsole')
               }
               $scope.endpoints.push(cluster.getEndpoints());
             });
-
-            // Refresh grid events
-            $scope.refreshGridEvents();
   }]);

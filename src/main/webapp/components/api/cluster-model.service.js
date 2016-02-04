@@ -137,21 +137,6 @@ angular.module('managementConsole.api')
               return utils.isNonEmptyArray(this.getNodes());
             };
 
-            // Fetch the list of cluster events
-            Cluster.prototype.fetchClusterEvents = function(maxLines) {
-              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
-                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
-
-                  var op = {
-                    'operation': 'read-event-log',
-                    'address': resourcePathCacheContainer,
-                    "lines": maxLines
-                  };
-
-                  return this.modelController.execute(op)
-            };
-
-
             return Cluster;
     }
   ]);

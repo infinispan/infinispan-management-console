@@ -237,7 +237,12 @@ angular.module('managementConsole', [
                 return currentCluster.getConfigurations();
               }
             }
-          });
+          }).state('viewEvents', {
+              url: '/events-view',
+              templateUrl: 'events-view/events-view.html',
+              controller: 'EventsViewCtrl'
+              }
+        );
 
         $urlRouterProvider
             .when('/', '/login')

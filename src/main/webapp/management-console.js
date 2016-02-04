@@ -151,7 +151,12 @@ angular.module('managementConsole', [
                     }
                   }
                 }
-            });
+            }).state('viewEvents', {
+              url: '/events-view',
+              templateUrl: 'events-view/events-view.html',
+              controller: 'EventsViewCtrl'
+              }
+            );
         $urlRouterProvider
             .when('/', '/login')
             .when('', '/login')

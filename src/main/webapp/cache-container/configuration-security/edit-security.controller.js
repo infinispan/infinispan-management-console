@@ -58,7 +58,7 @@ angular.module('managementConsole')
       $scope.mappers = [];
       $scope.roles = [];
 
-      $scope.securityAuthorizationDefined = $scope.currentCluster.hasSecurityAuthorizationConfiguration();
+      $scope.securityAuthorizationDefined = utils.isNotNullOrUndefined(securityConfig) && utils.isNotNullOrUndefined(securityConfig.authorization);
 
       if ($scope.securityAuthorizationDefined) {
         $scope.mappers = [];
@@ -101,8 +101,14 @@ angular.module('managementConsole')
         $scope.mappers = ['org.infinispan.security.impl.IdentityRoleMapper'];
         $scope.securityAuthorizationDefined = true;
         var clusterAddress = $scope.currentCluster.getResourcePath();
-        cacheContainerConfigurationService.addAuthorization(clusterAddress);
-        $scope.$apply();
+        cacheContainerConfigurationService.addSecurity(clusterAddress).then(function(){
+          cacheContainerConfigurationService.addAuthorization(clusterAddress).then (function(){
+            $state.go('editCacheContainerSecurity', {
+              clusterName: $scope.currentCluster.name
+            });
+            $state.reload();
+          })
+        });
       };
 
       $scope.removeRole = function (role){

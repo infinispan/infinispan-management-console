@@ -59,26 +59,33 @@ angular.module('managementConsole')
       }
 
       /**
-       * TODO does not work yet
+       *
+       *
+       * @param clusterAddress
+       * @returns {*}
+       */
+      function addSecurity (clusterAddress){
+        var addSecurityOp = {
+          'operation': 'add',
+          'address': clusterAddress.concat('security', 'SECURITY')
+        };
+        return modelController.execute(addSecurityOp);
+      }
+
+      /**
+       *
        *
        * @param clusterAddress
        * @returns {*}
        */
       function addAuthorization (clusterAddress){
-
-        var addSecurityOp = {
-          'operation': 'add',
-          'address': clusterAddress.concat('security', 'SECURITY')
-        };
         var addAuthMapperOp = {
           'operation': 'add',
           'audit-logger': 'undefined',
           'mapper':'org.infinispan.security.impl.IdentityRoleMapper',
           'address': clusterAddress.concat('security', 'SECURITY','authorization', 'AUTHORIZATION')
         };
-        return modelController.execute(addSecurityOp).then(function(){
-          modelController.execute(addAuthMapperOp);
-        });
+        return modelController.execute(addAuthMapperOp);
       }
 
       function writeGenericThreadpool (address, valueMap){
@@ -129,6 +136,7 @@ angular.module('managementConsole')
         editRole: editRole,
         removeRole: removeRole,
         addAuthorization: addAuthorization,
+        addSecurity: addSecurity,
         writeGenericThreadpool: writeGenericThreadpool,
         writeThreadPool: writeThreadPool,
         saveTransport: saveTransport

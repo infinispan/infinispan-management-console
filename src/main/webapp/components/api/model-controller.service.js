@@ -5,13 +5,15 @@ angular.module('managementConsole.api')
     '$http',
     '$q',
     'DomainModel',
-    function ($http, $q, DomainModel) {
+    'utils',
+    function ($http, $q, DomainModel, utils) {
             /**
              * Represents a client to the ModelController
              * @constructor
              * @param {string} url - the URL to the ModelController management endpoint
              */
             var ModelControllerClient = function (url) {
+                this.uploadUrl = url + '/management-upload';
                 this.url = url + '/management';
                 this.authenticated = false;
                 this.credentials = {
@@ -80,33 +82,93 @@ angular.module('managementConsole.api')
              * @param data
              * @param callback
              */
-            ModelControllerClient.prototype.execute = function (op) {
+            ModelControllerClient.prototype.execute = function (op, url) {
+                var url = (typeof url === 'undefined') ? this.url : url;
                 var deferred = $q.defer();
                 var http = new XMLHttpRequest();
                 if (this.credentials.username) {
-                    http.withCredentials = true;
-                    http.open('POST', this.url, true, this.credentials.username, this.credentials.password);
+                  http.withCredentials = true;
+                  http.open('POST', url, true, this.credentials.username, this.credentials.password);
                 } else {
-                    http.open('POST', this.url, true);
+                  http.open('POST', url, true);
                 }
 
                 http.setRequestHeader('Content-type', 'application/json');
                 http.setRequestHeader('Accept', 'application/json');
                 http.onreadystatechange = function () {
-                    if (http.readyState === 4 && http.status === 200) {
-                        var response = JSON.parse(http.responseText);
-                        if (response.outcome === 'success') {
-                            deferred.resolve(response.result);
-                        } else {
-                            deferred.reject();
-                        }
+                  if (http.readyState === 4 && http.status === 200) {
+                    var response = JSON.parse(http.responseText);
+                    if (response.outcome === 'success') {
+                      deferred.resolve(response.result);
+                    } else {
+                      deferred.reject();
                     }
-                    else if (http.status === 401 || http.status === 500){
-                      deferred.reject(http.statusText);
-                    }
+                  }
+                  else if (http.status >= 400 && http.status <= 505){
+                    deferred.reject(http.statusText);
+                  }
                 };
                 http.send(JSON.stringify(op));
                 return deferred.promise;
+            };
+
+            ModelControllerClient.prototype.executeDeploymentOp = function(op, file, uploadProgress) {
+              var deferred = $q.defer();
+              var fd = new FormData();
+
+              //First we append the file if we have it
+              if (utils.isNotNullOrUndefined(file)) {
+                fd.append('file', file);
+              }
+
+              //Second, we append the DMR operation
+              var blob = new Blob([JSON.stringify(op)], {type : "application/json"});
+              fd.append('operation', blob);
+
+              var http = new XMLHttpRequest();
+
+              http.upload.addEventListener("progress", uploadProgress, false);
+
+              http.addEventListener("readystatechange", function (e) {
+                // upload completed
+                if (this.readyState === 4) {
+                  console.log('Success: Upload done', e);
+
+                  var response = e.target.response;
+
+                  if (response) {
+                    try {
+                      console.log("Got response" + response);
+                      response = JSON.parse(response);
+                    } catch (e) {
+                      console.log('JSON.parse()', e);
+                    }
+                  }
+
+                  //callback(false, response);
+                }
+              });
+
+              http.addEventListener("error", function (e) {
+                console.log('Error: Upload failed', e);
+                //callback(true);
+              });
+
+              //Third, we open http connection
+              if (this.credentials.username) {
+                http.withCredentials = true;
+                http.open('POST', this.uploadUrl, true, this.credentials.username, this.credentials.password);
+              } else {
+                http.open('POST', this.uploadUrl, true);
+              }
+
+
+              //special headers to prevent CSRF
+              http.setRequestHeader('X-Management-Client-Name', 'HAL');
+
+              //Finally, send the form data to the server
+              http.send(fd);
+              return deferred.promise;
             };
 
             ModelControllerClient.prototype.readAttribute = function (address, name) {
@@ -179,6 +241,53 @@ angular.module('managementConsole.api')
                     'address': address
                 };
                 return this.execute(op);
+            };
+
+            ModelControllerClient.prototype.createAddArtifactOp = function (deploymentArtifact) {
+              var op = {
+                operation: "add",
+                address: [{
+                  deployment: deploymentArtifact
+                }],
+                'runtime-name': deploymentArtifact,
+                enabled: "false",
+                content: [{'input-stream-index': 0}]
+              };
+              return op;
+            };
+
+            ModelControllerClient.prototype.deployArtifact = function (serverGroup, deployment) {
+              var op = {
+                operation: 'deploy',
+                address: [{
+                  deployment: deployment
+                }]
+              };
+              return this.executeDeploymentOp(op);
+            };
+
+            ModelControllerClient.prototype.undeployArtifact = function (serverGroup, deployment) {
+              var op = {
+                operation: 'undeploy',
+                address: [{
+                  deployment: deployment
+                }]
+              };
+              return this.executeDeploymentOp(op, this.uploadUrl);
+            };
+
+            ModelControllerClient.prototype.removeArtifact = function (serverGroup, deployment) {
+              var op = {
+                operation: 'remove',
+                address: [{
+                  deployment: deployment
+                }]
+              };
+              return this.execute(op);
+            };
+
+            ModelControllerClient.prototype.getDeployedArtifacts = function (serverGroup) {
+              return this.readChildrenResources([],'deployment');
             };
 
             return new ModelControllerClient(window.location.origin);

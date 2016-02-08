@@ -5,9 +5,21 @@ angular.module('managementConsole', [
   'gridshore.c3js.chart',
   'ui.router',
   'ui.bootstrap'
-])
+]).directive('fileModel', ['$parse', function ($parse) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.fileModel);
+      var modelSetter = model.assign;
 
-.config(['$stateProvider', '$urlRouterProvider',
+      element.bind('change', function(){
+        scope.$apply(function(){
+          modelSetter(scope, element[0].files[0]);
+        });
+      });
+    }
+  };
+}]).config(['$stateProvider', '$urlRouterProvider',
     function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('login', {
@@ -245,9 +257,11 @@ angular.module('managementConsole', [
               clusterName: null
             },
             templateUrl: 'cache-container/configuration-deploy/deploy.html',
-            controller: 'editContainerTransportCtrl',
+            controller: 'editContainerDeployCtrl',
             resolve: {
-
+              deployments: function(modelController){
+                return modelController.getDeployedArtifacts();
+              }
             }
           }).state('editCacheContainerTemplates', {
             url: '/cluster/:clusterName/',

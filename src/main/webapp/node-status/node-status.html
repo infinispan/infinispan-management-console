@@ -13,17 +13,17 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ng-class="serverNodeAvailable()?'disabled':''"><a role="menuitem" ng-click="openModal('start')">Start</a></li>
-          <li role="presentation"><a role="menuitem" ng-click="openModal('stop')">Stop</a></li>
+          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('start')">Start</a></li>
+          <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="openModal('stop')">Stop</a></li>
         </ul>
       </div>
-      <h1><span class="label label-success">Available</span> {{nodeName}}
-        <small>IP: {{inetAddress}}</small>
+      <h1><span class="label" ng-class="serverNode.isRunning()?'label-success':'label-danger'">{{serverNode.getState()}}</span> {{nodeName}}
+        <small>IP: {{serverNode.getInetAddress()}}</small>
       </h1>
     </div>
   </div>
@@ -43,15 +43,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td>{{nodeStats['average-read-time']}} ms</td>
+                    <td id="averageReads">{{nodeStats['average-read-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td>{{nodeStats['average-write-time']}} ms</td>
+                    <td id="averageWrites">{{nodeStats['average-write-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td>{{nodeStats['average-remove-time']}} ms</td>
+                    <td id="averageRemoves">{{nodeStats['average-remove-time'] | number}} ms</td>
                   </tr>
                 </table>
               </div>
@@ -74,23 +74,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th># READ Hits</th>
-                    <td>{{nodeStats['hits']}}</td>
+                    <td id="numberOfReadHits">{{nodeStats['hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># READ misses</th>
-                    <td>{{nodeStats['misses']}}</td>
+                    <td id="numberOfReadMisses">{{nodeStats['misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE hits</th>
-                    <td>{{nodeStats['remove-hits']}}</td>
+                    <td id="numberOfRemoveHits">{{nodeStats['remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE misses</th>
-                    <td>{{nodeStats['remove-misses']}}</td>
+                    <td id="numberOfRemoveMisses">{{nodeStats['remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># PUTS</th>
-                    <td>{{nodeStats['stores']}}</td>
+                    <td id="numberOfPuts">{{nodeStats['stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -120,37 +120,37 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td>{{threadCount}}</td>
+                    <td id="threadCount">{{threadCount}}</td>
                   </tr>
                   <tr>
                     <th>Peak</th>
-                    <td>{{threadPeakCount}}</td>
+                    <td id="threadPeakCount">{{threadPeakCount}}</td>
                   </tr>
                   <tr>
                     <th>Daemon</th>
-                    <td>{{threadDaemonCount}}</td>
+                    <td id="threadDaemonCount">{{threadDaemonCount}}</td>
                   </tr>
                 </table>
                 <h4>Direct Buffers</h4>
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td>{{directBufferPoolCount}}</td>
+                    <td id="directBufferPoolCount">{{directBufferPoolCount}}</td>
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td>{{directBufferPoolMemoryUsed}} bytes</td>
+                    <td id="directBufferPoolMemoryUsed">{{directBufferPoolMemoryUsed}} bytes</td>
                   </tr>
                 </table>
                 <h4>Mapped Buffers</h4>
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td>{{mappedBufferPoolCount}}</td>
+                    <td id="mappedBufferPoolCount">{{mappedBufferPoolCount}}</td>
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td>{{mappedBufferPoolMemoryUsed}} bytes</td>
+                    <td id="mappedBufferPoolMemoryUsed">{{mappedBufferPoolMemoryUsed}} bytes</td>
                   </tr>
                 </table>
               </div>

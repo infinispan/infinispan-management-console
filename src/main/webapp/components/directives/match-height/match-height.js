@@ -1,3 +1,4 @@
+'use strict';
 angular.module('ispn.directives.matchheight', [])
   .directive('matchHeight', [
     function () {

@@ -13,31 +13,29 @@ angular.module('managementConsole')
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
-      $scope.inetAddress = $stateParams.inetAddress;
 
 
       var controller = modelController.getServer();
-      var serverNode = controller.getNode($stateParams.nodeName);
+      $scope.serverNode = controller.getNode($stateParams.nodeName);
 
 
       $scope.dataPoints = [];
       $scope.dataColumns = [
-        {"id": "d1", "type": "donut", "name": "Used"},
-        {"id": "d2", "type": "donut", "name": "Free"}
+        {'id': 'd1', 'type': 'donut', 'name': 'Used'},
+        {'id': 'd2', 'type': 'donut', 'name': 'Free'}
       ];
 
       $scope.fetchStats = function (){
-        serverNode.fetchStats().then(function (response) {
+        $scope.serverNode.fetchStats().then(function (response) {
           //memory
-          var memory = response['memory']['heap-memory-usage'];
+          var memory = response.memory['heap-memory-usage'];
           var used = (memory.used / 1024) / 1024;
           var max = (memory.max / 1024) / 1024;
 
-          $scope.dataPoints = [{"d1": used}, {"d2": max}];
+          $scope.dataPoints = [{'d1': used}, {'d2': max}];
 
           //threading
-
-          var threading = response['threading'];
+          var threading = response.threading;
           $scope.threadCount = threading['thread-count'];
           $scope.threadPeakCount = threading['peak-thread-count'];
           $scope.threadDaemonCount = threading['daemon-thread-count'];
@@ -56,14 +54,22 @@ angular.module('managementConsole')
 
 
       $scope.refresh = function (){
-        serverNode.fetchAggregateNodeStatsByClusterName("clustered", $scope.currentNode).then(function (response) {
-          $scope.nodeStats = response;
+        $scope.serverNode.refresh();
+        $scope.serverNode.refreshState();
+        $scope.serverNode.fetchAggregateNodeStats().then(function (response) {
+          //TODO here we need to loop through all cache containers and add all stats up
+          //but for now just use the first container found
+          var containersRoot = response['cache-container'];
+          for (var prop in containersRoot) {
+            $scope.nodeStats = containersRoot[prop];
+            break;
+          }
         });
         $scope.fetchStats();
       };
 
       $interval(function(){
-        $scope.refresh()
+        $scope.refresh();
       }, 500, 1);
 
 
@@ -81,19 +87,22 @@ angular.module('managementConsole')
       };
 
       $scope.startNode = function () {
-        serverNode.start();
+        $scope.serverNode.start();
       };
 
       $scope.stopNode = function () {
-        serverNode.stop();
+        $scope.serverNode.stop();
       };
 
-      $scope.restartNode = function () {
-        serverNode.restart();
-      };
+      var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
 
-      $scope.serverNodeAvailable = function (){
-        return serverNode.isRunning();
+        $scope.serverNode = $stateParams.nodeName;
+        $scope.clusterName = $stateParams.clusterName;
+
+        $scope.cancelModal = function () {
+          $modalInstance.dismiss('cancel');
+        };
+
       };
 
       $scope.openModal = function (mode) {
@@ -107,14 +116,5 @@ angular.module('managementConsole')
 
     }]);
 
-var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
-
-  $scope.serverNode = $stateParams.nodeName;
-
-  $scope.cancelModal = function () {
-    $modalInstance.dismiss('cancel');
-  };
-
-};
 
 

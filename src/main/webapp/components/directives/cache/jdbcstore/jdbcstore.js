@@ -14,11 +14,32 @@
         },
         replace: true,
         templateUrl: 'components/directives/cache/jdbcstore/jdbcstore.html',
-        link: function (scope, element, attrs) {
+        link: function (scope) {
 
-          scope.metadata.storeTypes = ['string-keyed-jdbc-store','mixed-keyed-jdbc-store', 'binary-keyed-jdbc-store'];
-          if (scope.initDefaults){
+          scope.hasStringKeyedTable = function () {
+            return utils.isNotNullOrUndefined(scope.data) && utils.isNotNullOrUndefined(scope.data['string-keyed-table']);
+          };
+
+          scope.hasBinaryKeyedTable = function () {
+            return utils.isNotNullOrUndefined(scope.data) && utils.isNotNullOrUndefined(scope.data['binary-keyed-table']);
+          };
+
+          if (!utils.isNotNullOrUndefined(scope.data)){
             scope.data = {};
+          }
+          scope.metadata.storeTypes = ['string-keyed-jdbc-store','mixed-keyed-jdbc-store', 'binary-keyed-jdbc-store'];
+
+          if (scope.hasBinaryKeyedTable() && scope.hasStringKeyedTable()) {
+            scope.data.type = 'mixed-keyed-jdbc-store';
+          } else if (scope.hasStringKeyedTable()) {
+            scope.data.type = 'string-keyed-jdbc-store';
+          } else if (scope.hasBinaryKeyedTable()) {
+            scope.data.type = 'binary-keyed-jdbc-store';
+          } else {
+            scope.data.type = '';
+          }
+
+          if (scope.initDefaults){
             scope.data.type = scope.metadata.storeTypes[0];
 
             ['fetch-state', 'passivation', 'preload', 'purge', 'read-only',
@@ -26,6 +47,7 @@
                 scope.data[attrName] = scope.metadata[attrName].default;
               });
           }
+
         }
       };
     }

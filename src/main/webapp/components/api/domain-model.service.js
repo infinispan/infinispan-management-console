@@ -174,8 +174,6 @@ angular.module('managementConsole.api')
             Domain.prototype.fetchNodeStats = function(cluster, server) {
                 var promises = [];
                 if (server.isRunning()) {
-                    var serverGroup = this.serverGroups[server.getGroup()];
-                    var serverProfile = this.profiles[serverGroup.profile];
                     var caches = cluster.getCaches();
                     for (var name in caches) {
                         var cache = caches[name];

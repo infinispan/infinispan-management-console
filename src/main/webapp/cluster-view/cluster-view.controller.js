@@ -11,6 +11,70 @@ angular.module('managementConsole')
     'utils',
     '$modal',
     function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
+      var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
+
+        $scope.cacheName = null;
+        $scope.selectedTemplate = null;
+        $scope.configurationTemplates = [];
+        $scope.configurationTemplatesMap = {};
+
+        $scope.createCache = function () {
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
+          address.push(cacheType);
+          address.push($scope.cacheName);
+          cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
+            $modalInstance.close();
+            $scope.currentCluster.refresh().then(function(){
+              $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+            });
+          });
+        };
+
+        $scope.configureTemplate = function () {
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
+          address.push(cacheType);
+          address.push($scope.cacheName);
+          $modalInstance.close();
+          $state.go('editCache', {
+            clusterName: $scope.currentCluster.name,
+            cacheName: $scope.cacheName,
+            cacheConfigurationTemplate: $scope.selectedTemplate,
+            cacheConfigurationType:cacheType,
+            newCacheCreation:true
+          });
+        };
+
+        $scope.cancel = function () {
+          $modalInstance.close();
+        };
+
+        angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+          var p = cacheCreateController.getConfigurationTemplates(cacheType);
+          p.then(function (response) {
+            var p = response[cacheType + '-configuration'];
+            for (var key in p) {
+              if (p.hasOwnProperty(key)) {
+                $scope.configurationTemplates.push(key);
+                $scope.configurationTemplatesMap[key] = cacheType;
+              }
+            }
+          });
+        });
+
+        $scope.cancel = function () {
+          $modalInstance.close();
+        };
+      };
+
+      var WIPModalInstanceCtrl = function ($scope, $modalInstance) {
+
+        $scope.cancel = function () {
+          $modalInstance.close();
+        };
+      };
+
       $scope.shared = {
         currentCollection: 'caches'
       };
@@ -29,11 +93,21 @@ angular.module('managementConsole')
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
 
+      $scope.currentClusterAvailabilityAsString = function () {
+        return utils.clusterAvailability($scope.currentCluster);
+      };
+
       $scope.refresh = function () {
         if (this.currentClusterAvailability()) {
           $scope.currentCluster.refresh();
         }
       };
+
+      if ($stateParams.refresh){
+        $scope.refresh();
+      }
+
+
 
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;
@@ -97,8 +171,8 @@ angular.module('managementConsole')
       };
     }]).filter('cacheTrait', function (){
     return function (cachesInput, traitFilter) {
-      var atLeastOneFilterOn = traitFilter.bounded || traitFilter.indexed || traitFilter.compatible || traitFilter.remotebackup
-        || traitFilter.persistent || traitFilter.secure || traitFilter.transactional;
+      var atLeastOneFilterOn = (traitFilter.bounded || traitFilter.indexed || traitFilter.compatible ||
+      traitFilter.remotebackup || traitFilter.persistent || traitFilter.secure || traitFilter.transactional);
       if (atLeastOneFilterOn) {
         var caches = [];
         angular.forEach(cachesInput, function (cache) {
@@ -119,7 +193,7 @@ angular.module('managementConsole')
       else {
         return cachesInput;
       }
-    }
+    };
   }).filter('cacheType', function () {
     return function (cachesInput, typeFilter) {
       var atLeastOneFilterOn = typeFilter.local || typeFilter.distributed || typeFilter.invalidation || typeFilter.replicated;
@@ -142,67 +216,4 @@ angular.module('managementConsole')
     };
   });
 
-var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
-
-  $scope.cacheName = null;
-  $scope.selectedTemplate = null;
-  $scope.configurationTemplates = [];
-  $scope.configurationTemplatesMap = {};
-
-  $scope.createCache = function () {
-    var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
-    var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
-    address.push(cacheType);
-    address.push($scope.cacheName);
-    cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
-      $modalInstance.close();
-      $scope.currentCluster.refresh().then(function(){
-        $state.go('clusterView', {clusterName: $scope.currentCluster.name});
-      });
-    });
-  };
-
-  $scope.configureTemplate = function () {
-    var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
-    var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
-    address.push(cacheType);
-    address.push($scope.cacheName);
-    $modalInstance.close();
-    $state.go('editCache', {
-      clusterName: $scope.currentCluster.name,
-      cacheName: $scope.cacheName,
-      cacheConfigurationTemplate: $scope.selectedTemplate,
-      cacheConfigurationType:cacheType,
-      newCacheCreation:true
-    });
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.close();
-  };
-
-  angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
-    var p = cacheCreateController.getConfigurationTemplates(cacheType);
-    p.then(function (response) {
-      var p = response[cacheType + '-configuration'];
-      for (var key in p) {
-        if (p.hasOwnProperty(key)) {
-          $scope.configurationTemplates.push(key);
-          $scope.configurationTemplatesMap[key] = cacheType;
-        }
-      }
-    });
-  });
-
-  $scope.cancel = function () {
-    $modalInstance.close();
-  };
-};
-
-var WIPModalInstanceCtrl = function ($scope, $modalInstance) {
-
-  $scope.cancel = function () {
-    $modalInstance.close();
-  };
-};
 

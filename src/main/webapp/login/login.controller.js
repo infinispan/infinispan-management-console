@@ -28,10 +28,10 @@ angular.module('managementConsole')
             $state.go('clustersView');
           });
         }).catch(function (e) {
-          console.log("Login error", e);
+          console.log('Login error', e);
           $scope.loginError = true;
           $scope.showLoginSpinner = false;
-        })
+        });
       };
 
       $scope.isAuthenticated = function () {

@@ -5,9 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$stateParams',
     '$state',
+    '$modal',
     'modelController',
     'utils',
-    function ($scope, $stateParams, $state, modelController, utils) {
+    function ($scope, $stateParams, $state, $modal, modelController, utils) {
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }
@@ -35,8 +36,28 @@ angular.module('managementConsole')
               return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
             };
 
+            $scope.currentClusterAvailabilityAsString = function () {
+              return utils.clusterAvailability($scope.currentCluster);
+            };
+
             $scope.matchHeight = function () {
               utils.matchHeight(document, '.card-pf');
+            };
+
+            $scope.enable = function () {
+              $scope.currentCache.enable();
+            };
+
+            $scope.disable = function () {
+              $scope.currentCache.disable();
+            };
+
+            $scope.purge = function () {
+              $scope.currentCache.flush();
+            };
+
+            $scope.resetStats = function () {
+              $scope.currentCache.resetStats();
             };
 
             $scope.currentCacheType = function () {
@@ -50,4 +71,19 @@ angular.module('managementConsole')
               utils.isNotNullOrUndefined($scope.currentCache.configuration.owners) ? $scope.currentCache.configuration.owners + ' owners' : '';
             };
 
+            $scope.openModal = function (mode) {
+              $scope.mode = mode;
+              $modal.open({
+                templateUrl: 'cache-status/confirmation-cache-modal.html',
+                controller: function ($scope, $modalInstance) {
+
+                  $scope.cacheName = $scope.currentCache.name;
+
+                  $scope.cancelModal = function () {
+                    $modalInstance.dismiss('cancel');
+                  };
+                },
+                scope: $scope
+              });
+            };
     }]);

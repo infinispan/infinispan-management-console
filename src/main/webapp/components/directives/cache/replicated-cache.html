@@ -1,85 +1,90 @@
 <div>
-  <uib-tabset>
+  <uib-tabset vertical="true" type="pills">
     <uib-tab heading="General" active="true">
+
       <configuration-section fields="['name','type','template','mode', 'auto-config', 'batching',
-      'jndi-name', 'module', 'start', 'statistics']" data='data.configuration'
+      'jndi-name', 'indexing', 'indexing-properties', 'module', 'queue-flush-interval', 'queue-size', 'remote-cache', 'remote-site',
+      'remote-timeout', 'start', 'statistics']" data='data'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Locking" active="false">
-      <!-- <locking data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
-               init-defaults="initDefaults" read-only="readOnly"/> -->
+    <uib-tab heading="Locking">
+
       <configuration-section fields="['acquire-timeout', 'concurrency-level', 'isolation', 'striping']"
-                             data='data.configuration.locking.LOCKING' metadata="resolveDescription('locking')"
+                             data='data.locking.LOCKING' metadata="resolveDescription('locking')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Eviction" active="false">
-      <!-- <eviction data='data.configuration.eviction.EVICTION' metadata="resolveDescription('eviction')"
-                init-defaults="initDefaults" read-only="readOnly"/> -->
+    <uib-tab heading="Eviction">
 
-      <configuration-section fields="['max-entries', 'strategy']" data='data.configuration.eviction.EVICTION'
+      <configuration-section fields="['type', 'strategy', 'size']" data='data.eviction.EVICTION'
                              metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Expiration" active="false">
-      <!-- <expiration data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
-                  init-defaults="initDefaults" read-only="readOnly"/> -->
+    <uib-tab heading="Expiration">
 
       <configuration-section fields="['lifespan', 'interval', 'max-idle']"
-                             data='data.configuration.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
+                             data='data.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Compatibility" active="false">
+    <uib-tab heading="Compatibility">
 
-      <configuration-section fields="['enabled', 'marshaller']" data='data.configuration.compatibility.COMPATIBILITY'
+      <configuration-section fields="['enabled', 'marshaller']" data='data.compatibility.COMPATIBILITY'
                              metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="TX">
-      <!-- <tx data="data.configuration.transaction.TRANSACTION" metadata="resolveDescription('tx')"
-          init-defaults="initDefaults" read-only="readOnly"/> -->
 
-      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.configuration.transaction.TRANSACTION"
+    <uib-tab heading="Partition handling">
+
+      <configuration-section fields="['enabled']" data="data['partition-handling'].PARTITION_HANDLING"
+                             metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
+    <uib-tab heading="Transactions">
+
+      <configuration-section fields="['locking', 'mode', 'stop-timeout']" data="data.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="State Transfer">
-      <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="data.configuration['state-transfer'].STATE_TRANSFER"
-                     metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
+    <uib-tab heading="State transfer">
+      <configuration-section fields="['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']" data="data['state-transfer'].STATE_TRANSFER"
+                             metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
+
     <uib-tab heading="Loader">
-      <configuration-section fields="['class', 'preload', 'shared']" data="data.configuration['loader'].LOADER"
+      <configuration-section fields="['class', 'preload', 'shared']" data="data['loader'].LOADER"
                              metadata="resolveDescription('loader')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="File Store">
+
+    <uib-tab heading="Generic store">
+      <configuration-section fields="['class', 'fetch-state', 'passivation', 'preload', 'purge', 'read-only', 'shared', 'singleton']"
+                             data="data['store'].STORE"
+                             metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"/>
+    </uib-tab>
+
+    <uib-tab heading="File store">
 
       <configuration-section fields="['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data.configuration['file-store'].FILE_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data['file-store'].FILE_STORE"
                              metadata="resolveDescription('filestore')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="Remote Store">
-      <configuration-section fields="['cache', 'fetch-state', 'passivation', 'preload', 'raw-values', 'purge', 'read-only',
-              'shared', 'singleton', 'socket-timeout', 'tcp-no-delay']" data="data.configuration['remote-store'].REMOTE_STORE" metadata="resolveDescription('remotestore')"
+    <uib-tab heading="JDBC store">
+      <jdbcstore data="data['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
                  init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    <uib-tab heading="JDBC Store">
-      <jdbcstore data="data.configuration['string-keyed-jdbc-store'].STRING_KEYED_JDBC_STORE" metadata="resolveDescription('jdbcstore')"
-                   init-defaults="initDefaults" read-only="readOnly"/>
-    </uib-tab>
 
-    <uib-tab heading="Level DB Store">
+    <uib-tab heading="LevelDB store">
       <configuration-section fields="['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data.configuration['leveldb-store'].LEVEL_DB_STORE"
+            'preload', 'purge', 'read-only', 'shared', 'singleton']" data="data['leveldb-store'].LEVEL_DB_STORE"
                              metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Backup">
       <configuration-section fields="['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']"
-                             data="data.configuration['backup'].BACKUP" metadata="resolveDescription('backup')"
+                             data="data['backup'].BACKUP" metadata="resolveDescription('backup')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
 
     <uib-tab heading="Security">
-      <security data="data.configuration.security.authorization" metadata="resolveDescription('authorization')"
-                 init-defaults="initDefaults" read-only="readOnly"/>
+      <configuration-section fields="['enabled', 'roles']" data="data.security.SECURITY.authorization.AUTHORIZATION"
+                             metadata="resolveDescription('authorization')"
+                             init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
   </uib-tabset>
 </div>

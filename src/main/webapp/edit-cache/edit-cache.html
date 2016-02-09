@@ -31,30 +31,31 @@
     </div>
   </div>
 
-  <h2>View / Edit cache configuration:</h2>
+  <h2 ng-if="isAddNewCacheWorkflow()">View / Edit cache configuration:</h2>
+  <h2 ng-if="isViewExistingCacheWorkflow()">View cache configuration:</h2>
 
-        <div ng-if="cacheConfigurationType == 'distributed-cache'">
+        <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
           <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
         </div>
-        <div ng-if="cacheConfigurationType == 'replicated-cache'">
+        <div id="replicatedCacheConfiguration" ng-if="cacheConfigurationType == 'replicated-cache'">
           <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
         </div>
-        <div ng-if="cacheConfigurationType == 'invalidation-cache'">
+        <div id="invalidationCacheConfiguration" ng-if="cacheConfigurationType == 'invalidation-cache'">
           <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
         </div>
-        <div ng-if="cacheConfigurationType == 'local-cache'">
+        <div id="localCacheConfiguration" ng-if="cacheConfigurationType == 'local-cache'">
           <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.cachesMetadata"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
         </div>
 
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-6">
-            <button type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Create</button>
-            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="isAddNewCacheWorkflow()" ng-click="onCacheCreateClick()">Create</button>
+            <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-if="isAddNewCacheWorkflow()" ng-click="cancel()">Cancel</button>
           </div>
         </div>
 

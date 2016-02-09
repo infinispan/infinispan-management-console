@@ -12,7 +12,7 @@
         <label class="col-md-3 control-label">* Name:</label>
 
         <div class="col-md-6">
-          <input type="text" class="form-control" name="serverName" ng-model="serverName" required="">
+          <input id="serverName" type="text" class="form-control" name="serverName" ng-model="serverName" required="">
         </div>
         <div class="col-md-3 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" tooltip="The server node name" tooltip-trigger="" tooltip-animation="true"
@@ -24,7 +24,7 @@
         <label class="col-md-3 control-label">* Host:</label>
 
         <div class="col-md-6">
-          <select class="form-control" ng-options="host for host in hosts track by host"
+          <select id="host" class="form-control" ng-options="host for host in hosts track by host"
                   ng-model="host"></select>
         </div>
         <div class="col-md-3 pull-left" style="padding-left: 0">
@@ -36,7 +36,7 @@
         <label class="col-md-3 control-label">Port offset:</label>
 
         <div class="col-md-6">
-          <input type="text" class="form-control" ng-model="portOffset" placeholder="0">
+          <input id="portOffset" type="text" class="form-control" ng-model="portOffset" placeholder="0">
         </div>
         <div class="col-md-3 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" tooltip="Port offset" tooltip-trigger="" tooltip-animation="true"
@@ -47,8 +47,8 @@
         <label class="col-md-3 control-label">External address:</label>
 
         <div class="col-md-6">
-          <input type="text" class="form-control" style="margin-bottom:5px" placeholder="Address">
-          <input type="text" class="form-control" placeholder="Port">
+          <input id="address" type="text" class="form-control" style="margin-bottom:5px" placeholder="Address">
+          <input id="port" type="text" class="form-control" placeholder="Port">
         </div>
         <div class="col-md-3 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" tooltip="External address" tooltip-trigger="" tooltip-animation="true"
@@ -112,8 +112,8 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button type="button" class="btn btn-primary" ng-click="createServerNode()">Create</button>
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button id="createServerNode" type="button" class="btn btn-primary" ng-click="createServerNode()">Create</button>
   </div>
 </div>
 

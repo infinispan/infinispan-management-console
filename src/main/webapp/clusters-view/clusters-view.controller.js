@@ -14,10 +14,10 @@ angular.module('managementConsole')
             $scope.relays = {};
             //endpoints for each cache container
             $scope.endpoints = [];
-            angular.forEach($scope.clusters, function(cluster, key){
+            angular.forEach($scope.clusters, function(cluster){
               var relays = cluster.getRelays();
               if (utils.isNonEmptyArray(relays)){
-                angular.forEach(relays, function (relay, key){
+                angular.forEach(relays, function (relay){
                   var tempRelays = relay['remote-site'];
                   $scope.relays[cluster.name] = Object.keys(tempRelays);
                 });

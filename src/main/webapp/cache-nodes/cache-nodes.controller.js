@@ -15,6 +15,7 @@ angular.module('managementConsole')
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
 
+
       $scope.refresh = function () {
         var server = modelController.getServer();
         var clusters = server.getClusters();
@@ -30,4 +31,8 @@ angular.module('managementConsole')
       };
 
       $scope.refresh();
+
+      $scope.currentClusterAvailabilityAsString = function () {
+        return utils.clusterAvailability($scope.currentCluster);
+      };
     }]);

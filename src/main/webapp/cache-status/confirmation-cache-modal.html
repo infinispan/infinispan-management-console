@@ -1,0 +1,20 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelModal()">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+  </div>
+  <div class="modal-body">
+
+    <h3 ng-if="mode === 'enable'">Enabling cache {{cacheName}} will attach it to all active remote endpoints. Enable {{cacheName}}?</h3>
+    <h3 ng-if="mode === 'disable'">Disabling cache {{cacheName}} will detach it from all active remote endpoints. Disable {{cacheName}}?</h3>
+    <h3 ng-if="mode === 'purge'">Purging cache {{cacheName}} will passivate all its cache entries. Purge {{cacheName}}?</h3>
+  </div>
+  <div class="modal-footer">
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+    <button id="enableButton" ng-if="mode === 'enable'" type="button" class="btn btn-primary" ng-click="enable();cancelModal()">Enable</button>
+    <button id="disableButton" ng-if="mode === 'disable'" type="button" class="btn btn-primary" ng-click="disable();cancelModal()">Disable</button>
+    <button id="purgeButton" ng-if="mode === 'purge'" type="button" class="btn btn-primary" ng-click="purge();cancelModal()">Purge</button>
+  </div>
+</div>

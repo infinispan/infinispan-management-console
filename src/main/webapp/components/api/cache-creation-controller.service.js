@@ -44,13 +44,15 @@ angular.module('managementConsole.api')
               deferred.reject();
             }
           }
+          if (http.status === 500){
+            deferred.reject();
+          }
         };
-        //console.log(JSON.stringify(op));
         http.send(JSON.stringify(op));
         return deferred.promise;
       };
 
-      CacheCreationControllerClient.prototype.emptyPromise = function (op) {
+      CacheCreationControllerClient.prototype.emptyPromise = function () {
         var deferred = $q.defer();
         return deferred.promise;
       };
@@ -131,43 +133,75 @@ angular.module('managementConsole.api')
        * @param cacheType cache type to create
        * @param callback to execute at the end of create operation
        */
-      CacheCreationControllerClient.prototype.createReplicatedOrDistributedCacheConfigurationTemplateBare = function (configuration, address, cacheType) {
-        var promise = null;
-        if (cacheType === 'distributed-cache') {
-          promise = this.createDistributedCacheConfigurationTemplate(address, configuration);
-        } else if (cacheType === 'replicated-cache') {
-          promise = this.createReplicatedCacheConfigurationTemplate(address, configuration);
-        }
+      CacheCreationControllerClient.prototype.createConfigurationTemplateBare = function (configuration, address, cacheType) {
+        var promise = this.createCacheConfigurationNode(address, configuration);
         return promise.then(function () {
-          this.addNode(address.concat('locking', 'LOCKING'), configuration.locking);
-        }).then(function () {
-          this.addNode(address.concat('eviction', 'EVICTION'), configuration.eviction);
-        }).then(function () {
-          this.addNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration);
-        }).then(function () {
-          this.addNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
-        }).then(function () {
-          this.addNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction);
-        }).then(function () {
-          this.addNode(address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
-        }).then(function () {
-          this.addNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-        }).bind(this);
+          if (utils.isNotNullOrUndefined(configuration.locking)) {
+            this.addNode(address.concat('locking', 'LOCKING'), configuration.locking);
+          }
+          if (utils.isNotNullOrUndefined(configuration.eviction)) {
+            this.addNode(address.concat('eviction', 'EVICTION'), configuration.eviction);
+          }
+          if (utils.isNotNullOrUndefined(configuration.expiration)) {
+            this.addNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+          }
+          if (utils.isNotNullOrUndefined(configuration.compatibility)) {
+            this.addNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
+          }
+          if (utils.isNotNullOrUndefined(configuration['partition-handling'])) {
+            this.addNode(address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
+          }
+          if (utils.isNotNullOrUndefined(configuration.transaction)) {
+            this.addNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction);
+          }
+          if (utils.isNotNullOrUndefined(configuration['state-transfer'])) {
+            this.addNode(address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
+          }
+          if (utils.isNotNullOrUndefined(configuration.loader)) {
+            this.addNode(address.concat('loader', 'LOADER'), configuration.loader);
+          }
+          if (utils.isNotNullOrUndefined(configuration.store)) {
+            this.addNode(address.concat('store', 'STORE'), configuration.store);
+          }
+          if (utils.isNotNullOrUndefined(configuration['file-store'])) {
+            this.addNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
+          }
+          if (utils.isNotNullOrUndefined(configuration['leveldb-store'])) {
+            this.addNode(address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
+          }
+          if (utils.isNotNullOrUndefined(configuration['string-keyed-jdbc-store'])) {
+            this.addNode(address.concat('string-keyed-jdbc-store', 'STRING_KEYED_JDBC_STORE'), configuration['string-keyed-jdbc-store'], ['type']);
+          }
+          if (utils.isNotNullOrUndefined(configuration['binary-keyed-jdbc-store'])) {
+            this.addNode(address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store'], ['type']);
+          }
+          if (utils.isNotNullOrUndefined(configuration['mixed-keyed-jdbc-store'])) {
+            this.addNode(address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store'], ['type']);
+          }
+          if (utils.isNotNullOrUndefined(configuration.backup)) {
+            this.addNode(address.concat('backup', 'BACKUP'), configuration.backup);
+          }
+          if (utils.isNotNullOrUndefined(configuration.security)) {
+            this.addNode(address.concat('security', 'SECURITY'), configuration.security, [], true).then(function () {
+              this.addNode(address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
+            }.bind(this));
+          }
+        }.bind(this));
       };
 
       CacheCreationControllerClient.prototype.createReplicatedOrDistributedCacheConfigurationTemplate = function (configuration, address, cacheType) {
-        return this.createReplicatedOrDistributedCacheConfigurationTemplateBare(configuration, address, cacheType);
+        return this.createConfigurationTemplateBare(configuration, address, cacheType);
       };
 
       CacheCreationControllerClient.prototype.executeBatch = function (f) {
         return this.execute('batch').then(f).
           catch(function (e) {
-            console.log("got an error in batched function processing", e);
+            console.log('got an error in batched function processing', e);
             throw e;
             // in $q it's better to `return $q.reject(e)` here
-          }).then(function (res) {
+          }).then(function () {
             this.execute('run-batch');
-          }.bind(this)).catch(function (e) {
+          }.bind(this)).catch(function () {
             // handle errors in processing or in error.
           });
       };
@@ -182,27 +216,7 @@ angular.module('managementConsole.api')
        * @param callback to execute at the end of create operation
        */
       CacheCreationControllerClient.prototype.createInvalidationOrLocalCacheConfigurationTemplate = function (configuration, address, cacheType) {
-        var promise = null;
-        if (cacheType === 'invalidation-cache') {
-          promise = this.createInvalidationCacheConfigurationTemplate(address, configuration);
-        } else if (cacheType === 'local-cache') {
-          promise = this.createLocalCacheConfigurationTemplate(address, configuration);
-        }
-        return promise.then(function () {
-          this.addNode(address.concat('locking', 'LOCKING'), configuration.locking);
-        }).then(function () {
-          this.addNode(address.concat('eviction', 'EVICTION'), configuration.eviction);
-        }).then(function () {
-          this.addNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration);
-        }).then(function () {
-          this.addNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
-        }).then(function () {
-          this.addNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction);
-        }).then(function () {
-          this.addNode(address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
-        }).then(function () {
-          this.addNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-        }).bind(this);
+        return this.createConfigurationTemplateBare(configuration, address, cacheType);
       };
 
 
@@ -247,126 +261,25 @@ angular.module('managementConsole.api')
        *
        *
        */
-      CacheCreationControllerClient.prototype.createDistributedCacheConfigurationTemplate = function (address, prop) {
+      CacheCreationControllerClient.prototype.createCacheConfigurationNode = function (address, prop) {
         // remove DMR attributes we added when we loaded the model
         return this.executeAddOperation(address, prop, ['name','type','template']);
       };
 
-      /**
-       * Creates new invalidation cache with given parameters
-       *
-       *
-       * @param address
-       *
-       * Parameter @param prop has the following properties:
-       *
-       * mode STRING  Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation.
-       *
-       * module  STRING  The module whose class loader should be used when building this cache's configuration
-       * remote_cache  STRING  The name of the remote cache that backups data here
-       * indexing STRING  If enabled, entries will be indexed when they are added to the cache.
-       * Indexes will be updated as entries change or are removed.
-       *
-       * auto-config  BOOLEAN  If enabled, will configure indexing automatically based on cache type
-       * statistics  BOOLEAN  If enabled, statistics will be collected for this cache
-       * remote-timeout  LONG  In SYNC mode, the timeout (in ms) used to wait for an acknowledgment when making
-       * a remote call, after which the call is aborted and an exception is thrown.
-       *
-       * batching  BOOLEAN  If enabled, the invocation batching API will be made available for this cache.
-       * start  STRING  The cache start mode, which can be EAGER (immediate start) or LAZY (on-demand start).
-       * remote-site  STRING  The name of the remote site containing the cache that backups data here.
-       * jndi-name  STRING  The jndi-name to which to bind this cache instance.
-       * queue-size  INT  In ASYNC mode, this attribute can be used to trigger flushing of the queue when it reaches a specific threshold.
-       * async-marshalling  BOOLEAN  If enabled, this will cause marshalling of entries to be performed asynchronously.
-       * queue-flush-interval  LONG  In ASYNC mode, this attribute controls how often the asynchronous thread used to flush the
-       * replication queue runs. This should be a positive integer which represents thread wakeup time in milliseconds.
-       *
-       */
-
-      CacheCreationControllerClient.prototype.createInvalidationCacheConfigurationTemplate = function (address, prop) {
-        // remove DMR attributes we added when we loaded the model
-        return this.executeAddOperation(address, prop, ['name','type','template']);
-      };
-
-      /**
-       * Creates new local cache with given parameters
-       *
-       *
-       * @param address
-       *
-       * Parameter @param prop has the following properties:
-       *
-       * mode STRING  Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation.
-       *
-       * module  STRING  The module whose class loader should be used when building this cache's configuration
-       * remote_cache  STRING  The name of the remote cache that backups data here
-       * indexing STRING  If enabled, entries will be indexed when they are added to the cache.
-       * Indexes will be updated as entries change or are removed.
-       *
-       * auto-config  BOOLEAN  If enabled, will configure indexing automatically based on cache type
-       * statistics  BOOLEAN  If enabled, statistics will be collected for this cache
-       * a remote call, after which the call is aborted and an exception is thrown.
-       *
-       * batching  BOOLEAN  If enabled, the invocation batching API will be made available for this cache.
-       * start  STRING  The cache start mode, which can be EAGER (immediate start) or LAZY (on-demand start).
-       * remote-site  STRING  The name of the remote site containing the cache that backups data here.
-       * jndi-name  STRING  The jndi-name to which to bind this cache instance.
-       *
-       */
-      CacheCreationControllerClient.prototype.createLocalCacheConfigurationTemplate = function (address, prop) {
-        // remove DMR attributes we added when we loaded the model
-        return this.executeAddOperation(address, prop, ['name','type','template']);
-      };
-
-
-      /**
-       * Creates new replicated cache with given parameters
-       *
-       *
-       * @param address
-       *
-       * Parameter @param prop has the following properties:
-       *
-       * mode STRING  Sets the clustered cache mode, ASYNC for asynchronous operation, or SYNC for synchronous operation.
-       *
-       * module  STRING  The module whose class loader should be used when building this cache's configuration
-       * remote_cache  STRING  The name of the remote cache that backups data here
-       * indexing STRING  If enabled, entries will be indexed when they are added to the cache.
-       * Indexes will be updated as entries change or are removed.
-       *
-       * auto-config  BOOLEAN  If enabled, will configure indexing automatically based on cache type
-       * statistics  BOOLEAN  If enabled, statistics will be collected for this cache
-       * remote-timeout  LONG  In SYNC mode, the timeout (in ms) used to wait for an acknowledgment when making
-       * a remote call, after which the call is aborted and an exception is thrown.
-       *
-       * batching  BOOLEAN  If enabled, the invocation batching API will be made available for this cache.
-       * start  STRING  The cache start mode, which can be EAGER (immediate start) or LAZY (on-demand start).
-       * remote-site  STRING  The name of the remote site containing the cache that backups data here.
-       * jndi-name  STRING  The jndi-name to which to bind this cache instance.
-       * queue-size  INT  In ASYNC mode, this attribute can be used to trigger flushing of the queue when it reaches a specific threshold.
-       * async-marshalling  BOOLEAN  If enabled, this will cause marshalling of entries to be performed asynchronously.
-       * queue-flush-interval  LONG  In ASYNC mode, this attribute controls how often the asynchronous thread used to flush the
-       * replication queue runs. This should be a positive integer which represents thread wakeup time in milliseconds.
-       *
-       */
-      CacheCreationControllerClient.prototype.createReplicatedCacheConfigurationTemplate = function (address, prop) {
-        // remove DMR attributes we added when we loaded the model
-        return this.executeAddOperation(address, prop, ['name','type','template']);
-      };
-
-      CacheCreationControllerClient.prototype.addNode = function (address, prop) {
+      CacheCreationControllerClient.prototype.addNode = function (address, prop, excludeAttributeList, forceOp) {
         //peek the last element of the address array but do not pop it
         var modelNode = address.slice(-1).pop();
         if (utils.isNotNullOrUndefined(prop) && prop.hasOwnProperty(modelNode)) {
-          return this.executeAddOperation(address, prop[modelNode]);
+          return this.executeAddOperation(address, prop[modelNode], excludeAttributeList, forceOp);
         } else {
           return this.emptyPromise();
         }
       };
 
-      CacheCreationControllerClient.prototype.executeAddOperation = function (address, prop, excludeAttributeList) {
+      CacheCreationControllerClient.prototype.executeAddOperation = function (address, prop, excludeAttributeList, forceExecution) {
+        forceExecution = (typeof forceExecution === 'undefined') ? false : forceExecution;
         var op = this.createAddOperation(address, prop, excludeAttributeList);
-        if (Object.keys(op).length > 2) {
+        if (Object.keys(op).length > 2 || forceExecution) {
           //ok cool, we actually have more op parameter fields besides address and operation
           //therefore - execute this op
           return this.execute(op);
@@ -392,7 +305,27 @@ angular.module('managementConsole.api')
             if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
               //assign only primitives (strings, numbers, integers)
               // i.e disregard potential branches of prop object tree
-              op[propKey] = propValue;
+
+              //handle JSON described objects
+              if (utils.isString(propValue)) {
+                if ((propValue.indexOf('{') > -1 && propValue.indexOf('}') > -1) ||
+                  (propValue.indexOf('[') > -1 && propValue.indexOf(']') > -1)) {
+                  try {
+                    op[propKey] = JSON.parse(propValue);
+                  }
+                  catch (e) {
+                    console.log('Invalid JSON value ' + propValue + ' for field ' + propKey);
+                  }
+                }
+                //simple strings
+                else {
+                  op[propKey] = propValue;
+                }
+              }
+              // numbers, integers, booleans etc
+              else {
+                op[propKey] = propValue;
+              }
             }
           }
         }

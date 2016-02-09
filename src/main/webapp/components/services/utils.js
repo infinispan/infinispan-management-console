@@ -17,7 +17,7 @@
        * @returns {boolean}
        */
       isString: function (str) {
-        return (typeof str === "string");
+        return (typeof str === 'string');
       },
 
       /**
@@ -26,7 +26,7 @@
        * @returns {boolean}
        */
       isBoolean: function (b) {
-        return (typeof b === "boolean");
+        return (typeof b === 'boolean');
       },
 
       /**
@@ -35,7 +35,7 @@
        * @returns {boolean}
        */
       isNumber: function (n) {
-        return (typeof n === "number");
+        return (typeof n === 'number');
       },
 
       /**
@@ -120,20 +120,23 @@
       },
 
       makeResourceDescriptionMap: function makeResourceDescriptionMap(map) {
-        map['general'] = '.attributes';
-        map['locking'] = 'children.locking.model-description.LOCKING.attributes';
-        map['eviction'] = 'children.eviction.model-description.EVICTION.attributes';
-        map['expiration'] = 'children.expiration.model-description.EXPIRATION.attributes';
-        map['compatibility'] = 'children.compatibility.model-description.*.attributes';
-        map['tx'] = 'children.transaction.model-description.TRANSACTION.attributes';
-        map['statetransfer'] = 'children.state-transfer.model-description.STATE_TRANSFER.attributes';
-        map['filestore'] = 'children.file-store.model-description.*.attributes';
-        map['remotestore'] = 'children.remote-store.model-description.*.attributes';
-        map['jdbcstore'] = 'children.string-keyed-jdbc-store.model-description.*.attributes';
-        map['leveldbstore'] = 'children.leveldb-store.model-description.*.attributes';
-        map['backup'] = 'children.backup.model-description.*.attributes';
-        map['loader'] = 'children.loader.model-description.*.attributes';
-        map['authorization'] = 'children.security.model-description.*.children.authorization.model-description.*.attributes';
+        map.general = '.attributes';
+        map.locking = 'children.locking.model-description.LOCKING.attributes';
+        map.eviction = 'children.eviction.model-description.EVICTION.attributes';
+        map.expiration = 'children.expiration.model-description.EXPIRATION.attributes';
+        map.compatibility = 'children.compatibility.model-description.*.attributes';
+        map['partition-handling'] = 'children.partition-handling.model-description.PARTITION_HANDLING.attributes';
+        map.tx = 'children.transaction.model-description.TRANSACTION.attributes';
+        map.statetransfer = 'children.state-transfer.model-description.STATE_TRANSFER.attributes';
+        map.filestore = 'children.file-store.model-description.*.attributes';
+        map.remotestore = 'children.remote-store.model-description.*.attributes';
+        map.jdbcstore = 'children.string-keyed-jdbc-store.model-description.*.attributes';
+        map.leveldbstore = 'children.leveldb-store.model-description.*.attributes';
+        map.store = 'children.store.model-description.*.attributes';
+        map['rest-store'] = 'children.rest-store.model-description.*.attributes';
+        map.backup = 'children.backup.model-description.*.attributes';
+        map.loader = 'children.loader.model-description.*.attributes';
+        map.authorization = 'children.security.model-description.*.children.authorization.model-description.*.attributes';
       },
 
       resolveDescription: function resolveDescription(metadata, resourceDescriptionMap, elementPath, cacheType) {
@@ -167,10 +170,10 @@
             }
             return fieldType;
           } else {
-            throw new this.ISPNException("Unresolved field for " + metadata + " and field " + field);
+            throw new this.ISPNException('Unresolved field for ' + metadata + ' and field ' + field);
           }
         } else {
-            throw new this.ISPNException("Invalid metadata " + metadata + " or field " + field);
+            throw new this.ISPNException('Invalid metadata ' + metadata + ' or field ' + field);
         }
       },
 
@@ -180,7 +183,7 @@
 
       ISPNException: function ISPNException(message) {
         this.message = message;
-        this.name = "ISPNException";
+        this.name = 'ISPNException';
       },
 
       getCacheType: function getCacheType(cacheModel) {
@@ -197,7 +200,11 @@
         return cacheType;
       },
 
-      //credits to https://gist.github.com/ralphcrisostomo/3141412
+      /***
+       * Finds duplicates in an input array and counts number of those duplicates
+       *
+       * credits to https://gist.github.com/ralphcrisostomo/3141412
+       */
       countOccurrences: function countOccurrences(anArray) {
 
         var compressed = [];
@@ -210,7 +217,7 @@
           var myCount = 0;
           // loop over every element in the copy and see if it's the same
           for (var w = 0; w < copy.length; w++) {
-            if (anArray[i] == copy[w]) {
+            if (anArray[i] === copy[w]) {
               // increase amount of times duplicate is found
               myCount++;
               // sets item to undefined
@@ -219,7 +226,7 @@
           }
 
           if (myCount > 0) {
-            var a = new Object();
+            var a = {};
             a.value = anArray[i];
             a.count = myCount;
             compressed.push(a);
@@ -244,6 +251,26 @@
           target: null,
           remove: false
         });
+      },
+
+      toCamelCase: function toCamelCase(inputText) {
+        var text = inputText.toLowerCase();
+        var split = text.split(' ');
+
+        //iterate through each of the "words" and capitalize them
+        for (var i = 0, len = split.length; i < len; i++) {
+          split[i] = split[i].charAt(0).toUpperCase() + split[i].slice(1);
+        }
+
+        return split.join(' ');
+      },
+
+      clusterAvailability: function clusterAvailability(cluster){
+        if(this.isNotNullOrUndefined(cluster)){
+          return this.toCamelCase(cluster.getAvailable());
+        } else {
+          return 'Unavailable';
+        }
       }
     };
   });

@@ -52,18 +52,22 @@ angular.module('managementConsole.api')
               return this.type;
             };
 
+            Cache.prototype.getCluster = function () {
+              return this.cluster;
+            };
+
             Cache.prototype.getConfigurationTemplate = function () {
               return this.configurationTemplate;
             };
 
             Cache.prototype.isPersistent = function () {
-              return utils.isNotNullOrUndefined(this.configuration['file-store'])
-                || utils.isNotNullOrUndefined(this.configuration['leveldb-store'])
-                || utils.isNotNullOrUndefined(this.configuration['rest-store'])
-                || utils.isNotNullOrUndefined(this.configuration['store'])
-                || utils.isNotNullOrUndefined(this.configuration['binary-keyed-jdbc-store'])
-                || utils.isNotNullOrUndefined(this.configuration['string-keyed-jdbc-store'])
-                || utils.isNotNullOrUndefined(this.configuration['mixed-keyed-jdbc-store']);
+              return (utils.isNotNullOrUndefined(this.configuration['file-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['leveldb-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['rest-store']) ||
+              utils.isNotNullOrUndefined(this.configuration.store) ||
+              utils.isNotNullOrUndefined(this.configuration['binary-keyed-jdbc-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['string-keyed-jdbc-store']) ||
+              utils.isNotNullOrUndefined(this.configuration['mixed-keyed-jdbc-store']));
             };
 
             Cache.prototype.hasCompatibility = function () {
@@ -71,7 +75,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.hasSecurityEnabled = function () {
-              return utils.isNotNullOrUndefined(this.configuration.security);
+              return this.isSecured();
             };
 
             Cache.prototype.hasRemoteBackup = function () {
@@ -83,7 +87,58 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.isTransactional = function () {
-              return utils.isNotNullOrUndefined(this.configuration.transaction);
+              return utils.isNotNullOrUndefined(this.configuration.transaction) && (this.configuration.transaction.TRANSACTION.mode !== 'NONE');
+            };
+
+            Cache.prototype.isSecured = function () {
+              return utils.isNotNullOrUndefined(this.configuration.security) && utils.isNotNullOrUndefined(this.configuration.security.SECURITY.authorization);
+            };
+
+            Cache.prototype.start = function () {
+              return this.executeOp('start-cache');
+            };
+
+            Cache.prototype.stop = function () {
+              return this.executeOp('stop-cache');
+            };
+
+            Cache.prototype.enable = function () {
+              var profile = this.getCluster().getProfile();
+              var endpointAddress = profile.getResourcePath().concat('subsystem','datagrid-infinispan-endpoint');
+              var op = {
+                'operation': 'unignore-cache-all-endpoints',
+                'cache-names':[this.name],
+                'address': endpointAddress
+              };
+              return this.getModelController().execute(op);
+            };
+
+            Cache.prototype.disable = function () {
+              var profile = this.getCluster().getProfile();
+              var endpointAddress = profile.getResourcePath().concat('subsystem','datagrid-infinispan-endpoint');
+              var op = {
+                'operation': 'ignore-cache-all-endpoints',
+                'cache-names':[this.name],
+                'address': endpointAddress
+              };
+              return this.getModelController().execute(op);
+            };
+
+            Cache.prototype.flush = function () {
+              return this.executeOp('flush-cache');
+            };
+
+            Cache.prototype.resetStats = function () {
+              return this.executeOp('reset-statistics');
+            };
+
+            Cache.prototype.executeOp = function (operationName){
+              var address = this.getResourcePath();
+              var op = {
+                'operation': operationName,
+                'address': address
+              };
+              return this.getModelController().execute(op);
             };
 
             return Cache;

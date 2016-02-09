@@ -14,31 +14,31 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Disable</a></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Enable</a></li>
+          <li role="presentation" class="enabled"><a id="dropdownMenuDisable" role="menuitem" ng-click="openModal('disable')">Disable</a></li>
+          <li role="presentation" class="enabled"><a id="dropdownMenuEnable" role="menuitem" ng-click="openModal('enable')">Enable</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Purge cache data</a>
+          <li role="presentation" class="enabled"><a id="dropdownMenuPurgeCache" role="menuitem" ng-click="openModal('purge')">Purge cache data</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Start rebalance</a>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Stop rebalance</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuStartRebalance" role="menuitem" href="#">Start rebalance</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuStopRebalance" role="menuitem" href="#">Stop rebalance</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Start mass reindex</a>
-          <li role="presentation" class="disabled"><a role="menuitem" href="#">Reset statistics</a>
+          <li role="presentation" class="disabled"><a id="dropdownMenuStartMassIndex" role="menuitem" href="#">Start mass reindex</a>
+          <li role="presentation" class="enabled"><a id="dropdownMenuResetStatistics" role="menuitem" ng-click="resetStats">Reset statistics</a>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View / Edit configuration</a>
+            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View configuration</a>
           </li>
         </ul>
       </div>
-      <h1><span class="label"
+      <h1><span class="label" id="currentCacheAvailability"
                 ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
-        {{currentCluster.isAvailable() ? 'Available' : 'Unavailable'}}
+        {{currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{currentCache.name}}</h1>
     </div>
   </div>
@@ -59,28 +59,49 @@
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isPersistent()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-database" title="Persistent"></span> Persistent
+            <span class="fa fa-database" id="persistent" title="Persistent"></span> Persistent
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isTransactional()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional
+            <span class="fa fa-arrow-circle-o-down" id="transactional" title="Transactional"></span> Transactional
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isBounded()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded
+            <span class="fa fa-stack-overflow" id="bounded" title="Bounded"></span> Bounded
           </h2>
         </div>
       </div>
       <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isIndexed()">
-        <div class="card-pf card-pf-accented    card-pf-aggregate-status card-pf-with-action">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-list-ol" title="Indexed"></span> Indexed
+            <span class="fa fa-list-ol" id="indexed" title="Indexed"></span> Indexed
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.hasCompatibility()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="fa fa-puzzle-piece" id="compatible" title="Compatible"></span> Compatible
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.isSecured()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="fa fa-lock" id="secured" title="Secured"></span> Secured
+          </h2>
+        </div>
+      </div>
+      <div class="col-xs-1 col-sm-1 col-md-1" ng-if="currentCache.hasRemoteBackup()">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <h2 class="card-pf-title">
+            <span class="pficon pficon-history" id="remotelyBackedUp" title="Remotely backed up"></span>Backup
           </h2>
         </div>
       </div>
@@ -99,19 +120,19 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Entries</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-entries']}}</td>
+                    <td id="numberOfEntries">{{currentCacheStats.firstServerStats['clusterwide-number-of-entries'] | number}}</td>
                   </tr>
                   <tr>
                     <th>READ / WRITE ratio</th>
-                    <td><td>{{currentCacheStats.firstServerStats['clusterwide-read-write-ratio']}}</td></td>
+                    <td id="readWriteRatio">{{currentCacheStats.firstServerStats['clusterwide-read-write-ratio'] | number}}</td>
                   </tr>
                   <tr>
                     <th>HIT ratio</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-hit-ratio']}}</td>
+                    <td id="hitRatio">{{currentCacheStats.firstServerStats['clusterwide-hit-ratio'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Max capacity:</th>
-                    <td>TODO</td>
+                    <td id="maxCapacity">TODO</td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding-top: 10px">
@@ -145,15 +166,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-read-time']}}</td>
+                    <td id="avgReads">{{currentCacheStats.firstServerStats['clusterwide-average-read-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-write-time']}}</td>
+                    <td id="avgWrites">{{currentCacheStats.firstServerStats['clusterwide-average-write-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-average-remove-time']}}</td>
+                    <td id="avgRemoves">{{currentCacheStats.firstServerStats['clusterwide-average-remove-time'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -175,23 +196,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th># READ Hits</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-hits']}}</td>
+                    <td id="numberOfReadHits">{{currentCacheStats.firstServerStats['clusterwide-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># READ misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                    <td id="numberOfReadMisses">{{currentCacheStats.firstServerStats['clusterwide-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE hits</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-hits']}}</td>
+                    <td id="numberOfRemoveHits">{{currentCacheStats.firstServerStats['clusterwide-remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th># REMOVE misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-remove-misses']}}</td>
+                    <td id="NumberOfRemoveMisses">{{currentCacheStats.firstServerStats['clusterwide-remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># PUTS</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                    <td id="numberOfPuts">{{currentCacheStats.firstServerStats['clusterwide-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -217,19 +238,19 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Activations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-activations']}}</td>
+                    <td id="numberOfActivations">{{currentCacheStats.firstServerStats['clusterwide-activations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Evictions</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-evictions']}}</td>
+                    <td id="numberOfReadEvictions">{{currentCacheStats.firstServerStats['clusterwide-evictions'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Invalidations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-invalidations']}}</td>
+                    <td id="numberOfInvalidations">{{currentCacheStats.firstServerStats['clusterwide-invalidations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Passivations</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                    <td id="numberOfPassivations">{{currentCacheStats.firstServerStats['clusterwide-passivations'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -251,15 +272,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Loads</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-passivations']}}</td>
+                    <td id="numberOfLoads">{{currentCacheStats.firstServerStats['clusterwide-passivations'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Misses</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-misses']}}</td>
+                    <td id="numberOfMisses">{{currentCacheStats.firstServerStats['clusterwide-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Stores</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-stores']}}</td>
+                    <td id="numberOfStores">{{currentCacheStats.firstServerStats['clusterwide-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -281,11 +302,11 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Locks available</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-available']}}</td>
+                    <td id="numberOfLocksAvailable">{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-available'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Locks held</th>
-                    <td>{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-held']}}</td>
+                    <td id="numberOfLocksHeld">{{currentCacheStats.firstServerStats['clusterwide-number-of-locks-held'] | number}}</td>
                   </tr>
                 </table>
               </div>

@@ -63,19 +63,25 @@
    </ciManagement>
    <distributionManagement>
       <repository>
-         <id>jboss-releases-repository</id>
+         <id>${jboss.releases.repo.id}</id>
          <name>JBoss Release Repository</name>
          <url>${jboss.releases.repo.url}</url>
       </repository>
       <snapshotRepository>
-         <id>jboss-snapshots-repository</id>
+         <id>${jboss.snapshots.repo.id}</id>
          <name>JBoss Snapshot Repository</name>
          <url>${jboss.snapshots.repo.url}</url>
       </snapshotRepository>
    </distributionManagement>
-   
+
    <properties>
-      <jboss.releases.repo.url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</jboss.releases.repo.url>
+
+      <autoReleaseAfterClose>true</autoReleaseAfterClose>
+
+      <jboss.releases.repo.id>jboss-releases-repository</jboss.releases.repo.id>
+
+      <jboss.releases.repo.url>https://repository.jboss.org/nexus</jboss.releases.repo.url>
+      <jboss.snapshots.repo.id>jboss-snapshots-repository</jboss.snapshots.repo.id>
       <jboss.snapshots.repo.url>https://repository.jboss.org/nexus/content/repositories/snapshots/</jboss.snapshots.repo.url>
    </properties>
 
@@ -108,15 +114,6 @@
                   </configuration>
                </execution>
                <execution>
-                  <id>bower install</id>
-                  <goals>
-                     <goal>bower</goal>
-                  </goals>
-                  <configuration>
-                     <arguments>install</arguments>
-                  </configuration>
-               </execution>
-               <execution>
                   <id>gulp build</id>
                   <goals>
                      <goal>gulp</goal>
@@ -136,7 +133,7 @@
                <filesets>
                   <fileset>
                      <directory>dist</directory>
-                     <directory>src/main/bower_components</directory>
+                     <directory>src/main/components</directory>
                   </fileset>
                </filesets>
             </configuration>
@@ -154,6 +151,17 @@
             </executions>
             <configuration>
                <classesDirectory>dist</classesDirectory>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.6</version>
+            <extensions>true</extensions>
+            <configuration>
+
+               <nexusUrl>${jboss.releases.repo.url}</nexusUrl>
+               <serverId>${jboss.releases.repo.id}</serverId>
             </configuration>
          </plugin>
       </plugins>

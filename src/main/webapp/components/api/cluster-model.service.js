@@ -59,7 +59,7 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.getConfigurationModel = function (cacheModel, cacheType, name) {
-              return cacheModel['configurations']['CONFIGURATIONS'][cacheType + '-configuration'][name];
+              return cacheModel.configurations.CONFIGURATIONS[cacheType + '-configuration'][name];
             };
 
             Cluster.prototype.getAvailability = function () {
@@ -77,25 +77,25 @@ angular.module('managementConsole.api')
               var socketEndpoints = [];
               var socketBindings = this.domain.getServerGroup().getSocketBindings();
               var offset = this.domain.getServerGroup().getSocketPortBindingOffset();
-              var endpoints = this.domain.getProfile(this.profile).getEndpoints();
-              angular.forEach(endpoints, function(value, key, obj){
+              var endpoints = this.getProfile().getEndpoints();
+              angular.forEach(endpoints, function(value, key){
                  var endpoint = value[key];
                  var bindingName = endpoint['socket-binding'];
                  var bindingPort = socketBindings[bindingName].port;
                  var fixedPort = socketBindings[bindingName]['fixed-port'];
                  socketEndpoints.push(new EndpointModel(bindingName,
                   !fixedPort? bindingPort + offset: bindingPort,
-                  utils.isNotNullOrUndefined(endpoint.encryption) ? endpoint.encryption : ""));
+                  utils.isNotNullOrUndefined(endpoint.encryption) ? endpoint.encryption : ''));
               });
               return socketEndpoints;
             };
 
             Cluster.prototype.getRelays = function () {
               var relays = [];
-              var stacks = this.domain.getProfile(this.profile).getJGroups()['stack'];
-              angular.forEach(stacks, function(stack, key){
-                if (utils.isNotNullOrUndefined(stack['relay']) && utils.isNotNullOrUndefined(stack['relay']['RELAY'])){
-                  relays.push(stack['relay']['RELAY']);
+              var stacks = this.getProfile().getJGroups().stack;
+              angular.forEach(stacks, function(stack){
+                if (utils.isNotNullOrUndefined(stack.relay) && utils.isNotNullOrUndefined(stack.relay.RELAY)){
+                  relays.push(stack.relay.RELAY);
                 }
               });
               return relays;
@@ -105,9 +105,17 @@ angular.module('managementConsole.api')
               return this.availability === 'AVAILABLE';
             };
 
+            Cluster.prototype.getAvailable = function () {
+              return this.availability;
+            };
+
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();
+            };
+
+            Cluster.prototype.getProfile = function () {
+              return this.domain.getProfile(this.profile);
             };
 
             Cluster.prototype.getCaches = function () {

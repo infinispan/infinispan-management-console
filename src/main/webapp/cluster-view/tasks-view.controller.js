@@ -103,12 +103,22 @@ angular.module('managementConsole')
       var CreateTaskModalController = function($scope, $modalInstance, modelController, currentCluster) {
 
         // Initialize form properties
-        $scope.availableTasks = [];
-        $scope.selectedCache = null;
-        $scope.selectedTask  = null;
-        $scope.errorLaunching = false;
+        $scope.availableTasks   = [];
+        $scope.availableNodes   = [];
+
+        angular.forEach( modelController.getServer().getNodes(),
+           function(node) {
+              if( node.isRunning()) {
+                $scope.availableNodes.push(node.name);
+              }
+        });
+
+        $scope.selectedCache    = null;
+        $scope.selectedTask     = null;
+        $scope.selectedNode     = null;
+        $scope.errorLaunching   = false;
         $scope.successLaunching = false;
-        $scope.taskOutput = null;
+        $scope.taskOutput  = null;
         $scope.param1_name = null; $scope.param1_value = null;
         $scope.param2_name = null; $scope.param2_value = null;
         $scope.param3_name = null; $scope.param3_value = null;
@@ -138,7 +148,16 @@ angular.module('managementConsole')
             $scope.errorLaunching = false;
             $scope.errorDescription = null;
 
-            var resourcePathCacheContainer = currentCluster.domain.getFirstServer().getResourcePath()
+            var server = null;
+            if( $scope.selectedNode != null ) {
+              server = currentCluster.domain.getNode($scope.selectedNode);
+            }
+
+            if( server == null ) {
+              server = currentCluster.domain.getFirstServer()
+            }
+
+            var resourcePathCacheContainer = server.getResourcePath()
                 .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
 
             var op = {
@@ -148,6 +167,8 @@ angular.module('managementConsole')
                "cache-name":   $scope.selectedCache.name,
                "async":        $scope.asyncTask
             };
+
+            //alert(JSON.stringify(op));
 
             // Now add parameters as needed
             var parameters = {};

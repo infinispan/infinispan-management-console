@@ -40,9 +40,8 @@
           </select>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
-          <i class="fa fa-info-circle ng-scope" tooltip="The cache name"  tooltip-animation="true" tooltip-placement="top"></i>
+          <i class="fa fa-info-circle ng-scope" tooltip="Task type"></i>
         </div>
-        <!-- ngIf: form.cacheName.$invalid && !form.cacheName.$pristine -->
       </div>
       <div class="form-group">
         <label class="col-md-4 control-label">* Cache:</label>
@@ -58,11 +57,26 @@
           </select>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
-          <i class="fa fa-info-circle ng-scope" tooltip="The cache name"  tooltip-animation="true" tooltip-placement="top"></i>
+          <i class="fa fa-info-circle ng-scope" tooltip="Cache name"></i>
         </div>
-        <!-- ngIf: form.cacheName.$invalid && !form.cacheName.$pristine -->
       </div>
 
+      <div class="form-group">
+        <label class="col-md-4 control-label">* Node:</label>
+        <div class="col-md-6" >
+
+          <select class="form-control"
+                  name="selectedNode"
+                  ng-model="selectedNode"
+                  ng-options="node for node in availableNodes"
+                  ng-required="true"
+            >
+          </select>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0">
+          <i class="fa fa-info-circle ng-scope" tooltip="Cache name"></i>
+        </div>
+      </div>
 
       <!-------------------------------------->
       <div class="form-group">

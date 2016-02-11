@@ -31,6 +31,14 @@ angular.module('managementConsole', [
                 templateUrl: 'cluster-view/cluster-view.html',
                 controller: 'ClusterViewCtrl'
             })
+            .state('tasksView', {
+                url: '/cluster/:clusterName/tasks',
+                params:{
+                  refresh:false
+                },
+                templateUrl: 'cluster-view/tasks-view.html',
+                controller: 'TasksViewCtrl'
+            })
             .state('clustersViewPhysical', {
               url: '/clusters-view-physical',
               templateUrl: 'clusters-view-physical/clusters-view.html',

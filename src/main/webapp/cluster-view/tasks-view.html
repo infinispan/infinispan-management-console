@@ -1,0 +1,142 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li class="active"><strong>{{currentCluster.name}}</strong></li>
+      </ol>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
+          <span class="pficon pficon-refresh"></span> Refresh
+        </button>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                data-toggle="dropdown" uib-dropdown-toggle>
+          Actions
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+          <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
+          <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
+        </ul>
+      </div>
+      <h1><span class="label"
+                ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
+        {{currentClusterAvailabilityAsString()}}
+      </span>&nbsp;{{currentCluster.name}}</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs">
+        <li><a href="#/cluster/{{currentCluster.name}}">Caches</a></li>
+        <li class="active"><a href="#">Tasks execution</a></li>
+        <li><a ng-click="openWIPModal()">Endpoints</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li ng-class="selectedView=='running' ? 'active' : ''"><a href="#" ng-click="selectedView='running';">Running
+          tasks</a></li>
+        <li ng-class="selectedView=='history' ? 'active' : ''"><a href="#" ng-click="selectedView='history';">Task
+          history</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div ng-if="selectedView=='running'">
+    <div class="row">
+      <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
+        <div class="btn-group" role="group">
+          <a href="#" role="button" class="btn btn-default" ng-click="openTaskDialog()"><span
+            class="pficon pficon-add-circle-o"></span> Launch new task</a>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12">
+        <table class="table ispn-table" ng-if="runningTasks.length > 0">
+          <tbody>
+          <tr>
+            <th style="width: 50px">Status</th>
+            <th>Task name</th>
+            <th>Cache name</th>
+            <th>Executing at</th>
+            <th>Start time</th>
+            <th>Who</th>
+            <!--th style="width: 220px">Actions</th-->
+          </tr>
+          <tr ng-repeat="task in runningTasks">
+            <td style="padding: 10px">
+              <span class="label label-warning">RUNNING</span>
+            </td>
+            <td style="padding: 10px">{{task.name}}</td>
+            <td style="padding: 10px">{{task.context}}</td>
+            <td style="padding: 10px">{{task.where}}</td>
+            <td style="padding: 10px">{{task.start | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+            <td style="padding: 10px">{{task.who ? task.who : '-'}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <!--------------------------------------------------------------------------------------------------------------->
+        <div class="text-center" ng-if="runningTasks.length==0">
+          <br>
+          <br>
+          <span class="pficon pficon-info"></span>
+          <strong>No running tasks have been found.</strong>
+          <br>
+          <br>
+        </div>
+        <!--------------------------------------------------------------------------------------------------------------->
+      </div>
+    </div>
+  </div>
+
+  <!--------------------------------------------------------------------------------------------------------------->
+  <div ng-if="selectedView=='history'">
+    <br>
+    <div class="row">
+      <div class="col-sm-12 col-md-12">
+        <table class="table ispn-table" ng-if="taskHistory.length > 0">
+          <tbody>
+          <tr>
+            <th style="width: 50px">Status</th>
+            <th>Description</th>
+            <th>End time</th>
+            <th>Who</th>
+            <th>Result</th>
+          </tr>
+          <tr ng-repeat="task in taskHistory">
+            <td style="padding: 10px">
+              <span class="label label-danger" ng-if="task.level=='ERROR'">ERROR</span>
+              <span class="label label-success" ng-if="task.level=='INFO'">SUCCESS</span>
+            </td>
+            <td style="padding: 10px">{{task.message}}</td>
+            <td style="padding: 10px">{{task.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+            <td style="padding: 10px">{{task.who ? task.who : '-'}}</td>
+            <td style="padding: 10px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+              <span ng-if="task.detail"><a href="#" ng-click="displayEventDetails(task)"><span class="pficon pficon-info"></span></a>
+              {{task.detail}}
+              </span>
+              <span ng-if="!task.detail">-</span>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <!--------------------------------------------------------------------------------------------------------------->
+        <div class="text-center" ng-if="taskHistory.length==0">
+          <br>
+          <br>
+          <span class="pficon pficon-info"></span>
+          <strong>No failed or completed tasks have been found.</strong>
+          <br>
+          <br>
+        </div>
+        <!--------------------------------------------------------------------------------------------------------------->
+      </div>
+    </div>
+  </div>
+</div>

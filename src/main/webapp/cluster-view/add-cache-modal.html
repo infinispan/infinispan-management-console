@@ -10,13 +10,14 @@
     <h4><b>Step 1</b>: Please, enter the required cache properties:</h4>
     <br>
 
-    <form class="form-horizontal">
-      <div class="form-group">
-        <label class="col-md-4 control-label">* Name:</label>
+    <form class="form-horizontal" name="form" novalidate>
+      <div class="form-group" ng-class="{'has-error': form.cacheName.$invalid}">
+        <label class="col-md-4 control-label">Name:</label>
 
         <div class="col-md-6">
           <input type="text" class="form-control" name="cacheName" ng-model="cacheName" ng-disabled="readOnly"
-                 required="">
+                 required="" valid-cache-name>
+          <span ng-show="form.cacheName.$error.validCacheName">Cache already exists!</span>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" tooltip="The cache name" tooltip-trigger="" tooltip-animation="true"
@@ -24,11 +25,11 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-md-4 control-label">* Base configuration:</label>
+        <label class="col-md-4 control-label">Base configuration:</label>
 
         <div class="col-md-6">
           <select ng-model="selectedTemplate" class="form-control"
-                    ng-options="ctem as ctem for ctem in configurationTemplates"/>
+                    ng-options="template for template in configurationTemplates"/>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" tooltip="Configuration template to create cache" tooltip-trigger=""
@@ -40,6 +41,7 @@
   </div>
   <div class="modal-footer">
     <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="configureTemplate()">Next</button>
+    <button id="configureTemplateButton" ng-disabled="form.$invalid || !isTemplateSelected()"
+            type="button" class="btn btn-primary" ng-click="configureTemplate()">Next</button>
   </div>
 </div>

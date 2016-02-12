@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('managementConsole')
+var app = angular.module('managementConsole')
   .controller('ClusterViewCtrl', [
     '$scope',
     '$stateParams',
@@ -13,8 +13,8 @@ angular.module('managementConsole')
     function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
       var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
-        $scope.cacheName = null;
-        $scope.selectedTemplate = null;
+        $scope.cacheName;
+        $scope.selectedTemplate;
         $scope.configurationTemplates = [];
         $scope.configurationTemplatesMap = {};
 
@@ -46,6 +46,10 @@ angular.module('managementConsole')
           });
         };
 
+        $scope.isTemplateSelected = function () {
+          return utils.isNotNullOrUndefined($scope.selectedTemplate) && $scope.selectedTemplate.length > 0;
+        };
+
         $scope.cancel = function () {
           $modalInstance.close();
         };
@@ -65,6 +69,7 @@ angular.module('managementConsole')
             });
           });
         });
+
 
         $scope.cancel = function () {
           $modalInstance.close();
@@ -129,7 +134,7 @@ angular.module('managementConsole')
                   )
               }
             });
-      }
+      };
 
       $scope.refreshBackupSiteStatus();
 
@@ -239,5 +244,22 @@ angular.module('managementConsole')
       }
     };
   });
+
+app.directive('validCacheName', function($stateParams, modelController) {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.validCacheName = function(modelValue, viewValue) {
+        if (ctrl.$isEmpty(modelValue)) {
+          // consider empty models to be valid
+          return true;
+        }
+
+        scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+        return !scope.currentCluster.hasCache(modelValue);
+      };
+    }
+  };
+});
 
 

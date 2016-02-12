@@ -52,6 +52,10 @@ angular.module('managementConsole.api')
               return this.type;
             };
 
+            Cache.prototype.getName = function () {
+              return this.name;
+            };
+
             Cache.prototype.getCluster = function () {
               return this.cluster;
             };

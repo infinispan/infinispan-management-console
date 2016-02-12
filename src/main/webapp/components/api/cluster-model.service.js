@@ -196,6 +196,16 @@ angular.module('managementConsole.api')
               return utils.isNonEmptyArray(this.getCachesAsArray());
             };
 
+            Cluster.prototype.hasCache = function (cacheName) {
+              if (this.hasCaches()) {
+                return this.getCachesAsArray().some(function (cache) {
+                  return cache.getName() === cacheName;
+                });
+              } else {
+                return false;
+              }
+            };
+
             Cluster.prototype.hasNodes = function () {
               return utils.isNonEmptyArray(this.getNodes());
             };

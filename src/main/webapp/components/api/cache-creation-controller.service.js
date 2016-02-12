@@ -97,10 +97,10 @@ angular.module('managementConsole.api')
        *
        * @param cacheType One of distributed-cache, invalidation-cache, local-cache or replicated-cache
        */
-      CacheCreationControllerClient.prototype.getConfigurationTemplates = function (cacheType) {
+      CacheCreationControllerClient.prototype.getConfigurationTemplates = function (cacheContainer, cacheType) {
         var deferred = $q.defer();
         var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
-          'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration'];
+          'cache-container', cacheContainer, 'configurations', 'CONFIGURATIONS', cacheType + '-configuration'];
         modelController.readResource(dmrConfigurationsAddress, true, false).then(function (response) {
           deferred.resolve(response);
         }.bind(this));
@@ -113,10 +113,10 @@ angular.module('managementConsole.api')
        *
        * @param cacheType One of distributed-cache, invalidation-cache, local-cache or replicated-cache
        */
-      CacheCreationControllerClient.prototype.getConfigurationTemplate = function (cacheType, cacheTemplateName) {
+      CacheCreationControllerClient.prototype.getConfigurationTemplate = function (cacheContainer, cacheType, cacheTemplateName) {
         var deferred = $q.defer();
         var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
-          'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', cacheTemplateName];
+          'cache-container', cacheContainer, 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', cacheTemplateName];
         modelController.readResource(dmrConfigurationsAddress, true, false).then(function (response) {
           deferred.resolve(response);
         }.bind(this));

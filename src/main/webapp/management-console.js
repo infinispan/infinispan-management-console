@@ -149,13 +149,15 @@ angular.module('managementConsole', [
                 resolve: {
                   configurationModel: function (cacheCreateController, modelController, $stateParams) {
                     if ($stateParams.newCacheCreation) {
-                      return cacheCreateController.getConfigurationTemplate($stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                      return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                        $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
                     } else {
                       var server = modelController.getServer();
                       var clusters = server.getClusters();
                       var currentCluster = server.getCluster(clusters, $stateParams.clusterName);
                       var currentCache = currentCluster.getCaches()[$stateParams.cacheName];
-                      return cacheCreateController.getConfigurationTemplate(currentCache.getType(), currentCache.getConfigurationTemplate());
+                      return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                        currentCache.getType(), currentCache.getConfigurationTemplate());
                     }
                   }
                 }
@@ -171,7 +173,8 @@ angular.module('managementConsole', [
                 controller: 'editCacheTemplateCtrl',
                 resolve: {
                   configurationModel: function (cacheCreateController, modelController, $stateParams) {
-                    var cacheTemplateModel = cacheCreateController.getConfigurationTemplate($stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                    var cacheTemplateModel = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                      $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
                     cacheTemplateModel.template = $stateParams.templateName;
                     return cacheTemplateModel;
                   }

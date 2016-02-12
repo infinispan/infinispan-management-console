@@ -19,26 +19,26 @@ angular.module('managementConsole')
         $scope.configurationTemplatesMap = {};
 
         $scope.createCache = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
           cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
             $modalInstance.close();
             $scope.currentCluster.refresh().then(function(){
-              $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+              $state.go('clusterView', {clusterName: $scope.currentCluster.getName()});
             });
           });
         };
 
         $scope.configureTemplate = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
           $modalInstance.close();
           $state.go('editCache', {
-            clusterName: $scope.currentCluster.name,
+            clusterName: $scope.currentCluster.getName(),
             cacheName: $scope.cacheName,
             cacheConfigurationTemplate: $scope.selectedTemplate,
             cacheConfigurationType:cacheType,
@@ -50,16 +50,19 @@ angular.module('managementConsole')
           $modalInstance.close();
         };
 
-        angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
-          var p = cacheCreateController.getConfigurationTemplates(cacheType);
-          p.then(function (response) {
-            var p = response[cacheType + '-configuration'];
-            for (var key in p) {
-              if (p.hasOwnProperty(key)) {
-                $scope.configurationTemplates.push(key);
-                $scope.configurationTemplatesMap[key] = cacheType;
+        //Find all configuration templates across all clusters (cache containers)
+        angular.forEach($scope.clusters, function (cluster){
+          angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+            var p = cacheCreateController.getConfigurationTemplates(cluster.getName(), cacheType);
+            p.then(function (response) {
+              var p = response[cacheType + '-configuration'];
+              for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                  $scope.configurationTemplates.push(key);
+                  $scope.configurationTemplatesMap[key] = cacheType;
+                }
               }
-            }
+            });
           });
         });
 
@@ -79,7 +82,7 @@ angular.module('managementConsole')
         currentCollection: 'caches'
       };
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
 
       $scope.$watch('currentCluster', function (currentCluster) {
         if (currentCluster && currentCluster.name !== $stateParams.clusterName) {

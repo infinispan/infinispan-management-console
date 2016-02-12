@@ -123,15 +123,29 @@ angular.module('managementConsole', [
               }
             })
             .state('nodeStatus', {
-              url: '/cluster/:clusterName/:nodeName/',
-              params: {
-                clusterName: null,
-                nodeName: null,
-                inetAddress: null
-              },
-              templateUrl: 'node-status/node-status.html',
-              controller: 'NodeStatusCtrl'
-            })
+                url: '/cluster/:clusterName/:nodeName/',
+                params: {
+                  clusterName: null,
+                  nodeName: null,
+                  inetAddress: null
+                },
+                templateUrl: 'node-status/node-status.html',
+                controller: 'NodeStatusCtrl',
+                resolve: {
+                  nodeStats: function (modelController, $stateParams) {
+                    var controller = modelController.getServer();
+                    var serverNode = controller.getNode($stateParams.nodeName);
+                    return serverNode.fetchStats();
+                  },
+
+                  aggregateNodeStats: function(modelController, $stateParams){
+                    var controller = modelController.getServer();
+                    var serverNode = controller.getNode($stateParams.nodeName);
+                    return serverNode.fetchAggregateNodeStats();
+                  }
+                }
+              }
+            )
             .state('error404', {
                 url: '/error404',
                 templateUrl: 'error404/error404.html'

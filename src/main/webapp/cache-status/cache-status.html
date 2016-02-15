@@ -298,15 +298,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th># Loads</th>
-                    <td id="numberOfLoads">{{currentCacheStats.firstServerStats['clusterwide-passivations'] | number}}</td>
+                    <td id="numberOfLoads">{{currentCacheStats.firstServerStats['clusterwide-cache-loader-loads'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Misses</th>
-                    <td id="numberOfMisses">{{currentCacheStats.firstServerStats['clusterwide-misses'] | number}}</td>
+                    <td id="numberOfMisses">{{currentCacheStats.firstServerStats['clusterwide-cache-loader-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th># Stores</th>
-                    <td id="numberOfStores">{{currentCacheStats.firstServerStats['clusterwide-stores'] | number}}</td>
+                    <td id="numberOfStores">{{currentCacheStats.firstServerStats['clusterwide-cache-loader-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>

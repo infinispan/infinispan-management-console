@@ -1,0 +1,7 @@
+[org.infinispan-infinispan-management-console]
+scmurl = git+https://code.engineering.redhat.com/gerrit/p/jdg-management-console.git#put_commit_here
+properties = npmDownloadRoot=http://rcm-guest.app.eng.bos.redhat.com/rcm-guest/staging/jboss-dg/node/npm/
+  nodeDownloadRoot=http://rcm-guest.app.eng.bos.redhat.com/rcm-guest/staging/jboss-dg/node/
+  npmRegistryURL=http://jboss-prod-docker.app.eng.bos.redhat.com:49162
+packages = make gcc-c++ tar bzip2 
+

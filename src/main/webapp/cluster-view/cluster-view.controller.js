@@ -105,6 +105,26 @@ var app = angular.module('managementConsole')
         return utils.clusterAvailability($scope.currentCluster);
       };
 
+      // For caches with backup sites, we need to retrieve their status to look into their site status
+      // We don't do it for every cache to avoid costly remote calls in the general case
+      $scope.refreshBackupSiteStatus = function () {
+        $scope.offlineSites = {};
+        $scope.onlineSites = {};
+        $scope.mixedSites = {};
+
+        angular.forEach($scope.currentCluster.getCachesAsArray(), function (cache) {
+          if (cache.hasRemoteBackup()) {
+            modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
+              function (response) {
+                $scope.offlineSites[cache.name] = response[0]['sites-offline'];
+                $scope.onlineSites[cache.name] = response[0]['sites-online'];
+                $scope.mixedSites[cache.name] = response[0]['sites-mixed'];
+              }
+            )
+          }
+        });
+      };
+
       $scope.refresh = function () {
         if (this.currentClusterAvailability()) {
           $scope.currentCluster.refresh();
@@ -115,26 +135,6 @@ var app = angular.module('managementConsole')
       if ($stateParams.refresh){
         $scope.refresh();
       }
-
-      // For caches with backup sites, we need to retrieve their status to look into their site status
-      // We don't do it for every cache to avoid costly remote calls in the general case
-      $scope.refreshBackupSiteStatus = function() {
-            $scope.offlineSites = {};
-            $scope.onlineSites  = {};
-            $scope.mixedSites   = {};
-
-            angular.forEach($scope.currentCluster.getCachesAsArray(), function(cache) {
-               if( cache.hasRemoteBackup()) {
-                  modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
-                    function (response) {
-                      $scope.offlineSites[cache.name] = response[0]['sites-offline'];
-                      $scope.onlineSites[cache.name]  = response[0]['sites-online'];
-                      $scope.mixedSites[cache.name]   = response[0]['sites-mixed'];
-                    }
-                  )
-              }
-            });
-      };
 
       $scope.refreshBackupSiteStatus();
 

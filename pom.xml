@@ -11,7 +11,7 @@
    
    <groupId>org.infinispan</groupId>
    <artifactId>infinispan-management-console</artifactId>
-   <version>8.3.0-redhat-SNAPSHOT</version>
+   <version>8.3.0.DR1-redhat-2</version>
    <packaging>jar</packaging>
    <name>Infinispan Management Console</name>
    <description>Web Management Console for Infinispan</description>

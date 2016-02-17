@@ -8,8 +8,9 @@ angular.module('managementConsole')
     'modelController',
     'nodeStats',
     'aggregateNodeStats',
+    'view',
     'utils',
-    function ($scope, $stateParams, $modal, modelController, nodeStats, aggregateNodeStats, utils) {
+    function ($scope, $stateParams, $modal, modelController, nodeStats, aggregateNodeStats, view, utils) {
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
@@ -19,6 +20,7 @@ angular.module('managementConsole')
       $scope.serverNode = controller.getNode($stateParams.nodeName);
 
 
+      $scope.view = view;
       $scope.dataPoints = [];
       $scope.dataColumns = [
         {'id': 'd1', 'type': 'donut', 'name': 'Used'},
@@ -33,6 +35,10 @@ angular.module('managementConsole')
           $scope.nodeStats = containersRoot[prop];
           break;
         }
+      };
+
+      $scope.isCoordinator = function (server) {
+        return server.getHost() === $scope.view.host && server.getServerName() === $scope.view.server;
       };
 
       $scope.updateStatsData = function (statsData) {

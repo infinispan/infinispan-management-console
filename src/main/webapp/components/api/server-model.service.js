@@ -52,6 +52,18 @@ angular.module('managementConsole.api')
               return this.name;
             };
 
+            Server.prototype.getServerName = function () {
+              return this.server;
+            };
+
+            Server.prototype.getHost = function () {
+              return this.host;
+            };
+
+            Server.prototype.getDomain = function () {
+              return this.domain;
+            };
+
             Server.prototype.refresh = function () {
                 this.getModelController().readAttributeAndResolveExpressions(this.getResourcePath().concat('subsystem', 'datagrid-jgroups'),
                   'default-stack', true).then(function (response) {

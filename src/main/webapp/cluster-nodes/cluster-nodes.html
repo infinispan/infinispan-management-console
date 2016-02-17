@@ -80,7 +80,8 @@
             </h2>
 
             <div class="card-pf-body">
-              <p> </p>
+              <p ng-show="isCoordinator(server)">Coordinator</p>
+              <p ng-show="!isCoordinator(server)">&nbsp;</p>
               <p class="card-pf-aggregate-status-notifications">
                 <span class="card-pf-aggregate-status-notification">{{server.getInetAddress()}}</span>
               </p>

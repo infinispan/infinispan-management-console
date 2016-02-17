@@ -10,9 +10,10 @@ angular.module('managementConsole')
     '$q',
     'modelController',
     'nodeCreateController',
+    'view',
     'utils',
     '$modal',
-    function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, utils, $modal) {
+    function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, view, utils, $modal) {
       var ModalInstanceCtrl = function ($scope, $modalInstance) {
 
         $scope.cancel = function () {
@@ -67,6 +68,8 @@ angular.module('managementConsole')
 
       };
 
+      $scope.view = view;
+
       $scope.getServersInCluster = function () {
         var serversInCluster = [];
         angular.forEach($scope.servers, function (server) {
@@ -82,6 +85,10 @@ angular.module('managementConsole')
           }
         });
         return serversInCluster;
+      };
+
+      $scope.isCoordinator = function (server) {
+        return server.getHost() === $scope.view.host && server.getServerName() === $scope.view.server;
       };
 
       $scope.refresh = function (refreshDomain) {

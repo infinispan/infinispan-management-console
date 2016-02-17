@@ -131,6 +131,13 @@ angular.module('managementConsole', [
                     cluster.status = 'STARTED';
                   }
                   return cluster;
+                },
+                view: function(modelController, clusterNodesService){
+                  var servers = modelController.getServer().getNodes();
+                  var firstServer = servers[0];
+                  var domain = firstServer.getDomain();
+                  var firstCluster = domain.getClusters()[0];
+                  return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
                 }
               }
             })
@@ -154,6 +161,14 @@ angular.module('managementConsole', [
                     var controller = modelController.getServer();
                     var serverNode = controller.getNode($stateParams.nodeName);
                     return serverNode.fetchAggregateNodeStats();
+                  },
+
+                  view: function(modelController, clusterNodesService){
+                    var servers = modelController.getServer().getNodes();
+                    var firstServer = servers[0];
+                    var domain = firstServer.getDomain();
+                    var firstCluster = domain.getClusters()[0];
+                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
                   }
                 }
               }

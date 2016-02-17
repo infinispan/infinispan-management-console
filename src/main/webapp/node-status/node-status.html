@@ -23,7 +23,7 @@
         </ul>
       </div>
       <h1><span class="label" ng-class="serverNode.isRunning()?'label-success':'label-danger'">{{serverNode.getState()}}</span> {{nodeName}}
-        <small>IP: {{serverNode.getInetAddress()}} - {{nodeStats['number-of-entries']}} entries</small>
+        <span ng-show="isCoordinator(serverNode)">(coordinator) </span><small>IP: {{serverNode.getInetAddress()}} - {{nodeStats['number-of-entries']}} entries</small>
       </h1>
     </div>
   </div>

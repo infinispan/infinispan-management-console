@@ -139,7 +139,7 @@
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td id="directBufferPoolMemoryUsed">{{directBufferPoolMemoryUsed}} bytes</td>
+                    <td id="directBufferPoolMemoryUsed">{{(directBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
                   </tr>
                 </table>
                 <h4>Mapped Buffers</h4>
@@ -150,7 +150,7 @@
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td id="mappedBufferPoolMemoryUsed">{{mappedBufferPoolMemoryUsed}} bytes</td>
+                    <td id="mappedBufferPoolMemoryUsed">{{(mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
                   </tr>
                 </table>
               </div>

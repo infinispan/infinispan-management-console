@@ -186,6 +186,142 @@ var app = angular.module('managementConsole')
         });
       };
 
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //
+      // Site management modal
+      //
+      //
+      var SiteManagementModalController = function ($scope, $modalInstance, modelController, currentCluster) {
+
+        $scope.currentCluster = currentCluster;
+        $scope.offlineSites = [];
+        $scope.onlineSites = [];
+        $scope.mixedSites = [];
+        $scope.successExecuteOperation = false;
+        $scope.errorExecuting = false;
+        $scope.errorDescription = null;
+
+        // Confirms and executes a site operation
+        $scope.executeSiteOperation = function (siteName, operationId, confirmationMessage) {
+
+          // Get confirmation dialog
+          var confirmDialog = $modal.open({
+            templateUrl: 'cluster-view/confirmation-message-modal.html',
+            controller: function ($scope, $modalInstance) {
+
+              $scope.confirmationMessage = confirmationMessage;
+
+              $scope.ok = function () {
+                $modalInstance.close(true);
+              };
+
+              $scope.cancel = function () {
+                $modalInstance.dismiss();
+              };
+            },
+            scope: $scope
+          });
+
+          confirmDialog.result.then(function (result) {
+            var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name);
+
+            var op = {
+              'operation': operationId,
+              'address': resourcePathCacheContainer,
+              "site-name": siteName
+            };
+
+            $scope.successExecuteOperation = false;
+            $scope.errorExecuting = false;
+
+            modelController.execute(op).then(
+              function (response) {
+                $scope.successExecuteOperation = true;
+                $scope.refresh();
+              },
+              function (reason) {
+                $scope.refresh();
+                $scope.errorExecuting = true;
+                $scope.errorDescription = reason;
+              }
+            );
+          });
+        };
+
+        // Refresh site status
+        $scope.refreshRemoteSitesStatus = function (cluster) {
+          var resourcePathCacheContainer = cluster.domain.getFirstServer().getResourcePath()
+            .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
+
+          // Refresh list of offline sites
+          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
+            function (response) {
+              if (response != null && response.constructor === Array) {
+                $scope.offlineSites = response
+              } else {
+                $scope.offlineSites = [];
+              }
+            }
+          );
+
+          // Refresh list of online sites
+          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
+            function (response) {
+              if (response != null && response.constructor === Array) {
+                $scope.onlineSites = response
+              } else {
+                $scope.onlineSites = [];
+              }
+            }
+          );
+
+          // Refresh list of mixed sites
+          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
+            function (response) {
+              if (response != null && response.constructor === Array) {
+                $scope.mixedSites = response
+              } else {
+                $scope.mixedSites = [];
+              }
+            }
+          );
+        };
+
+        $scope.refresh = function () {
+          // Refresh site status
+          $scope.refreshRemoteSitesStatus($scope.currentCluster);
+        };
+
+        $scope.cancel = function () {
+          $modalInstance.dismiss();
+        };
+
+        $scope.refresh();
+      };
+
+      /// End of site management dialog controller
+
+      // Opens the site management dialog
+      $scope.openSiteDialog = function () {
+        return $modal.open({
+          templateUrl: 'cluster-view/manage-sites-modal.html',
+          size: 'lg',
+          controller: SiteManagementModalController,
+          resolve: {
+            modelController: function () {
+              return modelController;
+            },
+            currentCluster: function () {
+              return $scope.currentCluster;
+            },
+          }
+        });
+      };
+
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       $scope.openModal = function () {
 
         var modalInstance = $modal.open({

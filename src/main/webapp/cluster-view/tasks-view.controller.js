@@ -78,7 +78,7 @@ angular.module('managementConsole')
 
       $scope.displayEventDetails = function(event) {
         return $modal.open( {
-          templateUrl: '/cluster-view/display-event-modal.html',
+          templateUrl: 'cluster-view/display-event-modal.html',
           size: 'lg',
           controller: ViewEventDetailsModalController,
           resolve: {
@@ -207,7 +207,7 @@ angular.module('managementConsole')
 
       $scope.openTaskDialog = function() {
         return $modal.open( {
-          templateUrl: '/cluster-view/create-task-modal.html',
+          templateUrl: 'cluster-view/create-task-modal.html',
           size: 'lg',
           controller: CreateTaskModalController,
           resolve: {

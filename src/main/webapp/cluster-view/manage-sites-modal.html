@@ -1,0 +1,91 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click='cancel()' aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Manage backup sites</h4>
+    </div>
+    <div class="modal-body" style="min-height:300px">
+
+        <div class="alert alert-success alert-dismissable" ng-if="successExecuteOperation">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <span class="pficon pficon-close"></span>
+            </button>
+            <span class="pficon pficon-ok"></span>
+            <strong>Success!</strong> The operation has been successfully executed.
+        </div>
+
+       <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <span class="pficon pficon-close"></span>
+            </button>
+            <span class="pficon  pficon-error-circle-o"></span>
+            <strong>Error</strong> There has been an error executing the request: {{errorDescription}}
+        </div>
+
+        <br>
+        <p><span class="pficon pficon-info"></span> Current status of backup sites:</p>
+        <table class="table ispn-table">
+            <tr>
+                <th>Status</th>
+                <th>Site name</th>
+                <th>Available actions</th>
+            </tr>
+            <tr ng-repeat="site in offlineSites">
+                <td style="padding: 10px"><span class="pficon pficon-error-circle-o"></span> <span
+                        class="label label-danger">OFFLINE</span></td>
+                <td style="padding: 10px">{{site}}</td>
+                <td style="padding: 10px">
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'bring-site-online', 'By continuing you will bring the site online. Are you sure?')"><i
+                            class="pficon pficon-restart"></i> Bring online
+                    </button>
+                </td>
+            </tr>
+            <tr ng-repeat="site in mixedSites">
+                <td style="padding: 10px"><span class="pficon pficon-warning-triangle-o"></span> <span
+                        class="label label-warning">WARNING</span></td>
+                <td style="padding: 10px">{{site}}</td>
+                <td style="padding: 10px">
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'take-site-offline', 'By continuing, you will take the site offline. Are you sure?')"><i
+                            class="fa fa-power-off"></i> Take offline
+                    </button>
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'push-state', 'Are you sure you want to force state transfer to the site ?')"><i
+                            class="pficon pficon-export"></i> Push state
+                    </button>
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'cancel-push-state', 'Are you sure you want to cancel state transfer to the site ?')"><i
+                            class="fa fa-ban"></i> Cancel state transfer
+                    </button>
+                </td>
+            </tr>
+            <tr ng-repeat="site in onlineSites">
+                <td style="padding: 10px"><span class="pficon pficon-ok"></span> <span class="label label-success">ONLINE</span>
+                </td>
+                <td style="padding: 10px">{{site}}</td>
+                <td style="padding: 10px">
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'take-site-offline', 'By continuing, you will take the site offline. Are you sure?')"><i
+                            class="fa fa-power-off"></i> Take offline
+                    </button>
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'push-state', 'Are you sure you want to force state transfer to the site ?')"><i
+                            class="pficon pficon-export"></i> Push state
+                    </button>
+                    <button class="btn btn-default btn-sm" ng-click="executeSiteOperation(site, 'cancel-push-state', 'Are you sure you want to cancel state transfer to the site ?')"><i
+                            class="fa fa-ban"></i> Cancel state transfer
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <!--------------------------------------------------------------------------------------------------------------->
+        <div class="text-center" ng-if="onlineSites.length + offlineSites.length + mixedSites.length==0">
+            <br>
+            <br> <span class="pficon pficon-info"></span>
+            <strong>There are no backup sites configured.</strong>
+            <br>
+            <br>
+        </div>
+        <!--------------------------------------------------------------------------------------------------------------->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh"></i> Refresh status</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+    </div>
+</div>

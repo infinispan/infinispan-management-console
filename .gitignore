@@ -9,3 +9,4 @@ dist
 .classpath
 src/main/bower_components
 target
+*.iml

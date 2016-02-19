@@ -17,6 +17,7 @@ angular.module('managementConsole.api')
                 this.caches = {};
                 this.metadata = null;
                 this.availability = null;
+                this.rebalancingStatus = null;
                 this.endpoints = [];
                 this.security = null;
                 this.threadpool = null;
@@ -65,7 +66,9 @@ angular.module('managementConsole.api')
                     return $q.all(cachePromises);
                 }.bind(this)).then(function (){
                   this.getAvailability();
-                }.bind(this));
+                }.bind(this)).then(function (){
+                                  this.getRebalancingStatus();
+                                }.bind(this));
             };
 
             Cluster.prototype.getConfigurationModel = function (cacheType, name) {
@@ -126,6 +129,14 @@ angular.module('managementConsole.api')
 
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
                 this.availability = response.toUpperCase();
+              }.bind(this));
+            };
+
+            Cluster.prototype.getRebalancingStatus= function () {
+              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
+                .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
+              return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-rebalance').then(function (response){
+                this.rebalancingStatus = response;
               }.bind(this));
             };
 

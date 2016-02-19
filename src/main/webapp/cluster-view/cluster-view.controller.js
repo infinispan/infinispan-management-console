@@ -18,6 +18,11 @@ angular.module('managementConsole')
         $scope.configurationTemplates = [];
         $scope.configurationTemplatesMap = {};
 
+        // User feedback report
+        $scope.successExecuteOperation = false;
+        $scope.errorExecuting          = false;
+        $scope.errorDescription        = null;
+
         $scope.createCache = function () {
           var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
@@ -127,6 +132,68 @@ angular.module('managementConsole')
               }
             });
       }
+
+
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     // Cache container rebalancing control
+     //
+     $scope.setCacheContainerRebalance = function(rebalance) {
+
+        var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
+            .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name
+        );
+
+        var op = {
+            'operation': "cluster-rebalance",
+            'address'  : resourcePathCacheContainer,
+            "value"    : rebalance
+        };
+
+        // User feedback report
+        $scope.successExecuteOperation = false;
+        $scope.errorExecuting          = false;
+        $scope.errorDescription        = null;
+
+        modelController.execute(op).then(
+                function(response) {
+                    $scope.successExecuteOperation = true;
+                    $scope.refresh();
+                },
+                function(reason) {
+                    $scope.errorExecuting = true;
+                    $scope.errorDescription = reason;
+                    $scope.refresh();
+                }
+        );
+    };
+
+    $scope.confirmAndSetCacheContainerRebalance = function(rebalanceValue, confirmationMessage) {
+
+         // Get confirmation dialog
+         // TODO: Unify and refactor this modal creation into a single function point
+         var confirmDialog = $modal.open({
+            templateUrl: 'cluster-view/confirmation-message-modal.html',
+               controller: function($scope, $modalInstance) {
+                   $scope.confirmationMessage = confirmationMessage;
+
+                   $scope.ok = function() {
+                       $modalInstance.close(true);
+                   };
+
+                   $scope.cancel = function() {
+                       $modalInstance.dismiss();
+                   };
+               },
+               scope: $scope
+         });
+
+        confirmDialog.result.then(function(result) {
+             $scope.setCacheContainerRebalance(rebalanceValue);
+        });
+    };
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
       $scope.refreshBackupSiteStatus();
 

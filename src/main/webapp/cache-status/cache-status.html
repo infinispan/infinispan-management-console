@@ -1,6 +1,8 @@
 <div class="container-fluid">
   <div class="row header-row">
     <div class="col-sm-12 col-md-12">
+
+
       <ol class="breadcrumb">
         <li>
           <a ui-sref="clustersView">Cache containers</a>
@@ -20,14 +22,22 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation"><a role="menuitem" ng-click="refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
+
           <li role="presentation" class="enabled"><a id="dropdownMenuDisable" role="menuitem" ng-click="openModal('disable')">Disable</a></li>
           <li role="presentation" class="enabled"><a id="dropdownMenuEnable" role="menuitem" ng-click="openModal('enable')">Enable</a></li>
           <li role="presentation" class="divider"></li>
+
           <li role="presentation" class="enabled"><a id="dropdownMenuPurgeCache" role="menuitem" ng-click="openModal('purge')">Purge cache data</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a id="dropdownMenuStartRebalance" role="menuitem" href="#">Start rebalance</a>
-          <li role="presentation" class="disabled"><a id="dropdownMenuStopRebalance" role="menuitem" href="#">Stop rebalance</a>
+          <!-- Rebalancing options -->
+          <li role="presentation"
+              ng-class="currentCacheStats.firstServerStats['cache-rebalancing-status']=='SUSPENDED' ? 'enabled':'disabled'"
+                ><a id="dropdownMenuStartRebalance" role="menuitem" ng-click="openModal('enable-rebalance')">Enable rebalance</a>
+          <li role="presentation"
+              ng-class="currentCacheStats.firstServerStats['cache-rebalancing-status']=='SUSPENDED' ? 'disabled':'enabled'"
+                ><a id="dropdownMenuStopRebalance" role="menuitem" ng-click="openModal('disable-rebalance')">Disable rebalance</a>
           <li role="presentation" class="divider"></li>
+
           <li role="presentation" class="disabled"><a id="dropdownMenuStartMassIndex" role="menuitem" href="#">Start mass reindex</a>
           <li role="presentation" class="enabled"><a id="dropdownMenuResetStatistics" role="menuitem" ng-click="resetStats">Reset statistics</a>
           <li role="presentation" class="divider"></li>
@@ -36,6 +46,7 @@
           </li>
         </ul>
       </div>
+
       <h1><span class="label" id="currentCacheAvailability"
                 ng-class="currentCacheAvailability() ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}

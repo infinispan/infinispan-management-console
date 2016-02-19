@@ -207,7 +207,7 @@ var app = angular.module('managementConsole')
 
               // Get confirmation dialog
               var confirmDialog = $modal.open({
-                  templateUrl: '/cluster-view/confirmation-message-modal.html',
+                  templateUrl: 'cluster-view/confirmation-message-modal.html',
                   controller: function($scope, $modalInstance) {
 
                       $scope.confirmationMessage = confirmationMessage;
@@ -306,7 +306,7 @@ var app = angular.module('managementConsole')
       // Opens the site management dialog
       $scope.openSiteDialog = function() {
           return $modal.open({
-              templateUrl: '/cluster-view/manage-sites-modal.html',
+              templateUrl: 'cluster-view/manage-sites-modal.html',
               size: 'lg',
               controller: SiteManagementModalController,
               resolve: {

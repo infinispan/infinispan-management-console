@@ -18,6 +18,13 @@ angular.module('managementConsole')
             $scope.caches = $scope.currentCluster.getCaches();
             $scope.currentCache = $scope.caches[$stateParams.cacheName];
             $scope.currentCache.refresh();
+
+            // User feedback report
+            $scope.successExecuteOperation = false;
+            $scope.errorExecuting          = false;
+            $scope.errorDescription        = null;
+
+
             $scope.currentCacheStats = {
                 'cacheStatus': '',
                 'firstServerStats': []
@@ -63,6 +70,37 @@ angular.module('managementConsole')
             $scope.currentCacheType = function () {
               return utils.getCacheType($scope.currentCache);
             };
+
+            // Changes cache rebalancing
+            $scope.setCacheRebalance = function(rebalance) {
+
+                var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
+                    .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name,
+                    $scope.currentCache.type,
+                    $scope.currentCache.name
+                );
+
+                var op = {
+                    'operation': "cache-rebalance",
+                    'address'  : resourcePathCacheContainer,
+                    "value"    : rebalance
+                };
+
+                $scope.successExecuteOperation = false;
+                $scope.errorExecuting          = false;
+
+                modelController.execute(op).then(
+                        function(response) {
+                            $scope.successExecuteOperation = true;
+                            $scope.refresh();
+                        },
+                        function(reason) {
+                            $scope.errorExecuting = true;
+                            $scope.errorDescription = reason;
+                            $scope.refresh();
+                        }
+                );
+            }
 
             $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
 

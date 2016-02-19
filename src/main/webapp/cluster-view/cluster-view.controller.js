@@ -18,6 +18,11 @@ var app = angular.module('managementConsole')
         $scope.configurationTemplates = [];
         $scope.configurationTemplatesMap = {};
 
+        // User feedback report
+        $scope.successExecuteOperation = false;
+        $scope.errorExecuting          = false;
+        $scope.errorDescription        = null;
+
         $scope.createCache = function () {
           var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
@@ -135,6 +140,88 @@ var app = angular.module('managementConsole')
       if ($stateParams.refresh){
         $scope.refresh();
       }
+
+      // For caches with backup sites, we need to retrieve their status to look into their site status
+      // We don't do it for every cache to avoid costly remote calls in the general case
+      $scope.refreshBackupSiteStatus = function () {
+        $scope.offlineSites = {};
+        $scope.onlineSites = {};
+        $scope.mixedSites = {};
+
+        angular.forEach($scope.currentCluster.getCachesAsArray(), function (cache) {
+          if (cache.hasRemoteBackup()) {
+            modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
+              function (response) {
+                $scope.offlineSites[cache.name] = response[0]['sites-offline'];
+                $scope.onlineSites[cache.name] = response[0]['sites-online'];
+                $scope.mixedSites[cache.name] = response[0]['sites-mixed'];
+              }
+            )
+          }
+        });
+      };
+
+
+     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     // Cache container rebalancing control
+     //
+      $scope.setCacheContainerRebalance = function (rebalance) {
+
+        var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
+          .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name
+        );
+
+        var op = {
+          'operation': "cluster-rebalance",
+          'address': resourcePathCacheContainer,
+          "value": rebalance
+        };
+
+        // User feedback report
+        $scope.successExecuteOperation = false;
+        $scope.errorExecuting = false;
+        $scope.errorDescription = null;
+
+        modelController.execute(op).then(
+          function (response) {
+            $scope.successExecuteOperation = true;
+            $scope.refresh();
+          },
+          function (reason) {
+            $scope.errorExecuting = true;
+            $scope.errorDescription = reason;
+            $scope.refresh();
+          }
+        );
+      };
+
+      $scope.confirmAndSetCacheContainerRebalance = function (rebalanceValue, confirmationMessage) {
+
+        // Get confirmation dialog
+        // TODO: Unify and refactor this modal creation into a single function point
+        var confirmDialog = $modal.open({
+          templateUrl: 'cluster-view/confirmation-message-modal.html',
+          controller: function ($scope, $modalInstance) {
+            $scope.confirmationMessage = confirmationMessage;
+
+            $scope.ok = function () {
+              $modalInstance.close(true);
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.dismiss();
+            };
+          },
+          scope: $scope
+        });
+
+        confirmDialog.result.then(function (result) {
+          $scope.setCacheContainerRebalance(rebalanceValue);
+        });
+      };
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
       $scope.refreshBackupSiteStatus();
 
@@ -315,7 +402,7 @@ var app = angular.module('managementConsole')
             },
             currentCluster: function () {
               return $scope.currentCluster;
-            },
+            }
           }
         });
       };

@@ -50,11 +50,13 @@
               <td>{{artifact.name}}</td>
               <td>{{artifactType(artifact.name)}}</td>
               <td>
-                <div class="btn-group">
-                  <!--<button type="button" class="btn btn-default" ng-click="deployArtifact(artifact.name)">Assign</button>
-                  <button type="button" class="btn btn-default" ng-click="undeployArtifact(artifact.name)">Unassign</button> -->
-                  <button type="button" class="btn btn-default" ng-click="removeArtifact(artifact.name)">Remove</button>
-                </div>
+                <form name="myForm">
+                  <div class="btn-group">
+                    <button class="btn btn-default" ng-disabled='canDeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name,'deploy')">Deploy</button>
+                    <button class="btn btn-default" ng-disabled='canUndeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name, 'undeploy')">Undeploy</button>
+                    <button class="btn btn-default" ng-click="openConfirmationModal(artifact.name, 'remove')">Remove</button>
+                  </div>
+                </form>
               </td>
             </tr>
             </tbody>

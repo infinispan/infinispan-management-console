@@ -276,8 +276,12 @@ angular.module('managementConsole', [
             templateUrl: 'cache-container/configuration-deploy/deploy.html',
             controller: 'editContainerDeployCtrl',
             resolve: {
-              deployments: function(modelController){
-                return modelController.getDeployedArtifacts();
+              deployments: function(cacheContainerConfigurationService){
+                return cacheContainerConfigurationService.getArtifacts();
+              },
+
+              deployed: function(cacheContainerConfigurationService){
+                return cacheContainerConfigurationService.getDeployedArtifact('main-server-group');
               }
             }
           }).state('editCacheContainerTemplates', {

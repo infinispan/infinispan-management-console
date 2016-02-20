@@ -3,36 +3,63 @@
 angular.module('managementConsole')
   .controller('editContainerDeployCtrl', [
     '$scope',
+    '$q',
     '$state',
     '$stateParams',
     '$modal',
     'utils',
     'modelController',
+    'cacheContainerConfigurationService',
     'deployments',
-    function ($scope, $state, $stateParams, $modal, utils, modelController, deployments) {
+    'deployed',
+    function ($scope, $q, $state, $stateParams, $modal, utils, modelController, cacheContainerConfigurationService, deployments, deployed) {
 
       var UploadArtifactModalInstanceCtrl = function ($scope, $state, $modalInstance) {
 
         $scope.fileToUpload = null;
         $scope.uploadAndDeployArtifact = function (){
           if (utils.isNotNullOrUndefined($scope.fileToUpload)) {
-            var op = modelController.createAddArtifactOp($scope.fileToUpload.name);
+            var op = {
+              operation: 'add',
+              address: [{deployment: $scope.fileToUpload.name}],
+              'runtime-name': $scope.fileToUpload.name,
+              enabled: false,
+              content: [{'input-stream-index': 0}]
+            };
             return modelController.executeDeploymentOp(op, $scope.fileToUpload, function () {});
+          } else {
+            return $q.when('nothing uploaded');
           }
         };
 
         $scope.uploadArtifact = function () {
-          var promise = $scope.uploadAndDeployArtifact();
-          $modalInstance.close();
-          if (utils.isNotNullOrUndefined(promise)){
+          $scope.uploadAndDeployArtifact().then(function () {
             $state.go('editCacheContainerDeploy', {
               clusterName: $scope.currentCluster.name
-            });
-            $state.reload();
-          }
+            }, {reload: true});
+          });
         };
 
-        $scope.cancel = function () {
+        $scope.cancelModal = function () {
+          $modalInstance.close();
+        };
+      };
+
+      var DeployArtifactModalInstanceCtrl = function ($scope, $state, $modalInstance) {
+
+        $scope.confirmDeployArtifact = function (){
+          $scope.deployArtifact($scope.artifact);
+        };
+
+        $scope.confirmUndeployArtifact = function () {
+          $scope.undeployArtifact($scope.artifact);
+        };
+
+        $scope.confirmRemoveArtifact = function () {
+          $scope.removeArtifact($scope.artifact);
+        };
+
+        $scope.cancelModal = function () {
           $modalInstance.close();
         };
       };
@@ -43,33 +70,53 @@ angular.module('managementConsole')
       $scope.deployments = deployments;
       $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
 
+      $scope.deployedArtifacts = {};
+      deployed.forEach(function (deployment){
+        $scope.deployedArtifacts[deployment.result.name] = deployment.result;
+      });
+
+
+      $scope.canDeploy = function (deployment){
+        var artifact = $scope.deployedArtifacts[deployment];
+        if (utils.isNotNullOrUndefined(artifact)){
+          return artifact.enabled;
+        } else {
+          return false;
+        }
+      };
+
+      $scope.canUndeploy = function (deployment){
+        return !$scope.canDeploy(deployment);
+      };
 
       $scope.artifactType = function (name) {
-        var ext = name.split('.').pop();
-        return ext.toUpperCase();
+        var artifactExtension = name.split('.').pop();
+        return artifactExtension.toUpperCase();
       };
 
       $scope.removeArtifact = function (name) {
-        console.log('Invoking remove for ' + name);
-        modelController.removeArtifact($scope.serverGroup, name).then(function(){
+        cacheContainerConfigurationService.removeArtifact(name).then(function(){
           $state.go('editCacheContainerDeploy', {
             clusterName: $scope.currentCluster.name
-          });
-          $state.reload();
+          }, {reload: true});
         })
       };
 
       $scope.deployArtifact = function (name) {
-        console.log('Invoking deploy for ' + name);
-        var promise = modelController.deployArtifact($scope.serverGroup, name);
-        promise.then (function (response){
-          console.log('Deploy for ' + name + ' is ' + response);
-        })
+        cacheContainerConfigurationService.deployArtifact($scope.serverGroup, name).then(function(){
+          $state.go('editCacheContainerDeploy', {
+            clusterName: $scope.currentCluster.name
+          }, {reload: true});
+        });
       };
 
       $scope.undeployArtifact = function (name) {
-        console.log('Invoking undeploy for ' + name);
-        return modelController.undeployArtifact($scope.serverGroup, name);
+        cacheContainerConfigurationService.undeployArtifact($scope.serverGroup, name).then(function () {
+          $state.go('editCacheContainerDeploy', {
+            clusterName: $scope.currentCluster.name
+          }, {reload: true});
+        });
+
       };
 
 
@@ -78,6 +125,17 @@ angular.module('managementConsole')
         $modal.open({
           templateUrl: 'cache-container/configuration-deploy/upload-artifact-modal.html',
           controller: UploadArtifactModalInstanceCtrl,
+          scope: $scope
+        });
+      };
+
+      $scope.openConfirmationModal = function (artifact, mode) {
+        $scope.artifact = artifact;
+        $scope.mode = mode;
+
+        $modal.open({
+          templateUrl: 'cache-container/configuration-deploy/confirmation-deploy-modal.html',
+          controller: DeployArtifactModalInstanceCtrl,
           scope: $scope
         });
       };

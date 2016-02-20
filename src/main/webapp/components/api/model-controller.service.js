@@ -129,25 +129,43 @@ angular.module('managementConsole.api')
 
               http.upload.addEventListener("progress", uploadProgress, false);
 
-              http.addEventListener("readystatechange", function (e) {
+              http.onreadystatechange = function () {
+                if (http.readyState === 4 && http.status === 200) {
+                  var response = http.responseText;
+                  if (response) {
+                    try {
+                      response = JSON.parse(response);
+                    } catch (e) {
+                      console.log('JSON.parse()', e);
+                      deferred.reject(e);
+                    }
+                  }
+                  if (response.outcome === 'success') {
+                    deferred.resolve(response.result);
+                  } else {
+                    deferred.reject(response.result);
+                  }
+                }
+                else if (http.status >= 400 && http.status <= 505){
+                  deferred.reject(http.statusText);
+                }
+              };
+
+              /*http.addEventListener("readystatechange", function (e) {
                 // upload completed
                 if (this.readyState === 4) {
                   console.log('Success: Upload done', e);
 
                   var response = e.target.response;
-
                   if (response) {
                     try {
-                      console.log("Got response" + response);
                       response = JSON.parse(response);
                     } catch (e) {
                       console.log('JSON.parse()', e);
                     }
                   }
-
-                  //callback(false, response);
                 }
-              });
+              }); */
 
               http.addEventListener("error", function (e) {
                 console.log('Error: Upload failed', e);

@@ -130,6 +130,40 @@ angular.module('managementConsole')
         return deferred.promise;
       }
 
+
+      function deployArtifact (serverGroup, deployment) {
+        var op = {
+          operation: 'add',
+          enabled: true,
+          address: ['server-group', serverGroup,  'deployment', deployment]
+        };
+        return modelController.execute(op);
+      }
+
+      function undeployArtifact (serverGroup, deployment) {
+        var op = {
+          operation: 'remove',
+          address: ['server-group', serverGroup,  'deployment', deployment]
+        };
+        return modelController.execute(op);
+      }
+
+      function removeArtifact (deployment) {
+        var op = {
+          operation: 'remove',
+          address: ['deployment', deployment]
+        };
+        return modelController.execute(op);
+      }
+
+      function getArtifacts () {
+        return modelController.readChildrenResources([],'deployment');
+      }
+
+      function getDeployedArtifact(serverGroup) {
+        return modelController.readResource(['server-group', serverGroup, 'deployment', '*'], true);
+      }
+
       return {
         loadRole: loadRole,
         addRole: addRole,
@@ -139,7 +173,12 @@ angular.module('managementConsole')
         addSecurity: addSecurity,
         writeGenericThreadpool: writeGenericThreadpool,
         writeThreadPool: writeThreadPool,
-        saveTransport: saveTransport
+        saveTransport: saveTransport,
+        getArtifacts:getArtifacts,
+        getDeployedArtifact:getDeployedArtifact,
+        deployArtifact:deployArtifact,
+        undeployArtifact:undeployArtifact,
+        removeArtifact:removeArtifact
       };
     }
   ]);

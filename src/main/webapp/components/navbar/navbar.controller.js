@@ -6,12 +6,10 @@ angular.module('managementConsole')
     '$state',
     'modelController',
     function ($scope, $state, modelController) {
+            $scope.modelController = modelController;
+
             $scope.isVisible = function () {
                 return modelController.isAuthenticated();
-            };
-
-            $scope.getUser = function() {
-                return modelController.getUsername();
             };
 
             $scope.logout = function () {

@@ -12,16 +12,18 @@
   </div>
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-utility">
-      <span uib-dropdown>
-        <a uib-dropdown-toggle>
-          Admin <b class="caret"></b>
+
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="logoutDropdown">
+          <span class="pficon pficon-user"></span>
+          {{modelController.credentials.username}} <b class="caret"></b>
         </a>
-        <ul class="uib-dropdown-menu">
-          <li>
-            <a ng-click="logout()">Logout</a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="logoutDropdown">
+          <li role="presentation">
+            <a ng-click="logout()">Log out</a>
           </li>
         </ul>
-      </span>
+      </li>
     </ul>
     <ul class="nav navbar-nav navbar-primary">
       <li>

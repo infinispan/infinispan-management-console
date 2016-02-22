@@ -22,6 +22,7 @@ angular.module('managementConsole')
         modelController.login(credentials.username, credentials.password).then(function () {
           $scope.authenticated = true;
           $scope.page.htmlClass = '';
+          // TODO: Why is this refreshing done here?
           var modelPromise = modelController.refresh();
           modelPromise.then(function () {
             $scope.showLoginSpinner = false;

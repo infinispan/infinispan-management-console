@@ -4,7 +4,8 @@ angular.module('managementConsole', [
   'managementConsole.api',
   'gridshore.c3js.chart',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'LocalStorageModule',
 ]).directive('fileModel', ['$parse', function ($parse) {
   return {
     restrict: 'A',
@@ -304,38 +305,60 @@ angular.module('managementConsole', [
             .when('/', '/login')
             .when('', '/login')
             .otherwise('/error404');
+    }])
+
+  .config(['localStorageServiceProvider', function(localStorageServiceProvider) {
+    localStorageServiceProvider.setPrefix('infinispan-management-console');
   }])
+
 /**
  * Safe apply method. It should be used when normal $scope.$apply happens to execute
  * during digest cycle which causes an error.
  * Use it just like normal apply: $scope.safeApply(myFunc).
  */
   .run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
-      $rootScope.safeApply = function (f) {
-        var scope = this;
-        $timeout(function () {
-          scope.$apply(f);
-        });
-      };
-      $rootScope.page = {htmlClass: ''};
-    }]).run(['$rootScope', '$location', 'modelController', function ($rootScope, $location, modelController) {
+    $rootScope.safeApply = function (f) {
+      var scope = this;
+      $timeout(function () {
+        scope.$apply(f);
+      });
+    };
+    $rootScope.page = {htmlClass: ''};
+  }])
 
-      $rootScope.$on('$locationChangeStart', function () {
+  .run([
+    '$rootScope', 'modelController', '$urlRouter', '$state',
+    function ($rootScope, modelController, $urlRouter, $state) {
+      $rootScope.$on('$stateChangeStart', function (event, toState) {
         // redirect to login page if not logged in
-        if ($location.path() !== '/login' && !modelController.isAuthenticated()) {
-          $location.path('/login');
+        if (toState.name !== 'login' && !modelController.isAuthenticated()) {
+          event.preventDefault();
+          modelController.login().then(function () {
+            // TODO: Do I have to do this refreshing here? Why?
+            var modelPromise = modelController.refresh();
+            modelPromise.then(function () {
+              $urlRouter.sync();
+            }, function () {
+              $state.go('login');
+            });
+          }, function () {
+            $state.go('login');
+          });
         }
       });
-    }]).run(['$templateCache', function ($templateCache) {
-    $templateCache.put('template/tabs/tabset.html',
+    }])
+
+  .run(['$templateCache', function ($templateCache) {
+    $templateCache.put(
+      'template/tabs/tabset.html',
       '<div>\n' +
-      "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +
-      '  <div class=\"tab-content col-md-10\">\n' +
-      '    <div class=\"tab-pane\" \n' +
-      '         ng-repeat=\"tab in tabs\" \n' +
-      '         ng-class=\"{active: tab.active}\"\n' +
-      '         uib-tab-content-transclude=\"tab\">\n' +
-      '    </div>\n' +
-      '  </div>\n' +
-      '</div>\n');
+        "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +
+        '  <div class=\"tab-content col-md-10\">\n' +
+        '    <div class=\"tab-pane\" \n' +
+        '         ng-repeat=\"tab in tabs\" \n' +
+        '         ng-class=\"{active: tab.active}\"\n' +
+        '         uib-tab-content-transclude=\"tab\">\n' +
+        '    </div>\n' +
+        '  </div>\n' +
+        '</div>\n');
   }]);

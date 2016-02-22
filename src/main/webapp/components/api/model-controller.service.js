@@ -6,7 +6,8 @@ angular.module('managementConsole.api')
     '$q',
     'DomainModel',
     'utils',
-    function ($http, $q, DomainModel, utils) {
+    'localStorageService',
+    function ($http, $q, DomainModel, utils, localStorageService) {
             /**
              * Represents a client to the ModelController
              * @constructor
@@ -17,8 +18,8 @@ angular.module('managementConsole.api')
                 this.url = url + '/management';
                 this.authenticated = false;
                 this.credentials = {
-                    username: null,
-                    password: null
+                    username: localStorageService.get('username') || null,
+                    password: localStorageService.get('password') || null
                 };
                 this.server = null;
             };
@@ -36,22 +37,27 @@ angular.module('managementConsole.api')
             };
 
             /**
-             * Logs into the management endpoint and determines the launch type
+             * Logs into the management endpoint and determines the launch type.
+             * If username and/or password are not given, previously stored username and/or password are used.
              * @param {string} username - the username to use when connecting to the management endpoint
              * @param {string} password - the password to use when connecting to the management endpoint
              */
             ModelControllerClient.prototype.login = function (username, password) {
-                this.credentials.username = username;
-                this.credentials.password = password;
+                if (username !== undefined) { this.credentials.username = username; }
+                if (password !== undefined) { this.credentials.password = password; }
                 return this.readResource([], false, true).then(function (response) {
+                // TODO: Handle situation where response is received but login failed - that happens!
                     this.authenticated = true;
+                    localStorageService.set('username', this.credentials.username);
+                    localStorageService.set('password', this.credentials.password);
                     var launchType = response['launch-type'];
                     if (launchType === 'DOMAIN') {
                         this.server = new DomainModel(this, response);
                     } else if (launchType === 'STANDALONE') {
                         //TODO
                     }
-                }.bind(this)).catch(function(e){
+                }.bind(this)).catch(function(e) {
+                  this.logout();
                   throw e;
                 });
             };
@@ -65,6 +71,8 @@ angular.module('managementConsole.api')
                     username: null,
                     password: null
                 };
+                localStorageService.remove('username');
+                localStorageService.remove('password');
                 this.authenticated = false;
                 this.server = null;
             };

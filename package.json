@@ -2,16 +2,17 @@
   "name": "managementConsole",
   "version": "8.2.0-SNAPSHOT",
   "dependencies": {
-    "jquery": "2.1.4",
     "angular": "1.4.4",
+    "angular-local-storage": "0.2.2",
+    "angular-ui-bootstrap": "0.14.0",
     "angular-ui-router": "0.2.13",
     "bootstrap": "3.3.5",
-    "angular-ui-bootstrap": "0.14.0",
-    "patternfly": "2.5.0",
-    "jquery-match-height": "0.6.0",
-    "c3-angular": "1.0.1",
     "c3": "0.4.10",
-    "d3": "3.5.0"
+    "c3-angular": "1.0.1",
+    "d3": "3.5.0",
+    "jquery": "2.1.4",
+    "jquery-match-height": "0.6.0",
+    "patternfly": "2.5.0"
   },
   "devDependencies": {
     "gulp": "^3.8.0",

@@ -9,4 +9,5 @@ angular.module('managementConsole.api', [
   'ispn.directives.cache.cacheconfiguration',
   'ispn.directives.cache.configurationsection',
   'ispn.directives.cache.jdbcstore',
+  'LocalStorageModule'
 ]);

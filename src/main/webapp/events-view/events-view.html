@@ -29,6 +29,7 @@
           <th>Description</th>
           <th>Category</th>
           <th>Scope</th>
+          <th>Context</th>
         </tr>
         <tr ng-repeat="event in gridEvents">
           <td style="padding: 10px">
@@ -48,6 +49,9 @@
           </td>
           <td>
             {{event.scope}}
+          </td>
+          <td>
+            {{event.context}}
           </td>
         </tr>
         </tbody>

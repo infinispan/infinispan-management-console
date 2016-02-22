@@ -36,7 +36,8 @@
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
             {{event.message}}.</h3>
           <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</small><br>
-          <small>{{event.scope}}</small>
+          <small ng-if="event.scope">{{event.scope}}<br></small>
+          <small ng-if="event.context">{{event.context}}</small>
         </li>
       </ul>
     </div>

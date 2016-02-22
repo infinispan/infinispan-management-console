@@ -17,7 +17,6 @@
                 data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" class="divider"></li>
           <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('start')">Start</a></li>
           <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="openModal('stop')">Stop</a></li>
         </ul>
@@ -73,23 +72,23 @@
               <div class="col-md-12">
                 <table class="col-md-12">
                   <tr>
-                    <th># READ Hits</th>
+                    <th>READ Hits</th>
                     <td id="numberOfReadHits">{{nodeStats['hits'] | number}}</td>
                   </tr>
                   <tr>
-                    <th># READ misses</th>
+                    <th>READ misses</th>
                     <td id="numberOfReadMisses">{{nodeStats['misses'] | number}}</td>
                   </tr>
                   <tr>
-                    <th># REMOVE hits</th>
+                    <th>REMOVE hits</th>
                     <td id="numberOfRemoveHits">{{nodeStats['remove-hits'] | number}}</td>
                   </tr>
                   <tr>
-                    <th># REMOVE misses</th>
+                    <th>REMOVE misses</th>
                     <td id="numberOfRemoveMisses">{{nodeStats['remove-misses'] | number}}</td>
                   </tr>
                   <tr>
-                    <th># PUTS</th>
+                    <th>PUTS</th>
                     <td id="numberOfPuts">{{nodeStats['stores'] | number}}</td>
                   </tr>
                 </table>

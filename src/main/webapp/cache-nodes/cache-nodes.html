@@ -20,18 +20,12 @@
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" class="enabled">
+            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="resetStats()">Reset statistics</a>
+          </li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a id="dropdownMenuDisable" role="menuitem" tabindex="-1" href="#">Disable</a></li>
-          <li role="presentation" class="disabled"><a id="dropdownMenuEnable" role="menuitem" tabindex="-1" href="#">Enable</a></li>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a id="dropdownMenuPurgeCache" role="menuitem" tabindex="-1" href="#">Purge cache data</a>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a id="dropdownMenuStartRebalance" role="menuitem" tabindex="-1" href="#">Start rebalance</a>
-          <li role="presentation" ><a id="dropdownMenuStopRebalance" role="menuitem" tabindex="-1" href="#">Stop rebalance</a>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation" ><a id="dropdownMenuStartMassIndex" role="menuitem" tabindex="-1" href="#">Start mass reindex</a>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation"><a id="dropdownMenuViewCacheConfiguration" role="menuitem" tabindex="-1" href="cache-configuration.html">View / Edit configuration</a>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View configuration</a>
           </li>
         </ul>
       </div>

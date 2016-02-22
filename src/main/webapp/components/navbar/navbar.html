@@ -7,32 +7,39 @@
       <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="/">
-      <img src="assets/images/brand.svg" alt="Infinispan Server Management Console" />
+      <img src="assets/images/brand.svg" alt="Infinispan Server Management Console"/>
     </a>
   </div>
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-utility">
-      <span uib-dropdown>
-        <a uib-dropdown-toggle>
-          {{ getUser() }} <b class="caret"></b>
+
+      <li class="dropdown" uib-dropdown>
+        <a class="dropdown-toggle" type="button" id="logoutDropdown"
+                data-toggle="dropdown" uib-dropdown-toggle>
+          <span class="pficon pficon-user"></span>
+          {{ getUser() }}<b class="caret"></b>
         </a>
-        <ul class="uib-dropdown-menu">
-          <li>
-            <a ng-click="logout()">Logout</a>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="logoutDropdown">
+          <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'disabled' : 'enabled'">
+            <a id="logout" role="menuitem" ng-click="logout()">Log out</a>
           </li>
         </ul>
-      </span>
-    </ul>
-    <ul class="nav navbar-nav navbar-primary">
-      <li>
-        <a href="#/clusters">Caches</a>
-      </li>
-      <li>
-        <a href="#/clusters-view-physical">Clusters</a>
-      </li>
-      <li>
-        <a href="#/events-view">Status events</a>
       </li>
     </ul>
+
+  </div>
+
+
+  <ul class="nav navbar-nav navbar-primary">
+    <li>
+      <a href="#/clusters">Caches</a>
+    </li>
+    <li>
+      <a href="#/clusters-view-physical">Clusters</a>
+    </li>
+    <li>
+      <a href="#/events-view">Status events</a>
+    </li>
+  </ul>
   </div>
 </nav>

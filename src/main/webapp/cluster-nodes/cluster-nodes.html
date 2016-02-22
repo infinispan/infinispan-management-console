@@ -8,24 +8,24 @@
         <li class="active"><strong>{{cluster.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh(true)">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
         <button class="btn btn-default dropdown-toggle" type="button"
                 id="dropdownMenu" data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-click="openClusterModal('start')"><a id="dropdownMenuStart" role="menuitem">Start</a></li>
-          <li role="presentation" ng-click="openClusterModal('stop')"><a id="dropdownMenuStop" role="menuitem">Stop</a></li>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation" class="disabled"><a id="dropdownMenuEnableManualRebalancing" role="menuitem">Enable manual rebalancing</a>
-          <li role="presentation" class="disabled"><a id="dropdownMenuEnableAutomaticRebalancing" role="menuitem">Enable automatic rebalancing</a>
+          <li role="presentation" ng-class="cluster.status === 'STARTED' ? 'disabled' : 'enabled'" ng-click="openClusterModal('start')">
+            <a id="dropdownMenuStart" role="menuitem">Start</a>
+          </li>
+          <li role="presentation" ng-class="cluster.status === 'STARTED' ? 'enabled' : 'disabled'" ng-click="openClusterModal('stop')">
+            <a id="dropdownMenuStop" role="menuitem">Stop</a>
           </li>
         </ul>
       </div>
 
       <h1><span class="label"
-                ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span>&nbsp;Cluster: {{cluster.name}}
+                ng-class="(cluster.status != 'STARTED')?'label-danger':'label-success'">{{cluster.status}}</span>&nbsp;Cluster: {{cluster.name}}
       </h1>
     </div>
   </div>
@@ -34,13 +34,9 @@
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
         <li class="active"><a href="cluster-nodes.html">Nodes</a></li>
-        <li><a id="performance" ng-click="openWIPModal()">Performance</a></li>
-        <li><a id="configuration" ng-click="openWIPModal()">Configuration</a></li>
-        <li><a id="deployments" ng-click="openWIPModal()">Deployments</a></li>
       </ul>
     </div>
   </div>
-
 
   <div class="row">
     <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">

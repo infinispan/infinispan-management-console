@@ -27,7 +27,7 @@
           </td>
           <td>
             <span class="endpoint" ng-repeat="e in endpoints[$index]">
-                 {{e.name}}:{{e.port}} {{e.encryption}}</br>
+                 {{e.name}} : {{e.port}} {{e.encryption}}</br>
             </span>
           </td>
           <td>
@@ -50,8 +50,9 @@
             <span ng-if="event.level=='INFO'"  class="icon-class pficon-info"></span>
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
             {{event.message}}.</h3>
-          <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</small><br>
-          <small>{{event.scope}}</small>
+          <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}<br></small>
+          <small ng-if="event.scope">{{event.scope}}<br></small>
+          <small ng-if="event.context">{{event.context}}</small>
         </li>
       </ul>
 

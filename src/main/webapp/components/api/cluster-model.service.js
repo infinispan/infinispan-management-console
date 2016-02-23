@@ -232,8 +232,23 @@ angular.module('managementConsole.api')
                     "lines": maxLines
                   };
 
-                  return this.modelController.execute(op)
+                  return this.modelController.execute(op);
             };
+
+            // Sets cluster rebalancing
+            Cluster.prototype.setRebalancing = function(rebalance) {
+              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
+                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
+
+              var op = {
+                'operation': "cluster-rebalance",
+                'address': resourcePathCacheContainer,
+                "value": rebalance
+              };
+
+              return this.modelController.execute(op);
+            };
+
             return Cluster;
     }
   ]);

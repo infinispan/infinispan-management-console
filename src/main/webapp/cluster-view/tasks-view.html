@@ -16,24 +16,53 @@
           Actions
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-          <li role="presentation" class="disabled"><a role="menuitem">Start</a></li>
-          <li role="presentation" class="disabled"><a role="menuitem">Stop</a></li>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'disabled' : 'enabled'"><a  id="dropdownMenuEnableRebalance"  role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');">Enable rebalancing</a>
+          <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'enabled'  : 'disabled'"><a id="dropdownMenuDisableRebalance" role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');">Disable rebalancing</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" ><a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()">Manage backup sites</a>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation" >
+            <a role="menuitem" id="dropdownMenuViewEditConfiguration" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">View / Edit configuration</a>
+          </li>
         </ul>
       </div>
       <h1><span class="label"
                 ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}
-      </span>&nbsp;{{currentCluster.name}}</h1>
+      </span>&nbsp;{{currentCluster.name}}
+        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong>Rebalancing is disabled</strong></small></span>
+      </h1>
     </div>
   </div>
+
+  <!-- User feedback reporting -->
+  <div class="row" ng-if="errorExecuting || successExecuteOperation ">
+    <div class="col-sm-12 col-md-12">
+      <div class="alert alert-success alert-dismissable" ng-if="successExecuteOperation">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
+        <strong>Success!</strong> The operation has been successfully executed.
+      </div>
+
+      <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon  pficon-error-circle-o"></span>
+        <strong>Error</strong> There has been an error executing the operation: {{errorDescription}}
+      </div>
+    </div>
+  </div>
+  <!-- End of user feedback -->
 
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
         <li><a href="#/cluster/{{currentCluster.name}}">Caches</a></li>
         <li class="active"><a href="#">Tasks execution</a></li>
-        <li><a ng-click="openWIPModal()">Endpoints</a></li>
       </ul>
     </div>
   </div>

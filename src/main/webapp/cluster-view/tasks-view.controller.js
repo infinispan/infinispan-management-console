@@ -10,14 +10,22 @@ angular.module('managementConsole')
   'cacheCreateController',
   'utils',
   '$modal',
+  '$controller',
+  function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal, $controller) {
 
-  function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
+      // Extend from cluster view controller, given we need some functions for the menus and we don't want to replicate them here
+      angular.extend(this, $controller('ClusterViewCtrl',{$scope: $scope}));
 
       $scope.clusters = modelController.getServer().getClusters();
       $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
       $scope.selectedView = 'running';
       $scope.runningTasks = [];
       $scope.taskHistory  = [];
+
+      // User feedback report
+      $scope.successExecuteOperation = false;
+      $scope.errorExecuting          = false;
+      $scope.errorDescription        = null;
 
       // Fetch the list of cluster events
       $scope.refreshTaskHistory = function(maxLines) {
@@ -57,6 +65,7 @@ angular.module('managementConsole')
       $scope.refresh = function() {
           $scope.refreshRunningTasks();
           $scope.refreshTaskHistory();
+          $scope.currentCluster.refresh();
       };
 
       $scope.currentClusterAvailability = function () {

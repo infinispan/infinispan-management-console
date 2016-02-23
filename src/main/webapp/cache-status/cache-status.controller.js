@@ -53,18 +53,22 @@ angular.module('managementConsole')
 
             $scope.enable = function () {
               $scope.currentCache.enable();
+              $scope.refresh();
             };
 
             $scope.disable = function () {
               $scope.currentCache.disable();
+              $scope.refresh();
             };
 
             $scope.purge = function () {
               $scope.currentCache.flush();
+              $scope.refresh();
             };
 
             $scope.resetStats = function () {
               $scope.currentCache.resetStats();
+              $scope.refresh();
             };
 
             $scope.currentCacheType = function () {

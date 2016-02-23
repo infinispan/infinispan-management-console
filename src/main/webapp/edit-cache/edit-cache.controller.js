@@ -63,8 +63,10 @@ angular.module('managementConsole')
         address.push($scope.configurationModel.type);
         address.push($scope.currentCacheName);
         cacheCreateController.createCacheFromTemplate(address, $scope.configurationModel.template).then(function () {
-            $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true});
-          });
+          $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
+        });
       };
 
       $scope.cancel = function () {
@@ -108,6 +110,8 @@ angular.module('managementConsole')
         if ($scope.isTemplateNameEdited()) {
           $scope.saveCacheConfigurationTemplate().then(function () {
             $scope.createCache();
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
           });
         } else {
           $scope.createCache();

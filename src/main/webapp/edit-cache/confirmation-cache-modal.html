@@ -17,8 +17,8 @@
 
     <button id="cancelButton" ng-if="mode !== 'dirty'" type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
     <button id="okButton" ng-if="mode === 'dirty'" type="button" class="btn btn-primary" ng-click="cancelModal()">Ok</button>
-    <button id="createCacheButton" ng-if="mode === 'cache'" type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Create</button>
-    <button id="updateCacheButton" ng-if="mode === 'template'" type="button" class="btn btn-primary" ng-click="createCacheWithTemplate()">Update</button>
+    <button id="createCacheButton" ng-if="mode === 'cache'" type="button" class="btn btn-primary" ng-click="cancelModal();createCacheWithTemplate()">Create</button>
+    <button id="updateCacheButton" ng-if="mode === 'template'" type="button" class="btn btn-primary" ng-click="cancelModal();createCacheWithTemplate()">Update</button>
 
   </div>
 </div>

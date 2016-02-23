@@ -105,12 +105,16 @@ angular.module('managementConsole')
 
       $scope.startCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-        cluster.startServers();
+        cluster.startServers().catch(function (e) {
+          $scope.openErrorModal(e);
+        });
       };
 
       $scope.stopCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-        cluster.stopServers();
+        cluster.stopServers().catch(function (e) {
+          $scope.openErrorModal(e);
+        });
       };
 
       $scope.openModal = function () {

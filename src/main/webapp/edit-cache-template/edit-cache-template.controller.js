@@ -72,8 +72,8 @@ angular.module('managementConsole')
           $state.go('editCacheContainerTemplates', {
             clusterName: $scope.currentCluster.name
           });
-        }).catch(function(){
-          //TODO error handling
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
         });
       };
 

@@ -73,13 +73,14 @@ angular.module('managementConsole')
         cacheCreateController.removeCacheConfigurationNode(cacheTemplateType, template).then(function () {
             $state.go('editCacheContainerTemplates', {
               clusterName: $scope.currentCluster.name
-            });
-            $state.reload();
+            }, {reload: true});
           }
-        ).catch(function () {
-            //TODO error handling
+        ).catch(function (e) {
+            $scope.openErrorModal(e);
           });
       };
+
+
 
       $scope.openModal = function () {
 

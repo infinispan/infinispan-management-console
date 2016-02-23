@@ -322,16 +322,33 @@ angular.module('managementConsole', [
  * during digest cycle which causes an error.
  * Use it just like normal apply: $scope.safeApply(myFunc).
  */
-  .run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
-    $rootScope.safeApply = function (f) {
-      var scope = this;
-      $timeout(function () {
-        scope.$apply(f);
-      });
-    };
-    $rootScope.page = {htmlClass: ''};
-  }])
+  .run(['$rootScope', '$timeout', '$modal', 'utils', function ($rootScope, $timeout, $modal, utils) {
+      $rootScope.safeApply = function (f) {
+        var scope = this;
+        $timeout(function () {
+          scope.$apply(f);
+        });
+      };
+      $rootScope.page = {htmlClass: ''};
 
+      //generic error modal
+      $rootScope.openErrorModal = function (error) {
+        $modal.open({
+          templateUrl: 'components/dialogs/generic-error.html',
+          controller: function($scope, $modalInstance) {
+            var trail = [];
+            utils.traverse(error, function (key, value, trail) {
+              $scope.errorText = trail[0];
+              $scope.errorTextDetail = value;
+            });
+            $scope.ok = function () {
+              $modalInstance.close();
+            }
+          },
+          scope: $rootScope
+        });
+      };
+    }])
   .run([
     '$rootScope', 'modelController', '$urlRouter', '$state',
     function ($rootScope, modelController, $urlRouter, $state) {

@@ -7,7 +7,7 @@ angular.module('managementConsole.api')
     'DomainModel',
     'utils',
     'localStorageService',
-      function ($http, $q, DomainModel, utils, localStorageService) {
+    function ($http, $q, DomainModel, utils, localStorageService) {
             /**
              * Represents a client to the ModelController
              * @constructor
@@ -46,7 +46,7 @@ angular.module('managementConsole.api')
                 if (username !== undefined) { this.credentials.username = username; }
                 if (password !== undefined) { this.credentials.password = password; }
                 return this.readResource([], false, true).then(function (response) {
-                // TODO: Handle situation where response is received but login failed - that happens!
+                  // TODO: Handle situation where response is received but login failed - that happens!
                     this.authenticated = true;
                     localStorageService.set('username', this.credentials.username);
                     localStorageService.set('password', this.credentials.password);

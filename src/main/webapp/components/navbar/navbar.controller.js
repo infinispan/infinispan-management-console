@@ -10,8 +10,8 @@ angular.module('managementConsole')
                 return modelController.isAuthenticated();
             };
 
-            $scope.getUser = function() {
-                return modelController.getUsername();
+            $scope.getUser = function () {
+              return modelController.getUser();
             };
 
             $scope.logout = function () {

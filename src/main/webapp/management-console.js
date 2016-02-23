@@ -308,7 +308,9 @@ angular.module('managementConsole', [
     }])
 
   .config(['localStorageServiceProvider', function(localStorageServiceProvider) {
-    localStorageServiceProvider.setPrefix('infinispan-management-console');
+    localStorageServiceProvider
+      .setPrefix('infinispan-management-console')
+      .setStorageType('sessionStorage');
   }])
 
 /**
@@ -334,7 +336,6 @@ angular.module('managementConsole', [
         if (toState.name !== 'login' && !modelController.isAuthenticated()) {
           event.preventDefault();
           modelController.login().then(function () {
-            // TODO: Do I have to do this refreshing here? Why?
             var modelPromise = modelController.refresh();
             modelPromise.then(function () {
               $urlRouter.sync();

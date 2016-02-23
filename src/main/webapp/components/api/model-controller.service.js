@@ -7,7 +7,7 @@ angular.module('managementConsole.api')
     'DomainModel',
     'utils',
     'localStorageService',
-    function ($http, $q, DomainModel, utils, localStorageService) {
+      function ($http, $q, DomainModel, utils, localStorageService) {
             /**
              * Represents a client to the ModelController
              * @constructor

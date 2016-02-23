@@ -24,15 +24,14 @@ angular.module('managementConsole')
 
         $scope.createNewRole = function () {
           var address = $scope.getRoleDMRAddress($scope.roleName);
-          cacheContainerConfigurationService.addRole($scope.roleName, address, $scope.permissions).then(function(){
+          cacheContainerConfigurationService.addRole($scope.roleName, address, $scope.permissions).then(function () {
             $modalInstance.close();
             $state.go('editCacheContainerSecurity', {
               clusterName: $scope.currentCluster.name
-            });
+            }, {reload: true});
             $state.reload();
-          }).catch(function(){
-            $modalInstance.close();
-            //TODO error handling
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
           });
         };
 
@@ -97,29 +96,28 @@ angular.module('managementConsole')
       };
 
       $scope.defineAuthorization = function () {
-        //TODO not working yet
         $scope.mappers = ['org.infinispan.security.impl.IdentityRoleMapper'];
         $scope.securityAuthorizationDefined = true;
         var clusterAddress = $scope.currentCluster.getResourcePath();
-        cacheContainerConfigurationService.addSecurity(clusterAddress).then(function(){
-          cacheContainerConfigurationService.addAuthorization(clusterAddress).then (function(){
+        cacheContainerConfigurationService.addSecurity(clusterAddress).then(function () {
+          cacheContainerConfigurationService.addAuthorization(clusterAddress).then(function () {
             $state.go('editCacheContainerSecurity', {
               clusterName: $scope.currentCluster.name
-            });
-            $state.reload();
-          })
+            }, {reload: true});
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
+          });
         });
       };
 
-      $scope.removeRole = function (role){
-        var address  = $scope.getRoleDMRAddress(role.name);
-        cacheContainerConfigurationService.removeRole(address).then(function(){
+      $scope.removeRole = function (role) {
+        var address = $scope.getRoleDMRAddress(role.name);
+        cacheContainerConfigurationService.removeRole(address).then(function () {
           $state.go('editCacheContainerSecurity', {
             clusterName: $scope.currentCluster.name
-          });
-          $state.reload();
-        }).catch(function(){
-          //TODO error handling
+          }, {reload: true});
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
         });
       };
 

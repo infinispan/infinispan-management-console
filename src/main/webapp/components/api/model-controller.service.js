@@ -104,8 +104,23 @@ angular.module('managementConsole.api')
                       deferred.reject();
                     }
                   }
-                  else if (http.status >= 400 && http.status <= 505){
-                    deferred.reject(http.statusText);
+                  else if (http.readyState === 4 && http.status >= 400 && http.status <= 505) {
+                      var response = http.responseText;
+                      if (response) {
+                        try {
+                          response = JSON.parse(response);
+                          if (utils.isNotNullOrUndefined(response['failure-description'])){
+                            deferred.reject(response['failure-description']);
+                          } else {
+                            deferred.reject("An unspecified error has been received from the server");
+                          }
+                        } catch (e) {
+                          console.log('JSON.parse()', e);
+                          deferred.reject("An unspecified error has been received from the server");
+                        }
+                      } else {
+                        deferred.reject("An unspecified error has been received from the server");
+                      }
                   }
                 };
                 http.send(JSON.stringify(op));

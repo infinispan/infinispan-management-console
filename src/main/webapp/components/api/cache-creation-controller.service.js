@@ -27,29 +27,7 @@ angular.module('managementConsole.api')
        * @param callback
        */
       CacheCreationControllerClient.prototype.execute = function (op) {
-        var deferred = $q.defer();
-        var http = new XMLHttpRequest();
-        var username = modelController.credentials.username;
-        var password = modelController.credentials.password;
-        http.withCredentials = true;
-        http.open('POST', this.url, true, username, password);
-        http.setRequestHeader('Content-type', 'application/json');
-        http.setRequestHeader('Accept', 'application/json');
-        http.onreadystatechange = function () {
-          if (http.readyState === 4 && http.status === 200) {
-            var response = JSON.parse(http.responseText);
-            if (response.outcome === 'success') {
-              deferred.resolve(response.result);
-            } else {
-              deferred.reject();
-            }
-          }
-          if (http.status === 500){
-            deferred.reject();
-          }
-        };
-        http.send(JSON.stringify(op));
-        return deferred.promise;
+        return modelController.execute(op);
       };
 
       CacheCreationControllerClient.prototype.emptyPromise = function () {

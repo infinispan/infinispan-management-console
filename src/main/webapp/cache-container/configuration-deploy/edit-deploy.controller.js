@@ -37,7 +37,9 @@ angular.module('managementConsole')
             $state.go('editCacheContainerDeploy', {
               clusterName: $scope.currentCluster.name
             }, {reload: true});
-          });
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
+          });;
         };
 
         $scope.cancelModal = function () {
@@ -99,7 +101,9 @@ angular.module('managementConsole')
           $state.go('editCacheContainerDeploy', {
             clusterName: $scope.currentCluster.name
           }, {reload: true});
-        })
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
+        });
       };
 
       $scope.deployArtifact = function (name) {
@@ -107,6 +111,8 @@ angular.module('managementConsole')
           $state.go('editCacheContainerDeploy', {
             clusterName: $scope.currentCluster.name
           }, {reload: true});
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
         });
       };
 
@@ -115,6 +121,8 @@ angular.module('managementConsole')
           $state.go('editCacheContainerDeploy', {
             clusterName: $scope.currentCluster.name
           }, {reload: true});
+        }).catch(function (e) {
+          $scope.openErrorModal(e);
         });
 
       };

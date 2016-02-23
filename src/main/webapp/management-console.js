@@ -314,7 +314,7 @@ angular.module('managementConsole', [
  * during digest cycle which causes an error.
  * Use it just like normal apply: $scope.safeApply(myFunc).
  */
-  .run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
+  .run(['$rootScope', '$timeout', '$modal', 'utils', function ($rootScope, $timeout, $modal, utils) {
       $rootScope.safeApply = function (f) {
         var scope = this;
         $timeout(function () {
@@ -322,6 +322,24 @@ angular.module('managementConsole', [
         });
       };
       $rootScope.page = {htmlClass: ''};
+
+      //and generic error modal
+      $rootScope.openErrorModal = function (error) {
+        $modal.open({
+          templateUrl: 'components/dialogs/generic-error.html',
+          controller: function($scope, $modalInstance) {
+            var trail = [];
+            utils.traverse(error, function (key, value, trail) {
+              $scope.errorText = trail[0];
+              $scope.errorTextDetail = value;
+            });
+            $scope.ok = function () {
+              $modalInstance.close();
+            }
+          },
+          scope: $rootScope
+        });
+      };
     }]).run(['$rootScope', '$location', 'modelController', function ($rootScope, $location, modelController) {
 
       $rootScope.$on('$locationChangeStart', function () {

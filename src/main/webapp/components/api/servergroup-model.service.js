@@ -53,6 +53,14 @@ angular.module('managementConsole.api')
               return this.executeOp('stop-servers');
             };
 
+            ServerGroup.prototype.reloadServers = function (){
+              return this.executeOp('reload-servers');
+            };
+
+            ServerGroup.prototype.restartServers = function (){
+              return this.executeOp('restart-servers');
+            };
+
             ServerGroup.prototype.executeOp = function (operationName){
               var op = {
                 'operation': operationName,

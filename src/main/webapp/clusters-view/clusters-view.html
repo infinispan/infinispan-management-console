@@ -31,10 +31,10 @@
             </span>
           </td>
           <td>
-
-            <span class="relay" ng-repeat="r in relays[cluster.name]">
-                 {{r}}</br>
-            </span>
+              <div ng-repeat="site in onlineSites[cluster.name]"><span class="pficon pficon-ok"></span> {{site}}</div>
+              <div ng-repeat="site in mixedSites[cluster.name]"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
+              <div ng-repeat="site in offlineSites[cluster.name]"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
+              <div ng-if="(mixedSites[cluster.name].length + onlineSites[cluster.name].length + offlineSites[cluster.name].length) == 0">N/A</div>
           </td>
         </tr>
       </table>
@@ -43,7 +43,18 @@
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5">Latest Grid Events:</h2>
       </div>
-      <ul class="list-group"></ul>
+      <ul class="list-group"  ng-if="gridEvents.length > 0" >
+        <li class="list-group-item" ng-repeat="event in gridEvents | orderBy:'when'">
+          <h3 class="list-group-item-heading">
+            <span ng-if="event.level=='WARN'"  class="icon-class pficon-warning-triangle-o"></span>
+            <span ng-if="event.level=='INFO'"  class="icon-class pficon-info"></span>
+            <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
+            {{event.message}}.</h3>
+          <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</small><br>
+          <small>{{event.scope}}</small>
+        </li>
+      </ul>
+
     </div>
     <!-- /col -->
   </div>

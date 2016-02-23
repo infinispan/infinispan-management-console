@@ -15,9 +15,13 @@ angular.module('managementConsole.api')
                 this.modelController = domain.getModelController();
                 this.lastRefresh = null;
                 this.caches = {};
-                this.cachesMetadata = null;
+                this.metadata = null;
                 this.availability = null;
                 this.endpoints = [];
+                this.security = null;
+                this.threadpool = null;
+                this.transport = null;
+                this.configurations;
             };
 
             Cluster.prototype.getModelController = function () {
@@ -30,9 +34,10 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.refresh = function () {
                 this.modelController.readResourceDescription(this.getResourcePath(), true, false).then(function (response) {
-                  this.cachesMetadata = response;
+                  this.metadata = response;
                 }.bind(this));
                 return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
+                    this.configurations = response.configurations.CONFIGURATIONS;
                     this.lastRefresh = new Date();
                     this.caches = {};
                     var cachePromises = [];
@@ -44,7 +49,7 @@ angular.module('managementConsole.api')
                             for (var name in typedCaches) {
                                 if (name !== undefined) {
                                     var configurationName = typedCaches[name].configuration;
-                                    var confModel = this.getConfigurationModel(response, cacheType, configurationName);
+                                    var confModel = this.getConfigurationModel(cacheType, configurationName);
                                     var cache = new CacheModel(name, cacheTypes[i], configurationName, confModel, this);
                                     this.caches[name] = cache;
                                     cachePromises.push(cache.refresh());
@@ -52,14 +57,52 @@ angular.module('managementConsole.api')
                             }
                         }
                     }
+                    this.threadpool = response['thread-pool'];
+                    this.security = response.security;
+                    this.transport = response.transport;
                     return $q.all(cachePromises);
                 }.bind(this)).then(function (){
                   this.getAvailability();
                 }.bind(this));
             };
 
-            Cluster.prototype.getConfigurationModel = function (cacheModel, cacheType, name) {
-              return cacheModel.configurations.CONFIGURATIONS[cacheType + '-configuration'][name];
+            Cluster.prototype.getConfigurationModel = function (cacheType, name) {
+              return this.getConfigurationsByTypeAndName(cacheType, name);
+            };
+
+            Cluster.prototype.getConfigurations = function () {
+              return this.modelController.readResource(this.getResourcePath().concat('configurations', 'CONFIGURATIONS'), true, false).then(function (response) {
+                this.configurations = response;
+                return response;
+              }.bind(this));
+            };
+
+            Cluster.prototype.getConfigurationsByTypeAndName = function (cacheType, name) {
+              return this.configurations[cacheType + '-configuration'][name];
+            };
+
+            Cluster.prototype.getConfigurationsByType = function (cacheType) {
+              return this.configurations[cacheType + '-configuration'];
+            };
+
+            Cluster.prototype.getConfigurationsTemplates = function () {
+              return this.getConfigurationTemplatesFromModel(this.configurations);
+            };
+
+            Cluster.prototype.getSecurityConfiguration = function () {
+              return this.modelController.readResource(this.getResourcePath().concat('security', 'SECURITY'), true, false);
+            };
+
+            Cluster.prototype.getConfigurationTemplatesFromModel = function (inputConfigurationTemplates) {
+              var configurationTemplates = [];
+              angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+                var templatesForType = inputConfigurationTemplates[cacheType + '-configuration'];
+                angular.forEach(templatesForType, function (template, templateName) {
+                  template.name = templateName;
+                  template.type = cacheType;
+                  configurationTemplates.push(template);
+                })}.bind(this));
+              return configurationTemplates;
             };
 
             Cluster.prototype.getAvailability = function () {
@@ -109,6 +152,13 @@ angular.module('managementConsole.api')
               return this.availability;
             };
 
+            Cluster.prototype.getName = function () {
+              return this.name;
+            };
+
+            Cluster.prototype.getMetadata = function () {
+              return this.metadata;
+            };
 
             Cluster.prototype.getNodes = function () {
                 return this.domain.getNodes();
@@ -133,10 +183,46 @@ angular.module('managementConsole.api')
               return utils.isNonEmptyArray(this.getCachesAsArray());
             };
 
+            Cluster.prototype.hasCache = function (cacheName) {
+              if (this.hasCaches()) {
+                return this.getCachesAsArray().some(function (cache) {
+                  return cache.getName() === cacheName;
+                });
+              } else {
+                return false;
+              }
+            };
+
             Cluster.prototype.hasNodes = function () {
               return utils.isNonEmptyArray(this.getNodes());
             };
 
+            Cluster.prototype.getTransportConfiguration = function () {
+              if (utils.isNotNullOrUndefined(this.transport)) {
+                return this.transport.TRANSPORT;
+              } else {
+                return this.transport;
+              }
+            };
+
+            Cluster.prototype.getThreadpoolConfiguration = function () {
+              return this.threadpool;
+            };
+
+
+            // Fetch the list of cluster events
+            Cluster.prototype.fetchClusterEvents = function(maxLines) {
+              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
+                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
+
+                  var op = {
+                    'operation': 'read-event-log',
+                    'address': resourcePathCacheContainer,
+                    "lines": maxLines
+                  };
+
+                  return this.modelController.execute(op)
+            };
             return Cluster;
     }
   ]);

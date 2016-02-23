@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li><a href="#">{{currentCluster.name}}</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li class="active"><a href="#">Schemas</a></li>
+        <li><a ui-sref="editCacheContainerTransport({clusterName: currentCluster.name})">Transport</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({clusterName: currentCluster.name})">Thread pools</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({clusterName: currentCluster.name})">Security</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+
+      <br>
+
+      <!-- <table class="datatable table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th colspan="3" class="text-right">
+            <div class="btn-group" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Add</a>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="col-sm-1">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Person</td>
+          <td>ProtoBuf</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>ProtoBuf</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Job</td>
+          <td>ProtoBuf</td>
+          <td>
+            <div class="btn-group btn-group-justified" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
+                 data-target="#myModal">Edit</a>
+              <a href="#" role="button" class="btn btn-default">Remove</a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>  -->
+      <h3>Work in progress. Will be implemented in the next minor release. </h3>
+    </div>
+  </div>
+</div>

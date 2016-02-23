@@ -52,6 +52,10 @@ angular.module('managementConsole.api')
               return this.type;
             };
 
+            Cache.prototype.getName = function () {
+              return this.name;
+            };
+
             Cache.prototype.getCluster = function () {
               return this.cluster;
             };
@@ -79,7 +83,7 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.hasRemoteBackup = function () {
-              return utils.isNotNullOrUndefined(this.configuration.remotebackup);
+              return utils.isNotNullOrUndefined(this.configuration.backup);
             };
 
             Cache.prototype.isBounded = function () {

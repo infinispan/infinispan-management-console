@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li><a href="#">{{currentCluster.name}}</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">Schemas</a></li>
+        <li><a ui-sref="editCacheContainerTransport({clusterName: currentCluster.name})">Transport</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({clusterName: currentCluster.name})">Thread pools</a></li>
+        <li class="active"><a href="#">Security</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+      <br />
+      <form class="form-horizontal" ng-if="securityAuthorizationDefined">
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="roleMapper">Role Mapper</label>
+          <div class="col-md-10">
+            <select id="roleMapper"  ng-model="mapper" ng-options="mapper as item for item in mappers"/>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label">Roles</label>
+          <div class="col-md-3">
+            <table class="datatable table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th colspan="2" class="text-right">
+                  <div class="btn-group" role="group">
+                    <a role="button" class="btn btn-default" ng-click="openAddRoleModal()">Add</a>
+                  </div>
+                </th>
+              </tr>
+              <tr>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="role in roles">
+                <td>{{role.name}}</td>
+                <td>
+                  <div class="btn-group btn-group-justified" role="group">
+                    <a role="button" class="btn btn-default" ng-click="openEditRoleModal(role)">Edit</a>
+                    <a role="button" class="btn btn-default" ng-click="removeRole(role)">Remove</a>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!--<div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-default">Cancel</button>
+          </div>
+        </div> -->
+      </form>
+      <div ng-if="!securityAuthorizationDefined">
+        <div class="form-group">
+          <label class="col-md-12 control-label" for="roleMapper">Authorization has not been defined for this cache container. Do you want to define it now?</label>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10 col-md-offset-2">
+            <button type="button" class="btn btn-primary" ng-click="defineAuthorization()">Yes</button>
+            <button type="button" class="btn btn-default">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+

@@ -11,15 +11,40 @@
         metadata: '=',
         fields: '=',
         initDefaults: '=',
-        readOnly: '='
+        readOnly: '=',
+        outsideController: '='
       },
       replace: true,
       templateUrl: 'components/directives/cache/configuration-section.html',
       link: function (scope) {
 
+        if (utils.isNotNullOrUndefined(scope.outsideController)){
+          if (utils.isArray(scope.outsideController)){
+            var handle = {};
+            scope.outsideController.push(handle);
+            scope.internalController = handle;
+          } else {
+            scope.internalController = scope.outsideController;
+          }
+        } else {
+          scope.internalController = {};
+        }
+
         scope.cleanFieldMetadata = function (field) {
           scope.metadata[field].uiModified = false;
           scope.metadata[field].style = null;
+        };
+
+
+        scope.cleanMetadata = function () {
+          scope.fields.forEach(function (attrName) {
+            scope.cleanFieldMetadata(attrName);
+            if (utils.isNotNullOrUndefined(scope.data[attrName])) {
+              scope.prevData[attrName] = scope.data[attrName];
+            } else {
+              scope.prevData[attrName] = '';
+            }
+          });
         };
 
         scope.isFieldValueModified = function (field) {
@@ -48,21 +73,30 @@
         }
 
         //now clean any previous metadata and record field values in model so they can be reverted (undo)
-        scope.fields.forEach(function (attrName) {
-          scope.cleanFieldMetadata(attrName);
-          if(utils.isNotNullOrUndefined(scope.data[attrName])){
-            scope.prevData[attrName] = scope.data[attrName];
-          } else {
-            scope.prevData[attrName] = '';
-          }
-        });
+        scope.cleanMetadata();
 
         scope.resolveFieldType = function (field) {
           return utils.resolveFieldType(scope.metadata, field);
         };
 
+        scope.isFieldModified = function (field) {
+          return scope.metadata[field].uiModified;
+        };
+
+        scope.isAnyFieldModified = function () {
+          return scope.fields.some(function (attrName) {
+            return scope.isFieldModified(attrName);
+          });
+        };
+
         scope.fieldChangeRequiresRestart = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field]['restart-required'] === 'resource-services';
+          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field]['restart-required'] !== 'no-services';
+        };
+
+        scope.requiresRestart = function () {
+          return scope.fields.some(function (attrName) {
+            return scope.isFieldModified(attrName) && scope.fieldChangeRequiresRestart(attrName);
+          });
         };
 
         scope.isSingleValue = function (field) {
@@ -93,6 +127,19 @@
         scope.resolveFieldName = function (field) {
           return utils.convertCacheAttributeIntoFieldName(field);
         };
+
+        /**
+         *
+         * Below we expose methods we need outside of this directive
+         * The methods will be available through an object handle assigned
+         * to outsideController attribute of <configuration-section> HTML
+         * element
+         *
+         */
+
+        scope.internalController.requiresRestart = scope.requiresRestart;
+        scope.internalController.cleanMetadata = scope.cleanMetadata;
+        scope.internalController.isAnyFieldModified = scope.isAnyFieldModified;
       }
     };
   }

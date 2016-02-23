@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('managementConsole')
+var app = angular.module('managementConsole')
   .controller('ClusterViewCtrl', [
     '$scope',
     '$stateParams',
@@ -13,32 +13,32 @@ angular.module('managementConsole')
     function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
       var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
-        $scope.cacheName = null;
-        $scope.selectedTemplate = null;
+        $scope.cacheName;
+        $scope.selectedTemplate;
         $scope.configurationTemplates = [];
         $scope.configurationTemplatesMap = {};
 
         $scope.createCache = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
           cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
             $modalInstance.close();
             $scope.currentCluster.refresh().then(function(){
-              $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+              $state.go('clusterView', {clusterName: $scope.currentCluster.getName()});
             });
           });
         };
 
         $scope.configureTemplate = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
+          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
           $modalInstance.close();
           $state.go('editCache', {
-            clusterName: $scope.currentCluster.name,
+            clusterName: $scope.currentCluster.getName(),
             cacheName: $scope.cacheName,
             cacheConfigurationTemplate: $scope.selectedTemplate,
             cacheConfigurationType:cacheType,
@@ -46,22 +46,30 @@ angular.module('managementConsole')
           });
         };
 
+        $scope.isTemplateSelected = function () {
+          return utils.isNotNullOrUndefined($scope.selectedTemplate) && $scope.selectedTemplate.length > 0;
+        };
+
         $scope.cancel = function () {
           $modalInstance.close();
         };
 
-        angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
-          var p = cacheCreateController.getConfigurationTemplates(cacheType);
-          p.then(function (response) {
-            var p = response[cacheType + '-configuration'];
-            for (var key in p) {
-              if (p.hasOwnProperty(key)) {
-                $scope.configurationTemplates.push(key);
-                $scope.configurationTemplatesMap[key] = cacheType;
+        //Find all configuration templates across all clusters (cache containers)
+        angular.forEach($scope.clusters, function (cluster){
+          angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+            var p = cacheCreateController.getConfigurationTemplates(cluster.getName(), cacheType);
+            p.then(function (response) {
+              var p = response[cacheType + '-configuration'];
+              for (var key in p) {
+                if (p.hasOwnProperty(key)) {
+                  $scope.configurationTemplates.push(key);
+                  $scope.configurationTemplatesMap[key] = cacheType;
+                }
               }
-            }
+            });
           });
         });
+
 
         $scope.cancel = function () {
           $modalInstance.close();
@@ -79,7 +87,7 @@ angular.module('managementConsole')
         currentCollection: 'caches'
       };
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
 
       $scope.$watch('currentCluster', function (currentCluster) {
         if (currentCluster && currentCluster.name !== $stateParams.clusterName) {
@@ -97,9 +105,30 @@ angular.module('managementConsole')
         return utils.clusterAvailability($scope.currentCluster);
       };
 
+      // For caches with backup sites, we need to retrieve their status to look into their site status
+      // We don't do it for every cache to avoid costly remote calls in the general case
+      $scope.refreshBackupSiteStatus = function () {
+        $scope.offlineSites = {};
+        $scope.onlineSites = {};
+        $scope.mixedSites = {};
+
+        angular.forEach($scope.currentCluster.getCachesAsArray(), function (cache) {
+          if (cache.hasRemoteBackup()) {
+            modelController.getServer().fetchCacheStats($scope.currentCluster, cache).then(
+              function (response) {
+                $scope.offlineSites[cache.name] = response[0]['sites-offline'];
+                $scope.onlineSites[cache.name] = response[0]['sites-online'];
+                $scope.mixedSites[cache.name] = response[0]['sites-mixed'];
+              }
+            )
+          }
+        });
+      };
+
       $scope.refresh = function () {
         if (this.currentClusterAvailability()) {
           $scope.currentCluster.refresh();
+          $scope.refreshBackupSiteStatus();
         }
       };
 
@@ -107,7 +136,7 @@ angular.module('managementConsole')
         $scope.refresh();
       }
 
-
+      $scope.refreshBackupSiteStatus();
 
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;
@@ -215,5 +244,22 @@ angular.module('managementConsole')
       }
     };
   });
+
+app.directive('validCacheName', function($stateParams, modelController) {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.validCacheName = function(modelValue, viewValue) {
+        if (ctrl.$isEmpty(modelValue)) {
+          // consider empty models to be valid
+          return true;
+        }
+
+        scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+        return !scope.currentCluster.hasCache(modelValue);
+      };
+    }
+  };
+});
 
 

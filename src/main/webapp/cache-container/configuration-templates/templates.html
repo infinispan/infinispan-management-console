@@ -1,0 +1,68 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView">Cache containers</a>
+        </li>
+        <li><a href="#">{{currentCluster.name}}</a></li>
+        <li class="active"><strong>Configuration</strong></li>
+      </ol>
+      <h1>Cache container configuration</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">Schemas</a></li>
+        <li><a ui-sref="editCacheContainerTransport({clusterName: currentCluster.name})">Transport</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({clusterName: currentCluster.name})">Thread pools</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({clusterName: currentCluster.name})">Security</a></li>
+        <li class="active"><a href="#">Templates</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({clusterName: currentCluster.name})">Deployments</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+
+      <table class="datatable table table-striped table-bordered">
+        <thead>
+        <tr>
+          <th colspan="6" class="text-right">
+            <div class="btn-group" role="group">
+              <a href="#" role="button" class="btn btn-default" data-toggle="modal" ng-click="openModal()"><span
+                class="pficon pficon-add-circle-o"></span> Create new template</a>
+            </div>
+
+          </th>
+        </tr>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Mode</th>
+          <th>Traits</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="conf in confs">
+          <td>{{conf.name}}</td>
+          <td>{{conf.type}}</td>
+          <td>{{conf.mode}}</td>
+          <td>{{extractTraits(conf)}}</td>
+          <td>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default" ng-click="editTemplate(conf.name)">Edit</button>
+              <button type="button" class="btn btn-default" ng-click="removeTemplate(conf.type, conf.name)">Remove</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

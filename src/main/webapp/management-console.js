@@ -366,6 +366,22 @@ angular.module('managementConsole', [
           scope: $rootScope
         });
       };
+
+      //generic info modal
+      $rootScope.openInfoModal = function (infoText, infoTextDetail) {
+        $modal.open({
+          templateUrl: 'components/dialogs/generic-info.html',
+          controller: function ($scope, $modalInstance) {
+            $scope.infoText = infoText;
+            $scope.infoTextDetail = infoTextDetail;
+
+            $scope.ok = function () {
+              $modalInstance.close();
+            }
+          },
+          scope: $rootScope
+        });
+      };
     }])
   .run([
     '$rootScope', 'modelController', '$urlRouter', '$state',

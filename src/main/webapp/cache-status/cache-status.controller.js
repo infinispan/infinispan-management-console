@@ -52,17 +52,29 @@ angular.module('managementConsole')
             };
 
             $scope.enable = function () {
-              $scope.currentCache.enable();
+              $scope.currentCache.enable().then(function (){
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been attached to remote endpoints successfully.');
+              }).catch(function (e){
+                $scope.openErrorModal(e);
+              });
               $scope.refresh();
             };
 
             $scope.disable = function () {
-              $scope.currentCache.disable();
+              $scope.currentCache.disable().then(function (){
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been detached from remote endpoints successfully.');
+              }).catch(function (e){
+                $scope.openErrorModal(e);
+              });
               $scope.refresh();
             };
 
             $scope.purge = function () {
-              $scope.currentCache.flush();
+              $scope.currentCache.flush().then(function (){
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been purged successfully.');
+              }).catch(function (e){
+                $scope.openErrorModal(e);
+              });
               $scope.refresh();
             };
 

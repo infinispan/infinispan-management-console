@@ -152,18 +152,6 @@ angular.module('managementConsole', [
                 templateUrl: 'node-status/node-status.html',
                 controller: 'NodeStatusCtrl',
                 resolve: {
-                  nodeStats: function (modelController, $stateParams) {
-                    var controller = modelController.getServer();
-                    var serverNode = controller.getNode($stateParams.nodeName);
-                    return serverNode.fetchStats();
-                  },
-
-                  aggregateNodeStats: function(modelController, $stateParams){
-                    var controller = modelController.getServer();
-                    var serverNode = controller.getNode($stateParams.nodeName);
-                    return serverNode.fetchAggregateNodeStats();
-                  },
-
                   view: function(modelController, clusterNodesService){
                     var servers = modelController.getServer().getNodes();
                     var firstServer = servers[0];

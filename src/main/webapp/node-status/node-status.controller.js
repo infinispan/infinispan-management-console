@@ -6,19 +6,17 @@ angular.module('managementConsole')
     '$stateParams',
     '$modal',
     'modelController',
-    'nodeStats',
-    'aggregateNodeStats',
+    '$interval',
     'view',
     'utils',
-    function ($scope, $stateParams, $modal, modelController, nodeStats, aggregateNodeStats, view, utils) {
+    function ($scope, $stateParams, $modal, modelController, $interval, view, utils) {
+
 
       $scope.clusterName = $stateParams.clusterName;
       $scope.nodeName = $stateParams.nodeName;
 
-
       var controller = modelController.getServer();
       $scope.serverNode = controller.getNode($stateParams.nodeName);
-
 
       $scope.view = view;
       $scope.dataPoints = [];
@@ -27,61 +25,53 @@ angular.module('managementConsole')
         {'id': 'd2', 'type': 'donut', 'name': 'Free'}
       ];
 
-      $scope.extractAggregateNodeStats = function (aggregateStats) {
-        //TODO here we need to loop through all cache containers and add all stats up
-        //but for now just use the first container found
-        var containersRoot = aggregateStats['cache-container'];
-        for (var prop in containersRoot) {
-          $scope.nodeStats = containersRoot[prop];
-          break;
-        }
-      };
-
-      $scope.isCoordinator = function (server) {
-        return server.getHost() === $scope.view.host && server.getServerName() === $scope.view.server;
-      };
-
-      $scope.updateStatsData = function (statsData) {
-        //memory
-        var memory = statsData.memory['heap-memory-usage'];
-        var used = (memory.used / 1024) / 1024;
-        var max = (memory.max / 1024) / 1024;
-
-        $scope.dataPoints = [{'d1': used}, {'d2': max}];
-
-        //threading
-        var threading = statsData.threading;
-        $scope.threadCount = threading['thread-count'];
-        $scope.threadPeakCount = threading['peak-thread-count'];
-        $scope.threadDaemonCount = threading['daemon-thread-count'];
-
-        var directBufferPool = utils.deepGet(statsData, 'buffer-pool.name.direct');
-        var mappedBufferPool = utils.deepGet(statsData,'buffer-pool.name.mapped');
-
-        $scope.directBufferPoolCount =  directBufferPool.count;
-        $scope.directBufferPoolMemoryUsed= directBufferPool['memory-used'];
-
-        $scope.mappedBufferPoolCount =  mappedBufferPool.count;
-        $scope.mappedBufferPoolMemoryUsed= mappedBufferPool['memory-used'];
-      };
-
-      $scope.extractAggregateNodeStats(aggregateNodeStats);
-      $scope.updateStatsData(nodeStats);
-
       $scope.fetchStats = function (){
         $scope.serverNode.fetchStats().then(function (response) {
-         $scope.updateStatsData(response);
+          //memory
+          var memory = response.memory['heap-memory-usage'];
+          var used = (memory.used / 1024) / 1024;
+          var max = (memory.max / 1024) / 1024;
+
+          $scope.dataPoints = [{'d1': used}, {'d2': max}];
+
+          //threading
+          var threading = response.threading;
+          $scope.threadCount = threading['thread-count'];
+          $scope.threadPeakCount = threading['peak-thread-count'];
+          $scope.threadDaemonCount = threading['daemon-thread-count'];
+
+          var directBufferPool = utils.deepGet(response, 'buffer-pool.name.direct');
+          var mappedBufferPool = utils.deepGet(response,'buffer-pool.name.mapped');
+
+          $scope.directBufferPoolCount =  directBufferPool.count;
+          $scope.directBufferPoolMemoryUsed= directBufferPool['memory-used'];
+
+          $scope.mappedBufferPoolCount =  mappedBufferPool.count;
+          $scope.mappedBufferPoolMemoryUsed= mappedBufferPool['memory-used'];
+
         });
       };
+
 
       $scope.refresh = function (){
         $scope.serverNode.refresh();
         $scope.serverNode.refreshState();
         $scope.serverNode.fetchAggregateNodeStats().then(function (response) {
-          $scope.extractAggregateNodeStats(response);
+          //TODO here we need to loop through all cache containers and add all stats up
+          //but for now just use the first container found
+          var containersRoot = response['cache-container'];
+          for (var prop in containersRoot) {
+            $scope.nodeStats = containersRoot[prop];
+            break;
+          }
         });
         $scope.fetchStats();
       };
+
+      $interval(function(){
+        $scope.refresh();
+      }, 500, 1);
+
 
       $scope.currentCacheAvailability = function () {
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
@@ -122,6 +112,11 @@ angular.module('managementConsole')
           controller: NodeModalInstanceCtrl,
           scope: $scope
         });
+      };
+
+
+      $scope.isCoordinator = function (server) {
+        return server.getHost() === $scope.view.host && server.getServerName() === $scope.view.server;
       };
 
     }]);

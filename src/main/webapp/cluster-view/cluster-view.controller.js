@@ -167,22 +167,12 @@ var app = angular.module('managementConsole')
      //
       $scope.setCacheContainerRebalance = function (rebalance) {
 
-        var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
-          .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name
-        );
-
-        var op = {
-          'operation': "cluster-rebalance",
-          'address': resourcePathCacheContainer,
-          "value": rebalance
-        };
-
         // User feedback report
         $scope.successExecuteOperation = false;
         $scope.errorExecuting = false;
         $scope.errorDescription = null;
 
-        modelController.execute(op).then(
+        $scope.currentCluster.setRebalancing(rebalance).then(
           function (response) {
             $scope.successExecuteOperation = true;
             $scope.refresh();
@@ -198,7 +188,6 @@ var app = angular.module('managementConsole')
       $scope.confirmAndSetCacheContainerRebalance = function (rebalanceValue, confirmationMessage) {
 
         // Get confirmation dialog
-        // TODO: Unify and refactor this modal creation into a single function point
         var confirmDialog = $modal.open({
           templateUrl: 'cluster-view/confirmation-message-modal.html',
           controller: function ($scope, $modalInstance) {

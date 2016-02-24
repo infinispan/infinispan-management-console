@@ -14,6 +14,18 @@
         </div><!--/#brand-->
       </div><!--/.col-*-->
       <div class="col-sm-7 col-md-6 col-lg-5 login">
+
+
+        <div class="alert alert-danger alert-dismissable" ng-show="loginError" id="loginErrorMessage">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+          </button>
+          <span class="pficon pficon-error-circle-o"></span>
+            <strong>Invalid login or password.</strong> Please, try again.
+        </div>
+
+
+
           <div class="form-group">
             <label for="inputUsername" class="col-sm-2 col-md-2 control-label">Username</label>
             <div class="col-sm-10 col-md-10">
@@ -31,7 +43,6 @@
 
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 submit">
-              <p class="text-error" ng-show="loginError">Invalid credentials</p>
               <span class="spinner spinner-xs spinner-inline" ng-show="showLoginSpinner"/>
               <button ng-disabled="authenticated" type="submit" class="btn btn-primary btn-lg" tabindex="4">Log In</button>
             </div>

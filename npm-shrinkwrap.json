@@ -1,6 +1,6 @@
 {
   "name": "managementConsole",
-  "version": "8.3.0-DR1-redhat-1",
+  "version": "8.3.0-redhat-SNAPSHOT",
   "dependencies": {
     "jquery": {
       "version": "2.1.4",

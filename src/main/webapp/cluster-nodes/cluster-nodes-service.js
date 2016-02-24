@@ -32,15 +32,21 @@ angular.module('managementConsole')
       }
 
       function getView(hostName, serverName, clusterName) {
-        return getChannelName(clusterName).then(function (channelName){
+        return getChannelName(clusterName).then(function (channelName) {
           var address = ['host', hostName, 'server', serverName, 'subsystem', 'datagrid-jgroups',
             'channel', channelName[0], 'protocol', 'pbcast.GMS'];
-          return modelController.readAttribute(address, 'view').then(function(view){
+
+          return modelController.readAttribute(address, 'view').then(function (view) {
             var lastIndex = view.indexOf('|');
             var hostServerSplitIndex = view.indexOf(':');
             return {
-              host: view.substring(1,hostServerSplitIndex),
-              server: view.substring(hostServerSplitIndex + 1,lastIndex)
+              host: view.substring(1, hostServerSplitIndex),
+              server: view.substring(hostServerSplitIndex + 1, lastIndex)
+            };
+          }).catch(function (e) {
+            return {
+              host: '',
+              server: ''
             };
           });
         });

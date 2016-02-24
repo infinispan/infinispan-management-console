@@ -116,6 +116,8 @@ angular.module('managementConsole.api')
 
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
                 this.availability = response.toUpperCase();
+              }.bind(this)).catch(function (e){
+                this.availability = 'UNAVAILABLE';
               }.bind(this));
             };
 

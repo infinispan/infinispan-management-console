@@ -63,6 +63,7 @@ angular.module('managementConsole.api')
 
             ServerGroup.prototype.executeOp = function (operationName){
               var op = {
+                'blocking': true,
                 'operation': operationName,
                 'address': this.getResourcePath()
               };

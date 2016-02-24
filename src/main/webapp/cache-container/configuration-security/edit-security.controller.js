@@ -29,7 +29,6 @@ angular.module('managementConsole')
             $state.go('editCacheContainerSecurity', {
               clusterName: $scope.currentCluster.name
             }, {reload: true});
-            $state.reload();
           }).catch(function (e) {
             $scope.openErrorModal(e);
           });

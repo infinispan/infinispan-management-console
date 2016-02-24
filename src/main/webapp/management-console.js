@@ -54,39 +54,51 @@ angular.module('managementConsole', [
             })
             .state('clustersViewPhysical', {
               url: '/clusters-view-physical',
+              params:{
+                refresh:false
+              },
               templateUrl: 'clusters-view-physical/clusters-view.html',
               controller: 'ClustersViewPhysicalCtrl',
-              resolve:{
-                serverGroups:function (modelController, utils) {
+              resolve: {
+                serverGroups: function (modelController, utils, $stateParams) {
 
-                  var groups = modelController.getServer().getServerGroups();
-                  var servers = modelController.getServer().getNodes();
-
-                  angular.forEach(groups, function(cluster){
-                    cluster.status = 'STOPPED';
-                    cluster.hostCount = 0;
-                    cluster.nodeCount = 0;
-                    var hosts = [];
-                    angular.forEach(servers, function(server){
-                      if (server.getGroup() === cluster.name) {
-                        hosts.push(server.host);
-                        if (!server.isRunning()){
-                          cluster.status = 'DEGRADED';
+                  function calculateClusterState() {
+                    var groups = modelController.getServer().getServerGroups();
+                    var servers = modelController.getServer().getNodes();
+                    angular.forEach(groups, function (cluster) {
+                      cluster.status = 'STOPPED';
+                      cluster.hostCount = 0;
+                      cluster.nodeCount = 0;
+                      var hosts = [];
+                      angular.forEach(servers, function (server) {
+                        if (server.getGroup() === cluster.name) {
+                          hosts.push(server.host);
+                          if (!server.isRunning()) {
+                            cluster.status = 'DEGRADED';
+                          }
                         }
+                      });
+                      var hostsUnique = utils.countOccurrences(hosts);
+                      cluster.hostCount = hostsUnique.length;
+                      angular.forEach(hostsUnique, function (host) {
+                        cluster.nodeCount += host.count;
+                      });
+
+                      if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
+                        cluster.status = 'STARTED';
                       }
                     });
-                    var hostsUnique = utils.countOccurrences(hosts);
-                    cluster.hostCount = hostsUnique.length;
-                    angular.forEach(hostsUnique, function(host) {
-                      cluster.nodeCount += host.count;
-                    });
+                    return groups;
+                  }
 
-                    if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED'){
-                      cluster.status = 'STARTED';
-                    }
-                  });
-                  return groups;
-              }
+                  if ($stateParams.refresh) {
+                    return modelController.refresh().then(function () {
+                      return calculateClusterState();
+                    });
+                  } else {
+                    return calculateClusterState();
+                  }
+                }
               }
             })
             .state('cacheStatus', {
@@ -102,43 +114,61 @@ angular.module('managementConsole', [
             .state('clusterNodes', {
               url: '/clusters-view-physical/:clusterName/',
               templateUrl: 'cluster-nodes/cluster-nodes.html',
+              params:{
+                refresh:false
+              },
               controller: 'ClusterNodesCtrl',
               resolve:{
                 serverGroup:function (modelController, utils, $stateParams) {
+                  function calculateClusterState() {
+                    var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+                    var servers = modelController.getServer().getNodes();
 
-                  var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-                  var servers = modelController.getServer().getNodes();
 
-
-                  cluster.status = 'STOPPED';
-                  cluster.hostCount = 0;
-                  cluster.nodeCount = 0;
-                  var hosts = [];
-                  angular.forEach(servers, function (server) {
-                    if (server.getGroup() === cluster.name) {
-                      hosts.push(server.host);
-                      if (!server.isRunning()) {
-                        cluster.status = 'DEGRADED';
+                    cluster.status = 'STOPPED';
+                    cluster.hostCount = 0;
+                    cluster.nodeCount = 0;
+                    var hosts = [];
+                    angular.forEach(servers, function (server) {
+                      if (server.getGroup() === cluster.name) {
+                        hosts.push(server.host);
+                        if (!server.isRunning()) {
+                          cluster.status = 'DEGRADED';
+                        }
                       }
-                    }
-                  });
-                  var hostsUnique = utils.countOccurrences(hosts);
-                  cluster.hostCount = hostsUnique.length;
-                  angular.forEach(hostsUnique, function (host) {
-                    cluster.nodeCount += host.count;
-                  });
+                    });
+                    var hostsUnique = utils.countOccurrences(hosts);
+                    cluster.hostCount = hostsUnique.length;
+                    angular.forEach(hostsUnique, function (host) {
+                      cluster.nodeCount += host.count;
+                    });
 
-                  if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
-                    cluster.status = 'STARTED';
+                    if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
+                      cluster.status = 'STARTED';
+                    }
+                    return cluster;
                   }
-                  return cluster;
+                  if ($stateParams.refresh) {
+                    return modelController.refresh().then(function () {
+                      return calculateClusterState();
+                    });
+                  } else {
+                    return calculateClusterState();
+                  }
                 },
-                view: function(modelController, clusterNodesService){
+                view: function (modelController, clusterNodesService, utils) {
                   var servers = modelController.getServer().getNodes();
-                  var firstServer = servers[0];
-                  var domain = firstServer.getDomain();
-                  var firstCluster = domain.getClusters()[0];
-                  return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
+                  if (utils.isNonEmptyArray(servers)) {
+                    var firstServer = servers[0];
+                    var domain = firstServer.getDomain();
+                    var firstCluster = domain.getClusters()[0];
+                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
+                  } else {
+                    return {
+                      host: '',
+                      server: ''
+                    };
+                  }
                 }
               }
             })

@@ -70,6 +70,18 @@ angular.module('managementConsole')
 
       $scope.view = view;
 
+      $scope.hosts = modelController.getServer().getHosts();
+      $scope.servers = modelController.getServer().getNodes();
+      $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+      $scope.clusterName = $stateParams.clusterName;
+
+      $scope.refresh = function (refreshModel) {
+        $state.go('clusterNodes', {
+          clusterName: $scope.clusterName,
+          refresh: true
+        }, {reload: true});
+      };
+
       $scope.getServersInCluster = function () {
         var serversInCluster = [];
         angular.forEach($scope.servers, function (server) {
@@ -91,28 +103,21 @@ angular.module('managementConsole')
         return server.getHost() === $scope.view.host && server.getServerName() === $scope.view.server;
       };
 
-      $scope.refresh = function (refreshDomain) {
-        refreshDomain = (typeof refreshDomain === 'undefined') ? true : false;
-        if (refreshDomain) {
-          modelController.getServer().refresh();
-        }
-        $scope.hosts = modelController.getServer().getHosts();
-        $scope.servers = modelController.getServer().getNodes();
-        $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-      };
-
-      $scope.refresh(false);
 
       $scope.startCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-        cluster.startServers().catch(function (e) {
+        cluster.startServers().then(function () {
+          modelController.refresh();
+        }).catch(function (e) {
           $scope.openErrorModal(e);
         });
       };
 
       $scope.stopCluster = function () {
         var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
-        cluster.stopServers().catch(function (e) {
+        cluster.stopServers().then(function () {
+          modelController.refresh();
+        }).catch(function (e) {
           $scope.openErrorModal(e);
         });
       };

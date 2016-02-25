@@ -89,13 +89,6 @@ angular.module('managementConsole')
             serversInCluster.push(server);
           }
         });
-
-        //now add stopped servers
-        angular.forEach($scope.servers, function (server) {
-          if (server.isStopped()) {
-            serversInCluster.push(server);
-          }
-        });
         return serversInCluster;
       };
 

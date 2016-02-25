@@ -62,20 +62,27 @@ angular.module('managementConsole', [
               resolve: {
                 serverGroups: function (modelController, utils, $stateParams) {
 
+                  function isStopped(server) {
+                    return !server.isRunning();
+                  }
+
+                  function isRunning(server) {
+                    return !isStopped(server);
+                  }
+
                   function calculateClusterState() {
                     var groups = modelController.getServer().getServerGroups();
                     var servers = modelController.getServer().getNodes();
                     angular.forEach(groups, function (cluster) {
-                      cluster.status = 'STOPPED';
+                      cluster.status = '';
                       cluster.hostCount = 0;
                       cluster.nodeCount = 0;
                       var hosts = [];
+                      var serversInGroup = [];
                       angular.forEach(servers, function (server) {
                         if (server.getGroup() === cluster.name) {
                           hosts.push(server.host);
-                          if (!server.isRunning()) {
-                            cluster.status = 'DEGRADED';
-                          }
+                          serversInGroup.push(server);
                         }
                       });
                       var hostsUnique = utils.countOccurrences(hosts);
@@ -84,8 +91,13 @@ angular.module('managementConsole', [
                         cluster.nodeCount += host.count;
                       });
 
-                      if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
+                      if (serversInGroup.some(isStopped) && serversInGroup.some(isRunning)) {
+                        cluster.status = 'DEGRADED';
+                      }
+                      else if (serversInGroup.some(isRunning)) {
                         cluster.status = 'STARTED';
+                      } else {
+                        cluster.status = 'STOPPED';
                       }
                     });
                     return groups;
@@ -120,31 +132,34 @@ angular.module('managementConsole', [
               controller: 'ClusterNodesCtrl',
               resolve:{
                 serverGroup:function (modelController, utils, $stateParams) {
+
+                  function isStopped(server) {
+                    return !server.isRunning();
+                  }
+
+                  function isRunning(server) {
+                    return server.isRunning();
+                  }
+
                   function calculateClusterState() {
                     var cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
                     var servers = modelController.getServer().getNodes();
+                    var serversInGroup = [];
 
-
-                    cluster.status = 'STOPPED';
-                    cluster.hostCount = 0;
-                    cluster.nodeCount = 0;
-                    var hosts = [];
+                    cluster.status = '';
                     angular.forEach(servers, function (server) {
                       if (server.getGroup() === cluster.name) {
-                        hosts.push(server.host);
-                        if (!server.isRunning()) {
-                          cluster.status = 'DEGRADED';
-                        }
+                        serversInGroup.push(server);
                       }
                     });
-                    var hostsUnique = utils.countOccurrences(hosts);
-                    cluster.hostCount = hostsUnique.length;
-                    angular.forEach(hostsUnique, function (host) {
-                      cluster.nodeCount += host.count;
-                    });
 
-                    if (cluster.nodeCount > 0 && cluster.status !== 'DEGRADED') {
+                    if (serversInGroup.some(isStopped) && serversInGroup.some(isRunning)) {
+                      cluster.status = 'DEGRADED';
+                    }
+                    else if (serversInGroup.some(isRunning)) {
                       cluster.status = 'STARTED';
+                    } else {
+                      cluster.status = 'STOPPED';
                     }
                     return cluster;
                   }

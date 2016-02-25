@@ -15,13 +15,18 @@ angular.module('managementConsole.api')
                 this.domain = domain;
                 this.lastRefresh = null;
                 this.show = true;
-                this.defaultStack = 'N/A';
-                this.inetAddress = 'N/A';
+                this.defaultStack = '';
+                this.inetAddress = '';
                 this.stats = {};
+                this.group = ''
             };
 
             Server.prototype.getResourcePath = function () {
                 return this.domain.getResourcePath().concat('host', this.host, 'server', this.server);
+            };
+
+            Server.prototype.getConfigResourcePath = function () {
+              return this.domain.getResourcePath().concat('host', this.host, 'server-config', this.server);
             };
 
             Server.prototype.getModelController = function () {
@@ -33,7 +38,7 @@ angular.module('managementConsole.api')
             };
 
             Server.prototype.getGroup = function () {
-              return this.root['server-group'];
+              return this.group;
             };
 
             Server.prototype.getState = function () {
@@ -77,6 +82,12 @@ angular.module('managementConsole.api')
                   this.inetAddress = response;
                 }.bind(this)).catch(function(){
                     this.inetAddress = 'N/A';
+                  }.bind(this));
+
+                this.getModelController().readAttribute(this.getConfigResourcePath(),'group').then(function (response) {
+                    this.group = response;
+                  }.bind(this)).catch(function () {
+                    this.group = 'N/A';
                   }.bind(this));
             };
 

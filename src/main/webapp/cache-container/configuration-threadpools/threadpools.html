@@ -26,45 +26,45 @@
       <div>
         <uib-tabset vertical="true" type="pills">
           <uib-tab heading="Async Operations" active="true">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['async-operations']"
+            <configuration-section fields="[{name: 'Async Operations', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool['async-operations']"
                 metadata="metadata['async-operations'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
           </uib-tab>
           <uib-tab heading="Expiration">
-            <configuration-section fields="['max-threads', 'keepalive-time']" data='threadpool.expiration'
+            <configuration-section fields="[{name: 'Expiration', fields: ['max-threads', 'keepalive-time']}]" data='threadpool.expiration'
                                    metadata="metadata.expiration.attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
           </uib-tab>
           <uib-tab heading="Listener">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool.listener"
+            <configuration-section fields="[{name: 'Listener', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool.listener"
                                    metadata="metadata['listener'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
           </uib-tab>
           <uib-tab heading="Persistence">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool.persistence"
+            <configuration-section fields="[{name: 'Persistence', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool.persistence"
                                    metadata="metadata['persistence'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
           </uib-tab>
           <uib-tab heading="Remote commands">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['remote-command']"
+            <configuration-section fields="[{name: 'Remote commands', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool['remote-command']"
                                    metadata="metadata['remote-command'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
 
           </uib-tab>
           <uib-tab heading="Replication queue">
-            <configuration-section fields="['max-threads', 'keepalive-time']" data="threadpool['replication-queue']"
+            <configuration-section fields="[{name: 'Replication queue', fields: ['max-threads', 'keepalive-time']}]" data="threadpool['replication-queue']"
                                    metadata="metadata['replication-queue'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
 
           </uib-tab>
           <uib-tab heading="State transfer">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['state-transfer']"
+            <configuration-section fields="[{name: 'State transfer', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool['state-transfer']"
                                    metadata="metadata['state-transfer'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
 
           </uib-tab>
           <uib-tab heading="Transport">
-            <configuration-section fields="['min-threads', 'max-threads', 'queue-length', 'keepalive-time']" data="threadpool['transport']"
+            <configuration-section fields="[{name: 'Transport', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]" data="threadpool['transport']"
                                    metadata="metadata['transport'].attributes" init-defaults="false" read-only="false"
                                    outside-controller="configurationSectionHandles"/>
           </uib-tab>

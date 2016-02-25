@@ -17,7 +17,6 @@
       replace: true,
       templateUrl: 'components/directives/cache/configuration-section.html',
       link: function (scope) {
-
         if (utils.isNotNullOrUndefined(scope.outsideController)){
           if (utils.isArray(scope.outsideController)){
             var handle = {};
@@ -37,13 +36,15 @@
 
 
         scope.cleanMetadata = function () {
-          scope.fields.forEach(function (attrName) {
-            scope.cleanFieldMetadata(attrName);
-            if (utils.isNotNullOrUndefined(scope.data[attrName])) {
-              scope.prevData[attrName] = scope.data[attrName];
-            } else {
-              scope.prevData[attrName] = '';
-            }
+          scope.fields.forEach(function (group) {
+            group.fields.forEach(function (attrName) {
+              scope.cleanFieldMetadata(attrName);
+              if (utils.isNotNullOrUndefined(scope.data[attrName])) {
+                scope.prevData[attrName] = scope.data[attrName];
+              } else {
+                scope.prevData[attrName] = '';
+              }
+            });
           });
         };
 
@@ -60,10 +61,12 @@
         scope.prevData = {};
         if (scope.initDefaults) {
           scope.data = {};
-          scope.fields.forEach(function (attrName) {
-            if (scope.metadata[attrName].hasOwnProperty('default')) {
-              scope.data[attrName] = scope.metadata[attrName].default;
-            }
+          scope.fields.forEach(function (group) {
+            group.fields.forEach(function (attrName) {
+              if (scope.metadata[attrName].hasOwnProperty('default')) {
+                scope.data[attrName] = scope.metadata[attrName].default;
+              }
+            });
           });
         } else {
           //if not initializing to defaults then make root node in the model tree (if not existing already)
@@ -84,8 +87,10 @@
         };
 
         scope.isAnyFieldModified = function () {
-          return scope.fields.some(function (attrName) {
-            return scope.isFieldModified(attrName);
+          return scope.fields.some(function(group) {
+            return group.fields.some(function (attrName) {
+              return scope.isFieldModified(attrName);
+            });
           });
         };
 
@@ -94,8 +99,10 @@
         };
 
         scope.requiresRestart = function () {
-          return scope.fields.some(function (attrName) {
-            return scope.isFieldModified(attrName) && scope.fieldChangeRequiresRestart(attrName);
+          return scope.fields.some(function (group) {
+            return group.fields.some(function (attrName) {
+              return scope.isFieldModified(attrName) && scope.fieldChangeRequiresRestart(attrName);
+            });
           });
         };
 

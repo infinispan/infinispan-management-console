@@ -88,6 +88,25 @@ angular.module('managementConsole')
         });
       };
 
+      $scope.openRemoveRoleModal = function (role) {
+        $modal.open({
+          templateUrl: 'components/dialogs/generic-ok-cancel.html',
+          controller: function ($scope, $state, $modalInstance) {
+            $scope.confirmButton = 'Remove';
+            $scope.modalText = 'Do you want to remove ' + role.name + ' role?';
+
+            $scope.ok = function () {
+              $scope.removeRole(role)
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.close();
+            };
+          },
+          scope: $scope
+        });
+      };
+
       $scope.getRoleDMRAddress = function (roleName) {
         var clusterAddress = $scope.currentCluster.getResourcePath();
         var roleAddress = clusterAddress.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION', 'role', roleName);

@@ -94,6 +94,10 @@ angular.module('managementConsole')
         $scope.serverNode.stop();
       };
 
+      $scope.removeNode = function () {
+        $scope.serverNode.remove();
+      };
+
       var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {
 
         $scope.serverNode = $stateParams.nodeName;

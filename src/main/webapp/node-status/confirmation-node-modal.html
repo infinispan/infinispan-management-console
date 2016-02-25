@@ -9,11 +9,13 @@
 
     <h3 ng-if="mode === 'start'">Starting {{serverNode}} will add it to {{clusterName}} cluster. Start {{serverNode}}?</h3>
     <h3 ng-if="mode === 'stop'">Stopping {{serverNode}} will remove it from {{clusterName}} cluster. Stop {{serverNode}}?</h3>
+    <h3 ng-if="mode === 'remove'">Removing {{serverNode}} from {{clusterName}} will destroy it. It can not be restarted after removal. Remove {{serverNode}}?</h3>
   </div>
   <div class="modal-footer">
 
     <button id="cancelButton" type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
     <button id="startNodeButton" ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Start</button>
     <button id="stopNodeButton" ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Stop</button>
+    <button id="removeNodeButton" ng-if="mode === 'remove'" type="button" class="btn btn-default" ng-click="removeNode();cancelModal()">Remove</button>
   </div>
 </div>

@@ -149,6 +149,10 @@ angular.module('managementConsole.api')
               return this.executeServerOp('resume');
             };
 
+            Server.prototype.remove = function (){
+              return this.executeServerOp('remove');
+            };
+
             Server.prototype.executeServerOp = function (operationName){
               var address = ['host', this.host, 'server-config', this.server];
               var op = {

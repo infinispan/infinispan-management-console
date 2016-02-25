@@ -19,6 +19,7 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('start')">Start</a></li>
           <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="openModal('stop')">Stop</a></li>
+          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('remove')">Remove</a></li>
         </ul>
       </div>
       <h1><span class="label" ng-class="serverNode.isRunning()?'label-success':'label-danger'">{{serverNode.getState()}}</span> {{nodeName}}

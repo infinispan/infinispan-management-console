@@ -36,9 +36,9 @@ angular.module('managementConsole.api')
             };
 
             Domain.prototype.refreshServers = function () {
-              this.servers = [];
-              this.hosts = [];
               return this.modelController.readChildrenResources(this.getResourcePath(), 'host', 2, true, true).then(function (response) {
+                this.servers = [];
+                this.hosts = [];
                 var serverPromises = [];
                 for (var hostName in response) {
                   if (hostName !== undefined) {

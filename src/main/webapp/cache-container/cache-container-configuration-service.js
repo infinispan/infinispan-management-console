@@ -164,6 +164,69 @@ angular.module('managementConsole')
         return modelController.readResource(['server-group', serverGroup, 'deployment', '*'], true);
       }
 
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //
+      // Script related functions
+      //
+
+      // Deploys a script - if script exists, updates its body
+      function deployScript(currentCluster, name, body) {
+          var resourcePathCacheContainer = currentCluster.domain.getFirstServer().getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+
+          var op = {
+               'operation': 'script-add',
+               'address':    resourcePathCacheContainer,
+               "name":       name,
+               "code":       body
+          };
+
+          return modelController.execute(op);
+      }
+
+      // Deletes a script
+      function removeScript(currentCluster, scriptName) {
+          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+
+          var op = {
+            'operation': 'script-remove',
+            'address':    resourcePathCacheContainer,
+            'name':       scriptName
+          };
+
+          return modelController.execute(op);
+      }
+
+      // Loads script body
+      function loadScriptBody(currentCluster, scriptName) {
+          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
+                           .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+          var op = {
+            'operation': 'script-cat',
+            'address':    resourcePathCacheContainer,
+            'name':       scriptName
+          };
+
+          return modelController.execute(op);
+      }
+
+      // Load all script task
+      function loadScriptTasks(currentCluster) {
+          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+
+          var op = {
+             'operation': 'task-list',
+             'address': resourcePathCacheContainer
+          };
+
+          return modelController.execute(op);
+      };
+
+
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
       return {
         loadRole: loadRole,
         addRole: addRole,
@@ -178,7 +241,11 @@ angular.module('managementConsole')
         getDeployedArtifact:getDeployedArtifact,
         deployArtifact:deployArtifact,
         undeployArtifact:undeployArtifact,
-        removeArtifact:removeArtifact
+        removeArtifact:removeArtifact,
+        deployScript:deployScript,
+        removeScript:removeScript,
+        loadScriptBody:loadScriptBody,
+        loadScriptTasks:loadScriptTasks
       };
     }
   ]);

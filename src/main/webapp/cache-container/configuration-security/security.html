@@ -33,7 +33,7 @@
 
         <div class="form-group">
           <label class="col-md-2 control-label">Roles</label>
-          <div class="col-md-3">
+          <div class="col-md-6">
             <table class="datatable table table-striped table-bordered">
               <thead>
               <tr>
@@ -45,16 +45,18 @@
               </tr>
               <tr>
                 <th>Role</th>
-                <th>Actions</th>
+                <th width="170" class="text-center">Actions</th>
               </tr>
               </thead>
               <tbody>
               <tr ng-repeat="role in roles">
                 <td>{{role.name}}</td>
-                <td>
-                  <div class="btn-group btn-group-justified" role="group">
-                    <a role="button" class="btn btn-default" ng-click="openEditRoleModal(role)">Edit</a>
-                    <a role="button" class="btn btn-default" ng-click="openRemoveRoleModal(role)">Remove</a>
+                <td class="text-center">
+                  <div class="btn-group" role="group">
+                    <a role="button" class="btn btn-default" ng-click="openEditRoleModal(role)"><i class="pficon pficon-edit"></i> Edit</a>
+                  </div>
+                  <div class="btn-group" role="group">
+                    <a role="button" class="btn btn-default" ng-click="openRemoveRoleModal(role)"><i class="pficon pficon-delete"></i> Remove</a>
                   </div>
                 </td>
               </tr>

@@ -1,6 +1,7 @@
 {
   "name": "managementConsole",
   "version": "8.2.0-SNAPSHOT",
+  "license": "Apache-2.0",
   "dependencies": {
     "angular": "1.4.4",
     "angular-local-storage": "0.2.2",
@@ -18,7 +19,6 @@
     "gulp": "^3.8.0",
     "gulp-autoprefixer": "^0.0.6",
     "gulp-cache": "^0.2.0",
-    "gulp-rimraf": "^0.1.0",
     "gulp-csso": "^0.2.6",
     "del": "^1.1.0",
     "event-stream": "^3.2.2",

@@ -369,11 +369,17 @@ angular.module('managementConsole', [
         $modal.open({
           templateUrl: 'components/dialogs/generic-error.html',
           controller: function($scope, $modalInstance) {
-            var trail = [];
-            utils.traverse(error, function (key, value, trail) {
-              $scope.errorText = trail[0];
-              $scope.errorTextDetail = value;
-            });
+            if( typeof error === 'string') {
+              $scope.errorText = "An error has occurred:";
+              $scope.errorTextDetail = error;
+            }
+            else {
+              var trail = [];
+              utils.traverse(error, function (key, value, trail) {
+                $scope.errorText = trail[0];
+                $scope.errorTextDetail = value;
+              });
+            }
             $scope.ok = function () {
               $modalInstance.close();
             }

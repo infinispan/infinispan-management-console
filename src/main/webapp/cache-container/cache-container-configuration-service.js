@@ -164,6 +164,12 @@ angular.module('managementConsole')
         return modelController.readResource(['server-group', serverGroup, 'deployment', '*'], true);
       }
 
+      // Returns the DMR resource path for the current cache container
+      function getClusterResourcePath(currentCluster) {
+          return currentCluster.domain.getFirstServer().getResourcePath()
+                .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+      }
+
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       //
       // Script related functions
@@ -171,12 +177,9 @@ angular.module('managementConsole')
 
       // Deploys a script - if script exists, updates its body
       function deployScript(currentCluster, name, body) {
-          var resourcePathCacheContainer = currentCluster.domain.getFirstServer().getResourcePath()
-              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
-
           var op = {
                'operation': 'script-add',
-               'address':    resourcePathCacheContainer,
+               'address':    getClusterResourcePath(currentCluster),
                "name":       name,
                "code":       body
           };
@@ -186,12 +189,9 @@ angular.module('managementConsole')
 
       // Deletes a script
       function removeScript(currentCluster, scriptName) {
-          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
-              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
-
           var op = {
             'operation': 'script-remove',
-            'address':    resourcePathCacheContainer,
+            'address':    getClusterResourcePath(currentCluster),
             'name':       scriptName
           };
 
@@ -200,11 +200,9 @@ angular.module('managementConsole')
 
       // Loads script body
       function loadScriptBody(currentCluster, scriptName) {
-          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
-                           .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
           var op = {
             'operation': 'script-cat',
-            'address':    resourcePathCacheContainer,
+            'address':    getClusterResourcePath(currentCluster),
             'name':       scriptName
           };
 
@@ -213,17 +211,58 @@ angular.module('managementConsole')
 
       // Load all script task
       function loadScriptTasks(currentCluster) {
-          var resourcePathCacheContainer =  currentCluster.domain.getFirstServer().getResourcePath()
-              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
-
           var op = {
              'operation': 'task-list',
-             'address': resourcePathCacheContainer
+             'address': getClusterResourcePath(currentCluster)
           };
 
           return modelController.execute(op);
-      };
+      }
 
+
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      //
+      // Schema related functions
+      //
+      function loadSchemas(currentCluster) {
+          var op = {
+             'operation':   'get-proto-schema-names',
+             'address':     getClusterResourcePath(currentCluster)
+          };
+
+          return modelController.execute(op);
+      }
+
+      function deploySchema(currentCluster, schemaName, schemaBody) {
+          var op = {
+            'operation':     'register-proto-schemas',
+            'file-contents': [schemaBody],
+            'file-names':    [schemaName],
+            'address':       getClusterResourcePath(currentCluster)
+          };
+
+          return modelController.execute(op);
+      }
+
+      function loadSchema(currentCluster, schemaName) {
+        var op = {
+           'operation':  'get-proto-schema',
+           'file-name':   schemaName,
+           'address':     getClusterResourcePath(currentCluster)
+        };
+
+        return modelController.execute(op);
+      }
+
+      function removeSchema(currentCluster, schemaName) {
+        var op = {
+           'operation':   'unregister-proto-schemas',
+           'file-names':  [schemaName],
+           'address':     getClusterResourcePath(currentCluster)
+        };
+
+        return modelController.execute(op);
+      }
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -242,10 +281,16 @@ angular.module('managementConsole')
         deployArtifact:deployArtifact,
         undeployArtifact:undeployArtifact,
         removeArtifact:removeArtifact,
+
         deployScript:deployScript,
         removeScript:removeScript,
         loadScriptBody:loadScriptBody,
-        loadScriptTasks:loadScriptTasks
+        loadScriptTasks:loadScriptTasks,
+
+        loadSchemas:loadSchemas,
+        deploySchema:deploySchema,
+        loadSchema:loadSchema,
+        removeSchema:removeSchema
       };
     }
   ]);

@@ -4,8 +4,9 @@ angular.module('managementConsole')
   .factory('cacheContainerConfigurationService', [
     '$q',
     'modelController',
+    'clusterNodesService',
     'utils',
-    function ($q, modelController, utils) {
+    function ($q, modelController, clusterNodesService, utils) {
 
       function loadRole(dmrAddress) {
         var deferred = $q.defer();
@@ -166,8 +167,9 @@ angular.module('managementConsole')
 
       // Returns the DMR resource path for the current cache container
       function getClusterResourcePath(currentCluster) {
-          return currentCluster.domain.getFirstServer().getResourcePath()
-                .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+        return clusterNodesService.getCoordinator(currentCluster).then(function (coord) {
+          return coord.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.getName());
+        });
       }
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,46 +179,53 @@ angular.module('managementConsole')
 
       // Deploys a script - if script exists, updates its body
       function deployScript(currentCluster, name, body) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
-               'operation': 'script-add',
-               'address':    getClusterResourcePath(currentCluster),
-               "name":       name,
-               "code":       body
+            'operation': 'script-add',
+            'address': address,
+            "name": name,
+            "code": body
           };
 
           return modelController.execute(op);
+        });
       }
 
       // Deletes a script
       function removeScript(currentCluster, scriptName) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
             'operation': 'script-remove',
-            'address':    getClusterResourcePath(currentCluster),
-            'name':       scriptName
+            'address': address,
+            'name': scriptName
           };
-
           return modelController.execute(op);
+        });
       }
 
       // Loads script body
       function loadScriptBody(currentCluster, scriptName) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
             'operation': 'script-cat',
-            'address':    getClusterResourcePath(currentCluster),
-            'name':       scriptName
+            'address': address,
+            'name': scriptName
           };
 
           return modelController.execute(op);
+        });
       }
 
       // Load all script task
       function loadScriptTasks(currentCluster) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
-             'operation': 'task-list',
-             'address': getClusterResourcePath(currentCluster)
+            'operation': 'task-list',
+            'address': address
           };
 
           return modelController.execute(op);
+        });
       }
 
 
@@ -225,43 +234,48 @@ angular.module('managementConsole')
       // Schema related functions
       //
       function loadSchemas(currentCluster) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
-             'operation':   'get-proto-schema-names',
-             'address':     getClusterResourcePath(currentCluster)
+            'operation': 'get-proto-schema-names',
+            'address': address
           };
 
           return modelController.execute(op);
+        });
       }
 
       function deploySchema(currentCluster, schemaName, schemaBody) {
+        return getClusterResourcePath(currentCluster).then(function (address) {
           var op = {
-            'operation':     'register-proto-schemas',
+            'operation': 'register-proto-schemas',
             'file-contents': [schemaBody],
-            'file-names':    [schemaName],
-            'address':       getClusterResourcePath(currentCluster)
+            'file-names': [schemaName],
+            'address': address
           };
-
           return modelController.execute(op);
+        });
       }
 
       function loadSchema(currentCluster, schemaName) {
-        var op = {
-           'operation':  'get-proto-schema',
-           'file-name':   schemaName,
-           'address':     getClusterResourcePath(currentCluster)
-        };
-
-        return modelController.execute(op);
+        return getClusterResourcePath(currentCluster).then(function (address) {
+          var op = {
+            'operation': 'get-proto-schema',
+            'file-name': schemaName,
+            'address': address
+          };
+          return modelController.execute(op);
+        });
       }
 
       function removeSchema(currentCluster, schemaName) {
-        var op = {
-           'operation':   'unregister-proto-schemas',
-           'file-names':  [schemaName],
-           'address':     getClusterResourcePath(currentCluster)
-        };
-
-        return modelController.execute(op);
+        return getClusterResourcePath(currentCluster).then(function (address) {
+          var op = {
+            'operation': 'unregister-proto-schemas',
+            'file-names': [schemaName],
+            'address': address
+          };
+          return modelController.execute(op);
+        });
       }
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////

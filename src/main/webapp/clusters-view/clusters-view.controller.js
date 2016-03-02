@@ -5,8 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$state',
     'modelController',
+    'clusterEventsService',
+    'clusterNodesService',
     'utils',
-    function ($scope, $state, modelController, utils) {
+    function ($scope, $state, modelController, clusterEventsService, clusterNodesService, utils) {
 
             $scope.clusters = modelController.getServer().getClusters();
             $scope.group = modelController.getServer().getServerGroupName();
@@ -16,92 +18,51 @@ angular.module('managementConsole')
             $scope.onlineSites  = {};
             $scope.mixedSites   = {};
 
-            //
-            // Updates the map of remote site status
-            //
-            $scope.refreshRemoteSitesStatus = function(cluster) {
-              var resourcePathCacheContainer = cluster.domain.getFirstServer().getResourcePath()
-                 .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
-
-                // Refresh list of offline sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
-                  function (response){
-                      if( response != null && response.constructor === Array) {
-                        $scope.offlineSites[cluster.name] = response
-                      } else {
-                        $scope.offlineSites[cluster.name] = [];
-                      }
-                  }
-                );
-
-                // Refresh list of online sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
-                  function (response){
-                      if( response != null && response.constructor === Array) {
-                        $scope.onlineSites[cluster.name] = response
-                      } else {
-                        $scope.onlineSites[cluster.name] = [];
-                      }
-                  }
-                );
-
-                // Refresh list of mixed sites
-                cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
-                  function (response){
-                    if( response != null && response.constructor === Array) {
-                      $scope.mixedSites[cluster.name] = response
-                    } else {
-                      $scope.mixedSites[cluster.name] = [];
-                    }
-                  }
-               );
-            };
-
             //endpoints for each cache container
             $scope.endpoints = [];
-            $scope.offlineSites = {};
-            $scope.onlineSites  = {};
-            $scope.mixedSites   = {};
+
 
             //
             // Updates the map of remote site status
             //
             $scope.refreshRemoteSitesStatus = function (cluster) {
-              var resourcePathCacheContainer = cluster.domain.getFirstServer().getResourcePath()
-                .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
+              clusterNodesService.getCoordinator(cluster).then(function (coord) {
+                var address = coord.getResourcePath()
+                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.getName());
 
-              // Refresh list of offline sites
-              cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
-                function (response) {
-                  if (response != null && response.constructor === Array) {
-                    $scope.offlineSites[cluster.name] = response
-                  } else {
-                    $scope.offlineSites[cluster.name] = [];
+                // Refresh list of offline sites
+                modelController.readAttribute(address, 'sites-offline').then(
+                  function (response) {
+                    if (utils.isNonEmptyArray(response)) {
+                      $scope.offlineSites[cluster.getName()] = response
+                    } else {
+                      $scope.offlineSites[cluster.getName()] = [];
+                    }
                   }
-                }
-              );
+                );
 
-              // Refresh list of online sites
-              cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
-                function (response) {
-                  if (response != null && response.constructor === Array) {
-                    $scope.onlineSites[cluster.name] = response
-                  } else {
-                    $scope.onlineSites[cluster.name] = [];
+                // Refresh list of online sites
+                modelController.readAttribute(address, 'sites-online').then(
+                  function (response) {
+                    if (utils.isNonEmptyArray(response)) {
+                      $scope.onlineSites[cluster.getName()] = response
+                    } else {
+                      $scope.onlineSites[cluster.getName()] = [];
+                    }
                   }
-                }
-              );
+                );
 
-              // Refresh list of mixed sites
-              cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
-                function (response) {
-                  if (response != null && response.constructor === Array) {
-                    $scope.mixedSites[cluster.name] = response
-                  } else {
-                    $scope.mixedSites[cluster.name] = [];
+                // Refresh list of mixed sites
+                modelController.readAttribute(address, 'sites-mixed').then(
+                  function (response) {
+                    if (utils.isNonEmptyArray(response)) {
+                      $scope.mixedSites[cluster.getName()] = response
+                    } else {
+                      $scope.mixedSites[cluster.getName()] = [];
+                    }
                   }
-                }
-              );
+                );
+              });
             };
 
 
@@ -116,8 +77,7 @@ angular.module('managementConsole')
             };
 
             $scope.refreshClusterEvents = function (cluster, maxLines) {
-              cluster.fetchClusterEvents(maxLines).then(
-                function (response) {
+              clusterEventsService.fetchClusterEvents(cluster, maxLines).then(function (response) {
                   angular.forEach(response, function (event) {
                     $scope.gridEvents.push(event);
                   });
@@ -134,10 +94,10 @@ angular.module('managementConsole')
               if (utils.isNonEmptyArray(relays)){
                 angular.forEach(relays, function (relay){
                   var tempRelays = relay['remote-site'];
-                  $scope.relays[cluster.name] = Object.keys(tempRelays);
+                  $scope.relays[cluster.getName()] = Object.keys(tempRelays);
                 });
               } else {
-                $scope.relays[cluster.name] = ['N/A'];
+                $scope.relays[cluster.getName()] = ['N/A'];
               }
               $scope.endpoints.push(cluster.getEndpoints());
             });

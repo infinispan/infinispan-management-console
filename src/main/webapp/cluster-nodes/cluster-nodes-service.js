@@ -52,12 +52,45 @@ angular.module('managementConsole')
         });
       }
 
+      function getCoordinator(cluster) {
+        var servers = cluster.getNodes();
+        var firstServer = servers[0]; //lets ask first server
+        return getChannelName(cluster.getName()).then(function (channelName) {
+          var address = ['host', firstServer.getHost(), 'server', firstServer.getServerName(), 'subsystem', 'datagrid-jgroups',
+            'channel', channelName[0], 'protocol', 'pbcast.GMS'];
+
+          return modelController.readAttribute(address, 'view').then(function (view) {
+            var lastIndex = view.indexOf('|');
+            var hostServerSplitIndex = view.indexOf(':');
+            var host = view.substring(1, hostServerSplitIndex);
+            var server = view.substring(hostServerSplitIndex + 1, lastIndex);
+
+            var serverIndex = -1; // not found
+            var foundCoordinator = servers.some(function(entry, index) {
+              if (entry.getHost() === host && entry.getServerName() === server) {
+                serverIndex = index;
+                return true;
+              }
+            });
+            if (foundCoordinator){
+              return servers[serverIndex];
+            } else {
+              return servers[0];
+            }
+
+          }).catch(function (e) {
+            return servers [0];
+          });
+        });
+      }
+
       return {
         stopCluster:stopCluster,
         startCluster:startCluster,
         restartCluster:restartCluster,
         reloadCluster:reloadCluster,
-        getView:getView
+        getView:getView,
+        getCoordinator:getCoordinator
       };
     }
   ]);

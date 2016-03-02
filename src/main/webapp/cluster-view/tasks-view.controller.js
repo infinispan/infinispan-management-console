@@ -8,10 +8,11 @@ angular.module('managementConsole')
   '$q',
   'modelController',
   'cacheCreateController',
+  'clusterNodesService',
   'utils',
   '$modal',
   '$controller',
-  function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal, $controller) {
+  function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, clusterNodesService, utils, $modal, $controller) {
 
       // Extend from cluster view controller, given we need some functions for the menus and we don't want to replicate them here
       angular.extend(this, $controller('ClusterViewCtrl',{$scope: $scope}));
@@ -29,37 +30,41 @@ angular.module('managementConsole')
 
       // Fetch the list of cluster events
       $scope.refreshTaskHistory = function(maxLines) {
-          var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
-              .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name);
+        clusterNodesService.getCoordinator($scope.currentCluster).then(function (coord) {
+          var resourcePathCacheContainer = coord.getResourcePath()
+            .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name);
 
           var op = {
-              'operation': 'read-event-log',
-              'address':    resourcePathCacheContainer,
-              "lines":      maxLines,
-              "category":   "TASKS"
+            'operation': 'read-event-log',
+            'address': resourcePathCacheContainer,
+            "lines": maxLines,
+            "category": "TASKS"
           };
 
           modelController.execute(op).then(
-            function(response) {
-                $scope.taskHistory = response;
-          });
+            function (response) {
+              $scope.taskHistory = response;
+            });
+        });
       };
 
       // Refresh running tasks
-      $scope.refreshRunningTasks = function() {
-         var resourcePathCacheContainer =  $scope.currentCluster.domain.getFirstServer().getResourcePath()
-                      .concat('subsystem', 'datagrid-infinispan', 'cache-container',   $scope.currentCluster.name);
+      $scope.refreshRunningTasks = function () {
+        clusterNodesService.getCoordinator($scope.currentCluster).then(function (coord) {
+          var resourcePathCacheContainer = coord.getResourcePath()
+            .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name);
 
-         var op = {
+          var op = {
             'operation': 'task-status',
-            'address'  : resourcePathCacheContainer
-         };
+            'address': resourcePathCacheContainer
+          };
 
-         modelController.execute(op).then(
-           function(response) {
+          modelController.execute(op).then(
+            function (response) {
               $scope.runningTasks = response;
-           }
-        );
+            }
+          );
+        });
       };
 
       $scope.refresh = function() {
@@ -95,7 +100,7 @@ angular.module('managementConsole')
           }
           }
         );
-      }
+      };
 
       var ViewEventDetailsModalController = function($scope, $modalInstance, event) {
           $scope.event = event;
@@ -136,18 +141,66 @@ angular.module('managementConsole')
         $scope.asyncTask = false;
 
         // Load tasks
-        $scope.loadTasks = function() {
-            var resourcePathCacheContainer = currentCluster.domain.getFirstServer().getResourcePath()
-                .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+        $scope.loadTasks = function () {
+          clusterNodesService.getCoordinator(currentCluster).then(function (coord) {
+            var resourcePathCacheContainer = coord.getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
 
             var op = {
-               'operation': 'task-list',
-               'address': resourcePathCacheContainer
+              'operation': 'task-list',
+              'address': resourcePathCacheContainer
             };
 
+            modelController.execute(op).then(
+              function (response) {
+                $scope.availableTasks = response;
+              }
+            );
+          });
+        };
+
+        $scope.executeTask = function (server) {
+          var resourcePathCacheContainer = server.getResourcePath()
+            .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
+
+          var op = {
+            'operation': 'task-execute',
+            'address': resourcePathCacheContainer,
+            "name": $scope.selectedTask.name,
+            "cache-name": $scope.selectedCache.name,
+            "async": $scope.asyncTask
+          };
+
+          // Now add parameters as needed
+          var parameters = {};
+          if ($scope.param1_name != null) {
+            parameters[$scope.param1_name] = $scope.param1_value;
+          }
+          if ($scope.param2_name != null) {
+            parameters[$scope.param2_name] = $scope.param2_value;
+          }
+          if ($scope.param3_name != null) {
+            parameters[$scope.param3_name] = $scope.param3_value;
+          }
+          if ($scope.param4_name != null) {
+            parameters[$scope.param4_name] = $scope.param4_value;
+          }
+          if ($scope.param5_name != null) {
+            parameters[$scope.param5_name] = $scope.param5_value;
+          }
+          op["parameters"] = parameters;
+
           modelController.execute(op).then(
-            function(response) {
-              $scope.availableTasks = response;
+            function (response) {
+              $scope.successTaskLaunch = true;
+              $scope.taskOutput = response;
+              if ($scope.asyncTask) {
+                $modalInstance.dismiss();
+              }
+            },
+            function (reason) {
+              $scope.errorLaunching = true;
+              $scope.errorDescription = reason;
             }
           );
         };
@@ -157,50 +210,15 @@ angular.module('managementConsole')
             $scope.errorLaunching = false;
             $scope.errorDescription = null;
 
-            var server = null;
-            if( $scope.selectedNode != null ) {
-              server = currentCluster.domain.getNode($scope.selectedNode);
+
+            if(utils.isNotNullOrUndefined($scope.selectedNode)) {
+              var server = currentCluster.domain.getNode($scope.selectedNode);
+              $scope.executeTask(server);
+            } else {
+              clusterNodesService.getCoordinator(currentCluster).then(function(coord){
+                $scope.executeTask(coord)
+              });
             }
-
-            if( server == null ) {
-              server = currentCluster.domain.getFirstServer()
-            }
-
-            var resourcePathCacheContainer = server.getResourcePath()
-                .concat('subsystem', 'datagrid-infinispan', 'cache-container', currentCluster.name);
-
-            var op = {
-               'operation': 'task-execute',
-               'address':      resourcePathCacheContainer,
-               "name":         $scope.selectedTask.name,
-               "cache-name":   $scope.selectedCache.name,
-               "async":        $scope.asyncTask
-            };
-
-            //alert(JSON.stringify(op));
-
-            // Now add parameters as needed
-            var parameters = {};
-            if( $scope.param1_name != null ) { parameters[ $scope.param1_name ]=$scope.param1_value; }
-            if( $scope.param2_name != null ) { parameters[ $scope.param2_name ]=$scope.param2_value; }
-            if( $scope.param3_name != null ) { parameters[ $scope.param3_name ]=$scope.param3_value; }
-            if( $scope.param4_name != null ) { parameters[ $scope.param4_name ]=$scope.param4_value; }
-            if( $scope.param5_name != null ) { parameters[ $scope.param5_name ]=$scope.param5_value; }
-            op["parameters"] = parameters;
-
-            modelController.execute(op).then(
-              function(response) {
-                $scope.successTaskLaunch = true;
-                $scope.taskOutput = response;
-                if( $scope.asyncTask ){
-                  $modalInstance.dismiss();
-                }
-              },
-              function(reason) {
-                $scope.errorLaunching = true;
-                $scope.errorDescription = reason;
-              }
-            );
         };
 
         // Get list of caches

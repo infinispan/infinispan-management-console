@@ -25,59 +25,43 @@
 
       <br>
 
-      <!-- <table class="datatable table table-striped table-bordered">
+      <table class="datatable table table-striped table-bordered">
         <thead>
         <tr>
           <th colspan="3" class="text-right">
             <div class="btn-group" role="group">
-              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#myModal">Add</a>
+              <a role="button" class="btn btn-default" ng-click="openCreateSchemaModal()"><span
+                class="pficon pficon-add-circle-o"></span> Add</a>
             </div>
           </th>
         </tr>
-        <tr>
+        <tr ng-if="availableSchemas.length > 0">
           <th>Name</th>
           <th>Type</th>
-          <th class="col-sm-1">Actions</th>
+          <th width="160" class="text-center">Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>Person</td>
+        <tr ng-repeat="schema in availableSchemas">
+          <td>{{schema}}</td>
           <td>ProtoBuf</td>
-          <td>
-            <div class="btn-group btn-group-justified" role="group">
-              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#myModal">Edit</a>
-              <a href="#" role="button" class="btn btn-default">Remove</a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Address</td>
-          <td>ProtoBuf</td>
-          <td>
-            <div class="btn-group btn-group-justified" role="group">
-              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#myModal">Edit</a>
-              <a href="#" role="button" class="btn btn-default">Remove</a>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>Job</td>
-          <td>ProtoBuf</td>
-          <td>
-            <div class="btn-group btn-group-justified" role="group">
-              <a href="#" role="button" class="btn btn-default" data-toggle="modal"
-                 data-target="#myModal">Edit</a>
-              <a href="#" role="button" class="btn btn-default">Remove</a>
+          <td class="text-center">
+            <div class="btn-group" role="group">
+              <button class="btn btn-default" ng-click="openEditSchemaModal(schema)"><i class="pficon pficon-edit"></i> Edit</button>
+              </div>
+            <div class="btn-group" role="group">
+              <button class="btn btn-default" ng-click="openConfirmationModal(schema, 'remove-schema')"><i class="pficon pficon-delete"></i> Remove</button>
             </div>
           </td>
         </tr>
         </tbody>
-      </table>  -->
-      <h3>Work in progress. Will be implemented in the next minor release. </h3>
+      </table>
+      <div class="text-center" ng-if="availableSchemas.length == 0">
+          <br>
+          <br>
+          <i class="fa fa-ban"></i> No protobuf schemas defined yet.
+      </div>
+
     </div>
   </div>
 </div>

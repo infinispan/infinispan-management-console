@@ -8,9 +8,10 @@ var app = angular.module('managementConsole')
     '$q',
     'modelController',
     'cacheCreateController',
+    'clusterNodesService',
     'utils',
     '$modal',
-    function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, utils, $modal) {
+    function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, clusterNodesService, utils, $modal) {
       var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
         $scope.cacheName;
@@ -173,17 +174,27 @@ var app = angular.module('managementConsole')
         $scope.errorExecuting = false;
         $scope.errorDescription = null;
 
-        $scope.currentCluster.setRebalancing(rebalance).then(
-          function (response) {
-            $scope.successExecuteOperation = true;
-            $scope.refresh();
-          },
-          function (reason) {
-            $scope.errorExecuting = true;
-            $scope.errorDescription = reason;
-            $scope.refresh();
-          }
-        );
+        clusterNodesService.getCoordinator($scope.currentCluster).then(function (coord) {
+          var path = coord.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName());
+
+          var op = {
+            'operation': "cluster-rebalance",
+            'address': path,
+            "value": rebalance
+          };
+
+          return modelController.execute(op).then(
+            function (response) {
+              $scope.successExecuteOperation = true;
+              $scope.refresh();
+            },
+            function (reason) {
+              $scope.errorExecuting = true;
+              $scope.errorDescription = reason;
+              $scope.refresh();
+            }
+          );
+        });
       };
 
       $scope.confirmAndSetCacheContainerRebalance = function (rebalanceValue, confirmationMessage) {
@@ -301,69 +312,74 @@ var app = angular.module('managementConsole')
           });
 
           confirmDialog.result.then(function (result) {
-            var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
-              .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name);
+            clusterNodesService.getCoordinator($scope.currentCluster).then(function(coord){
+              var resourcePathCacheContainer = coord.getResourcePath()
+                .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName());
 
-            var op = {
-              'operation': operationId,
-              'address': resourcePathCacheContainer,
-              "site-name": siteName
-            };
+              var op = {
+                'operation': operationId,
+                'address': resourcePathCacheContainer,
+                "site-name": siteName
+              };
 
-            $scope.successExecuteOperation = false;
-            $scope.errorExecuting = false;
+              $scope.successExecuteOperation = false;
+              $scope.errorExecuting = false;
 
-            modelController.execute(op).then(
-              function (response) {
-                $scope.successExecuteOperation = true;
-                $scope.refresh();
-              },
-              function (reason) {
-                $scope.refresh();
-                $scope.errorExecuting = true;
-                $scope.errorDescription = reason;
-              }
-            );
+              modelController.execute(op).then(
+                function (response) {
+                  $scope.successExecuteOperation = true;
+                  $scope.refresh();
+                },
+                function (reason) {
+                  $scope.refresh();
+                  $scope.errorExecuting = true;
+                  $scope.errorDescription = reason;
+                }
+              );
+            });
           });
         };
 
         // Refresh site status
         $scope.refreshRemoteSitesStatus = function (cluster) {
-          var resourcePathCacheContainer = cluster.domain.getFirstServer().getResourcePath()
-            .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
+          clusterNodesService.getCoordinator(cluster).then(function(coord){
+            var resourcePathCacheContainer = coord.getResourcePath()
+              .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.name);
 
-          // Refresh list of offline sites
-          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
-            function (response) {
-              if (response != null && response.constructor === Array) {
-                $scope.offlineSites = response
-              } else {
-                $scope.offlineSites = [];
+            // Refresh list of offline sites
+            modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
+              function (response) {
+                if (response != null && response.constructor === Array) {
+                  $scope.offlineSites = response
+                } else {
+                  $scope.offlineSites = [];
+                }
               }
-            }
-          );
+            );
 
-          // Refresh list of online sites
-          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
-            function (response) {
-              if (response != null && response.constructor === Array) {
-                $scope.onlineSites = response
-              } else {
-                $scope.onlineSites = [];
+            // Refresh list of online sites
+            modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
+              function (response) {
+                if (response != null && response.constructor === Array) {
+                  $scope.onlineSites = response
+                } else {
+                  $scope.onlineSites = [];
+                }
               }
-            }
-          );
+            );
 
-          // Refresh list of mixed sites
-          cluster.modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
-            function (response) {
-              if (response != null && response.constructor === Array) {
-                $scope.mixedSites = response
-              } else {
-                $scope.mixedSites = [];
+            // Refresh list of mixed sites
+            modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
+              function (response) {
+                if (response != null && response.constructor === Array) {
+                  $scope.mixedSites = response
+                } else {
+                  $scope.mixedSites = [];
+                }
               }
-            }
-          );
+            );
+          });
+
         };
 
         $scope.refresh = function () {

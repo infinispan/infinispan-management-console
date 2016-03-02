@@ -34,39 +34,39 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.refresh = function () {
-                this.modelController.readResourceDescription(this.getResourcePath(), true, false).then(function (response) {
-                  this.metadata = response;
-                }.bind(this));
-                return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
-                    this.configurations = response.configurations.CONFIGURATIONS;
-                    this.lastRefresh = new Date();
-                    this.caches = {};
-                    var cachePromises = [];
-                    var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
-                    for (var i = 0; i < cacheTypes.length; i++) {
-                        var cacheType = cacheTypes[i];
-                        var typedCaches = response[cacheType];
-                        if (typedCaches !== undefined) {
-                            for (var name in typedCaches) {
-                                if (name !== undefined) {
-                                    var configurationName = typedCaches[name].configuration;
-                                    var confModel = this.getConfigurationModel(cacheType, configurationName);
-                                    var cache = new CacheModel(name, cacheTypes[i], configurationName, confModel, this);
-                                    this.caches[name] = cache;
-                                    cachePromises.push(cache.refresh());
-                                }
-                            }
-                        }
+              this.modelController.readResourceDescription(this.getResourcePath(), true, false).then(function (response) {
+                this.metadata = response;
+              }.bind(this));
+              return this.modelController.readResource(this.getResourcePath(), true, false).then(function (response) {
+                this.configurations = response.configurations.CONFIGURATIONS;
+                this.lastRefresh = new Date();
+                this.caches = {};
+                var cachePromises = [];
+                var cacheTypes = ['local-cache', 'distributed-cache', 'replicated-cache', 'invalidation-cache'];
+                for (var i = 0; i < cacheTypes.length; i++) {
+                  var cacheType = cacheTypes[i];
+                  var typedCaches = response[cacheType];
+                  if (typedCaches !== undefined) {
+                    for (var name in typedCaches) {
+                      if (name !== undefined) {
+                        var configurationName = typedCaches[name].configuration;
+                        var confModel = this.getConfigurationModel(cacheType, configurationName);
+                        var cache = new CacheModel(name, cacheTypes[i], configurationName, confModel, this);
+                        this.caches[name] = cache;
+                        cachePromises.push(cache.refresh());
+                      }
                     }
-                    this.threadpool = response['thread-pool'];
-                    this.security = response.security;
-                    this.transport = response.transport;
-                    return $q.all(cachePromises);
-                }.bind(this)).then(function (){
-                  this.getAvailability();
-                }.bind(this)).then(function (){
-                                  this.getRebalancingStatus();
-                                }.bind(this));
+                  }
+                }
+                this.threadpool = response['thread-pool'];
+                this.security = response.security;
+                this.transport = response.transport;
+                return $q.all(cachePromises);
+              }.bind(this)).then(function () {
+                this.getAvailability();
+              }.bind(this)).then(function () {
+                this.getRebalancingStatus();
+              }.bind(this));
             };
 
             Cluster.prototype.getConfigurationModel = function (cacheType, name) {
@@ -220,35 +220,6 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.getThreadpoolConfiguration = function () {
               return this.threadpool;
-            };
-
-
-            // Fetch the list of cluster events
-            Cluster.prototype.fetchClusterEvents = function(maxLines) {
-              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
-                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
-
-                  var op = {
-                    'operation': 'read-event-log',
-                    'address': resourcePathCacheContainer,
-                    "lines": maxLines
-                  };
-
-                  return this.modelController.execute(op);
-            };
-
-            // Sets cluster rebalancing
-            Cluster.prototype.setRebalancing = function(rebalance) {
-              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
-                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
-
-              var op = {
-                'operation': "cluster-rebalance",
-                'address': resourcePathCacheContainer,
-                "value": rebalance
-              };
-
-              return this.modelController.execute(op);
             };
 
             return Cluster;

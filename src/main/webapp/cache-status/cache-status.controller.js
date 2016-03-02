@@ -7,8 +7,9 @@ angular.module('managementConsole')
     '$state',
     '$modal',
     'modelController',
+    'clusterNodesService',
     'utils',
-    function ($scope, $stateParams, $state, $modal, modelController, utils) {
+    function ($scope, $stateParams, $state, $modal, modelController, clusterNodesService, utils) {
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }
@@ -88,35 +89,37 @@ angular.module('managementConsole')
             };
 
             // Changes cache rebalancing
-            $scope.setCacheRebalance = function(rebalance) {
+            $scope.setCacheRebalance = function (rebalance) {
 
-                var resourcePathCacheContainer = $scope.currentCluster.domain.getFirstServer().getResourcePath()
-                    .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name,
-                    $scope.currentCache.type,
-                    $scope.currentCache.name
+              clusterNodesService.getCoordinator($scope.currentCluster).then(function (coord) {
+                var resourcePathCacheContainer = coord.getResourcePath()
+                  .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName(),
+                  $scope.currentCache.type,
+                  $scope.currentCache.getName()
                 );
 
                 var op = {
-                    'operation': "cache-rebalance",
-                    'address'  : resourcePathCacheContainer,
-                    "value"    : rebalance
+                  'operation': "cache-rebalance",
+                  'address': resourcePathCacheContainer,
+                  "value": rebalance
                 };
 
                 $scope.successExecuteOperation = false;
-                $scope.errorExecuting          = false;
+                $scope.errorExecuting = false;
 
                 modelController.execute(op).then(
-                        function(response) {
-                            $scope.successExecuteOperation = true;
-                            $scope.refresh();
-                        },
-                        function(reason) {
-                            $scope.errorExecuting = true;
-                            $scope.errorDescription = reason;
-                            $scope.refresh();
-                        }
+                  function (response) {
+                    $scope.successExecuteOperation = true;
+                    $scope.refresh();
+                  },
+                  function (reason) {
+                    $scope.errorExecuting = true;
+                    $scope.errorDescription = reason;
+                    $scope.refresh();
+                  }
                 );
-            }
+              });
+            };
 
             $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
 

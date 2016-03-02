@@ -5,8 +5,9 @@ angular.module('managementConsole')
     '$scope',
     'modelController',
     'serverGroups',
+    'clusterEventsService',
     'utils',
-    function ($scope, modelController, serverGroups, utils) {
+    function ($scope, modelController, serverGroups, clusterEventsService, utils) {
            $scope.groups = serverGroups;
            $scope.servers = modelController.getServer().getNodes();
 
@@ -15,21 +16,20 @@ angular.module('managementConsole')
 
             // Loads latest grid events
            $scope.refreshClusterEvents = function(cluster, maxLines) {
-                cluster.fetchClusterEvents(maxLines).then(
-                function (response) {
-                     angular.forEach(response, function ( event ) {
-                       $scope.gridEvents.push(event);
-                       });
-                  }
-               );
-           }
+             clusterEventsService.fetchClusterEvents(cluster, maxLines).then(function (response) {
+                 angular.forEach(response, function (event) {
+                   $scope.gridEvents.push(event);
+                 });
+               }
+             );
+           };
 
           $scope.refreshGridEvents = function() {
                 $scope.gridEvents = [];
                 angular.forEach($scope.clusters, function(cluster){
                   $scope.refreshClusterEvents(cluster, 10);
                 });
-          }
+          };
 
           // Refresh grid events
           $scope.refreshGridEvents();

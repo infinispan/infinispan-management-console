@@ -58,6 +58,14 @@
           scope.metadata[field].style = null;
         };
 
+        scope.hasAnyFieldPreloadedData = function () {
+          return scope.fields.some(function(group) {
+            return group.fields.some(function (attrName) {
+              return utils.isNotNullOrUndefined(scope.data[attrName]);
+            });
+          });
+        };
+
         scope.prevData = {};
         if (scope.initDefaults) {
           scope.data = {};
@@ -74,6 +82,8 @@
             scope.data = {};
           }
         }
+
+        scope.data['is-new-node'] = !scope.hasAnyFieldPreloadedData();
 
         //now clean any previous metadata and record field values in model so they can be reverted (undo)
         scope.cleanMetadata();

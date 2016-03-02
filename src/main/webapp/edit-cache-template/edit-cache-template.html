@@ -24,25 +24,26 @@
 
         <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
           <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="replicatedCacheConfiguration" ng-if="cacheConfigurationType == 'replicated-cache'">
           <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="invalidationCacheConfiguration" ng-if="cacheConfigurationType == 'invalidation-cache'">
           <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="localCacheConfiguration" ng-if="cacheConfigurationType == 'local-cache'">
           <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="false"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
 
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-6">
-            <button id="saveCacheTemplateButton" type="button" class="btn btn-primary" ng-click="saveCacheTemplate()">Apply changes</button>
+            <button id="saveCacheTemplateButton" type="button" class="btn btn-primary" ng-if="isCreateMode()" ng-click="saveNewTemplate()">Create</button>
+            <button id="editCacheTemplateButton" type="button" class="btn btn-primary"  ng-if="isEditMode()" ng-click="saveEditedTemplate()">Apply changes</button>
             <button id="cancelCacheTemplateButton" type="button" class="btn btn-default" ng-click="goToTemplateView()">Cancel</button>
           </div>
         </div>

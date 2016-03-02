@@ -8,22 +8,22 @@ angular.module('managementConsole')
 
       function restartCluster() {
         var cluster = modelController.getServer().getServerGroup();
-        cluster.restartServers();
+        return cluster.restartServers();
       }
 
       function startCluster() {
         var cluster = modelController.getServer().getServerGroup();
-        cluster.startServers();
+        return cluster.startServers();
       }
 
       function stopCluster() {
         var cluster = modelController.getServer().getServerGroup();
-        cluster.stopServers();
+        return cluster.stopServers();
       }
 
       function reloadCluster() {
         var cluster = modelController.getServer().getServerGroup();
-        cluster.reloadServers();
+        return cluster.reloadServers();
       }
 
       function getChannelName(clusterName) {

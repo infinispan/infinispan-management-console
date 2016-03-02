@@ -11,7 +11,8 @@
           metadata: '=',
           initDefaults: '=',
           readOnly: '=',
-          cacheType: '@'
+          cacheType: '@',
+          outsideController: '='
         },
         replace: false,
         templateUrl: function(elem, attrs) {

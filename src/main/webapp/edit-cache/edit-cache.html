@@ -3,7 +3,7 @@
 <div class="container-fluid">
   <div class="row header-row">
     <div class="col-sm-12 col-md-12">
-      <ol class="breadcrumb" ng-if="isViewExistingCacheWorkflow()">
+      <ol class="breadcrumb" ng-if="isEditMode()">
         <li>
           <a ui-sref="clustersView">Cache containers</a>
         </li>
@@ -13,7 +13,7 @@
         <li>{{currentCacheName}}<small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
         <li class="active"><strong>Configuration</strong></li>
       </ol>
-      <ol class="breadcrumb" ng-if="isAddNewCacheWorkflow()">
+      <ol class="breadcrumb" ng-if="isCreateMode()">
         <li>
           <a ui-sref="clustersView">Cache containers</a>
         </li>
@@ -31,31 +31,31 @@
     </div>
   </div>
 
-  <h2 ng-if="isAddNewCacheWorkflow()">View / Edit cache configuration:</h2>
-  <h2 ng-if="isViewExistingCacheWorkflow()">View cache configuration:</h2>
+  <h2>View / Edit cache configuration:</h2>
 
         <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
           <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="replicatedCacheConfiguration" ng-if="cacheConfigurationType == 'replicated-cache'">
           <cache-configuration cache-type="replicated-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="invalidationCacheConfiguration" ng-if="cacheConfigurationType == 'invalidation-cache'">
           <cache-configuration cache-type="invalidation-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
         <div id="localCacheConfiguration" ng-if="cacheConfigurationType == 'local-cache'">
           <cache-configuration cache-type="local-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
-                               init-defaults="false" read-only="isViewExistingCacheWorkflow()"/>
+                               init-defaults="false" read-only="false" outside-controller="configurationSectionHandles"/>
         </div>
 
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-6">
-            <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="isAddNewCacheWorkflow()" ng-click="onCacheCreateClick()">Create</button>
-            <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-if="isAddNewCacheWorkflow()" ng-click="cancel()">Cancel</button>
+            <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="isCreateMode()" ng-click="onCacheCreateClick()">Create</button>
+            <button id="updateCacheButton" type="button" class="btn btn-primary" ng-if="isEditMode()" ng-click="onCacheCreateClick()">Apply changes</button>
+            <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
           </div>
         </div>
 

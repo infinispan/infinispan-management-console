@@ -242,16 +242,23 @@ angular.module('managementConsole', [
                   clusterName: null,
                   templateName: null,
                   cacheConfigurationType: null,
-                  cacheConfigurationTemplate: null
+                  cacheConfigurationTemplate: null,
+                  mode:''
                 },
                 templateUrl: 'edit-cache-template/edit-cache-template.html',
                 controller: 'editCacheTemplateCtrl',
                 resolve: {
-                  configurationModel: function (cacheCreateController, modelController, $stateParams) {
-                    var cacheTemplateModel = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                  configurationModel: function ($q, cacheCreateController, modelController, $stateParams) {
+                    var deferred = $q.defer();
+                    var promise = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
                       $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
-                    cacheTemplateModel.template = $stateParams.templateName;
-                    return cacheTemplateModel;
+                    promise.then(function (response){
+                      var model = response;
+                      model.type = $stateParams.cacheConfigurationType;
+                      model.template = $stateParams.cacheConfigurationTemplate;
+                      deferred.resolve(model);
+                    });
+                    return deferred.promise;
                   }
                 }
             }).state('editCacheContainerSchemas', {

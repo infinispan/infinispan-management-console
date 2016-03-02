@@ -3,6 +3,7 @@
 angular.module('managementConsole')
   .controller('editCacheCtrl', [
     '$scope',
+    '$rootScope',
     '$state',
     '$stateParams',
     'utils',
@@ -10,19 +11,19 @@ angular.module('managementConsole')
     'modelController',
     'cacheCreateController',
     'configurationModel',
-    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationModel) {
+    function ($scope, $rootScope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationModel) {
       if (!$stateParams.clusterName && !$stateParams.cacheName) {
         $state.go('error404');
       }
 
       $scope.changedFields = [];
 
-      $scope.isAddNewCacheWorkflow = function () {
+      $scope.isCreateMode = function () {
         return $stateParams.newCacheCreation === true;
       };
 
-      $scope.isViewExistingCacheWorkflow = function () {
-        return !$scope.isAddNewCacheWorkflow();
+      $scope.isEditMode = function () {
+        return !$scope.isCreateMode();
       };
 
 
@@ -33,7 +34,7 @@ angular.module('managementConsole')
       $scope.selectedTemplate = $stateParams.cacheConfigurationTemplate;
       $scope.cacheConfigurationType = $stateParams.cacheConfigurationType;
 
-      if ($scope.isViewExistingCacheWorkflow()) {
+      if ($scope.isEditMode()) {
         $scope.currentCache = $scope.currentCluster.getCaches()[$scope.currentCacheName];
         $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);
         $scope.selectedTemplate = $scope.currentCache.getConfigurationTemplate();
@@ -43,6 +44,14 @@ angular.module('managementConsole')
       $scope.configurationModel.name = $scope.currentCacheName;
       $scope.configurationModel.type = $scope.cacheConfigurationType;
       $scope.configurationModel.template = $scope.selectedTemplate;
+
+      $scope.configurationSectionHandles = []; //assigned to a configuration section through HTML attribute
+
+      $scope.requiresRestart = function (){
+        return $scope.configurationSectionHandles.some(function (handle) {
+          return handle.requiresRestart();
+        });
+      };
 
 
       $scope.currentCacheAvailability = function () {
@@ -67,6 +76,15 @@ angular.module('managementConsole')
         }).catch(function (e) {
           $scope.openErrorModal(e);
         });
+      };
+
+      $scope.updateCacheTemplate = function () {
+        var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container',
+          $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
+        address.push($scope.configurationModel.type + '-configuration');
+        address.push($scope.configurationModel.template);
+
+        return cacheCreateController.updateConfigurationTemplate(address, $scope.configurationModel);
       };
 
       $scope.cancel = function () {
@@ -102,8 +120,7 @@ angular.module('managementConsole')
         address.push($scope.configurationModel.template);
 
         return cacheCreateController.createCacheConfigurationTemplate(address,
-          $scope.configurationModel,
-          $scope.configurationModel.type);
+          $scope.configurationModel);
       };
 
       $scope.createCacheWithTemplate = function () {
@@ -114,13 +131,35 @@ angular.module('managementConsole')
             $scope.openErrorModal(e);
           });
         } else {
-          $scope.createCache();
+          $scope.updateCacheTemplate().then(function () {
+            $scope.createCache();
+            $rootScope.requiresRestartFlag = $scope.requiresRestart();
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
+          });
+        }
+      };
+
+      $scope.updateTemplate = function () {
+        if ($scope.isTemplateNameEdited()) {
+          $scope.saveCacheConfigurationTemplate().then(function () {
+            $scope.createCache();
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
+          });
+        } else {
+          $scope.updateCacheTemplate().then(function () {
+            $rootScope.requiresRestartFlag = $scope.requiresRestart();
+            $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
+          }).catch(function (e) {
+            $scope.openErrorModal(e);
+          });
         }
       };
 
       $scope.onCacheCreateClick = function () {
-        if($scope.isConfigurationFormDirty() && !$scope.isTemplateNameEdited()){
-          $scope.openModal('dirty');
+        if($scope.isConfigurationFormDirty() && $scope.isEditMode()){
+          $scope.openModal('template');
         } else {
           $scope.openModal('cache');
         }

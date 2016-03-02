@@ -55,18 +55,13 @@ angular.module('managementConsole.api')
 
       /**
        *
-       * Creates a cache at a given DMR address a configuration structure cacheConfiguration
+       * Creates a cache configuration template at a given DMR address and configuration model
        *
        * @param address DMR address of the cache
        * @param cacheConfiguration configuration
-       * @param callback to execute at the end of create operation
        */
-      CacheCreationControllerClient.prototype.createCacheConfigurationTemplate = function (address, cacheConfiguration, cacheType) {
-        if (cacheType === 'distributed-cache' || cacheType === 'replicated-cache') {
-          return this.createReplicatedOrDistributedCacheConfigurationTemplate(cacheConfiguration, address, cacheType);
-        } else if (cacheConfiguration.type === 'invalidation-cache' || cacheConfiguration.type === 'local-cache') {
-          return this.createInvalidationOrLocalCacheConfigurationTemplate(cacheConfiguration, address, cacheType);
-        }
+      CacheCreationControllerClient.prototype.createCacheConfigurationTemplate = function (address, cacheConfiguration) {
+        return this.createConfigurationTemplate(address, cacheConfiguration);
       };
 
       /**
@@ -109,94 +104,100 @@ angular.module('managementConsole.api')
        * @param cache cache configuration
        * @param address DMR address of the cache
        * @param cacheType cache type to create
-       * @param callback to execute at the end of create operation
        */
-      CacheCreationControllerClient.prototype.createConfigurationTemplateBare = function (configuration, address, cacheType) {
-        var promise = this.createCacheConfigurationNode(address, configuration);
-        return promise.then(function () {
-          if (utils.isNotNullOrUndefined(configuration.locking)) {
-            this.addNode(address.concat('locking', 'LOCKING'), configuration.locking);
-          }
-          if (utils.isNotNullOrUndefined(configuration.eviction)) {
-            this.addNode(address.concat('eviction', 'EVICTION'), configuration.eviction);
-          }
-          if (utils.isNotNullOrUndefined(configuration.expiration)) {
-            this.addNode(address.concat('expiration', 'EXPIRATION'), configuration.expiration);
-          }
-          if (utils.isNotNullOrUndefined(configuration.compatibility)) {
-            this.addNode(address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
-          }
-          if (utils.isNotNullOrUndefined(configuration['partition-handling'])) {
-            this.addNode(address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
-          }
-          if (utils.isNotNullOrUndefined(configuration.transaction)) {
-            this.addNode(address.concat('transaction', 'TRANSACTION'), configuration.transaction);
-          }
-          if (utils.isNotNullOrUndefined(configuration['state-transfer'])) {
-            this.addNode(address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
-          }
-          if (utils.isNotNullOrUndefined(configuration.loader)) {
-            this.addNode(address.concat('loader', 'LOADER'), configuration.loader);
-          }
-          if (utils.isNotNullOrUndefined(configuration.store)) {
-            this.addNode(address.concat('store', 'STORE'), configuration.store);
-          }
-          if (utils.isNotNullOrUndefined(configuration['file-store'])) {
-            this.addNode(address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-          }
-          if (utils.isNotNullOrUndefined(configuration['leveldb-store'])) {
-            this.addNode(address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
-          }
-          if (utils.isNotNullOrUndefined(configuration['string-keyed-jdbc-store'])) {
-            this.addNode(address.concat('string-keyed-jdbc-store', 'STRING_KEYED_JDBC_STORE'), configuration['string-keyed-jdbc-store'], ['type']);
-          }
-          if (utils.isNotNullOrUndefined(configuration['binary-keyed-jdbc-store'])) {
-            this.addNode(address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store'], ['type']);
-          }
-          if (utils.isNotNullOrUndefined(configuration['mixed-keyed-jdbc-store'])) {
-            this.addNode(address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store'], ['type']);
-          }
-          if (utils.isNotNullOrUndefined(configuration.backup)) {
-            this.addNode(address.concat('backup', 'BACKUP'), configuration.backup);
-          }
-          if (utils.isNotNullOrUndefined(configuration.security)) {
-            this.addNode(address.concat('security', 'SECURITY'), configuration.security, [], true).then(function () {
-              this.addNode(address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
-            }.bind(this));
-          }
+      CacheCreationControllerClient.prototype.createConfigurationTemplate = function (address, configuration, cacheType) {
+        var steps = [];
+        var compositeOp = {
+          operation:'composite',
+          address: [],
+          steps:steps
+        };
+
+        return this.createCacheConfigurationNode(address, configuration).then(function () {
+          this.createHelper(steps, address.concat('locking', 'LOCKING'), configuration.locking);
+          this.createHelper(steps, address.concat('eviction', 'EVICTION'), configuration.eviction);
+          this.createHelper(steps, address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+          this.createHelper(steps, address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
+          this.createHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
+          this.createHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
+          this.createHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
+          this.createHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
+          this.createHelper(steps, address.concat('store', 'STORE'), configuration.store);
+          this.createHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
+          this.createHelper(steps, address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
+          this.createHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
+          this.createHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
+          this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
+          this.createHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
+          this.createHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
+
+          //ok now, lets send composite op to server
+          return this.execute(compositeOp);
         }.bind(this));
       };
 
-      CacheCreationControllerClient.prototype.createReplicatedOrDistributedCacheConfigurationTemplate = function (configuration, address, cacheType) {
-        return this.createConfigurationTemplateBare(configuration, address, cacheType);
-      };
+      CacheCreationControllerClient.prototype.createHelper = function (steps, address, configurationElement) {
+        //'is-new-node' is special attribute denoting node being created rather than modified
+        //'type' is special attribute denoting type of store
+        // all exclusionList elements are not native to DMR
+        var exclusionList = ['is-new-node', 'type'];
 
-      CacheCreationControllerClient.prototype.executeBatch = function (f) {
-        return this.execute('batch').then(f).
-          catch(function (e) {
-            console.log('got an error in batched function processing', e);
-            throw e;
-            // in $q it's better to `return $q.reject(e)` here
-          }).then(function () {
-            this.execute('run-batch');
-          }.bind(this)).catch(function () {
-            // handle errors in processing or in error.
-          });
+        if (utils.isNotNullOrUndefined(configurationElement)) {
+          this.addNodeComposite(steps, address, configurationElement, exclusionList, true);
+        }
+
       };
 
       /**
        *
-       * Creates a invalidation/local cache at a given DMR address a and a cache configuration structure
+       * Updates a replicated/distributed cache at a given DMR address a and a cache configuration structure
        *
        * @param cache cache configuration
        * @param address DMR address of the cache
        * @param cacheType cache type to create
-       * @param callback to execute at the end of create operation
        */
-      CacheCreationControllerClient.prototype.createInvalidationOrLocalCacheConfigurationTemplate = function (configuration, address, cacheType) {
-        return this.createConfigurationTemplateBare(configuration, address, cacheType);
+      CacheCreationControllerClient.prototype.updateConfigurationTemplate = function (address, configuration, cacheType) {
+        var steps = [];
+        var compositeOp = {
+          operation:'composite',
+          address: [],
+          steps:steps
+        };
+
+        return this.updateCacheConfigurationNode(address, configuration).then(function () {
+          this.updateHelper(steps, address.concat('locking', 'LOCKING'), configuration.locking);
+          this.updateHelper(steps, address.concat('eviction', 'EVICTION'), configuration.eviction);
+          this.updateHelper(steps, address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+          this.updateHelper(steps, address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
+          this.updateHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
+          this.updateHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
+          this.updateHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
+          this.updateHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
+          this.updateHelper(steps, address.concat('store', 'STORE'), configuration.store);
+          this.updateHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
+          this.updateHelper(steps, address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
+          this.updateHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
+          this.updateHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
+          this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
+          this.updateHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
+          this.updateHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
+
+          //ok now, lets send composite op to server
+          return this.execute(compositeOp);
+        }.bind(this));
       };
 
+      CacheCreationControllerClient.prototype.updateHelper = function (steps, address, configurationElement) {
+        //'is-new-node' is special attribute denoting node being created rather than modified
+        //'type' is special attribute denoting type of store
+        // all exclusionList elements are not native to DMR
+        var exclusionList = ['is-new-node', 'type'];
+
+        if (utils.isNotNullOrUndefined(configurationElement)) {
+          this.addNodeComposite(steps, address, configurationElement, exclusionList, false);
+        }
+
+      };
 
       /**
        * Creates new distributed cache with given parameters
@@ -244,6 +245,19 @@ angular.module('managementConsole.api')
         return this.executeAddOperation(address, prop, ['name','type','template']);
       };
 
+      CacheCreationControllerClient.prototype.updateCacheConfigurationNode = function (address, prop) {
+        var steps = [];
+        var compositeOp = {
+          operation:'composite',
+          address: [],
+          steps:steps
+        };
+        if (utils.isNotNullOrUndefined(prop)) {
+          this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template', 'is-new-node']);
+        }
+        return this.execute(compositeOp);
+      };
+
       CacheCreationControllerClient.prototype.removeCacheConfigurationNode = function (cacheType, templateName) {
         var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
           'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', templateName];
@@ -255,13 +269,12 @@ angular.module('managementConsole.api')
         return this.execute(op);
       };
 
-      CacheCreationControllerClient.prototype.addNode = function (address, prop, excludeAttributeList, forceOp) {
+
+      CacheCreationControllerClient.prototype.addNodeComposite = function (steps, address, prop, excludeAttributeList, forceOp) {
         //peek the last element of the address array but do not pop it
         var modelNode = address.slice(-1).pop();
         if (utils.isNotNullOrUndefined(prop) && prop.hasOwnProperty(modelNode)) {
-          return this.executeAddOperation(address, prop[modelNode], excludeAttributeList, forceOp);
-        } else {
-          return this.emptyPromise();
+          this.addCompositeOperation(steps, address, prop[modelNode], excludeAttributeList, forceOp);
         }
       };
 
@@ -274,6 +287,22 @@ angular.module('managementConsole.api')
           return this.execute(op);
         } else {
           return this.emptyPromise();
+        }
+      };
+
+      CacheCreationControllerClient.prototype.addCompositeOperation = function (steps, address, prop, excludeAttributeList, forceAdd) {
+        forceAdd = (typeof forceAdd === 'undefined') ? false : forceAdd;
+        var createAddOperation = forceAdd || prop['is-new-node']; //TODO make is-new-node a constant somewhere
+        if (createAddOperation) {
+          var op = this.createAddOperation(address, prop, excludeAttributeList);
+          if (Object.keys(op).length > 2) {
+            //ok cool, we actually have at least address and operation
+            //therefore - add this op to composite steps
+            steps.push(op);
+          }
+        } else {
+          //otherwise we just overwrite all attributes with new values
+          this.composeWriteAttributeOperations(steps, address, prop, excludeAttributeList);
         }
       };
 
@@ -323,6 +352,57 @@ angular.module('managementConsole.api')
           delete op[attribute];
         });
         return op;
+      };
+
+      CacheCreationControllerClient.prototype.composeWriteAttributeOperations = function (steps, address, prop, excludeAttributeList) {
+
+        //copy all non complex attributes found at prop into op
+        if (utils.isNotNullOrUndefined(prop)) {
+
+          //iterate properties of model object and append (key/value) properties to op object
+          var keys = Object.keys(prop);
+          for (var i = 0; i < keys.length; i++) {
+            var propKey = keys[i];
+            var propValue = prop[keys[i]];
+            var excludeAttribute = excludeAttributeList.some(function (attribute){ return propKey === attribute;});
+            if(!excludeAttribute) {
+              if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
+                //assign only primitives (strings, numbers, integers)
+                // i.e disregard potential branches of prop object tree
+
+                //handle JSON described objects
+                if (utils.isString(propValue)) {
+                  if ((propValue.indexOf('{') > -1 && propValue.indexOf('}') > -1) ||
+                    (propValue.indexOf('[') > -1 && propValue.indexOf(']') > -1)) {
+                    try {
+                      steps.push(this.createCompositeWriteAttributeOperation(address, propKey, JSON.parse(propValue)));
+                    }
+                    catch (e) {
+                      console.log('Invalid JSON value ' + propValue + ' for field ' + propKey);
+                    }
+                  }
+                  //simple strings
+                  else {
+                    steps.push(this.createCompositeWriteAttributeOperation(address, propKey, propValue));
+                  }
+                }
+                // numbers, integers, booleans etc
+                else {
+                  steps.push(this.createCompositeWriteAttributeOperation(address, propKey, propValue));
+                }
+              }
+            }
+          }
+        }
+      };
+
+      CacheCreationControllerClient.prototype.createCompositeWriteAttributeOperation = function (address, attributeName, attributeValue) {
+        return {
+          operation: 'write-attribute',
+          address: address,
+          name: attributeName,
+          value: attributeValue
+        }
       };
       return new CacheCreationControllerClient(window.location.origin);
     }

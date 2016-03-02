@@ -3,6 +3,7 @@
 angular.module('managementConsole')
   .controller('editContainerThreadpoolsCtrl', [
     '$scope',
+    '$rootScope',
     '$q',
     '$state',
     '$stateParams',
@@ -11,7 +12,7 @@ angular.module('managementConsole')
     'modelController',
     'cacheContainerConfigurationService',
     'clusterNodesService',
-    function ($scope, $q, $state, $stateParams, utils, $modal, modelController,
+    function ($scope, $rootScope, $q, $state, $stateParams, utils, $modal, modelController,
               cacheContainerConfigurationService, clusterNodesService) {
       if (!$stateParams.clusterName) {
         $state.go('error404');
@@ -86,12 +87,6 @@ angular.module('managementConsole')
         });
       };
 
-      $scope.saveWithRestart = function (){
-        $scope.executeSave().then(function () {
-          clusterNodesService.restartCluster();
-        });
-      };
-
       $scope.saveWithoutRestart = function (){
         $scope.executeSave();
       };
@@ -108,10 +103,9 @@ angular.module('managementConsole')
 
             dialog.result.then(function (requiresRestart) {
               if (requiresRestart) {
-                $scope.saveWithRestart();
-              } else {
-                $scope.saveWithoutRestart();
+                $rootScope.requiresRestartFlag = true;
               }
+              $scope.saveWithoutRestart();
             });
           } else {
             $scope.saveWithoutRestart();

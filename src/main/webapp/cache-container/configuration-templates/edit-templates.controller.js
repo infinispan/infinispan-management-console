@@ -27,7 +27,8 @@ angular.module('managementConsole')
             clusterName: $scope.currentCluster.name,
             templateName: $scope.newTemplateName,
             cacheConfigurationTemplate: $scope.selectedTemplate.name,
-            cacheConfigurationType: 'distributed-cache'
+            cacheConfigurationType: $scope.selectedTemplate.type,
+            mode:'create'
           });
         };
 
@@ -63,14 +64,15 @@ angular.module('managementConsole')
       $scope.editTemplate = function (template) {
         $state.go('editCacheTemplate', {
           clusterName: $scope.currentCluster.name,
-          templateName: template,
-          cacheConfigurationTemplate: template,
-          cacheConfigurationType: 'distributed-cache'
+          templateName: template.name,
+          cacheConfigurationTemplate: template.name,
+          cacheConfigurationType: template.type,
+          mode:'edit'
         });
       };
 
-      $scope.removeTemplate = function (cacheTemplateType, template) {
-        cacheCreateController.removeCacheConfigurationNode(cacheTemplateType, template).then(function () {
+      $scope.removeTemplate = function (template) {
+        cacheCreateController.removeCacheConfigurationNode(template.type, template.name).then(function () {
             $state.go('editCacheContainerTemplates', {
               clusterName: $scope.currentCluster.name
             }, {reload: true});

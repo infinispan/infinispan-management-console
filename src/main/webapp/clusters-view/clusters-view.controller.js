@@ -11,7 +11,6 @@ angular.module('managementConsole')
     function ($scope, $state, modelController, clusterEventsService, clusterNodesService, utils) {
 
             $scope.clusters = modelController.getServer().getClusters();
-            $scope.group = modelController.getServer().getServerGroupName();
             $scope.stack = modelController.getServer().getFirstServer().getDefaultStack();
             $scope.relays = {};
             $scope.offlineSites = {};

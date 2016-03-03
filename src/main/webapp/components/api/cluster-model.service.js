@@ -7,7 +7,7 @@ angular.module('managementConsole.api')
     'EndpointModel',
     'utils',
     function ($q, CacheModel, EndpointModel, utils) {
-            var Cluster = function (name, profile, path, domain) {
+            var Cluster = function (name, profile, path, domain, serverGroupName) {
                 this.name = name;
                 this.profile = profile;
                 this.path = path;
@@ -23,10 +23,15 @@ angular.module('managementConsole.api')
                 this.threadpool = null;
                 this.transport = null;
                 this.configurations;
+                this.serverGroupName = serverGroupName;
             };
 
             Cluster.prototype.getModelController = function () {
                 return this.modelController;
+            };
+
+            Cluster.prototype.getServerGroupName = function () {
+              return this.serverGroupName;
             };
 
             Cluster.prototype.getResourcePath = function () {

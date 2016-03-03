@@ -17,7 +17,7 @@
         </tr>
 
         <tr ng-repeat="cluster in clusters track by $index">
-          <td><span class="label isCacheAvailable"
+          <td ng-init="group = cluster.getServerGroupName()"><span class="label isCacheAvailable"
                     ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
             {{cluster.isAvailable()?cluster.availability:'Unavailable'}}</span></td>
           <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>

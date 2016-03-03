@@ -92,9 +92,9 @@ var app = angular.module('managementConsole')
       $scope.shared = {
         currentCollection: 'caches'
       };
-      $scope.group = modelController.getServer().getServerGroupName();
       $scope.clusters = modelController.getServer().getClusters();
       $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.group = $scope.currentCluster.getServerGroupName();
 
       $scope.$watch('currentCluster', function (currentCluster) {
         if (currentCluster && currentCluster.name !== $stateParams.clusterName) {

@@ -4,7 +4,8 @@ angular.module('managementConsole.api')
     .factory('ProfileModel', [
     '$q',
     'ClusterModel',
-    function ($q, ClusterModel) {
+    'utils',
+    function ($q, ClusterModel, utils) {
             /**
              * Represents a Profile which contains the static configuration of all subsystems.
              */
@@ -31,17 +32,26 @@ angular.module('managementConsole.api')
                     this.lastRefresh = new Date();
                     var allClusters = {};
                     var clusterPromises = [];
-                    if (response.subsystem !== undefined && response.subsystem['datagrid-infinispan'] !== undefined) {
-                        for (var name in response.subsystem['datagrid-infinispan']['cache-container']) {
-                            if (name !== undefined && !(name in allClusters)) {
-                                allClusters[name] = new ClusterModel(name, this.name, this.getResourcePath(), this.domain);
+                    if (utils.isNotNullOrUndefined(response.subsystem) && utils.isNotNullOrUndefined(response.subsystem['datagrid-infinispan'])) {
+                      for (var name in response.subsystem['datagrid-infinispan']['cache-container']) {
+                        if (name !== undefined && !(name in allClusters)) {
+                          //find server group where this cluster is deployed
+
+                          var serverGroups = this.domain.getServerGroups();
+                          var groupName = '';
+                          Object.keys(serverGroups).forEach(function (group) {
+                            if(serverGroups[group].profile === name){
+                              groupName = group;
                             }
+                          });
+                          allClusters[name] = new ClusterModel(name, this.name, this.getResourcePath(), this.domain, groupName);
                         }
+                      }
                     }
-                    if (response.subsystem !== undefined && response.subsystem['datagrid-infinispan-endpoint'] !== undefined) {
+                    if (utils.isNotNullOrUndefined(response.subsystem) && utils.isNotNullOrUndefined(response.subsystem['datagrid-infinispan-endpoint'])) {
                       this.endpoints = response.subsystem['datagrid-infinispan-endpoint'];
                     }
-                    if (response.subsystem !== undefined && response.subsystem['datagrid-jgroups'] !== undefined) {
+                    if (utils.isNotNullOrUndefined(response.subsystem) && utils.isNotNullOrUndefined(response.subsystem['datagrid-jgroups'])) {
                       this.jgroups = response.subsystem['datagrid-jgroups'];
                     }
                     for(var i in allClusters) {

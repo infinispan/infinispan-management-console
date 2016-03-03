@@ -314,8 +314,9 @@ angular.module('managementConsole', [
                 return cacheContainerConfigurationService.getArtifacts();
               },
 
-              deployed: function(cacheContainerConfigurationService){
-                return cacheContainerConfigurationService.getDeployedArtifact('main-server-group');
+              deployed: function(modelController, $stateParams, cacheContainerConfigurationService){
+                var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                return cacheContainerConfigurationService.getDeployedArtifact(cluster.getServerGroupName());
               }
             }
           }).state('editCacheContainerTemplates', {

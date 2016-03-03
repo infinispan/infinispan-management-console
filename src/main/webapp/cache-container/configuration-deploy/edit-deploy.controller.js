@@ -39,7 +39,7 @@ angular.module('managementConsole')
             }, {reload: true});
           }).catch(function (e) {
             $scope.openErrorModal(e);
-          });;
+          });
         };
 
         $scope.cancelModal = function () {
@@ -71,9 +71,9 @@ angular.module('managementConsole')
       };
 
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.serverGroup = modelController.getServer().getServerGroupName();
       $scope.deployments = deployments;
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.serverGroup = $scope.currentCluster.getServerGroupName();
 
       $scope.deployedArtifacts = {};
       $scope.availableTasks = [];
@@ -253,7 +253,7 @@ angular.module('managementConsole')
            $scope.openErrorModal(error);
         }
       );
-   }
+   };
 
     $scope.removeScript = function (name) {
       cacheContainerConfigurationService.removeScript($scope.currentCluster, name).then(function(){

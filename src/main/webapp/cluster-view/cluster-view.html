@@ -11,6 +11,9 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
+        <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">
+          <span class="pficon pficon-settings"></span> Configuration
+        </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>
           Actions
@@ -26,10 +29,6 @@
           <li role="presentation" class="divider"></li>
           <li role="presentation" >
             <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()">Manage backup sites</a>
-          </li>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation" >
-            <a role="menuitem" id="dropdownMenuViewEditConfiguration" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">View / Edit configuration</a>
           </li>
         </ul>
       </div>

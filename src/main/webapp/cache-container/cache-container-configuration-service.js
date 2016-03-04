@@ -5,8 +5,7 @@ angular.module('managementConsole')
     '$q',
     'modelController',
     'clusterNodesService',
-    'utils',
-    function ($q, modelController, clusterNodesService, utils) {
+    function ($q, modelController, clusterNodesService) {
 
       function loadRole(dmrAddress) {
         var deferred = $q.defer();
@@ -183,8 +182,8 @@ angular.module('managementConsole')
           var op = {
             'operation': 'script-add',
             'address': address,
-            "name": name,
-            "code": body
+            'name': name,
+            'code': body
           };
 
           return modelController.execute(op);

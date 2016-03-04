@@ -71,12 +71,12 @@ angular.module('managementConsole')
 
             // add extension automatically
             var realName = $scope.schema.name;
-            if( realName.indexOf('.proto')==-1) {
+            if( realName.indexOf('.proto')===-1) {
                 realName += '.proto';
             }
 
             cacheContainerConfigurationService.deploySchema(currentCluster, realName, $scope.schema.body).then(
-                function(response) {
+                function() {
                   $scope.errorExecuting = false;
                   $scope.successExecuteOperation = true;
                   $modalInstance.close();
@@ -90,7 +90,7 @@ angular.module('managementConsole')
       };
 
     $scope.openCreateSchemaModal = function (schema) {
-      if( schema == null ) {
+      if( schema === null ) {
         schema = {editing:false};
       }
 
@@ -100,8 +100,8 @@ angular.module('managementConsole')
         scope: $scope,
         size: 'lg',
         resolve: {
-            currentCluster:  function() { return $scope.currentCluster },
-            modelController: function() { return modelController },
+            currentCluster:  function() { return $scope.currentCluster; },
+            modelController: function() { return modelController; },
             schema:          function() { return schema; }
         }
       });
@@ -124,7 +124,7 @@ angular.module('managementConsole')
            $scope.openErrorModal(error);
         }
       );
-   }
+   };
 
     $scope.removeSchema = function (name) {
       cacheContainerConfigurationService.removeSchema($scope.currentCluster, name).then(function(){

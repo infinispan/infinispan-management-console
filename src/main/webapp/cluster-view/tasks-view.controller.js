@@ -37,8 +37,8 @@ angular.module('managementConsole')
           var op = {
             'operation': 'read-event-log',
             'address': resourcePathCacheContainer,
-            "lines": maxLines,
-            "category": "TASKS"
+            'lines': maxLines,
+            'category': 'TASKS'
           };
 
           modelController.execute(op).then(
@@ -89,6 +89,13 @@ angular.module('managementConsole')
       //
       // Modal dialog to display task output
       //
+      
+      var ViewEventDetailsModalController = function($scope, $modalInstance, event) {
+          $scope.event = event;
+          $scope.cancel = function() {
+            $modalInstance.dismiss();
+          };
+      };
 
       $scope.displayEventDetails = function(event) {
         return $modal.open( {
@@ -96,18 +103,12 @@ angular.module('managementConsole')
           size: 'lg',
           controller: ViewEventDetailsModalController,
           resolve: {
-            event: function() { return event }
+            event: function() { return event; }
           }
           }
         );
       };
 
-      var ViewEventDetailsModalController = function($scope, $modalInstance, event) {
-          $scope.event = event;
-          $scope.cancel = function() {
-            $modalInstance.dismiss();
-          }
-      };
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       //
@@ -133,11 +134,11 @@ angular.module('managementConsole')
         $scope.errorLaunching   = false;
         $scope.successLaunching = false;
         $scope.taskOutput  = null;
-        $scope.param1_name = null; $scope.param1_value = null;
-        $scope.param2_name = null; $scope.param2_value = null;
-        $scope.param3_name = null; $scope.param3_value = null;
-        $scope.param4_name = null; $scope.param4_value = null;
-        $scope.param5_name = null; $scope.param5_value = null;
+        $scope.param1Name = null; $scope.param1Value = null;
+        $scope.param2Name = null; $scope.param2Value = null;
+        $scope.param3Name = null; $scope.param3Value = null;
+        $scope.param4Name = null; $scope.param4Value = null;
+        $scope.param5Name = null; $scope.param5Value = null;
         $scope.asyncTask = false;
 
         // Load tasks
@@ -166,29 +167,29 @@ angular.module('managementConsole')
           var op = {
             'operation': 'task-execute',
             'address': resourcePathCacheContainer,
-            "name": $scope.selectedTask.name,
-            "cache-name": $scope.selectedCache.name,
-            "async": $scope.asyncTask
+            'name': $scope.selectedTask.name,
+            'cache-name': $scope.selectedCache.name,
+            'async': $scope.asyncTask
           };
 
           // Now add parameters as needed
           var parameters = {};
-          if ($scope.param1_name != null) {
-            parameters[$scope.param1_name] = $scope.param1_value;
+          if ($scope.param1Name !== null) {
+            parameters[$scope.param1Name] = $scope.param1Value;
           }
-          if ($scope.param2_name != null) {
-            parameters[$scope.param2_name] = $scope.param2_value;
+          if ($scope.param2Name !== null) {
+            parameters[$scope.param2Name] = $scope.param2Value;
           }
-          if ($scope.param3_name != null) {
-            parameters[$scope.param3_name] = $scope.param3_value;
+          if ($scope.param3Name !== null) {
+            parameters[$scope.param3Name] = $scope.param3Value;
           }
-          if ($scope.param4_name != null) {
-            parameters[$scope.param4_name] = $scope.param4_value;
+          if ($scope.param4Name !== null) {
+            parameters[$scope.param4Name] = $scope.param4Value;
           }
-          if ($scope.param5_name != null) {
-            parameters[$scope.param5_name] = $scope.param5_value;
+          if ($scope.param5Name !== null) {
+            parameters[$scope.param5Name] = $scope.param5Value;
           }
-          op["parameters"] = parameters;
+          op.parameters = parameters;
 
           modelController.execute(op).then(
             function (response) {
@@ -216,7 +217,7 @@ angular.module('managementConsole')
               $scope.executeTask(server);
             } else {
               clusterNodesService.getCoordinator(currentCluster).then(function(coord){
-                $scope.executeTask(coord)
+                $scope.executeTask(coord);
               });
             }
         };
@@ -229,7 +230,7 @@ angular.module('managementConsole')
 
         $scope.cancel = function() {
           $modalInstance.dismiss();
-        }
+        };
       };
 
       $scope.openTaskDialog = function() {
@@ -243,5 +244,5 @@ angular.module('managementConsole')
           }
           }
         );
-      }
+      };
   }]);

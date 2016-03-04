@@ -99,16 +99,16 @@ angular.module('managementConsole')
                 );
 
                 var op = {
-                  'operation': "cache-rebalance",
+                  'operation': 'cache-rebalance',
                   'address': resourcePathCacheContainer,
-                  "value": rebalance
+                  'value': rebalance
                 };
 
                 $scope.successExecuteOperation = false;
                 $scope.errorExecuting = false;
 
                 modelController.execute(op).then(
-                  function (response) {
+                  function () {
                     $scope.successExecuteOperation = true;
                     $scope.refresh();
                   },

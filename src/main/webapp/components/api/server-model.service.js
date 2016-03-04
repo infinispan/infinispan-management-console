@@ -18,7 +18,7 @@ angular.module('managementConsole.api')
                 this.defaultStack = '';
                 this.inetAddress = '';
                 this.stats = {};
-                this.group = ''
+                this.group = '';
             };
 
             Server.prototype.getResourcePath = function () {

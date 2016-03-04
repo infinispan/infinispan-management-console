@@ -124,14 +124,14 @@ angular.module('managementConsole.api')
                           if (utils.isNotNullOrUndefined(response['failure-description'])){
                             deferred.reject(response['failure-description']);
                           } else {
-                            deferred.reject("An unspecified error has been received from the server");
+                            deferred.reject('An unspecified error has been received from the server');
                           }
                         } catch (e) {
                           console.log('JSON.parse()', e);
-                          deferred.reject("An unspecified error has been received from the server");
+                          deferred.reject('An unspecified error has been received from the server');
                         }
                       } else {
-                        deferred.reject("An unspecified error has been received from the server");
+                        deferred.reject('An unspecified error has been received from the server');
                       }
                   }
                 };
@@ -149,12 +149,12 @@ angular.module('managementConsole.api')
               }
 
               //Second, we append the DMR operation
-              var blob = new Blob([JSON.stringify(op)], {type : "application/json"});
+              var blob = new Blob([JSON.stringify(op)], {type : 'application/json'});
               fd.append('operation', blob);
 
               var http = new XMLHttpRequest();
 
-              http.upload.addEventListener("progress", uploadProgress, false);
+              http.upload.addEventListener('progress', uploadProgress, false);
 
               http.onreadystatechange = function () {
                 if (http.readyState === 4 && http.status === 200) {
@@ -194,7 +194,7 @@ angular.module('managementConsole.api')
                 }
               }); */
 
-              http.addEventListener("error", function (e) {
+              http.addEventListener('error', function (e) {
                 console.log('Error: Upload failed', e);
                 //callback(true);
               });
@@ -290,12 +290,12 @@ angular.module('managementConsole.api')
 
             ModelControllerClient.prototype.createAddArtifactOp = function (deploymentArtifact) {
               var op = {
-                operation: "add",
+                operation: 'add',
                 address: [{
                   deployment: deploymentArtifact
                 }],
                 'runtime-name': deploymentArtifact,
-                enabled: "false",
+                enabled: 'false',
                 content: [{'input-stream-index': 0}]
               };
               return op;
@@ -331,7 +331,7 @@ angular.module('managementConsole.api')
               return this.execute(op);
             };
 
-            ModelControllerClient.prototype.getDeployedArtifacts = function (serverGroup) {
+            ModelControllerClient.prototype.getDeployedArtifacts = function () {
               return this.readChildrenResources([],'deployment');
             };
 

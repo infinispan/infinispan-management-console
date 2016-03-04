@@ -22,7 +22,7 @@ angular.module('managementConsole.api')
                 this.security = null;
                 this.threadpool = null;
                 this.transport = null;
-                this.configurations;
+                this.configurations = null;
                 this.serverGroupName = serverGroupName;
             };
 
@@ -103,13 +103,14 @@ angular.module('managementConsole.api')
 
             Cluster.prototype.getConfigurationTemplatesFromModel = function (inputConfigurationTemplates) {
               var configurationTemplates = [];
-              angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
+              angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType) {
                 var templatesForType = inputConfigurationTemplates[cacheType + '-configuration'];
                 angular.forEach(templatesForType, function (template, templateName) {
                   template.name = templateName;
                   template.type = cacheType;
                   configurationTemplates.push(template);
-                })}.bind(this));
+                });
+              }.bind(this));
               return configurationTemplates;
             };
 
@@ -121,7 +122,7 @@ angular.module('managementConsole.api')
 
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
                 this.availability = response.toUpperCase();
-              }.bind(this)).catch(function (e){
+              }.bind(this)).catch(function (){
                 this.availability = 'UNAVAILABLE';
               }.bind(this));
             };

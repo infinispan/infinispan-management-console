@@ -6,8 +6,7 @@ angular.module('managementConsole')
     'modelController',
     'serverGroups',
     'clusterEventsService',
-    'utils',
-    function ($scope, modelController, serverGroups, clusterEventsService, utils) {
+    function ($scope, modelController, serverGroups, clusterEventsService) {
            $scope.groups = serverGroups;
            $scope.servers = modelController.getServer().getNodes();
 

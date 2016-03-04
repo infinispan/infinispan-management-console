@@ -43,7 +43,7 @@ angular.module('managementConsole')
               host: view.substring(1, hostServerSplitIndex),
               server: view.substring(hostServerSplitIndex + 1, lastIndex)
             };
-          }).catch(function (e) {
+          }).catch(function () {
             return {
               host: '',
               server: ''
@@ -78,7 +78,7 @@ angular.module('managementConsole')
               return servers[0];
             }
 
-          }).catch(function (e) {
+          }).catch(function () {
             return servers [0];
           });
         });

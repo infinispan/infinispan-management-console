@@ -75,7 +75,7 @@ angular.module('managementConsole')
       $scope.cluster = modelController.getServer().getServerGroupByName($stateParams.clusterName);
       $scope.clusterName = $stateParams.clusterName;
 
-      $scope.refresh = function (refreshModel) {
+      $scope.refresh = function () {
         $state.go('clusterNodes', {
           clusterName: $scope.clusterName,
           refresh: true

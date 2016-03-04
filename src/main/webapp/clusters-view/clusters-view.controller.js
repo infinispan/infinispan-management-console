@@ -33,7 +33,7 @@ angular.module('managementConsole')
                 modelController.readAttribute(address, 'sites-offline').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.offlineSites[cluster.getName()] = response
+                      $scope.offlineSites[cluster.getName()] = response;
                     } else {
                       $scope.offlineSites[cluster.getName()] = [];
                     }
@@ -44,7 +44,7 @@ angular.module('managementConsole')
                 modelController.readAttribute(address, 'sites-online').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.onlineSites[cluster.getName()] = response
+                      $scope.onlineSites[cluster.getName()] = response;
                     } else {
                       $scope.onlineSites[cluster.getName()] = [];
                     }
@@ -55,7 +55,7 @@ angular.module('managementConsole')
                 modelController.readAttribute(address, 'sites-mixed').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.mixedSites[cluster.getName()] = response
+                      $scope.mixedSites[cluster.getName()] = response;
                     } else {
                       $scope.mixedSites[cluster.getName()] = [];
                     }

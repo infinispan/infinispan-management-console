@@ -17,7 +17,7 @@ angular.module('managementConsole')
         $scope.permissions = {};
         if (utils.isNotNullOrUndefined(role)) {
           $scope.roleName = role.name;
-          angular.forEach(role.permissions, function(value, key){
+          angular.forEach(role.permissions, function(value){
             $scope.permissions[value] = true;
           });
         }
@@ -96,7 +96,7 @@ angular.module('managementConsole')
             $scope.modalText = 'Do you want to remove ' + role.name + ' role?';
 
             $scope.ok = function () {
-              $scope.removeRole(role)
+              $scope.removeRole(role);
             };
 
             $scope.cancel = function () {

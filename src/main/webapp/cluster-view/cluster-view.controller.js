@@ -15,8 +15,8 @@ var app = angular.module('managementConsole')
     function ($scope, $stateParams, $state, CONSTANTS, $q, modelController, cacheCreateController, clusterNodesService, utils, $modal) {
       var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
-        $scope.cacheName;
-        $scope.selectedTemplate;
+        $scope.cacheName = null;
+        $scope.selectedTemplate = null;
         $scope.configurationTemplates = [];
         $scope.configurationTemplatesMap = {};
 
@@ -132,7 +132,7 @@ var app = angular.module('managementConsole')
                 $scope.onlineSites[cache.name] = response[0]['sites-online'];
                 $scope.mixedSites[cache.name] = response[0]['sites-mixed'];
               }
-            )
+            );
           }
         });
       };
@@ -163,7 +163,7 @@ var app = angular.module('managementConsole')
                 $scope.onlineSites[cache.name] = response[0]['sites-online'];
                 $scope.mixedSites[cache.name] = response[0]['sites-mixed'];
               }
-            )
+            );
           }
         });
       };
@@ -183,13 +183,13 @@ var app = angular.module('managementConsole')
           var path = coord.getResourcePath().concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName());
 
           var op = {
-            'operation': "cluster-rebalance",
+            'operation': 'cluster-rebalance',
             'address': path,
-            "value": rebalance
+            'value': rebalance
           };
 
           return modelController.execute(op).then(
-            function (response) {
+            function () {
               $scope.successExecuteOperation = true;
               $scope.refresh();
             },
@@ -221,7 +221,7 @@ var app = angular.module('managementConsole')
           scope: $scope
         });
 
-        confirmDialog.result.then(function (result) {
+        confirmDialog.result.then(function () {
           $scope.setCacheContainerRebalance(rebalanceValue);
         });
       };
@@ -316,7 +316,7 @@ var app = angular.module('managementConsole')
             scope: $scope
           });
 
-          confirmDialog.result.then(function (result) {
+          confirmDialog.result.then(function () {
             clusterNodesService.getCoordinator($scope.currentCluster).then(function(coord){
               var resourcePathCacheContainer = coord.getResourcePath()
                 .concat('subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName());
@@ -324,14 +324,14 @@ var app = angular.module('managementConsole')
               var op = {
                 'operation': operationId,
                 'address': resourcePathCacheContainer,
-                "site-name": siteName
+                'site-name': siteName
               };
 
               $scope.successExecuteOperation = false;
               $scope.errorExecuting = false;
 
               modelController.execute(op).then(
-                function (response) {
+                function () {
                   $scope.successExecuteOperation = true;
                   $scope.refresh();
                 },
@@ -354,8 +354,8 @@ var app = angular.module('managementConsole')
             // Refresh list of offline sites
             modelController.readAttribute(resourcePathCacheContainer, 'sites-offline').then(
               function (response) {
-                if (response != null && response.constructor === Array) {
-                  $scope.offlineSites = response
+                if (response !== null && response.constructor === Array) {
+                  $scope.offlineSites = response;
                 } else {
                   $scope.offlineSites = [];
                 }
@@ -365,8 +365,8 @@ var app = angular.module('managementConsole')
             // Refresh list of online sites
             modelController.readAttribute(resourcePathCacheContainer, 'sites-online').then(
               function (response) {
-                if (response != null && response.constructor === Array) {
-                  $scope.onlineSites = response
+                if (response !== null && response.constructor === Array) {
+                  $scope.onlineSites = response;
                 } else {
                   $scope.onlineSites = [];
                 }
@@ -376,8 +376,8 @@ var app = angular.module('managementConsole')
             // Refresh list of mixed sites
             modelController.readAttribute(resourcePathCacheContainer, 'sites-mixed').then(
               function (response) {
-                if (response != null && response.constructor === Array) {
-                  $scope.mixedSites = response
+                if (response !== null && response.constructor === Array) {
+                  $scope.mixedSites = response;
                 } else {
                   $scope.mixedSites = [];
                 }
@@ -483,7 +483,7 @@ app.directive('validCacheName', function($stateParams, modelController) {
   return {
     require: 'ngModel',
     link: function(scope, elm, attrs, ctrl) {
-      ctrl.$validators.validCacheName = function(modelValue, viewValue) {
+      ctrl.$validators.validCacheName = function(modelValue) {
         if (ctrl.$isEmpty(modelValue)) {
           // consider empty models to be valid
           return true;

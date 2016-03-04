@@ -60,7 +60,7 @@ angular.module('managementConsole')
 
       $scope.saveExpiration = function(){
         var address = $scope.currentCluster.getResourcePath().concat('thread-pool','expiration');
-        return cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool['expiration']);
+        return cacheContainerConfigurationService.writeThreadPool(address, $scope.threadpool.expiration);
       };
 
 
@@ -71,15 +71,15 @@ angular.module('managementConsole')
 
       $scope.executeSave = function(){
         return $scope.saveGeneric('async-operations').then(function () {
-          $scope.saveGeneric('listener')
+          $scope.saveGeneric('listener');
         }).then(function () {
-          $scope.saveGeneric('persistence')
+          $scope.saveGeneric('persistence');
         }).then(function () {
-          $scope.saveGeneric('remote-command')
+          $scope.saveGeneric('remote-command');
         }).then(function () {
-          $scope.saveGeneric('state-transfer')
+          $scope.saveGeneric('state-transfer');
         }).then(function () {
-          $scope.saveGeneric('transport')
+          $scope.saveGeneric('transport');
         }).then(function () {
           $scope.saveExpiration();
         }).then(function () {
@@ -117,6 +117,6 @@ angular.module('managementConsole')
       $scope.cancel = function(){
         $scope.cleanMetadata();
         $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
-      }
+      };
 
     }]);

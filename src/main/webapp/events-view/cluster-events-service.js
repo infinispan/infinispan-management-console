@@ -14,7 +14,7 @@ angular.module('managementConsole')
           var op = {
             'operation': 'read-event-log',
             'address': resourcePathCacheContainer,
-            "lines": maxLines
+            'lines': maxLines
           };
           return modelController.execute(op);
         });

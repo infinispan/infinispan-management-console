@@ -326,7 +326,7 @@ angular.module('managementConsole', [
                 var deferred = $q.defer();
                 currentCluster.getSecurityConfiguration().then(function(response){
                   deferred.resolve(response);
-                }).catch(function(e){
+                }).catch(function(){
                   deferred.resolve(null);
                 });
                 return deferred.promise;
@@ -401,11 +401,10 @@ angular.module('managementConsole', [
           templateUrl: 'components/dialogs/generic-error.html',
           controller: function($scope, $modalInstance) {
             if( typeof error === 'string') {
-              $scope.errorText = "An error has occurred:";
+              $scope.errorText = 'An error has occurred:';
               $scope.errorTextDetail = error;
             }
             else {
-              var trail = [];
               utils.traverse(error, function (key, value, trail) {
                 $scope.errorText = trail[0];
                 $scope.errorTextDetail = value;
@@ -413,7 +412,7 @@ angular.module('managementConsole', [
             }
             $scope.ok = function () {
               $modalInstance.close();
-            }
+            };
           },
           scope: $rootScope
         });
@@ -450,7 +449,7 @@ angular.module('managementConsole', [
 
             $scope.ok = function () {
               $modalInstance.close();
-            }
+            };
           },
           scope: $rootScope
         });
@@ -481,7 +480,7 @@ angular.module('managementConsole', [
     $templateCache.put(
       'template/tabs/tabset.html',
       '<div>\n' +
-        "  <ul class=\"nav nav-{{type || 'tabs'}} col-md-2\" ng-class=\"{'nav-stacked': vertical, 'nav-justified': justified}\" ng-transclude></ul>\n" +
+        '  <ul class=\"nav nav-{{type || \'tabs\'}} col-md-2\" ng-class=\"{\'nav-stacked\': vertical, \'nav-justified\': justified}\" ng-transclude></ul>\n' +
         '  <div class=\"tab-content col-md-10\">\n' +
         '    <div class=\"tab-pane\" \n' +
         '         ng-repeat=\"tab in tabs\" \n' +

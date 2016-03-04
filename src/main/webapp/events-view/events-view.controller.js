@@ -5,8 +5,7 @@ angular.module('managementConsole')
     '$scope',
     'modelController',
     'clusterEventsService',
-    'utils',
-    function ($scope, modelController, clusterEventsService, utils) {
+    function ($scope, modelController, clusterEventsService) {
       $scope.clusters = modelController.getServer().getClusters();
       $scope.gridEvents = [];
       $scope.lineCount = 100;

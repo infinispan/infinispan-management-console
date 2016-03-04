@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var gnf = require('gulp-npm-files');
 var filter = require('gulp-filter');
+var runSequence = require('run-sequence');
 
 var plugins = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'del', 'q']
@@ -129,5 +130,8 @@ gulp.task('partials', pipes.buildPartials);
 gulp.task('index', pipes.buildIndex);
 gulp.task('images', pipes.buildImages);
 gulp.task('fonts', pipes.buildFonts);
+gulp.task('buildApp', pipes.buildApp);
+gulp.task('build', ['clean'], function (cb) {
+  runSequence('copy-comps', 'buildApp', cb);
+});
 
-gulp.task('build', ['clean', 'copy-comps'], pipes.buildApp);

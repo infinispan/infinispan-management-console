@@ -13,10 +13,10 @@
     "d3": "3.5.0",
     "jquery": "2.1.4",
     "jquery-match-height": "0.6.0",
-    "patternfly": "2.5.0"
+    "patternfly": "3.2.0"
   },
   "devDependencies": {
-    "gulp": "^3.8.0",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^0.0.6",
     "gulp-cache": "^0.2.0",
     "gulp-csso": "^0.2.6",
@@ -51,10 +51,11 @@
     "protractor": "^1.1.1",
     "uglify-save-license": "^0.4.1",
     "gulp-less": "^3.0.3",
-    "q": "^1.1.2"
+    "q": "^1.1.2",
+    "run-sequence": "^1.1.5"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4.3.0"
   },
   "repository": {
     "type": "git",

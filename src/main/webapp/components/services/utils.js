@@ -276,7 +276,7 @@
           } else {
             callback.call(obj, key, value, trail);
           }
-        })
+        });
       },
 
       clusterAvailability: function clusterAvailability(cluster){

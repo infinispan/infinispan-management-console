@@ -111,7 +111,7 @@ angular.module('managementConsole.api')
        * @param cacheType cache type to create
        * @param callback to execute at the end of create operation
        */
-      CacheCreationControllerClient.prototype.createConfigurationTemplateBare = function (configuration, address, cacheType) {
+      CacheCreationControllerClient.prototype.createConfigurationTemplateBare = function (configuration, address) {
         var promise = this.createCacheConfigurationNode(address, configuration);
         return promise.then(function () {
           if (utils.isNotNullOrUndefined(configuration.locking)) {

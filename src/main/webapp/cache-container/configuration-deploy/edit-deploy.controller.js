@@ -176,16 +176,16 @@ angular.module('managementConsole')
           $scope.buildBody = function() {
             var realTaskName = $scope.task.name;
 
-            var body = "// name=" + realTaskName + ", language=" + $scope.task.language + "\n";
-            body    += "// mode=" + $scope.task.mode + "\n";
-            if( $scope.task.parameters != null && $scope.task.parameters.length > 0) {
-              body    += "// parameters=[" + $scope.task.parameters + "]\n";
+            var body = '// name=' + realTaskName + ', language=' + $scope.task.language + '\n';
+            body    += '// mode=' + $scope.task.mode + '\n';
+            if( $scope.task.parameters !== null && $scope.task.parameters.length > 0) {
+              body    += '// parameters=[' + $scope.task.parameters + ']\n';
             }
             if($scope.task.role && $scope.task.role.length > 0) {
-              body    += "// role=" + $scope.task.role + "\n";
+              body    += '// role=' + $scope.task.role + '\n';
             }
 
-            body+="\n";
+            body+='\n';
             body+=$scope.task.body;
 
             return body;
@@ -205,7 +205,7 @@ angular.module('managementConsole')
             var realBody = $scope.task.editing ? $scope.task.body : $scope.buildBody();
 
             cacheContainerConfigurationService.deployScript(currentCluster, $scope.task.name, realBody).then(
-                function(response) {
+                function() {
                   $scope.errorExecuting = false;
                   $scope.successExecuteOperation = true;
                   $modalInstance.close();
@@ -219,7 +219,7 @@ angular.module('managementConsole')
       };
 
     $scope.openCreateScriptModal = function (script) {
-      if( script == null ) {
+      if( script === null ) {
         script = {editing:false};
       }
 
@@ -229,8 +229,8 @@ angular.module('managementConsole')
         scope: $scope,
         size: 'lg',
         resolve: {
-            currentCluster:  function() { return $scope.currentCluster },
-            modelController: function() { return modelController },
+            currentCluster:  function() { return $scope.currentCluster; },
+            modelController: function() { return modelController; },
             script:          function() { return script; }
         }
       });

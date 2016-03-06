@@ -13,7 +13,7 @@
             <div class="col-md-4" ng-init="elementType = resolveFieldType(field)">
               <select class="form-control" ng-class="field" ng-style="getStyle(field)" ng-model="data[field]" ng-options="item as item for item in metadata[field].allowed"
                       ng-disabled="readOnly" ng-if="isMultiValue(field)" ng-change="fieldValueModified(field)"/>
-              <input class="form-control" ng-class="field" ng-style="getStyle(field)" type="{{elementType}}" ng-model="data[field]" ng-disabled="readOnly"
+              <input class="form-control" ng-class="field" ng-style="getStyle(field)" type="{{elementType}}" ng-model="data[field]" placeholder="{{placeholder[field]}}" ng-disabled="readOnly"
                      ng-if="isSingleValue(field) && elementType !== 'checkbox'" ng-change="fieldValueModified(field)"/>
 
               <div class="checkbox" ng-if="elementType === 'checkbox'">
@@ -23,7 +23,7 @@
               </div>
             </div>
             <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle " tooltip="{{metadata[field].description}}"
+              <i class="fa fa-info-circle " tooltip="{{metadata[field].description}} The default value is {{resolveDefaultValue(field)}}."
                  tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
               <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
               <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>

@@ -29,11 +29,6 @@ angular.module('managementConsole')
 
       $scope.configurationSectionHandles = []; //assigned to a configuration section through HTML attribute
 
-      $scope.requiresRestart = function (){
-        return $scope.configurationSectionHandles.some(function (handle) {
-          return handle.requiresRestart();
-        });
-      };
 
 
       $scope.goToTemplateView = function () {
@@ -49,6 +44,23 @@ angular.module('managementConsole')
       $scope.isCreateMode = function () {
         return !$scope.isEditMode();
       };
+
+      $scope.requiresRestart = function () {
+        if ($scope.isCreateMode()) {
+          return false;
+        } else {
+          return $scope.configurationSectionHandles.some(function (handle) {
+            return handle.requiresRestart();
+          });
+        }
+      };
+
+      //reload configuration page for change of configuration type
+      $scope.$watch('configurationModel.type', function (newValue, oldValue) {
+        if (oldValue !== newValue) {
+          $scope.cacheConfigurationType = newValue;
+        }
+      });
 
       $scope.$on('configurationFieldDirty', function (event, field){
         if($scope.changedFields.indexOf(field) === -1){
@@ -93,9 +105,7 @@ angular.module('managementConsole')
 
       $scope.saveNewTemplate = function (){
         $scope.addCacheTemplate().then(function(){
-          $state.go('editCacheContainerTemplates', {
-            clusterName: $scope.currentCluster.name
-          });
+          $state.go('editCacheContainerTemplates', { clusterName: $scope.currentCluster.name});
         }).catch(function (e) {
           $scope.openErrorModal(e);
         });
@@ -104,9 +114,8 @@ angular.module('managementConsole')
       $scope.saveEditedTemplate = function (){
         $scope.updateCacheTemplate().then(function(){
           $rootScope.requiresRestartFlag = $scope.requiresRestart();
-          $state.go('editCacheContainerTemplates', {
-            clusterName: $scope.currentCluster.name
-          });
+          $state.go('editCacheContainerTemplates', {clusterName: $scope.currentCluster.name});
+          $scope.openRestartModal();
         }).catch(function (e) {
           $scope.openErrorModal(e);
         });

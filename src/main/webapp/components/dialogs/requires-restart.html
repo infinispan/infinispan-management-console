@@ -7,11 +7,13 @@
   </div>
   <div class="modal-body">
 
-    <h3>Attributes being changed require a restart of the affected servers. Proceed?</h3>
+    <h3>Attributes changed require a restart of the affected servers.
+      If you need to make additional configuration changes right now,
+      consider restarting servers after the last change. </h3>
 
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="ok()">Ok</button>
-    <button type="button" class="btn btn-primary" ng-click="cancel()">Cancel</button>
+    <button type="button" class="btn btn-default" ng-click="ok();cancel()">Restart Now</button>
+    <button type="button" class="btn btn-primary" ng-click="cancel()">Restart Later</button>
   </div>
 </div>

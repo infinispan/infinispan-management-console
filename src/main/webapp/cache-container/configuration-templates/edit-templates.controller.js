@@ -10,7 +10,8 @@ angular.module('managementConsole')
     'modelController',
     'cacheCreateController',
     'configurationTemplates',
-    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationTemplates) {
+    'CONSTANTS',
+    function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationTemplates, CONSTANTS) {
 
       $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
       $scope.confs = $scope.currentCluster.getConfigurationTemplatesFromModel(configurationTemplates);
@@ -18,7 +19,20 @@ angular.module('managementConsole')
       var AddCacheTemplateModalInstanceCtrl = function ($scope, $state, $modalInstance) {
 
         $scope.newTemplateName = '';
-        $scope.availableTemplates = $scope.currentCluster.getConfigurationsTemplates();
+        $scope.availableTemplates = [];
+
+        //now add no base template option
+        $scope.availableTemplates.push({
+          name: CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE,
+          type: 'distributed-cache',
+          mode: 'SYNC'
+        });
+
+        var templates = $scope.currentCluster.getConfigurationsTemplates();
+        angular.forEach(templates, function (template){
+          $scope.availableTemplates.push(template);
+        });
+
         $scope.selectedTemplate = $scope.availableTemplates[0];
 
         $scope.createNewTemplate = function () {

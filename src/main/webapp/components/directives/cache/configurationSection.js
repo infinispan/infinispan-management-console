@@ -67,20 +67,19 @@
         };
 
         scope.prevData = {};
-        if (scope.initDefaults) {
+        //if not initializing to defaults then make root node in the model tree (if not existing already)
+        if (!utils.isNotNullOrUndefined(scope.data)) {
           scope.data = {};
+        }
+        if (scope.initDefaults) {
+          scope.placeholder = {};
           scope.fields.forEach(function (group) {
             group.fields.forEach(function (attrName) {
               if (scope.metadata[attrName].hasOwnProperty('default')) {
-                scope.data[attrName] = scope.metadata[attrName].default;
+                scope.placeholder[attrName] = scope.metadata[attrName].default;
               }
             });
           });
-        } else {
-          //if not initializing to defaults then make root node in the model tree (if not existing already)
-          if (!utils.isNotNullOrUndefined(scope.data)){
-            scope.data = {};
-          }
         }
 
         scope.data['is-new-node'] = !scope.hasAnyFieldPreloadedData();
@@ -90,6 +89,10 @@
 
         scope.resolveFieldType = function (field) {
           return utils.resolveFieldType(scope.metadata, field);
+        };
+
+        scope.resolveDefaultValue = function (field) {
+          return utils.isNotNullOrUndefined(scope.metadata[field].default) ? scope.metadata[field].default : 'unspecified';
         };
 
         scope.isFieldModified = function (field) {

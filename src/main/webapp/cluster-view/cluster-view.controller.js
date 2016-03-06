@@ -5,13 +5,14 @@ var app = angular.module('managementConsole')
     '$scope',
     '$stateParams',
     '$state',
+    'CONSTANTS',
     '$q',
     'modelController',
     'cacheCreateController',
     'clusterNodesService',
     'utils',
     '$modal',
-    function ($scope, $stateParams, $state, $q, modelController, cacheCreateController, clusterNodesService, utils, $modal) {
+    function ($scope, $stateParams, $state, CONSTANTS, $q, modelController, cacheCreateController, clusterNodesService, utils, $modal) {
       var AddCacheModalInstanceCtrl = function ($scope, $state, $modalInstance, cacheCreateController) {
 
         $scope.cacheName;
@@ -21,8 +22,8 @@ var app = angular.module('managementConsole')
 
         // User feedback report
         $scope.successExecuteOperation = false;
-        $scope.errorExecuting          = false;
-        $scope.errorDescription        = null;
+        $scope.errorExecuting = false;
+        $scope.errorDescription = null;
 
         $scope.createCache = function () {
           var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
@@ -76,6 +77,10 @@ var app = angular.module('managementConsole')
           });
         });
 
+        //now add no base template option
+        $scope.configurationTemplates.push(CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE);
+        $scope.configurationTemplatesMap[CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE] = 'distributed-cache';
+        $scope.selectedTemplate = $scope.configurationTemplates[0];
 
         $scope.cancel = function () {
           $modalInstance.close();

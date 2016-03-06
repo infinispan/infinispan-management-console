@@ -5,8 +5,10 @@ angular.module('managementConsole', [
   'gridshore.c3js.chart',
   'ui.router',
   'ui.bootstrap',
-  'LocalStorageModule',
-]).directive('fileModel', ['$parse', function ($parse) {
+  'LocalStorageModule'
+]).constant('CONSTANTS', {
+  'NO_BASE_CONFIGURATION_TEMPLATE': '<none>'
+}).directive('fileModel', ['$parse', function ($parse) {
   return {
     restrict: 'A',
     link: function(scope, element, attrs) {
@@ -222,10 +224,21 @@ angular.module('managementConsole', [
                 templateUrl: 'edit-cache/edit-cache.html',
                 controller: 'editCacheCtrl',
                 resolve: {
-                  configurationModel: function (cacheCreateController, modelController, $stateParams) {
+                  configurationModel: function (cacheCreateController, modelController, $stateParams, CONSTANTS) {
                     if ($stateParams.newCacheCreation) {
-                      return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
-                        $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                      if ($stateParams.cacheConfigurationTemplate === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE) {
+                        return {
+                          'name': $stateParams.cacheName,
+                          'type': $stateParams.cacheConfigurationType,
+                          //creating new cache with bare template, name new template after cache
+                          'template': $stateParams.cacheName,
+                          //and set mode to SYNC
+                          'mode':'SYNC'
+                        };
+                      } else {
+                        return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                          $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                      }
                     } else {
                       var server = modelController.getServer();
                       var clusters = server.getClusters();
@@ -248,17 +261,27 @@ angular.module('managementConsole', [
                 templateUrl: 'edit-cache-template/edit-cache-template.html',
                 controller: 'editCacheTemplateCtrl',
                 resolve: {
-                  configurationModel: function ($q, cacheCreateController, modelController, $stateParams) {
-                    var deferred = $q.defer();
-                    var promise = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
-                      $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
-                    promise.then(function (response){
-                      var model = response;
-                      model.type = $stateParams.cacheConfigurationType;
-                      model.template = $stateParams.cacheConfigurationTemplate;
-                      deferred.resolve(model);
-                    });
-                    return deferred.promise;
+                  configurationModel: function ($q, cacheCreateController, modelController, $stateParams, CONSTANTS) {
+                    if ($stateParams.cacheConfigurationTemplate === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE) {
+                      return {
+                        'type': $stateParams.cacheConfigurationType,
+                        //creating new cache with bare template, name new template after cache
+                        'template': $stateParams.templateName,
+                        //and set mode to SYNC
+                        'mode': 'SYNC'
+                      };
+                    } else {
+                      var deferred = $q.defer();
+                      var promise = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                        $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
+                      promise.then(function (response) {
+                        var model = response;
+                        model.type = $stateParams.cacheConfigurationType;
+                        model.template = $stateParams.templateName;
+                        deferred.resolve(model);
+                      });
+                      return deferred.promise;
+                    }
                   }
                 }
             }).state('editCacheContainerSchemas', {
@@ -394,6 +417,27 @@ angular.module('managementConsole', [
           },
           scope: $rootScope
         });
+      };
+
+      //generic info modal
+      $rootScope.openRestartModal = function () {
+        if ($rootScope.requiresRestartFlag) {
+          $modal.open({
+            templateUrl: 'components/dialogs/requires-restart.html',
+            controller: function ($scope, $modalInstance, clusterNodesService) {
+
+              $scope.ok = function () {
+                clusterNodesService.restartCluster();
+                $rootScope.requiresRestartFlag = false;
+              };
+
+              $scope.cancel = function () {
+                $modalInstance.close();
+              }
+            },
+            scope: $rootScope
+          });
+        }
       };
 
       //generic info modal

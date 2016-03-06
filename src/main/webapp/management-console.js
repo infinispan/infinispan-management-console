@@ -302,71 +302,76 @@ angular.module('managementConsole', [
                 resolve: {
 
                 }
-          }).state('editCacheContainerThreadpools', {
-            url: '/cluster/:clusterName/',
-            params: {
-              clusterName: null
-            },
-            templateUrl: 'cache-container/configuration-threadpools/threadpools.html',
-            controller: 'editContainerThreadpoolsCtrl',
-            resolve: {
-
-            }
-          }).state('editCacheContainerSecurity', {
-            url: '/cluster/:clusterName/',
-            params: {
-              clusterName: null
-            },
-            templateUrl: 'cache-container/configuration-security/security.html',
-            controller: 'editContainerSecurityCtrl',
-            resolve: {
-              securityConfig: function ($q, modelController, $stateParams){
-                var clusters = modelController.getServer().getClusters();
-                var currentCluster = modelController.getServer().getCluster(clusters, $stateParams.clusterName);
-                var deferred = $q.defer();
-                currentCluster.getSecurityConfiguration().then(function(response){
-                  deferred.resolve(response);
-                }).catch(function(){
-                  deferred.resolve(null);
-                });
-                return deferred.promise;
-              }
-            }
-          }).state('editCacheContainerDeploy', {
-            url: '/cluster/:clusterName/',
-            params: {
-              clusterName: null
-            },
-            templateUrl: 'cache-container/configuration-deploy/deploy.html',
-            controller: 'editContainerDeployCtrl',
-            resolve: {
-              deployments: function(cacheContainerConfigurationService){
-                return cacheContainerConfigurationService.getArtifacts();
+            }).state('editCacheContainerThreadpools', {
+                url: '/cluster/:clusterName/',
+                params: {
+                  clusterName: null
+                },
+                templateUrl: 'cache-container/configuration-threadpools/threadpools.html',
+                controller: 'editContainerThreadpoolsCtrl',
+                resolve: {}
+            }).state('editCacheContainerSecurity', {
+              url: '/cluster/:clusterName/',
+              params: {
+                clusterName: null
               },
+              templateUrl: 'cache-container/configuration-security/security.html',
+              controller: 'editContainerSecurityCtrl',
+              resolve: {
+                securityConfig: function ($q, modelController, $stateParams){
+                  var clusters = modelController.getServer().getClusters();
+                  var currentCluster = modelController.getServer().getCluster(clusters, $stateParams.clusterName);
+                  var deferred = $q.defer();
+                  currentCluster.getSecurityConfiguration().then(function(response){
+                    deferred.resolve(response);
+                  }).catch(function(){
+                    deferred.resolve(null);
+                  });
+                  return deferred.promise;
+                }
+              }
+            }).state('editCacheContainerDeploy', {
+              url: '/cluster/:clusterName/',
+              params: {
+                clusterName: null
+              },
+              templateUrl: 'cache-container/configuration-deploy/deploy.html',
+              controller: 'editContainerDeployCtrl',
+              resolve: {
+                deployments: function(cacheContainerConfigurationService){
+                  return cacheContainerConfigurationService.getArtifacts();
+                },
 
-              deployed: function(modelController, $stateParams, cacheContainerConfigurationService){
-                var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
-                return cacheContainerConfigurationService.getDeployedArtifact(cluster.getServerGroupName());
+                deployed: function(modelController, $stateParams, cacheContainerConfigurationService){
+                  var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                  return cacheContainerConfigurationService.getDeployedArtifact(cluster.getServerGroupName());
+                }
               }
-            }
-          }).state('editCacheContainerTemplates', {
-            url: '/cluster/:clusterName/',
-            params: {
-              clusterName: null
-            },
-            templateUrl: 'cache-container/configuration-templates/templates.html',
-            controller: 'editContainerTemplatesCtrl',
-            resolve: {
-              configurationTemplates: function (modelController, $stateParams){
-                var currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
-                return currentCluster.getConfigurations();
+            }).state('editCacheContainerTasks', {
+              url: '/cluster/:clusterName/',
+              params: {
+                clusterName: null
+              },
+              templateUrl: 'cache-container/configuration-tasks/tasks.html',
+              controller: 'editContainerTasksCtrl',
+            }).state('editCacheContainerTemplates', {
+              url: '/cluster/:clusterName/',
+              params: {
+                clusterName: null
+              },
+              templateUrl: 'cache-container/configuration-templates/templates.html',
+              controller: 'editContainerTemplatesCtrl',
+              resolve: {
+                configurationTemplates: function (modelController, $stateParams){
+                  var currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                  return currentCluster.getConfigurations();
+                }
               }
-            }
-          }).state('viewEvents', {
+            }).state('viewEvents', {
               url: '/events-view',
               templateUrl: 'events-view/events-view.html',
               controller: 'EventsViewCtrl'
-              }
+            }
         );
 
         $urlRouterProvider

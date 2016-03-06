@@ -10,7 +10,6 @@
     <h3 ng-if="mode === 'deploy'">Deploy {{artifact}} to {{serverGroup}} ?</h3>
     <h3 ng-if="mode === 'undeploy'">Undeploy {{artifact}} from {{serverGroup}} ?</h3>
     <h3 ng-if="mode === 'remove'">Remove {{artifact}} from content repository ?</h3>
-    <h3 ng-if="mode === 'remove-script'">Remove script '{{artifact}}' ?</h3>
 
   </div>
   <div class="modal-footer">
@@ -21,7 +20,5 @@
             ng-click="confirmUndeployArtifact();cancelModal()">Undeploy</button>
     <button id="removeButton" ng-if="mode === 'remove'" type="button" class="btn btn-primary"
             ng-click="confirmRemoveArtifact();cancelModal()"><i class="pficon pficon-delete"></i> Remove</button>
-    <button id="removeScriptButton" ng-if="mode === 'remove-script'" type="button" class="btn btn-primary"
-            ng-click="confirmRemoveScript();cancelModal()"><i class="pficon pficon-delete"></i> Remove script</button>
   </div>
 </div>

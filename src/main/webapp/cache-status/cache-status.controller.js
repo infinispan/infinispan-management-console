@@ -19,6 +19,7 @@ angular.module('managementConsole')
             $scope.caches = $scope.currentCluster.getCaches();
             $scope.currentCache = $scope.caches[$stateParams.cacheName];
             $scope.currentCache.refresh();
+            $scope.currentCacheEnabled = true; //by default
 
             // User feedback report
             $scope.successExecuteOperation = false;
@@ -54,6 +55,7 @@ angular.module('managementConsole')
 
             $scope.enable = function () {
               $scope.currentCache.enable().then(function (){
+                $scope.currentCacheEnabled = true;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been attached to remote endpoints successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);
@@ -63,6 +65,7 @@ angular.module('managementConsole')
 
             $scope.disable = function () {
               $scope.currentCache.disable().then(function (){
+                $scope.currentCacheEnabled = false;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been detached from remote endpoints successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);

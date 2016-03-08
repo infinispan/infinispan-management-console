@@ -31,6 +31,9 @@ angular.module('managementConsole')
         $scope.cancelModal = function () {
           $modalInstance.close();
         };
+        $scope.confirmRemoveScript = function () {
+          $scope.removeScript($scope.artifact);
+        };
       };
 
       $scope.openConfirmationModal = function (artifact, mode) {
@@ -57,7 +60,7 @@ angular.module('managementConsole')
 
           var body = '// name=' + realTaskName + ', language=' + $scope.task.language + '\n';
           body += '// mode=' + $scope.task.mode + '\n';
-          if ($scope.task.parameters !== null && $scope.task.parameters.length > 0) {
+          if ($scope.task.parameters && $scope.task.parameters.length > 0) {
             body += '// parameters=[' + $scope.task.parameters + ']\n';
           }
           if ($scope.task.role && $scope.task.role.length > 0) {

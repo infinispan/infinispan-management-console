@@ -86,7 +86,9 @@ angular.module('managementConsole')
       };
 
       $scope.removeTemplate = function (template) {
-        cacheCreateController.removeCacheConfigurationNode(template.type, template.name).then(function () {
+        cacheCreateController.removeCacheConfigurationNode($scope.currentCluster.getProfileName(),
+          $scope.currentCluster.getName(),
+          template.type, template.name).then(function () {
             $state.go('editCacheContainerTemplates', {
               clusterName: $scope.currentCluster.name
             }, {reload: true});

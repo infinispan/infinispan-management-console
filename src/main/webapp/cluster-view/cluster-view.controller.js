@@ -26,7 +26,7 @@ var app = angular.module('managementConsole')
         $scope.errorDescription = null;
 
         $scope.createCache = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
+          var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
@@ -39,7 +39,7 @@ var app = angular.module('managementConsole')
         };
 
         $scope.configureTemplate = function () {
-          var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
+          var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.getName()];
           var cacheType = $scope.configurationTemplatesMap[$scope.selectedTemplate];
           address.push(cacheType);
           address.push($scope.cacheName);
@@ -64,7 +64,7 @@ var app = angular.module('managementConsole')
         //Find all configuration templates across all clusters (cache containers)
         angular.forEach($scope.clusters, function (cluster){
           angular.forEach(['distributed-cache', 'replicated-cache', 'invalidation-cache', 'local-cache'], function (cacheType){
-            var p = cacheCreateController.getConfigurationTemplates(cluster.getName(), cacheType);
+            var p = cacheCreateController.getConfigurationTemplates(cluster.getProfileName(), cluster.getName(), cacheType);
             p.then(function (response) {
               var p = response[cacheType + '-configuration'];
               for (var key in p) {

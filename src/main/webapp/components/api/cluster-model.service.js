@@ -34,6 +34,10 @@ angular.module('managementConsole.api')
               return this.serverGroupName;
             };
 
+            Cluster.prototype.getProfileName = function () {
+              return this.profile;
+            };
+
             Cluster.prototype.getResourcePath = function () {
                 return this.path.concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
             };

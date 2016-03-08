@@ -225,6 +225,8 @@ angular.module('managementConsole', [
                 controller: 'editCacheCtrl',
                 resolve: {
                   configurationModel: function (cacheCreateController, modelController, $stateParams, CONSTANTS) {
+                    var server = modelController.getServer();
+                    var currentCluster = server.getClusterByName($stateParams.clusterName);
                     if ($stateParams.newCacheCreation) {
                       if ($stateParams.cacheConfigurationTemplate === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE) {
                         return {
@@ -236,15 +238,12 @@ angular.module('managementConsole', [
                           'mode':'SYNC'
                         };
                       } else {
-                        return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                        return cacheCreateController.getConfigurationTemplate(currentCluster.getProfileName(), $stateParams.clusterName,
                           $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
                       }
                     } else {
-                      var server = modelController.getServer();
-                      var clusters = server.getClusters();
-                      var currentCluster = server.getCluster(clusters, $stateParams.clusterName);
                       var currentCache = currentCluster.getCaches()[$stateParams.cacheName];
-                      return cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                      return cacheCreateController.getConfigurationTemplate(currentCluster.getProfileName(), $stateParams.clusterName,
                         currentCache.getType(), currentCache.getConfigurationTemplate());
                     }
                   }
@@ -272,7 +271,8 @@ angular.module('managementConsole', [
                       };
                     } else {
                       var deferred = $q.defer();
-                      var promise = cacheCreateController.getConfigurationTemplate($stateParams.clusterName,
+                      var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                      var promise = cacheCreateController.getConfigurationTemplate(cluster.getProfileName(), $stateParams.clusterName,
                         $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
                       promise.then(function (response) {
                         var model = response;

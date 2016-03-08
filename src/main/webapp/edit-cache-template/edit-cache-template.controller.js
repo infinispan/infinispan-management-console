@@ -84,7 +84,7 @@ angular.module('managementConsole')
       };
 
       $scope.addCacheTemplate = function (){
-        var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container',
+        var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
         address.push($scope.configurationModel.template);
@@ -94,7 +94,7 @@ angular.module('managementConsole')
       };
 
       $scope.updateCacheTemplate = function (){
-        var address = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan', 'cache-container',
+        var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
         address.push($scope.configurationModel.template);

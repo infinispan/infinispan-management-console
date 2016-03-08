@@ -70,9 +70,9 @@ angular.module('managementConsole.api')
        *
        * @param cacheType One of distributed-cache, invalidation-cache, local-cache or replicated-cache
        */
-      CacheCreationControllerClient.prototype.getConfigurationTemplates = function (cacheContainer, cacheType) {
+      CacheCreationControllerClient.prototype.getConfigurationTemplates = function (profile, cacheContainer, cacheType) {
         var deferred = $q.defer();
-        var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
+        var dmrConfigurationsAddress = ['profile', profile , 'subsystem', 'datagrid-infinispan',
           'cache-container', cacheContainer, 'configurations', 'CONFIGURATIONS', cacheType + '-configuration'];
         modelController.readResource(dmrConfigurationsAddress, true, false).then(function (response) {
           deferred.resolve(response);
@@ -86,9 +86,9 @@ angular.module('managementConsole.api')
        *
        * @param cacheType One of distributed-cache, invalidation-cache, local-cache or replicated-cache
        */
-      CacheCreationControllerClient.prototype.getConfigurationTemplate = function (cacheContainer, cacheType, cacheTemplateName) {
+      CacheCreationControllerClient.prototype.getConfigurationTemplate = function (profile, cacheContainer, cacheType, cacheTemplateName) {
         var deferred = $q.defer();
-        var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
+        var dmrConfigurationsAddress = ['profile', profile , 'subsystem', 'datagrid-infinispan',
           'cache-container', cacheContainer, 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', cacheTemplateName];
         modelController.readResource(dmrConfigurationsAddress, true, false).then(function (response) {
           deferred.resolve(response);
@@ -258,9 +258,9 @@ angular.module('managementConsole.api')
         return this.execute(compositeOp);
       };
 
-      CacheCreationControllerClient.prototype.removeCacheConfigurationNode = function (cacheType, templateName) {
-        var dmrConfigurationsAddress = ['profile', 'clustered', 'subsystem', 'datagrid-infinispan',
-          'cache-container', 'clustered', 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', templateName];
+      CacheCreationControllerClient.prototype.removeCacheConfigurationNode = function (profile, cacheContainer, cacheType, templateName) {
+        var dmrConfigurationsAddress = ['profile', profile , 'subsystem', 'datagrid-infinispan',
+          'cache-container', cacheContainer , 'configurations', 'CONFIGURATIONS', cacheType + '-configuration', templateName];
         // remove DMR attributes we added when we loaded the model
         var op = {
           'operation': 'remove',

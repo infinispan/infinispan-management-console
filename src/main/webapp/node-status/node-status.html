@@ -5,7 +5,7 @@
         <li>
           <a href="#/clusters-view-physical">Clusters</a>
         </li>
-        <li><a ui-sref="clusterNodes({clusterName: clusterName})">{{clusterName}}</a></li>
+        <li><a ui-sref="clusterNodes({clusterName: clusterName, refresh: true})" ui-sref-opts="{reload:true}">{{clusterName}}</a></li>
         <li class="active"><strong>{{nodeName}}</strong></li>
       </ol>
 
@@ -106,7 +106,7 @@
             <h2 class="card-pf-title">Performance metrics</h2>
           </div>
           <div class="card-pf-body">
-            <div class="row">
+            <div class="row" ng-show="serverNode.isRunning()">
               <div class="col-md-8">
                 <h4>Memory Usage</h4>
 
@@ -154,6 +154,8 @@
                   </tr>
                 </table>
               </div>
+            </div>
+            <div class="row" class="col-md-8" ng-show="!serverNode.isRunning()">
             </div>
           </div>
         </div>

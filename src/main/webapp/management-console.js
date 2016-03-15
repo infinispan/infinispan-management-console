@@ -128,8 +128,9 @@ angular.module('managementConsole', [
             .state('clusterNodes', {
               url: '/clusters-view-physical/:clusterName/',
               templateUrl: 'cluster-nodes/cluster-nodes.html',
-              params:{
-                refresh:false
+              params: {
+                clusterName: null,
+                refresh: false
               },
               controller: 'ClusterNodesCtrl',
               resolve:{

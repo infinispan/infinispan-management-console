@@ -4,12 +4,13 @@ angular.module('managementConsole')
   .controller('NodeStatusCtrl', [
     '$scope',
     '$stateParams',
+    '$state',
     '$modal',
     'modelController',
     '$interval',
     'view',
     'utils',
-    function ($scope, $stateParams, $modal, modelController, $interval, view, utils) {
+    function ($scope, $stateParams, $state, $modal, modelController, $interval, view, utils) {
 
 
       $scope.clusterName = $stateParams.clusterName;
@@ -73,6 +74,14 @@ angular.module('managementConsole')
       }, 500, 1);
 
 
+      $scope.refreshPage = function () {
+        $state.go('nodeStatus', {
+          clusterName: $scope.clusterName,
+          nodeName: $scope.nodeName,
+          inetAddress: $scope.serverNode.getInetAddress()
+        }, {reload: true});
+      };
+
       $scope.currentCacheAvailability = function () {
         return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };
@@ -87,15 +96,32 @@ angular.module('managementConsole')
       };
 
       $scope.startNode = function () {
-        $scope.serverNode.start();
+        var bootModal = $modal.open({
+          templateUrl: 'components/dialogs/booting.html',
+          scope: $scope
+        });
+        $scope.serverNode.start().then(function () {
+        }).catch(function () {
+        }).finally(function () {
+          bootModal.close();
+          $scope.refreshPage();
+        });
       };
 
       $scope.stopNode = function () {
-        $scope.serverNode.stop();
+        $scope.serverNode.stop().then(function () {
+        }).catch(function () {
+        }).finally(function () {
+          $scope.refreshPage();
+        });
       };
 
       $scope.removeNode = function () {
         $scope.serverNode.remove();
+        $state.go('clusterNodes', {
+          clusterName: $scope.clusterName,
+          refresh: true
+        }, {reload: true});
       };
 
       var NodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $stateParams) {

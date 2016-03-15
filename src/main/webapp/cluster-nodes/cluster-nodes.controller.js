@@ -14,27 +14,6 @@ angular.module('managementConsole')
     'utils',
     '$modal',
     function ($scope, $stateParams, $state, $timeout, $interval, $q, modelController, nodeCreateController, view, utils, $modal) {
-      var ModalInstanceCtrl = function ($scope, $modalInstance) {
-
-        $scope.cancel = function () {
-          $modalInstance.dismiss('cancel');
-        };
-      };
-
-      var BootingInstanceCtrl = function ($scope, $modalInstance, modelController, $state, $timeout, $interval) {
-
-        $scope.countDown = 30;
-        $timeout(function(){$scope.refreshServers();}, $scope.countDown * 1000);
-
-        $scope.refreshServers = function () {
-          $modalInstance.close();
-          modelController.getServer().refreshServers().then(function () {
-            $state.go($state.current, {}, {reload: true});
-          });
-        };
-
-        $interval(function() {$scope.countDown--;}, 1000, false);
-      };
 
       var AddNodeModalInstanceCtrl = function ($scope, utils, $modalInstance, $state, modelController, nodeCreateController) {
 
@@ -44,11 +23,24 @@ angular.module('managementConsole')
 
 
         $scope.createServerNode = function () {
+          var modalBoot;
+          $modalInstance.close();
           var address = ['host', $scope.host, 'server-config'];
           address.push($scope.serverName);
-          nodeCreateController.createServerNode(address, true, $scope.cluster.name, 'clustered-sockets', $scope.portOffset, function () {
-            $modalInstance.close();
-            $scope.openBootingModal();
+          nodeCreateController.createServerNode(address, true, $scope.cluster.name, 'clustered-sockets', $scope.portOffset).then(function () {
+            //show booting modal
+            modalBoot = $scope.openBootingModal();
+            //start server
+            return modelController.execute({
+              'operation': 'start',
+              'address': address,
+              'blocking': true
+            });
+
+          }).catch(function () {
+          }).finally(function () {
+            modalBoot.close();
+            $scope.refresh();
           });
         };
 
@@ -137,16 +129,9 @@ angular.module('managementConsole')
       };
 
       $scope.openBootingModal = function () {
-        $modal.open({
-          templateUrl: 'cluster-nodes/booting.html',
-          controller: BootingInstanceCtrl
-        });
-      };
-
-      $scope.openWIPModal = function () {
-        $modal.open({
-          templateUrl: 'workinprogress.html',
-          controller: ModalInstanceCtrl
+        return $modal.open({
+          templateUrl: 'components/dialogs/booting.html',
+          scope: $scope
         });
       };
     }]).filter('inetAddressFilter', function (){

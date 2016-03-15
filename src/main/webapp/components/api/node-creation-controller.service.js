@@ -73,19 +73,7 @@ angular.module('managementConsole.api')
                 'address': address
               };
 
-              var opStart = {
-                'operation': 'start',
-                'address': address
-              };
-
-              //add and start server
-              var promise = this.execute(op).then(function(){
-                this.execute(opStart);
-              }.bind(this));
-
-              promise.then(function(){
-                callback();
-              });
+              return this.execute(op);
             };
             return new NodeCreateController(window.location.origin);
     }

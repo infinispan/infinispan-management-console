@@ -136,39 +136,41 @@ angular.module('managementConsole.api')
                 }.bind(this));
             };
 
-            Server.prototype.start = function (){
-              return this.executeServerOp('start');
+            Server.prototype.start = function (blocking){
+              return this.executeServerOp('start', blocking);
             };
 
-            Server.prototype.stop = function (){
-              return this.executeServerOp('stop');
+            Server.prototype.stop = function (blocking){
+              return this.executeServerOp('stop', blocking);
             };
 
-            Server.prototype.restart = function (){
-              return this.executeServerOp('restart');
+            Server.prototype.restart = function (blocking){
+              return this.executeServerOp('restart', blocking);
             };
 
-            Server.prototype.reload = function (){
-              return this.executeServerOp('reload');
+            Server.prototype.reload = function (blocking){
+              return this.executeServerOp('reload', blocking);
             };
 
-            Server.prototype.suspend = function (){
-              return this.executeServerOp('suspend');
+            Server.prototype.suspend = function (blocking){
+              return this.executeServerOp('suspend', blocking);
             };
 
-            Server.prototype.resume = function (){
-              return this.executeServerOp('resume');
+            Server.prototype.resume = function (blocking){
+              return this.executeServerOp('resume', blocking);
             };
 
-            Server.prototype.remove = function (){
-              return this.executeServerOp('remove');
+            Server.prototype.remove = function (blocking){
+              return this.executeServerOp('remove', blocking);
             };
 
-            Server.prototype.executeServerOp = function (operationName){
+            Server.prototype.executeServerOp = function (operationName, blocking){
+              blocking = blocking || true;
               var address = ['host', this.host, 'server-config', this.server];
               var op = {
                 'operation': operationName,
-                'address': address
+                'address': address,
+                'blocking':blocking
               };
               return this.getModelController().execute(op);
             };

@@ -46,6 +46,15 @@ angular.module('managementConsole')
           $scope.currentCluster.refresh();
       };
 
+      $scope.$watch('selectedView', function (newValue) {
+        if (newValue === 'running') {
+          $scope.refreshRunningTasks();
+        }
+        else if (newValue === 'history') {
+          $scope.refreshTaskHistory();
+        }
+      });
+
       $scope.currentClusterAvailability = function () {
           return utils.isNotNullOrUndefined($scope.currentCluster) && $scope.currentCluster.isAvailable();
       };

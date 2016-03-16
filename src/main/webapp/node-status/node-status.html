@@ -106,14 +106,17 @@
             <h2 class="card-pf-title">Performance metrics</h2>
           </div>
           <div class="card-pf-body">
-            <div class="row" ng-show="serverNode.isRunning()">
-              <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-8" ng-show="serverNode.isRunning()">
                 <h4>Memory Usage</h4>
 
                 <c3chart bindto-id="pie-plot1-chart" chart-data="dataPoints" chart-columns="dataColumns">
                   <chart-size chart-height="220" chart-width="220"/>
                   <chart-donut title="Memory" width="30"/>
                 </c3chart>
+              </div>
+              <div class="col-md-8" ng-show="!serverNode.isRunning()">
+                <h4>Node is stopped</h4>
               </div>
               <div class="col-md-4">
                 <h4>Threads</h4>
@@ -154,8 +157,6 @@
                   </tr>
                 </table>
               </div>
-            </div>
-            <div class="row" class="col-md-8" ng-show="!serverNode.isRunning()">
             </div>
           </div>
         </div>

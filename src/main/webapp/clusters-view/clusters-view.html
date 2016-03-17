@@ -8,19 +8,19 @@
       <br>
       <table class="table ispn-aligned">
         <tr>
-          <th>Status</th>
           <th>Name</th>
+          <th>Status</th>
           <th># Caches</th>
-          <th>Clustering info <span class="icon-class pficon-info"></span></th>
-          <th>Endpoints <span class="icon-class pficon-info"></span></th>
-          <th>Sites <span class="icon-class pficon-info"></span></th>
+          <th>Clustering info</th>
+          <th>Endpoints</th>
+          <th>Sites</th>
         </tr>
 
         <tr ng-repeat="cluster in clusters track by $index">
+          <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
           <td ng-init="group = cluster.getServerGroupName()"><span class="label isCacheAvailable"
                     ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
             {{cluster.isAvailable()?cluster.availability:'Unavailable'}}</span></td>
-          <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
           <td><span class="numberOfCaches label label-default">{{cluster.getCachesAsArray().length}}</span></td>
           <td><a class="clusterName" ui-sref="clusterNodes({clusterName: group})">{{group}}</a><br>
             <small class="stack">{{stack}}</small>

@@ -8,17 +8,17 @@
       <br>
       <table class="table ispn-aligned">
         <tr>
-          <th>Status</th>
           <th>Name</th>
+          <th>Status</th>
           <th># Hosts</th>
           <th># Nodes</span>
           </th>
         </tr>
 
         <tr ng-repeat="cluster in groups track by $index">
+          <td><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: cluster.name})">{{cluster.name}}</a></strong></td>
           <td><span class="label clusterStatus"
                     ng-class="(cluster.status === 'STARTED')?'label-success':'label-danger'">{{cluster.status}}</span></td>
-          <td style="padding: 10px"><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: cluster.name})">{{cluster.name}}</a></strong></td>
           <td style="padding: 10px"><span class="label label-default clusterHostCount">{{cluster.hostCount}}</span></td>
           <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{cluster.nodeCount}}</span></td>
         </tr>

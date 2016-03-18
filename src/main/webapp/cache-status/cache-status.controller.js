@@ -8,8 +8,9 @@ angular.module('managementConsole')
     '$modal',
     'modelController',
     'clusterNodesService',
+    'cacheService',
     'utils',
-    function ($scope, $stateParams, $state, $modal, modelController, clusterNodesService, utils) {
+    function ($scope, $stateParams, $state, $modal, modelController, clusterNodesService, cacheService, utils) {
             if (!$stateParams.clusterName && !$stateParams.cacheName) {
                 $state.go('error404');
             }
@@ -54,7 +55,7 @@ angular.module('managementConsole')
             };
 
             $scope.enable = function () {
-              $scope.currentCache.enable().then(function (){
+              cacheService.enable($scope.currentCache).then(function (){
                 $scope.currentCacheEnabled = true;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been attached to remote endpoints successfully.');
               }).catch(function (e){
@@ -64,7 +65,7 @@ angular.module('managementConsole')
             };
 
             $scope.disable = function () {
-              $scope.currentCache.disable().then(function (){
+              cacheService.disable($scope.currentCache).then(function (){
                 $scope.currentCacheEnabled = false;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been detached from remote endpoints successfully.');
               }).catch(function (e){
@@ -74,7 +75,7 @@ angular.module('managementConsole')
             };
 
             $scope.purge = function () {
-              $scope.currentCache.flush().then(function (){
+              cacheService.flush($scope.currentCache).then(function (){
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been purged successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);
@@ -83,7 +84,7 @@ angular.module('managementConsole')
             };
 
             $scope.resetStats = function () {
-              $scope.currentCache.resetStats();
+              cacheService.resetStats($scope.currentCache);
               $scope.refresh();
             };
 

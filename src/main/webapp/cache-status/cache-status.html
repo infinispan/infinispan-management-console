@@ -29,7 +29,7 @@
           <li role="presentation" ng-class="currentCacheEnabled?'enabled':'disabled'"><a id="dropdownMenuDisable" role="menuitem" ng-click="openModal('disable')">Disable</a></li>
           <li role="presentation" ng-class="!currentCacheEnabled?'enabled':'disabled'"><a id="dropdownMenuEnable" role="menuitem" ng-click="openModal('enable')">Enable</a></li>
           <li role="presentation" class="divider"></li>
-
+          <li role="presentation" ng-class="currentCache.isIndexed()?'enabled':'disabled'"><a id="dropdownMenuMassIndexCache" role="menuitem" ng-click="openModal('reindex')">Reindex</a>
           <li role="presentation" class="enabled"><a id="dropdownMenuPurgeCache" role="menuitem" ng-click="openModal('purge')">Purge cache data</a>
           <li role="presentation" class="divider"></li>
           <!-- Rebalancing options -->

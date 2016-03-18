@@ -10,6 +10,7 @@
     <h3 ng-if="mode === 'enable'">Enabling cache {{cacheName}} will attach it to all active remote endpoints. Enable {{cacheName}}?</h3>
     <h3 ng-if="mode === 'disable'">Disabling cache {{cacheName}} will detach it from all active remote endpoints. Disable {{cacheName}}?</h3>
     <h3 ng-if="mode === 'purge'">Purging cache {{cacheName}} will passivate all its cache entries. Purge {{cacheName}}?</h3>
+    <h3 ng-if="mode === 'reindex'">Re-indexing cache '{{cacheName}}' will remove its current index and recreate it according to the cache contents' schema. Re-index {{cacheName}}?</h3>
     <h3 ng-if="mode === 'enable-rebalance'">This will ENABLE rebalancing of {{cacheName}}?</h3>
     <h3 ng-if="mode === 'disable-rebalance'">This will DISABLE rebalancing of {{cacheName}}?</h3>
   </div>
@@ -18,6 +19,7 @@
     <button id="enableButton" ng-if="mode === 'enable'" type="button" class="btn btn-primary" ng-click="enable();cancelModal()">Enable</button>
     <button id="disableButton" ng-if="mode === 'disable'" type="button" class="btn btn-primary" ng-click="disable();cancelModal()">Disable</button>
     <button id="purgeButton" ng-if="mode === 'purge'" type="button" class="btn btn-primary" ng-click="purge();cancelModal()">Purge</button>
+    <button id="indexButton" ng-if="mode === 'reindex'" type="button" class="btn btn-primary" ng-click="reindex();cancelModal()">Reindex</button>
     <button id="enableRebalanceButton" ng-if="mode  === 'enable-rebalance'"  type="button" class="btn btn-primary" ng-click="setCacheRebalance(true); cancelModal()">Enable rebalance</button>
     <button id="disableRebalanceButton" ng-if="mode === 'disable-rebalance'" type="button" class="btn btn-primary" ng-click="setCacheRebalance(false);cancelModal()">Disable rebalance</button>
   </div>

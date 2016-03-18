@@ -83,6 +83,15 @@ angular.module('managementConsole')
               $scope.refresh();
             };
 
+            $scope.reindex = function () {
+              cacheService.reindex($scope.currentCache).then(function (){
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has started reindexing successfully.');
+              }).catch(function (e){
+                $scope.openErrorModal(e);
+              });
+              $scope.refresh();
+            };
+
             $scope.resetStats = function () {
               cacheService.resetStats($scope.currentCache);
               $scope.refresh();

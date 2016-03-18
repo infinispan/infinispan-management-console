@@ -44,6 +44,10 @@ angular.module('managementConsole')
         return executeOp(cache, 'reset-statistics');
       }
 
+      function reindex (cache){
+        return executeOp(cache, 'mass-reindex');
+      }
+
       function executeOp (cache, operationName){
         var address = cache.getResourcePath();
         var op = {
@@ -59,6 +63,7 @@ angular.module('managementConsole')
         enable: enable,
         disable: disable,
         flush: flush,
+        reindex: reindex,
         resetStats: resetStats
       };
 

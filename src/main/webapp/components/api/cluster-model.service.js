@@ -121,7 +121,7 @@ angular.module('managementConsole.api')
             Cluster.prototype.getAvailability = function () {
               // We are checking cluster availability on the first server
               // Is here any was how to check cluster availability globally?
-              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
+              var resourcePathCacheContainer = this.getNodes()[0].getResourcePath()
                 .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
 
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-availability').then(function (response){
@@ -132,7 +132,7 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.getRebalancingStatus= function () {
-              var resourcePathCacheContainer = this.domain.getFirstServer().getResourcePath()
+              var resourcePathCacheContainer = this.getNodes()[0].getResourcePath()
                 .concat('subsystem', 'datagrid-infinispan', 'cache-container', this.name);
               return this.modelController.readAttribute(resourcePathCacheContainer, 'cluster-rebalance').then(function (response){
                 this.rebalancingStatus = response;
@@ -184,7 +184,13 @@ angular.module('managementConsole.api')
             };
 
             Cluster.prototype.getNodes = function () {
-                return this.domain.getNodes();
+              var nodes = [];
+              angular.forEach(this.domain.getNodes(), function (node) {
+                if (node.getGroup() === this.serverGroupName) {
+                  nodes.push(node);
+                }
+              }.bind(this));
+              return nodes;
             };
 
             Cluster.prototype.getProfile = function () {

@@ -9,8 +9,13 @@ angular.module('managementConsole')
     'clusterNodesService',
     'utils',
     function ($scope, $state, modelController, clusterEventsService, clusterNodesService, utils) {
-
-            $scope.clusters = modelController.getServer().getClusters();
+            $scope.clusters = [];
+            $scope.serverGroups = modelController.getServer().getServerGroups();
+            angular.forEach($scope.serverGroups, function (group){
+              var profile = modelController.getServer().getProfile(group.profile);
+              $scope.clusters = $scope.clusters.concat(profile.getClusters());
+            });
+            //$scope.clusters = modelController.getServer().getClusters();
             $scope.stack = modelController.getServer().getFirstServer().getDefaultStack();
             $scope.relays = {};
             $scope.offlineSites = {};

@@ -174,13 +174,12 @@ angular.module('managementConsole', [
                     return calculateClusterState();
                   }
                 },
-                view: function (modelController, clusterNodesService, utils) {
+                view: function (modelController, clusterNodesService, $stateParams, utils) {
                   var servers = modelController.getServer().getNodes();
                   if (utils.isNonEmptyArray(servers)) {
                     var firstServer = servers[0];
-                    var domain = firstServer.getDomain();
-                    var firstCluster = domain.getClusters()[0];
-                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
+                    var serverGroup = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), serverGroup.profile);
                   } else {
                     return {
                       host: '',
@@ -200,12 +199,11 @@ angular.module('managementConsole', [
                 templateUrl: 'node-status/node-status.html',
                 controller: 'NodeStatusCtrl',
                 resolve: {
-                  view: function(modelController, clusterNodesService){
+                  view: function(modelController, clusterNodesService, $stateParams){
                     var servers = modelController.getServer().getNodes();
                     var firstServer = servers[0];
-                    var domain = firstServer.getDomain();
-                    var firstCluster = domain.getClusters()[0];
-                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), firstCluster.getName());
+                    var serverGroup = modelController.getServer().getServerGroupByName($stateParams.clusterName);
+                    return clusterNodesService.getView(firstServer.getHost(), firstServer.getServerName(), serverGroup.profile);
                   }
                 }
               }

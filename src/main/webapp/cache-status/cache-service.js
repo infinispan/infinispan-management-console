@@ -14,6 +14,17 @@ angular.module('managementConsole')
         return executeOp(cache, 'stop-cache');
       }
 
+      function isEnabled (cache) {
+        var profile = cache.getCluster().getProfile();
+        var endpointAddress = profile.getResourcePath().concat('subsystem','datagrid-infinispan-endpoint');
+        var op = {
+          'operation': 'is-ignored-all-endpoints',
+          'cache-names':[cache.getName()],
+          'address': endpointAddress
+        };
+        return modelController.execute(op);
+      }
+
       function enable (cache){
         var profile = cache.getCluster().getProfile();
         var endpointAddress = profile.getResourcePath().concat('subsystem','datagrid-infinispan-endpoint');
@@ -64,7 +75,8 @@ angular.module('managementConsole')
         disable: disable,
         flush: flush,
         reindex: reindex,
-        resetStats: resetStats
+        resetStats: resetStats,
+        isEnabled: isEnabled
       };
 
     }

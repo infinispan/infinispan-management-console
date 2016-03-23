@@ -38,6 +38,10 @@ angular.module('managementConsole')
                 $scope.currentCacheStats.nodeStats = response;
                 $scope.currentCacheStats.firstServerStats = response[0];
               });
+
+              cacheService.isEnabled($scope.currentCache).then(function (response) {
+                $scope.currentCacheEnabled = !response[$scope.currentCache.getName()];
+              });
             };
 
             $scope.refresh();
@@ -56,7 +60,6 @@ angular.module('managementConsole')
 
             $scope.enable = function () {
               cacheService.enable($scope.currentCache).then(function (){
-                $scope.currentCacheEnabled = true;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been attached to remote endpoints successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);
@@ -66,7 +69,6 @@ angular.module('managementConsole')
 
             $scope.disable = function () {
               cacheService.disable($scope.currentCache).then(function (){
-                $scope.currentCacheEnabled = false;
                 $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been detached from remote endpoints successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);

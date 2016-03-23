@@ -19,7 +19,7 @@ angular.module('managementConsole')
 
         $scope.host = $scope.hosts[0];
         $scope.serverName = '';
-        $scope.portOffset = utils.getRandomInt(0, 1000);
+        $scope.portOffset = 0;
 
 
         $scope.createServerNode = function () {

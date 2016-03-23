@@ -10,3 +10,4 @@ dist
 src/main/bower_components
 target
 *.iml
+*.pyc

@@ -27,6 +27,7 @@ angular.module('managementConsole.api')
             };
 
             Profile.prototype.refresh = function () {
+                var profileName = this.name;
                 this.clusters = [];
                 return this.getModelController().readResource(this.getResourcePath(), true, false).then(function (response) {
                     this.lastRefresh = new Date();
@@ -40,7 +41,7 @@ angular.module('managementConsole.api')
                           var serverGroups = this.domain.getServerGroups();
                           var groupName = '';
                           Object.keys(serverGroups).forEach(function (group) {
-                            if(serverGroups[group].profile === name){
+                            if(serverGroups[group].profile === profileName){
                               groupName = group;
                             }
                           });

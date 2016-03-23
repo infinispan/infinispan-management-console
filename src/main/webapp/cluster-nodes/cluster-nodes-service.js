@@ -55,7 +55,7 @@ angular.module('managementConsole')
       function getCoordinator(cluster) {
         var servers = cluster.getNodes();
         var firstServer = servers[0]; //lets ask first server
-        return getChannelName(cluster.getName()).then(function (channelName) {
+        return getChannelName(cluster.getProfileName()).then(function (channelName) {
           var address = ['host', firstServer.getHost(), 'server', firstServer.getServerName(), 'subsystem', 'datagrid-jgroups',
             'channel', channelName[0], 'protocol', 'pbcast.GMS'];
 

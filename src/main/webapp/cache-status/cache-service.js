@@ -40,6 +40,10 @@ angular.module('managementConsole')
         return executeOp(cache, 'flush-cache');
       }
 
+      function clear (cache){
+        return executeOp(cache, 'clear-cache');
+      }
+
       function resetStats (cache){
         return executeOp(cache, 'reset-statistics');
       }
@@ -62,6 +66,7 @@ angular.module('managementConsole')
         stop: stop,
         enable: enable,
         disable: disable,
+        clear: clear,
         flush: flush,
         reindex: reindex,
         resetStats: resetStats

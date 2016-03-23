@@ -74,9 +74,18 @@ angular.module('managementConsole')
               $scope.refresh();
             };
 
-            $scope.purge = function () {
+            $scope.flush = function () {
               cacheService.flush($scope.currentCache).then(function (){
-                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been purged successfully.');
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been flushed successfully.');
+              }).catch(function (e){
+                $scope.openErrorModal(e);
+              });
+              $scope.refresh();
+            };
+
+            $scope.clear = function () {
+              cacheService.clear($scope.currentCache).then(function (){
+                $scope.openInfoModal('Cache ' + $scope.currentCache.getName() + ' has been cleared successfully.');
               }).catch(function (e){
                 $scope.openErrorModal(e);
               });

@@ -20,7 +20,7 @@
           <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
           <td ng-init="group = cluster.getServerGroupName()"><span class="label isCacheAvailable"
                     ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
-            {{cluster.isAvailable()?cluster.availability:'Unavailable'}}</span></td>
+            {{cluster.getAvailability()}}</span></td>
           <td><span class="numberOfCaches label label-default">{{cluster.getCachesAsArray().length}}</span></td>
           <td><a class="clusterName" ui-sref="clusterNodes({clusterName: group})">{{group}}</a><br>
             <small class="stack">{{stack}}</small>

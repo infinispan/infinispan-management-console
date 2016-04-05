@@ -4,7 +4,8 @@ angular.module('managementConsole')
   .factory('clusterNodesService', [
     '$q',
     'modelController',
-    function ($q, modelController) {
+    'utils',
+    function ($q, modelController, utils) {
 
       function restartCluster() {
         var cluster = modelController.getServer().getServerGroup();
@@ -45,10 +46,29 @@ angular.module('managementConsole')
             };
           }).catch(function () {
             return {
-              host: '',
-              server: ''
+              host:'',
+              server:''
             };
           });
+        });
+      }
+
+      function getCoordinatorForServerGroup(hostName, serverName, serverGroup) {
+        var address = ['host', hostName, 'server', serverName, 'subsystem', 'datagrid-jgroups',
+          'channel', serverGroup, 'protocol', 'pbcast.GMS'];
+
+        return modelController.readAttribute(address, 'view').then(function (view) {
+          var lastIndex = view.indexOf('|');
+          var hostServerSplitIndex = view.indexOf(':');
+          return {
+            host: view.substring(1, hostServerSplitIndex),
+            server: view.substring(hostServerSplitIndex + 1, lastIndex)
+          };
+        }).catch(function () {
+          return {
+            host: '',
+            server: ''
+          };
         });
       }
 
@@ -84,13 +104,82 @@ angular.module('managementConsole')
         });
       }
 
+      function getViews(cluster) {
+        var servers = cluster.getNodes();
+        return getViewsForServers(servers, cluster);
+      }
+
+      function getViewsForServers(servers, cluster) {
+
+        var promises = servers.map(function (server) {
+          if (server.isRunning()) {
+
+            var address = ['host', server.getHost(), 'server', server.getServerName(), 'subsystem', 'datagrid-infinispan',
+              'cache-container', cluster.getName()];
+            return modelController.readAttribute(address, 'members');
+          }
+        });
+        return $q.all(promises);
+      }
+
+      function getCoordinatorsForServers(servers) {
+
+        var promises = servers.map(function (server) {
+          return getCoordinatorForServerGroup(server.getHost(), server.getServerName(), server.getGroup());
+        });
+        return $q.all(promises);
+      }
+
+      function areCoordinatorsSameForServers(servers) {
+        return getCoordinatorsForServers(servers).then(function (coords) {
+          var filteredCoords = coords.filter(function(coord){
+            return coord.host.length > 0 && coord.server.length > 0;
+          });
+
+          var firstCoord = filteredCoords[0];
+          return filteredCoords.every(function (coord) {
+            return coord.host === firstCoord.host && coord.server === firstCoord.server;
+          });
+        });
+      }
+
+      function areAllViewsTheSame(cluster) {
+        return getViews(cluster).then(function(views){
+
+          var filteredViews = views.filter(function(view) {
+            return utils.isNotNullOrUndefined(view);
+          });
+          var firstView = filteredViews[0];
+          return cluster.getNodes().length > 0 && filteredViews.every(function(view) {
+            return view === firstView;
+          });
+        }).catch(function(e){
+          console.log(e);
+        });
+      }
+
+      function getAvailability(cluster) {
+        return areAllViewsTheSame(cluster).then(function(viewsAreTheSame){
+          if(viewsAreTheSame){
+            return 'AVAILABLE';
+          } else {
+            return 'DEGRADED';
+          }
+        });
+      }
+
+
       return {
         stopCluster:stopCluster,
         startCluster:startCluster,
         restartCluster:restartCluster,
         reloadCluster:reloadCluster,
         getView:getView,
-        getCoordinator:getCoordinator
+        getCoordinator:getCoordinator,
+        areAllViewsTheSame:areAllViewsTheSame,
+        getAvailability:getAvailability,
+        getCoordinatorForServerGroup:getCoordinatorForServerGroup,
+        areCoordinatorsSameForServers:areCoordinatorsSameForServers
       };
     }
   ]);

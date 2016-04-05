@@ -62,7 +62,7 @@ angular.module('managementConsole', [
               templateUrl: 'clusters-view-physical/clusters-view.html',
               controller: 'ClustersViewPhysicalCtrl',
               resolve: {
-                serverGroups: function (modelController, utils, $stateParams) {
+                serverGroups: function (modelController, utils, clusterNodesService, $stateParams) {
 
                   function isStopped(server) {
                     return !server.isRunning();
@@ -93,11 +93,10 @@ angular.module('managementConsole', [
                         cluster.nodeCount += host.count;
                       });
 
-                      if (serversInGroup.some(isStopped) && serversInGroup.some(isRunning)) {
-                        cluster.status = 'DEGRADED';
-                      }
-                      else if (serversInGroup.some(isRunning)) {
-                        cluster.status = 'STARTED';
+                      if (serversInGroup.some(isRunning)) {
+                        clusterNodesService.areCoordinatorsSameForServers(serversInGroup).then(function (sameView) {
+                          cluster.status = sameView ? 'STARTED' : 'DEGRADED';
+                        });
                       } else {
                         cluster.status = 'STOPPED';
                       }
@@ -134,7 +133,7 @@ angular.module('managementConsole', [
               },
               controller: 'ClusterNodesCtrl',
               resolve:{
-                serverGroup:function (modelController, utils, $stateParams) {
+                serverGroup:function (modelController, utils, clusterNodesService, $stateParams) {
 
                   function isStopped(server) {
                     return !server.isRunning();
@@ -156,11 +155,10 @@ angular.module('managementConsole', [
                       }
                     });
 
-                    if (serversInGroup.some(isStopped) && serversInGroup.some(isRunning)) {
-                      cluster.status = 'DEGRADED';
-                    }
-                    else if (serversInGroup.some(isRunning)) {
-                      cluster.status = 'STARTED';
+                    if (serversInGroup.some(isRunning)) {
+                      clusterNodesService.areCoordinatorsSameForServers(serversInGroup).then(function (sameView) {
+                        cluster.status = sameView ? 'STARTED' : 'DEGRADED';
+                      });
                     } else {
                       cluster.status = 'STOPPED';
                     }

@@ -104,6 +104,11 @@ angular.module('managementConsole')
                 $scope.relays[cluster.getName()] = ['N/A'];
               }
               $scope.endpoints.push(cluster.getEndpoints());
+              clusterNodesService.getAvailability(cluster).then(function (result) {
+                cluster.availability = result;
+              }).catch(function () {
+                cluster.availability = 'UNAVAILABLE';
+              });
             });
 
             // Refresh grid events

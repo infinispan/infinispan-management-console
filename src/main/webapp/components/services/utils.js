@@ -25,6 +25,15 @@
        * @param str
        * @returns {boolean}
        */
+      isNonEmptyString: function (str) {
+        return this.isString(str) && str.length > 0;
+      },
+
+      /**
+       *
+       * @param str
+       * @returns {boolean}
+       */
       isBoolean: function (b) {
         return (typeof b === 'boolean');
       },

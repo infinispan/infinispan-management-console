@@ -5,7 +5,8 @@ angular.module('managementConsole')
     '$q',
     'modelController',
     'clusterNodesService',
-    function ($q, modelController, clusterNodesService) {
+    'utils',
+    function ($q, modelController, clusterNodesService, utils) {
 
       function getTaskHistory(cluster, maxLines) {
         return clusterNodesService.getCoordinator(cluster).then(function (coord) {
@@ -58,8 +59,10 @@ angular.module('managementConsole')
           .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.getName());
 
         var paramMap = {};
-        params.forEach(function (param){
-          paramMap[param.name] = param.value;
+        params.forEach(function (param) {
+          if (utils.isNotNullOrUndefined(param.name) && utils.isNonEmptyString(param.name)) {
+            paramMap[param.name] = param.value;
+          }
         });
 
         var op = {

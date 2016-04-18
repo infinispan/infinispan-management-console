@@ -15,7 +15,11 @@ angular.module('managementConsole')
       $scope.authenticated = false;
       $scope.showLoginSpinner = false;
 
-      $scope.page.htmlClass = 'login-pf';
+      if (modelController.isAuthenticated()) {
+        $scope.page.htmlClass = '';
+      } else {
+        $scope.page.htmlClass = 'login-pf';
+      }
 
       $scope.login = function (credentials) {
         $scope.showLoginSpinner = true;
@@ -32,9 +36,5 @@ angular.module('managementConsole')
           $scope.loginError = true;
           $scope.showLoginSpinner = false;
         });
-      };
-
-      $scope.isAuthenticated = function () {
-        return $scope.authenticated;
       };
     }]);

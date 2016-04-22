@@ -8,6 +8,9 @@ angular.module('managementConsole.api')
     'utils',
     'localStorageService',
     function ($http, $q, DomainModel, utils, localStorageService) {
+
+            var randomUsername = 'kmyZf1qpQWPJe95lCCg0';
+            var randomPassword = '2RAwgCZ0zBCU0ZyuSGQB'
             /**
              * Represents a client to the ModelController
              * @constructor
@@ -20,8 +23,8 @@ angular.module('managementConsole.api')
                 this.credentials = {
                     // in case we do not have stored credentials use random generated strings
                     // that are guaranteed to fail authentication
-                    username: localStorageService.get('username') || 'kmyZf1qpQWPJe95lCCg0',
-                    password: localStorageService.get('password') || '2RAwgCZ0zBCU0ZyuSGQB'
+                    username: localStorageService.get('username') || randomUsername,
+                    password: localStorageService.get('password') || randomPassword
                 };
                 this.server = null;
             };
@@ -45,11 +48,16 @@ angular.module('managementConsole.api')
              * @param {string} password - the password to use when connecting to the management endpoint
              */
             ModelControllerClient.prototype.login = function (username, password) {
-                if (utils.isNotNullOrUndefined(username)) {
+                if (utils.isNotNullOrUndefined(username) && utils.isNonEmptyString(username)) {
                   this.credentials.username = username;
+                } else {
+                  this.credentials.username = randomUsername;
                 }
-                if (utils.isNotNullOrUndefined(password)) {
+
+                if (utils.isNotNullOrUndefined(password) && utils.isNonEmptyString(password)) {
                   this.credentials.password = password;
+                } else {
+                  this.credentials.password = randomPassword;
                 }
                 return this.readResource([], false, true).then(function (response) {
                   // TODO: Handle situation where response is received but login failed - that happens!
@@ -89,6 +97,10 @@ angular.module('managementConsole.api')
                 } else {
                     return null;
                 }
+            };
+
+            ModelControllerClient.prototype.getCredentials = function () {
+              return this.credentials;
             };
 
             /**

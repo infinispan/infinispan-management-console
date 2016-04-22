@@ -464,7 +464,17 @@ angular.module('managementConsole', [
         // redirect to login page if not logged in
         if (toState.name !== 'login' && !modelController.isAuthenticated()) {
           event.preventDefault();
-          $state.go('login');
+          var credentials = modelController.getCredentials();
+          modelController.login(credentials.username, credentials.password).then(function () {
+            var modelPromise = modelController.refresh();
+            modelPromise.then(function () {
+              $urlRouter.sync();
+            }, function () {
+              $state.go('login');
+            });
+          }, function () {
+            $state.go('login');
+          });
         }
         else if (toState.name === 'login' && modelController.isAuthenticated()) {
           $state.go('clustersView');

@@ -138,10 +138,16 @@ var app = angular.module('managementConsole')
       };
 
       $scope.refresh = function () {
-        if (this.currentClusterAvailability()) {
-          $scope.currentCluster.refresh();
-          $scope.refreshBackupSiteStatus();
-        }
+        clusterNodesService.getAvailability(cluster).then(function (result) {
+          cluster.availability = result;
+        }).catch(function () {
+          cluster.availability = 'UNAVAILABLE';
+        }).finally(function (){
+          if (this.currentClusterAvailability()) {
+            $scope.currentCluster.refresh();
+            $scope.refreshBackupSiteStatus();
+          }
+        });
       };
 
       if ($stateParams.refresh){

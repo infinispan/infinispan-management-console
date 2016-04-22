@@ -16,7 +16,7 @@ angular.module('managementConsole.api')
                 this.lastRefresh = null;
                 this.caches = {};
                 this.metadata = null;
-                this.availability = null;
+                this.availability = 'AVAILABLE';
                 this.rebalancingStatus = null;
                 this.endpoints = [];
                 this.security = null;
@@ -71,8 +71,6 @@ angular.module('managementConsole.api')
                 this.security = response.security;
                 this.transport = response.transport;
                 return $q.all(cachePromises);
-              }.bind(this)).then(function () {
-                this.getAvailability();
               }.bind(this)).then(function () {
                 this.getRebalancingStatus();
               }.bind(this));

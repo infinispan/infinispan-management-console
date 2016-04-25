@@ -68,12 +68,12 @@ angular.module('managementConsole.api')
                     if (launchType === 'DOMAIN') {
                         this.server = new DomainModel(this, response);
                     } else if (launchType === 'STANDALONE') {
-                        //TODO
+                        throw "We only support Domain mode. Standalone mode is not supported in this release!"
                     }
                 }.bind(this)).catch(function(e) {
                   this.logout();
                   throw e;
-                });
+                }.bind(this));
             };
 
             ModelControllerClient.prototype.refresh = function() {
@@ -129,22 +129,26 @@ angular.module('managementConsole.api')
                     }
                   }
                   else if (http.readyState === 4 && http.status >= 400 && http.status <= 505) {
+                    if (http.status === 401) {
+                      deferred.reject("Invalid login or password. Please try again");
+                    } else {
                       var response = http.responseText;
                       if (response) {
                         try {
                           response = JSON.parse(response);
-                          if (utils.isNotNullOrUndefined(response['failure-description'])){
+                          if (utils.isNotNullOrUndefined(response['failure-description'])) {
                             deferred.reject(response['failure-description']);
                           } else {
-                            deferred.reject('An unspecified error has been received from the server');
+                            deferred.reject('An unspecified error has been received from the server:' + e);
                           }
                         } catch (e) {
                           console.log('JSON.parse()', e);
-                          deferred.reject('An unspecified error has been received from the server');
+                          deferred.reject('An unspecified error has been received from the server:' + e);
                         }
                       } else {
-                        deferred.reject('An unspecified error has been received from the server');
+                        deferred.reject('An unspecified error has been received from the server:' + e);
                       }
+                    }
                   }
                 };
                 http.send(JSON.stringify(op));

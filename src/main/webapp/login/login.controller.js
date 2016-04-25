@@ -32,9 +32,14 @@ angular.module('managementConsole')
             $state.go('clustersView');
           });
         }).catch(function (e) {
-          console.log('Login error', e);
-          $scope.loginError = true;
+          console.log(e);
+          $scope.loginError = e;
           $scope.showLoginSpinner = false;
         });
       };
+
+      $scope.alertDismissed = function () {
+        $scope.loginError = null;
+        $state.go('login', null, {reload: true});
+      }
     }]);

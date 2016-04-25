@@ -17,11 +17,11 @@
 
 
         <div class="alert alert-danger alert-dismissable" ng-show="loginError" id="loginErrorMessage">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="alertDismissed()">
             <span class="pficon pficon-close"></span>
           </button>
           <span class="pficon pficon-error-circle-o"></span>
-            <strong>Invalid login or password.</strong> Please, try again.
+          {{loginError}}
         </div>
 
 

@@ -26,7 +26,7 @@ angular.module('managementConsole')
         };
       };
 
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.transport = $scope.currentCluster.getTransportConfiguration();
       $scope.metadata = $scope.currentCluster.getMetadata().children.transport['model-description'];
       $scope.configurationHandle = {};
@@ -78,7 +78,10 @@ angular.module('managementConsole')
       };
 
       $scope.cancel = function(){
-        $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
+        $state.go('clusterView',{
+          groupName: $scope.currentCluster.getServerGroupName(),
+          clusterName: $scope.currentCluster.name
+        });
       };
 
     }]);

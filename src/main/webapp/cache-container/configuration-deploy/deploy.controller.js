@@ -35,6 +35,7 @@ angular.module('managementConsole')
         $scope.uploadArtifact = function () {
           $scope.uploadAndDeployArtifact().then(function () {
             $state.go('editCacheContainerDeploy', {
+              groupName: $scope.currentCluster.getServerGroupName(),
               clusterName: $scope.currentCluster.name
             }, {reload: true});
           }).catch(function (e) {
@@ -68,7 +69,7 @@ angular.module('managementConsole')
 
       $scope.clusters = modelController.getServer().getClusters();
       $scope.deployments = deployments;
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.serverGroup = $scope.currentCluster.getServerGroupName();
 
       $scope.deployedArtifacts = {};
@@ -98,6 +99,7 @@ angular.module('managementConsole')
       $scope.removeArtifact = function (name) {
         cacheContainerConfigurationService.removeArtifact(name).then(function(){
           $state.go('editCacheContainerDeploy', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name
           }, {reload: true});
         }).catch(function (e) {
@@ -108,6 +110,7 @@ angular.module('managementConsole')
       $scope.deployArtifact = function (name) {
         cacheContainerConfigurationService.deployArtifact($scope.serverGroup, name).then(function(){
           $state.go('editCacheContainerDeploy', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name
           }, {reload: true});
         }).catch(function (e) {
@@ -118,6 +121,7 @@ angular.module('managementConsole')
       $scope.undeployArtifact = function (name) {
         cacheContainerConfigurationService.undeployArtifact($scope.serverGroup, name).then(function () {
           $state.go('editCacheContainerDeploy', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name
           }, {reload: true});
         }).catch(function (e) {

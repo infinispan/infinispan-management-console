@@ -8,7 +8,7 @@
           <a ui-sref="clustersView">Cache containers</a>
         </li>
         <li>
-          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+          <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li class="active"><strong>{{currentCache.name}}</strong> <small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
       </ol>
@@ -16,7 +16,7 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="configureCacheButton" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">
+        <button class="btn btn-default" type="button" id="configureCacheButton" ui-sref="editCache({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: currentCache.name})">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
@@ -95,7 +95,7 @@
       <!--ul class="nav nav-tabs nav-tabs-pf"-->
       <ul class="nav nav-tabs nav-tabs">
         <li class="active"><a href="#">General status</a></li>
-        <li><a ui-sref="cacheNodes({clusterName: currentCluster.name, cacheName: currentCache.name})">Nodes</a></li>
+        <li><a ui-sref="cacheNodes({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: currentCache.name})">Nodes</a></li>
       </ul>
     </div>
   </div>

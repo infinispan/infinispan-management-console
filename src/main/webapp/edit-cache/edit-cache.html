@@ -8,7 +8,7 @@
           <a ui-sref="clustersView">Cache containers</a>
         </li>
         <li>
-          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+          <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li>{{currentCacheName}}<small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
         <li class="active"><strong>Configuration</strong></li>
@@ -18,7 +18,7 @@
           <a ui-sref="clustersView">Cache containers</a>
         </li>
         <li>
-          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+          <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li>{{currentCacheName}}</li>
         <li class="active"><strong>Configuration</strong></li>

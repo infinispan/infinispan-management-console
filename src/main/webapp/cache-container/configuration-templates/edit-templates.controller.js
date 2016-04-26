@@ -13,7 +13,7 @@ angular.module('managementConsole')
     'CONSTANTS',
     function ($scope, $state, $stateParams, utils, $modal, modelController, cacheCreateController, configurationTemplates, CONSTANTS) {
 
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.confs = $scope.currentCluster.getConfigurationTemplatesFromModel(configurationTemplates);
 
       var AddCacheTemplateModalInstanceCtrl = function ($scope, $state, $modalInstance) {
@@ -38,6 +38,7 @@ angular.module('managementConsole')
         $scope.createNewTemplate = function () {
           $modalInstance.close();
           $state.go('editCacheTemplate', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name,
             templateName: $scope.newTemplateName,
             cacheConfigurationTemplate: $scope.selectedTemplate.name,
@@ -77,6 +78,7 @@ angular.module('managementConsole')
 
       $scope.editTemplate = function (template) {
         $state.go('editCacheTemplate', {
+          groupName: $scope.currentCluster.getServerGroupName(),
           clusterName: $scope.currentCluster.name,
           templateName: template.name,
           cacheConfigurationTemplate: template.name,
@@ -90,6 +92,7 @@ angular.module('managementConsole')
           $scope.currentCluster.getName(),
           template.type, template.name).then(function () {
             $state.go('editCacheContainerTemplates', {
+              groupName: $scope.currentCluster.getServerGroupName(),
               clusterName: $scope.currentCluster.name
             }, {reload: true});
           }

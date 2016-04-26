@@ -6,7 +6,7 @@
           <a ui-sref="clustersView">Cache containers</a>
         </li>
         <li>
-          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+          <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li class="active"><strong>{{currentCache.name}}</strong>
       </ol>
@@ -40,7 +40,7 @@
     <div class="col-sm-12 col-md-12">
       <!--ul class="nav nav-tabs nav-tabs-pf"-->
       <ul class="nav nav-tabs nav-tabs">
-        <li ><a ui-sref="cacheStatus({clusterName: currentCluster.name, cacheName: currentCache.name})">General status</a></li>
+        <li ><a ui-sref="cacheStatus({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: currentCache.name})">General status</a></li>
         <li class="active"><a href="#">Nodes</a></li>
       </ul>
     </div>

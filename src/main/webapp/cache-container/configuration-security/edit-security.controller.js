@@ -27,6 +27,7 @@ angular.module('managementConsole')
           cacheContainerConfigurationService.addRole($scope.roleName, address, $scope.permissions).then(function () {
             $modalInstance.close();
             $state.go('editCacheContainerSecurity', {
+              groupName: $scope.currentCluster.getServerGroupName(),
               clusterName: $scope.currentCluster.name
             }, {reload: true});
           }).catch(function (e) {
@@ -51,7 +52,7 @@ angular.module('managementConsole')
         $state.go('error404');
       }
 
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
 
       $scope.mappers = [];
       $scope.roles = [];
@@ -120,6 +121,7 @@ angular.module('managementConsole')
         cacheContainerConfigurationService.addSecurity(clusterAddress).then(function () {
           cacheContainerConfigurationService.addAuthorization(clusterAddress).then(function () {
             $state.go('editCacheContainerSecurity', {
+              groupName: $scope.currentCluster.getServerGroupName(),
               clusterName: $scope.currentCluster.name
             }, {reload: true});
           }).catch(function (e) {
@@ -132,6 +134,7 @@ angular.module('managementConsole')
         var address = $scope.getRoleDMRAddress(role.name);
         cacheContainerConfigurationService.removeRole(address).then(function () {
           $state.go('editCacheContainerSecurity', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name
           }, {reload: true});
         }).catch(function (e) {

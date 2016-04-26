@@ -15,7 +15,7 @@ angular.module('managementConsole')
       }
 
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
 
       $scope.availableSchemas = [];
 

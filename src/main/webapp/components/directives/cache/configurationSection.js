@@ -30,8 +30,12 @@
         }
 
         scope.cleanFieldMetadata = function (field) {
-          scope.metadata[field].uiModified = false;
-          scope.metadata[field].style = null;
+          if (utils.isNotNullOrUndefined(scope.metadata[field])){
+            scope.metadata[field].uiModified = false;
+            scope.metadata[field].style = null;
+          } else {
+            console.log("Cleaning metadata for configuration field " + field + ", that field does not exist in DMR model")
+          }
         };
 
 
@@ -49,7 +53,7 @@
         };
 
         scope.isFieldValueModified = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field].uiModified) && scope.metadata[field].uiModified === true;
+          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field].uiModified === true;
         };
 
         scope.undoFieldChange = function (field) {
@@ -92,11 +96,11 @@
         };
 
         scope.resolveDefaultValue = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field].default) ? scope.metadata[field].default : 'unspecified';
+          return utils.isNotNullOrUndefined(scope.metadata[field]) ? scope.metadata[field].default : 'unspecified';
         };
 
         scope.isFieldModified = function (field) {
-          return scope.metadata[field].uiModified;
+          return utils.isNotNullOrUndefined(scope.metadata[field]) ? scope.metadata[field].uiModified: false;
         };
 
         scope.isAnyFieldModified = function () {
@@ -136,7 +140,7 @@
         };
 
         scope.getStyle = function (field) {
-          return scope.metadata[field].style;
+          return utils.isNotNullOrUndefined(scope.metadata[field]) ? scope.metadata[field].style : '';
         };
 
         scope.isMultiValue = function (field) {

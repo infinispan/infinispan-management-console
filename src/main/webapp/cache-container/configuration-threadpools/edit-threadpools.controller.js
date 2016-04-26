@@ -29,7 +29,7 @@ angular.module('managementConsole')
         };
       };
 
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.threadpool = $scope.currentCluster.getThreadpoolConfiguration();
 
       $scope.metadata = $scope.currentCluster.getMetadata().children['thread-pool']['model-description'];
@@ -116,7 +116,10 @@ angular.module('managementConsole')
 
       $scope.cancel = function(){
         $scope.cleanMetadata();
-        $state.go('clusterView',{'clusterName': $scope.currentCluster.name});
+        $state.go('clusterView',{
+          groupName: $scope.currentCluster.getServerGroupName(),
+          clusterName: $scope.currentCluster.name
+        });
       };
 
     }]);

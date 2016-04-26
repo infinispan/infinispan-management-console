@@ -34,13 +34,14 @@ angular.module('managementConsole')
                 var address = coord.getResourcePath()
                   .concat('subsystem', 'datagrid-infinispan', 'cache-container', cluster.getName());
 
+                var serverGroupClusterName = cluster.getServerGroupName().concat(cluster.getName());
                 // Refresh list of offline sites
                 modelController.readAttribute(address, 'sites-offline').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.offlineSites[cluster.getName()] = response;
+                      $scope.offlineSites[serverGroupClusterName] = response;
                     } else {
-                      $scope.offlineSites[cluster.getName()] = [];
+                      $scope.offlineSites[serverGroupClusterName] = [];
                     }
                   }
                 );
@@ -49,9 +50,9 @@ angular.module('managementConsole')
                 modelController.readAttribute(address, 'sites-online').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.onlineSites[cluster.getName()] = response;
+                      $scope.onlineSites[serverGroupClusterName] = response;
                     } else {
-                      $scope.onlineSites[cluster.getName()] = [];
+                      $scope.onlineSites[serverGroupClusterName] = [];
                     }
                   }
                 );
@@ -60,9 +61,9 @@ angular.module('managementConsole')
                 modelController.readAttribute(address, 'sites-mixed').then(
                   function (response) {
                     if (utils.isNonEmptyArray(response)) {
-                      $scope.mixedSites[cluster.getName()] = response;
+                      $scope.mixedSites[serverGroupClusterName] = response;
                     } else {
-                      $scope.mixedSites[cluster.getName()] = [];
+                      $scope.mixedSites[serverGroupClusterName] = [];
                     }
                   }
                 );

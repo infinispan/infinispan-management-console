@@ -19,7 +19,7 @@ angular.module('managementConsole')
       $scope.refresh = function () {
         var server = modelController.getServer();
         var clusters = server.getClusters();
-        $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+        $scope.currentCluster = server.getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
         $scope.caches = $scope.currentCluster.getCaches();
         $scope.currentCache = $scope.caches[$stateParams.cacheName];
         $scope.currentCache.refresh();

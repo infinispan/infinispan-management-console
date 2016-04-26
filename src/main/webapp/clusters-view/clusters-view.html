@@ -17,10 +17,8 @@
         </tr>
 
         <tr ng-repeat="cluster in clusters track by $index">
-          <td><strong><a href="#/cluster/{{cluster.name}}">{{cluster.name}}</a></strong></td>
-          <td ng-init="group = cluster.getServerGroupName()"><span class="label isCacheAvailable"
-                    ng-class="(cluster.isAvailable())?'label-success':'label-danger'">
-            {{cluster.getAvailability()}}</span></td>
+          <td ng-init="group = cluster.getServerGroupName()"><strong><a href="#/cluster/{{group}}/{{cluster.name}}">{{cluster.name}}</a></strong></td>
+          <td><span class="label isCacheAvailable" ng-class="(cluster.isAvailable())?'label-success':'label-danger'">{{cluster.getAvailability()}}</span></td>
           <td><span class="numberOfCaches label label-default">{{cluster.getCachesAsArray().length}}</span></td>
           <td><a class="clusterName" ui-sref="clusterNodes({clusterName: group})">{{group}}</a><br>
             <small class="stack">{{stack}}</small>
@@ -30,11 +28,11 @@
                  {{e.name}} : {{e.port}} {{e.encryption}}</br>
             </span>
           </td>
-          <td>
-              <div ng-repeat="site in onlineSites[cluster.name]"><span class="pficon pficon-ok"></span> {{site}}</div>
-              <div ng-repeat="site in mixedSites[cluster.name]"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
-              <div ng-repeat="site in offlineSites[cluster.name]"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
-              <div ng-if="(mixedSites[cluster.name].length + onlineSites[cluster.name].length + offlineSites[cluster.name].length) == 0">N/A</div>
+          <td ng-init="serverGroupClusterName = cluster.getServerGroupName().concat(cluster.getName())">
+              <div ng-repeat="site in onlineSites[serverGroupClusterName]"><span class="pficon pficon-ok"></span> {{site}}</div>
+              <div ng-repeat="site in mixedSites[serverGroupClusterName]"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
+              <div ng-repeat="site in offlineSites[serverGroupClusterName]"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
+              <div ng-if="(mixedSites[serverGroupClusterName].length + onlineSites[serverGroupClusterName].length + offlineSites[serverGroupClusterName].length) === 0">N/A</div>
           </td>
         </tr>
       </table>

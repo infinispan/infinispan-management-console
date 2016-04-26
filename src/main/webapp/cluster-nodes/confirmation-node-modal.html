@@ -8,7 +8,7 @@
   <div class="modal-body">
 
     <h3 ng-if="clusterStartStopMode === 'start'">Starting {{clusterName}} will start all previously running servers in this cluster. Start {{clusterName}}?</h3>
-    <h3 ng-if="clusterStartStopMode === 'stop'">Stopping {{clusterName}} will stop all running servers in this cluster. Stop {{clusterName}}?</h3>
+    <h3 ng-if="clusterStartStopMode === 'stop'">Stopping {{clusterName}} will stop all running servers in this cluster. All caches in cache containers deployed on {{clusterName}} will lose data unless a particular cache has cache store configured. Stop {{clusterName}}?</h3>
   </div>
   <div class="modal-footer">
 

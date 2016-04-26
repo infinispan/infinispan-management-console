@@ -11,7 +11,7 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">
+        <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
@@ -66,7 +66,7 @@
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
-        <li><a href="#/cluster/{{currentCluster.name}}">Caches</a></li>
+        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}">Caches</a></li>
         <li class="active"><a href="#">Tasks execution</a></li>
       </ul>
     </div>

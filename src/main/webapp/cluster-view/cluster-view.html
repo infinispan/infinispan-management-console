@@ -11,7 +11,7 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({clusterName: currentCluster.name})">
+        <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
@@ -68,7 +68,7 @@
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
         <li class="active"><a>Caches</a></li>
-        <li><a href="#/cluster/{{currentCluster.name}}/tasks">Tasks execution</a></li>
+        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}/tasks">Tasks execution</a></li>
       </ul>
     </div>
   </div>
@@ -100,7 +100,7 @@
       <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() |
       filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show" on-finish-render="matchHeight()">
-        <a ui-sref="cacheStatus({clusterName: currentCluster.name, cacheName: cache.name})" title="View Cache Details">
+        <a ui-sref="cacheStatus({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: cache.name})" title="View Cache Details">
             <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
               <h2 class="card-pf-title">
                 <span class="pficon pficon-ok"></span>{{cache.name}}

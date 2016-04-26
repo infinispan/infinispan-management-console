@@ -35,7 +35,7 @@ angular.module('managementConsole')
       var server = modelController.getServer();
       var clusters = server.getClusters();
       $scope.currentCacheName = $stateParams.cacheName;
-      $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+      $scope.currentCluster = server.getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.selectedTemplate = $stateParams.cacheConfigurationTemplate;
       $scope.cacheConfigurationType = $stateParams.cacheConfigurationType;
 
@@ -96,7 +96,11 @@ angular.module('managementConsole')
         address.push($scope.configurationModel.type);
         address.push($scope.currentCacheName);
         cacheCreateController.createCacheFromTemplate(address, $scope.configurationModel['template-name']).then(function () {
-          $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
+          $state.go('clusterView', {
+            groupName: $scope.currentCluster.getServerGroupName(),
+            clusterName: $scope.currentCluster.name,
+            refresh: true
+          }, {reload: true});
         }).catch(function (e) {
           $scope.openErrorModal(e);
         });
@@ -173,14 +177,22 @@ angular.module('managementConsole')
       $scope.updateTemplate = function () {
         if ($scope.isTemplateNameEdited()) {
           $scope.saveCacheConfigurationTemplate().then(function () {
-            $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
+            $state.go('clusterView', {
+              groupName: $scope.currentCluster.getServerGroupName(),
+              clusterName: $scope.currentCluster.name,
+              refresh: true
+            }, {reload: true});
           }).catch(function (e) {
             $scope.openErrorModal(e);
           });
         } else {
           $scope.updateCacheTemplate().then(function () {
             $rootScope.requiresRestartFlag = $scope.requiresRestart();
-            $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
+            $state.go('clusterView', {
+              groupName: $scope.currentCluster.getServerGroupName(),
+              clusterName: $scope.currentCluster.name,
+              refresh: true
+            }, {reload: true});
             $scope.openRestartModal();
           }).catch(function (e) {
             $scope.openErrorModal(e);

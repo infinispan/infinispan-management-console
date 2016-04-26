@@ -39,7 +39,7 @@ angular.module('managementConsole', [
                 controller: 'ClustersViewCtrl'
             })
             .state('clusterView', {
-                url: '/cluster/:clusterName',
+                url: '/cluster/:groupName/:clusterName',
                 params:{
                   refresh:false
                 },
@@ -47,7 +47,7 @@ angular.module('managementConsole', [
                 controller: 'ClusterViewCtrl'
             })
             .state('tasksView', {
-                url: '/cluster/:clusterName/tasks',
+                url: '/cluster/:groupName/:clusterName/tasks',
                 params:{
                   refresh:false
                 },
@@ -115,12 +115,12 @@ angular.module('managementConsole', [
               }
             })
             .state('cacheStatus', {
-              url: '/cluster/:clusterName/cache/:cacheName',
+              url: '/cluster/:groupName/:clusterName/cache/:cacheName',
               templateUrl: 'cache-status/cache-status.html',
               controller: 'CacheStatusCtrl'
             })
             .state('cacheNodes', {
-              url: '/cluster/:clusterName/cache/:cacheName',
+              url: '/cluster/:groupName/:clusterName/cache/:cacheName',
               templateUrl: 'cache-nodes/cache-nodes.html',
               controller: 'CacheNodesCtrl'
             })
@@ -210,8 +210,9 @@ angular.module('managementConsole', [
                 url: '/error404',
                 templateUrl: 'error404/error404.html'
             }).state('editCache', {
-                url: '/cluster/:clusterName/edit-cache/:cacheName',
+                url: '/cluster/:groupName/:clusterName/edit-cache/:cacheName',
                 params: {
+                  groupName: null,
                   clusterName: null,
                   cacheName: null,
                   cacheConfigurationType: null,
@@ -223,7 +224,7 @@ angular.module('managementConsole', [
                 resolve: {
                   configurationModel: function (cacheCreateController, modelController, $stateParams, CONSTANTS) {
                     var server = modelController.getServer();
-                    var currentCluster = server.getClusterByName($stateParams.clusterName);
+                    var currentCluster = server.getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
                     if ($stateParams.newCacheCreation) {
                       if ($stateParams.cacheConfigurationTemplate === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE) {
                         return {
@@ -246,8 +247,9 @@ angular.module('managementConsole', [
                   }
                 }
             }).state('editCacheTemplate', {
-                url: '/cluster/:clusterName/edit-cache-template/:cacheConfigurationTemplate',
+                url: '/cluster/:groupName/:clusterName/edit-cache-template/:cacheConfigurationTemplate',
                 params: {
+                  groupName: null,
                   clusterName: null,
                   templateName: null,
                   cacheConfigurationType: null,
@@ -268,7 +270,7 @@ angular.module('managementConsole', [
                       };
                     } else {
                       var deferred = $q.defer();
-                      var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                      var cluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
                       var promise = cacheCreateController.getConfigurationTemplate(cluster.getProfileName(), $stateParams.clusterName,
                         $stateParams.cacheConfigurationType, $stateParams.cacheConfigurationTemplate);
                       promise.then(function (response) {
@@ -282,16 +284,18 @@ angular.module('managementConsole', [
                   }
                 }
             }).state('editCacheContainerSchemas', {
-                url: '/cluster/:clusterName/',
+                url: '/cluster/:groupName/:clusterName/',
                 params: {
+                  groupName: null,
                   clusterName: null
                 },
                 templateUrl: 'cache-container/configuration-schemas/schemas.html',
                 controller: 'editContainerSchemasCtrl',
                 resolve: {}
             }).state('editCacheContainerTransport', {
-                url: '/cluster/:clusterName/',
+                url: '/cluster/:groupName/:clusterName/',
                 params: {
+                  groupName: null,
                   clusterName: null
                 },
                 templateUrl: 'cache-container/configuration-transport/transport.html',
@@ -300,16 +304,18 @@ angular.module('managementConsole', [
 
                 }
             }).state('editCacheContainerThreadpools', {
-                url: '/cluster/:clusterName/',
+                url: '/cluster/:groupName/:clusterName/',
                 params: {
+                  groupName: null,
                   clusterName: null
                 },
                 templateUrl: 'cache-container/configuration-threadpools/threadpools.html',
                 controller: 'editContainerThreadpoolsCtrl',
                 resolve: {}
             }).state('editCacheContainerSecurity', {
-              url: '/cluster/:clusterName/',
+              url: '/cluster/:groupName/:clusterName/',
               params: {
+                groupName: null,
                 clusterName: null
               },
               templateUrl: 'cache-container/configuration-security/security.html',
@@ -317,7 +323,7 @@ angular.module('managementConsole', [
               resolve: {
                 securityConfig: function ($q, modelController, $stateParams){
                   var clusters = modelController.getServer().getClusters();
-                  var currentCluster = modelController.getServer().getCluster(clusters, $stateParams.clusterName);
+                  var currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
                   var deferred = $q.defer();
                   currentCluster.getSecurityConfiguration().then(function(response){
                     deferred.resolve(response);
@@ -328,8 +334,9 @@ angular.module('managementConsole', [
                 }
               }
             }).state('editCacheContainerDeploy', {
-              url: '/cluster/:clusterName/',
+              url: '/cluster/:groupName/:clusterName/',
               params: {
+                groupName: null,
                 clusterName: null
               },
               templateUrl: 'cache-container/configuration-deploy/deploy.html',
@@ -340,27 +347,29 @@ angular.module('managementConsole', [
                 },
 
                 deployed: function(modelController, $stateParams, cacheContainerConfigurationService){
-                  var cluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                  var cluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
                   return cacheContainerConfigurationService.getDeployedArtifact(cluster.getServerGroupName());
                 }
               }
             }).state('editCacheContainerTasks', {
-              url: '/cluster/:clusterName/',
+              url: '/cluster/:groupName/:clusterName/',
               params: {
+                groupName: null,
                 clusterName: null
               },
               templateUrl: 'cache-container/configuration-tasks/tasks.html',
-              controller: 'editContainerTasksCtrl',
+              controller: 'editContainerTasksCtrl'
             }).state('editCacheContainerTemplates', {
-              url: '/cluster/:clusterName/',
+              url: '/cluster/:groupName/:clusterName/',
               params: {
+                groupName: null,
                 clusterName: null
               },
               templateUrl: 'cache-container/configuration-templates/templates.html',
               controller: 'editContainerTemplatesCtrl',
               resolve: {
                 configurationTemplates: function (modelController, $stateParams){
-                  var currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+                  var currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
                   return currentCluster.getConfigurations();
                 }
               }

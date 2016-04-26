@@ -22,7 +22,7 @@ angular.module('managementConsole')
 
       var server = modelController.getServer();
       var clusters = server.getClusters();
-      $scope.currentCluster = server.getCluster(clusters, $stateParams.clusterName);
+      $scope.currentCluster = server.getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.selectedTemplate = $stateParams.cacheConfigurationTemplate;
       $scope.cacheConfigurationType = $stateParams.cacheConfigurationType;
       $scope.configurationModel = configurationModel;
@@ -33,6 +33,7 @@ angular.module('managementConsole')
 
       $scope.goToTemplateView = function () {
         $state.go('editCacheContainerTemplates', {
+          groupName: $scope.currentCluster.getServerGroupName(),
           clusterName: $scope.currentCluster.name
         });
       };
@@ -106,7 +107,10 @@ angular.module('managementConsole')
 
       $scope.saveNewTemplate = function (){
         $scope.addCacheTemplate().then(function(){
-          $state.go('editCacheContainerTemplates', { clusterName: $scope.currentCluster.name});
+          $state.go('editCacheContainerTemplates', {
+            groupName: $scope.currentCluster.getServerGroupName(),
+            clusterName: $scope.currentCluster.name
+          });
         }).catch(function (e) {
           $scope.openErrorModal(e);
         });
@@ -115,7 +119,10 @@ angular.module('managementConsole')
       $scope.saveEditedTemplate = function (){
         $scope.updateCacheTemplate().then(function(){
           $rootScope.requiresRestartFlag = $scope.requiresRestart();
-          $state.go('editCacheContainerTemplates', {clusterName: $scope.currentCluster.name});
+          $state.go('editCacheContainerTemplates', {
+            groupName: $scope.currentCluster.getServerGroupName(),
+            clusterName: $scope.currentCluster.name
+          });
           $scope.openRestartModal();
         }).catch(function (e) {
           $scope.openErrorModal(e);

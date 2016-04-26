@@ -16,7 +16,7 @@ angular.module('managementConsole')
       angular.extend(this, $controller('ClusterViewCtrl',{$scope: $scope}));
 
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getCluster($scope.clusters, $stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.selectedView = 'running';
       $scope.runningTasks = [];
       $scope.taskHistory = [];

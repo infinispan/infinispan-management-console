@@ -8,7 +8,7 @@
           <a ui-sref="clustersView">Cache containers</a>
         </li>
         <li>
-          <a ui-sref="clusterView({clusterName: currentCluster.name})">{{currentCluster.name}}</a>
+          <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li>
           <a ui-sref="editCacheContainerTemplates({clusterName: currentCluster.name})">Configuration</a>

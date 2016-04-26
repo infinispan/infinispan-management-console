@@ -33,7 +33,10 @@ var app = angular.module('managementConsole')
           cacheCreateController.createCacheFromTemplate(address, $scope.selectedTemplate, function () {
             $modalInstance.close();
             $scope.currentCluster.refresh().then(function(){
-              $state.go('clusterView', {clusterName: $scope.currentCluster.getName()});
+              $state.go('clusterView', {
+                groupName: $scope.currentCluster.getServerGroupName(),
+                clusterName: $scope.currentCluster.getName()
+              });
             });
           });
         };
@@ -45,6 +48,7 @@ var app = angular.module('managementConsole')
           address.push($scope.cacheName);
           $modalInstance.close();
           $state.go('editCache', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.getName(),
             cacheName: $scope.cacheName,
             cacheConfigurationTemplate: $scope.selectedTemplate,
@@ -98,13 +102,14 @@ var app = angular.module('managementConsole')
         currentCollection: 'caches'
       };
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.group = $scope.currentCluster.getServerGroupName();
 
       $scope.$watch('currentCluster', function (currentCluster) {
         if (currentCluster && currentCluster.name !== $stateParams.clusterName) {
           $state.go('clusterView', {
-            'clusterName': currentCluster.name
+            groupName: $scope.currentCluster.getServerGroupName(),
+            clusterName: currentCluster.name
           });
         }
       });
@@ -495,7 +500,7 @@ app.directive('validCacheName', function($stateParams, modelController) {
           return true;
         }
 
-        scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+        scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
         return !scope.currentCluster.hasCache(modelValue);
       };
     }

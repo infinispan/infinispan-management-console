@@ -131,7 +131,7 @@ angular.module('managementConsole.api')
             Cluster.prototype.getEndpoints = function () {
               var socketEndpoints = [];
               var socketBindings = this.domain.getServerGroup().getSocketBindings();
-              var offset = this.domain.getServerGroup().getSocketPortBindingOffset();
+              var offset = this.domain.getServerGroupByName(this.getServerGroupName()).getSocketPortBindingOffset();
               var endpoints = this.getProfile().getEndpoints();
               angular.forEach(endpoints, function(value, key){
                  var endpoint = value[key];

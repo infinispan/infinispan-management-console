@@ -11,12 +11,12 @@ angular.module('managementConsole')
     'modelController',
     'cacheContainerConfigurationService',
     function ($scope, $q, $state, $stateParams, $modal, utils, modelController, cacheContainerConfigurationService) {
-      
+
       $scope.clusters = modelController.getServer().getClusters();
-      $scope.currentCluster = modelController.getServer().getClusterByName($stateParams.clusterName);
+      $scope.currentCluster = modelController.getServer().getClusterByNameAndGroup($stateParams.clusterName, $stateParams.groupName);
       $scope.serverGroup = $scope.currentCluster.getServerGroupName();
       $scope.availableTasks = [];
-      
+
       $scope.loadScriptTasks = function () {
         cacheContainerConfigurationService.loadScriptTasks($scope.currentCluster).then(
           function (response) {
@@ -46,7 +46,7 @@ angular.module('managementConsole')
           scope: $scope
         });
       };
-  
+
       var EditScriptModalInstanceCtrl = function ($scope, $state, $modalInstance, currentCluster, modelController, script) {
 
         $scope.task = script;
@@ -151,6 +151,7 @@ angular.module('managementConsole')
       $scope.removeScript = function (name) {
         cacheContainerConfigurationService.removeScript($scope.currentCluster, name).then(function () {
           $state.go('editCacheContainerTasks', {
+            groupName: $scope.currentCluster.getServerGroupName(),
             clusterName: $scope.currentCluster.name
           }, {
             reload: true

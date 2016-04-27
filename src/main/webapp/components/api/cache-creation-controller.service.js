@@ -231,9 +231,7 @@ angular.module('managementConsole.api')
        *
        *  remote-site  STRING  The name of the remote site containing the cache that backups data here.
        *  jndi-name  STRING  The jndi-name to which to bind this cache instance.
-       *  queue-size  INT  In ASYNC mode, this attribute can be used to trigger flushing of the queue when it reaches a specific threshold.
        *  async-marshalling  BOOLEAN  If enabled, this will cause marshalling of entries to be performed asynchronously.
-       *  queue-flush-interval  LONG  In ASYNC mode, this attribute controls how often the asynchronous thread used to flush the
        * replication queue runs. This should be a positive integer which represents thread wakeup time in milliseconds.
        *
        *  owners  INT  Number of cluster-wide replicas for each cache entry.

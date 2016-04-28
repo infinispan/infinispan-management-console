@@ -1,7 +1,7 @@
 <div>
   <uib-tabset vertical="true" type="pills">
     <uib-tab heading="General" active="true">
-      <configuration-section fields="[{name: 'Main', fields: ['type', 'template']}, 
+      <configuration-section fields="[{name: 'Main', fields: ['type', 'template-name']},
                                       {name: 'Monitoring', fields: ['statistics', 'jndi-name']}]" data='data'
                              metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
@@ -34,7 +34,7 @@
       <configuration-section fields="[{name: 'Transactions', fields:['locking', 'mode', 'stop-timeout']}]" data="data.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="Backup">
       <configuration-section fields="[{name: 'Backup policy', fields: ['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']}]"
                              data="data['backup'].BACKUP" metadata="resolveDescription('backup')"
@@ -46,7 +46,7 @@
                              metadata="resolveDescription('authorization')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="Loader">
       <configuration-section fields="[{name: 'Loader', fields: ['class', 'preload', 'shared']}]" data="data['loader'].LOADER"
                              metadata="resolveDescription('loader')"

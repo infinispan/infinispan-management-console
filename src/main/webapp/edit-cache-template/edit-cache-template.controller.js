@@ -80,15 +80,16 @@ angular.module('managementConsole')
       };
 
       $scope.isTemplateNameEdited = function () {
-        return $scope.configurationModel.template !== $scope.selectedTemplate;
+        return $scope.configurationModel['template-name'] !== $scope.selectedTemplate;
       };
 
       $scope.addCacheTemplate = function (){
         var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
-        address.push($scope.configurationModel.template);
+        address.push($scope.configurationModel['template-name']);
 
+        $scope.configurationModel.template = true; // we create template not concrete configuration
         return cacheCreateController.createCacheConfigurationTemplate(address,
           $scope.configurationModel);
       };
@@ -97,8 +98,8 @@ angular.module('managementConsole')
         var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
-        address.push($scope.configurationModel.template);
-
+        address.push($scope.configurationModel['template-name']);
+        $scope.configurationModel.template = true; // we create template not concrete configuration
         return cacheCreateController.updateConfigurationTemplate(address,
           $scope.configurationModel);
       };

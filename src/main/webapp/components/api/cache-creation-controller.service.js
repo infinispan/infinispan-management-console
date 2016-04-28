@@ -240,7 +240,7 @@ angular.module('managementConsole.api')
        */
       CacheCreationControllerClient.prototype.createCacheConfigurationNode = function (address, prop) {
         // remove DMR attributes we added when we loaded the model
-        return this.executeAddOperation(address, prop, ['name','type','template']);
+        return this.executeAddOperation(address, prop, ['name','type','template-name']);
       };
 
       CacheCreationControllerClient.prototype.updateCacheConfigurationNode = function (address, prop) {
@@ -251,7 +251,7 @@ angular.module('managementConsole.api')
           steps:steps
         };
         if (utils.isNotNullOrUndefined(prop)) {
-          this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template', 'is-new-node']);
+          this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template-name', 'is-new-node']);
         }
         return this.execute(compositeOp);
       };

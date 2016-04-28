@@ -10,8 +10,8 @@
     <h3 ng-if="mode === 'dirty'">Configuration template {{configurationModel.template}} has been modified. The configuration template has to be
       saved under a new name prior to creation of {{configurationModel.name}} cache. Please change configuration template name on the 'General'
       tab in order to proceed with {{configurationModel.name}} creation.</h3>
-    <h3 ng-if="mode === 'cache'">Create {{configurationModel.name}} cache using {{configurationModel.template}} configuration template?</h3>
-    <h3 ng-if="mode === 'template'">Update configuration template {{configurationModel.template}}?</h3>
+    <h3 ng-if="mode === 'cache'">Create {{configurationModel.name}} cache using {{configurationModel['template-name']}} configuration template?</h3>
+    <h3 ng-if="mode === 'template'">Update configuration template {{configurationModel['template-name']}}?</h3>
   </div>
   <div class="modal-footer">
 

@@ -50,7 +50,7 @@ angular.module('managementConsole')
       if (!$scope.isCreateModeWithBareTemplate()) {
         $scope.configurationModel.name = $scope.currentCacheName;
         $scope.configurationModel.type = $scope.cacheConfigurationType;
-        $scope.configurationModel.template = $scope.selectedTemplate;
+        $scope.configurationModel['template-name'] = $scope.selectedTemplate;
       }
 
       $scope.configurationSectionHandles = []; //assigned to a configuration section through HTML attribute
@@ -95,7 +95,7 @@ angular.module('managementConsole')
         var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container', $scope.currentCluster.name];
         address.push($scope.configurationModel.type);
         address.push($scope.currentCacheName);
-        cacheCreateController.createCacheFromTemplate(address, $scope.configurationModel.template).then(function () {
+        cacheCreateController.createCacheFromTemplate(address, $scope.configurationModel['template-name']).then(function () {
           $state.go('clusterView', {clusterName: $scope.currentCluster.name, refresh: true}, {reload: true});
         }).catch(function (e) {
           $scope.openErrorModal(e);
@@ -106,7 +106,7 @@ angular.module('managementConsole')
         var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
-        address.push($scope.configurationModel.template);
+        address.push($scope.configurationModel['template-name']);
 
         return cacheCreateController.updateConfigurationTemplate(address, $scope.configurationModel);
       };
@@ -134,18 +134,19 @@ angular.module('managementConsole')
       };
 
       $scope.isTemplateNameEdited = function () {
-        return $scope.configurationModel.template !== $scope.selectedTemplate;
+        return $scope.configurationModel['template-name'] !== $scope.selectedTemplate;
       };
 
       $scope.isTemplateNameDefault = function () {
-        return $scope.configurationModel.template === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE;
+        return $scope.configurationModel['template-name'] === CONSTANTS.NO_BASE_CONFIGURATION_TEMPLATE;
       };
 
       $scope.saveCacheConfigurationTemplate = function (){
         var address = ['profile', $scope.currentCluster.getProfileName(), 'subsystem', 'datagrid-infinispan', 'cache-container',
           $scope.currentCluster.name, 'configurations', 'CONFIGURATIONS'];
         address.push($scope.configurationModel.type + '-configuration');
-        address.push($scope.configurationModel.template);
+        address.push($scope.configurationModel['template-name']);
+        $scope.configurationModel.template = false; // we don't create template but concrete configuration
 
         return cacheCreateController.createCacheConfigurationTemplate(address,
           $scope.configurationModel);

@@ -138,12 +138,12 @@ var app = angular.module('managementConsole')
       };
 
       $scope.refresh = function () {
-        clusterNodesService.getAvailability(cluster).then(function (result) {
-          cluster.availability = result;
+        clusterNodesService.getAvailability($scope.currentCluster).then(function (result) {
+          $scope.currentCluster.availability = result;
         }).catch(function () {
-          cluster.availability = 'UNAVAILABLE';
+          $scope.currentCluster.availability = 'UNAVAILABLE';
         }).finally(function (){
-          if (this.currentClusterAvailability()) {
+          if ($scope.currentClusterAvailability()) {
             $scope.currentCluster.refresh();
             $scope.refreshBackupSiteStatus();
           }

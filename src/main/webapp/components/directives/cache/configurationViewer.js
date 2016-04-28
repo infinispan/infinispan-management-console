@@ -45,7 +45,7 @@
             }
           };
 
-          metadataRoot.template = {
+          metadataRoot['template-name'] = {
             description: 'The cache configuration template',
             type: {
               TYPE_MODEL_VALUE: 'STRING'

@@ -230,7 +230,7 @@ angular.module('managementConsole', [
                           'name': $stateParams.cacheName,
                           'type': $stateParams.cacheConfigurationType,
                           //creating new cache with bare template, name new template after cache
-                          'template': $stateParams.cacheName,
+                          'template-name': $stateParams.cacheName,
                           //and set mode to SYNC
                           'mode':'SYNC'
                         };
@@ -262,7 +262,7 @@ angular.module('managementConsole', [
                       return {
                         'type': $stateParams.cacheConfigurationType,
                         //creating new cache with bare template, name new template after cache
-                        'template': $stateParams.templateName,
+                        'template-name': $stateParams.templateName,
                         //and set mode to SYNC
                         'mode': 'SYNC'
                       };
@@ -274,7 +274,7 @@ angular.module('managementConsole', [
                       promise.then(function (response) {
                         var model = response;
                         model.type = $stateParams.cacheConfigurationType;
-                        model.template = $stateParams.templateName;
+                        model['template-name'] = $stateParams.templateName;
                         deferred.resolve(model);
                       });
                       return deferred.promise;

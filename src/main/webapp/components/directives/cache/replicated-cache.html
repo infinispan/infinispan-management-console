@@ -35,7 +35,7 @@
       <configuration-section fields="[{name: 'Transactions', fields:['locking', 'mode', 'stop-timeout']}]" data="data.transaction.TRANSACTION"
                              metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="Backup">
       <configuration-section fields="[{name: 'Backup policy', fields: ['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']}]"
                              data="data['backup'].BACKUP" metadata="resolveDescription('backup')"
@@ -47,17 +47,17 @@
                              metadata="resolveDescription('authorization')"
                              init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="Partition handling">
       <configuration-section fields="[{name: 'Partition handling', fields: ['enabled']}]" data="data['partition-handling'].PARTITION_HANDLING"
                              metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="State transfer">
       <configuration-section fields="[{name: 'State transfer', fields: ['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']}]" data="data['state-transfer'].STATE_TRANSFER"
                      metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
     </uib-tab>
-    
+
     <uib-tab heading="Loader">
       <configuration-section fields="[{name: 'Loader', fields: ['class', 'preload', 'shared']}]" data="data['loader'].LOADER"
                              metadata="resolveDescription('loader')"

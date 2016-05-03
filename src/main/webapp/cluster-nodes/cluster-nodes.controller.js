@@ -134,32 +134,16 @@ angular.module('managementConsole')
           scope: $scope
         });
       };
-    }]).filter('inetAddressFilter', function (){
-    return function (serverNodes, query) {
-      var validQuery = !(query === undefined || query === null) && query.length > 0;
-      //is it a number?
-      if (validQuery && !isNaN(query)) {
-        var nodes = [];
-        angular.forEach(serverNodes, function (serverNode) {
-          var address = serverNode.getInetAddress();
-          if (address.indexOf(query) > -1) {
-            nodes.push(serverNode);
-          }
-        });
-        return nodes;
-      } else {
-        return serverNodes;
-      }
-    };
-  }).filter('nameFilter', function (){
+    }]).filter('nameFilter', function (){
     return function (serverNodes, query) {
       var validQuery = !(query === undefined || query === null) && query.length > 0;
       //is it a leter?
-      if (validQuery && isNaN(query)) {
+      if (validQuery ) {
         var nodes = [];
         angular.forEach(serverNodes, function (serverNode) {
           var name = serverNode.getName();
-          if (name.indexOf(query) > -1) {
+          var address = serverNode.getInetAddress();
+          if (name.indexOf(query) > -1 || address.indexOf(query) > -1 ) {
             nodes.push(serverNode);
           }
         });

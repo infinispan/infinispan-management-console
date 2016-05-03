@@ -40,6 +40,8 @@ angular.module('managementConsole')
       $scope.cacheConfigurationType = $stateParams.cacheConfigurationType;
 
       $scope.configurationModel = configurationModel;
+      $scope.configurationModel['is-create-mode'] = $scope.isCreateMode();
+      $scope.configurationModel['is-create-with-bare-template'] = $scope.isCreateModeWithBareTemplate();
       if ($scope.isEditMode()) {
         $scope.currentCache = $scope.currentCluster.getCaches()[$scope.currentCacheName];
         $scope.currentCacheMode = utils.getCacheMode($scope.currentCache);

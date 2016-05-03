@@ -152,6 +152,19 @@
           return utils.convertCacheAttributeIntoFieldName(field);
         };
 
+        scope.isReadOnly = function (field) {
+          switch (field) {
+            case 'template-name':
+              var mutable = scope.data['is-create-with-bare-template'];
+              return utils.isNotNullOrUndefined(mutable) && !mutable;
+            case 'type':
+              var mutable = scope.data['is-create-mode'];
+              return utils.isNotNullOrUndefined(mutable) && !mutable;
+            default:
+              return false;
+          }
+        };
+
         /**
          *
          * Below we expose methods we need outside of this directive

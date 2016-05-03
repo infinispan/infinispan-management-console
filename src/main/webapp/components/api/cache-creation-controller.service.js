@@ -251,7 +251,8 @@ angular.module('managementConsole.api')
           steps:steps
         };
         if (utils.isNotNullOrUndefined(prop)) {
-          this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template-name', 'is-new-node']);
+          this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template-name', 'is-new-node',
+          'is-create-with-bare-template', 'is-create-mode']);
         }
         return this.execute(compositeOp);
       };

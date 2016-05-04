@@ -64,7 +64,16 @@
        * @returns {boolean}
        */
       isNotNullOrUndefined: function (value) {
-        return !(value === undefined || value === null);
+        return !(this.isNullOrUndefined(value));
+      },
+
+      /**
+       *
+       * @param value
+       * @returns {boolean}
+       */
+      isNullOrUndefined: function (value) {
+        return value === undefined || value === null;
       },
       /**
        *

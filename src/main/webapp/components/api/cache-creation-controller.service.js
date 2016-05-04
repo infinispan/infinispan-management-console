@@ -140,9 +140,12 @@ angular.module('managementConsole.api')
         //'is-new-node' is special attribute denoting node being created rather than modified
         //'type' is special attribute denoting type of store
         // all exclusionList elements are not native to DMR
-        var exclusionList = ['is-new-node', 'type'];
-
         if (utils.isNotNullOrUndefined(configurationElement)) {
+          // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
+          var exclusionList = ['is-new-node'];
+          if (utils.isNullOrUndefined(configurationElement['EVICTION'])) {
+            exclusionList.push['type'];
+          }
           this.addNodeComposite(steps, address, configurationElement, exclusionList, true);
         }
 
@@ -191,9 +194,12 @@ angular.module('managementConsole.api')
         //'is-new-node' is special attribute denoting node being created rather than modified
         //'type' is special attribute denoting type of store
         // all exclusionList elements are not native to DMR
-        var exclusionList = ['is-new-node', 'type'];
-
         if (utils.isNotNullOrUndefined(configurationElement)) {
+          // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
+          var exclusionList = ['is-new-node'];
+          if (utils.isNullOrUndefined(configurationElement['EVICTION'])) {
+            exclusionList.push['type'];
+          }
           this.addNodeComposite(steps, address, configurationElement, exclusionList, false);
         }
 

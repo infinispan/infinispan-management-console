@@ -259,6 +259,7 @@ angular.module('managementConsole.api')
         if (utils.isNotNullOrUndefined(prop)) {
           this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template-name', 'is-new-node',
           'is-create-with-bare-template', 'is-create-mode']);
+          this.composeWriteObjectOperations(steps, address, prop, ['indexing-properties']);
         }
         return this.execute(compositeOp);
       };
@@ -325,29 +326,33 @@ angular.module('managementConsole.api')
           for (var i = 0; i < keys.length; i++) {
             var propKey = keys[i];
             var propValue = prop[keys[i]];
-            if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
-              //assign only primitives (strings, numbers, integers)
-              // i.e disregard potential branches of prop object tree
+            if (utils.isNotNullOrUndefined(propValue)) {
+              if (utils.isObject(propValue) && propKey === 'indexing-properties') {
+                op[propKey] = propValue;
+              } else {
+                //assign only primitives (strings, numbers, integers)
+                // i.e disregard potential branches of prop object tree
 
-              //handle JSON described objects
-              if (utils.isString(propValue)) {
-                if ((propValue.indexOf('{') > -1 && propValue.indexOf('}') > -1) ||
-                  (propValue.indexOf('[') > -1 && propValue.indexOf(']') > -1)) {
-                  try {
-                    op[propKey] = JSON.parse(propValue);
+                //handle JSON described objects
+                if (utils.isString(propValue)) {
+                  if ((propValue.indexOf('{') > -1 && propValue.indexOf('}') > -1) ||
+                    (propValue.indexOf('[') > -1 && propValue.indexOf(']') > -1)) {
+                    try {
+                      op[propKey] = JSON.parse(propValue);
+                    }
+                    catch (e) {
+                      console.log('Invalid JSON value ' + propValue + ' for field ' + propKey);
+                    }
                   }
-                  catch (e) {
-                    console.log('Invalid JSON value ' + propValue + ' for field ' + propKey);
+                  //simple strings
+                  else {
+                    op[propKey] = propValue;
                   }
                 }
-                //simple strings
+                // numbers, integers, booleans etc
                 else {
                   op[propKey] = propValue;
                 }
-              }
-              // numbers, integers, booleans etc
-              else {
-                op[propKey] = propValue;
               }
             }
           }
@@ -409,6 +414,23 @@ angular.module('managementConsole.api')
           value: attributeValue
         }
       };
+
+      CacheCreationControllerClient.prototype.composeWriteObjectOperations = function (steps, address, prop, includedAttributes) {
+        if (utils.isNotNullOrUndefined(prop)) {
+          var keys = Object.keys(prop);
+          for (var i = 0; i < keys.length; i++) {
+            var propKey = keys[i];
+            var propValue = prop[keys[i]];
+            var includedAttribute = includedAttributes.some(function (attribute){ return propKey === attribute;});
+            if(includedAttribute) {
+              if (utils.isNotNullOrUndefined(propValue) && utils.isObject(propValue)) {
+                steps.push(this.createCompositeWriteAttributeOperation(address, propKey, propValue))
+              }
+            }
+          }
+        }
+      };
+
       return new CacheCreationControllerClient(window.location.origin);
     }
   ]);

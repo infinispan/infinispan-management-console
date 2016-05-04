@@ -118,7 +118,10 @@ angular.module('managementConsole')
       };
 
       $scope.cancel = function () {
-        $state.go('clusterView', {clusterName: $scope.currentCluster.name});
+        $state.go('clusterView', {
+          groupName: $scope.currentCluster.getServerGroupName(),
+          clusterName: $scope.currentCluster.name
+        });
       };
 
 

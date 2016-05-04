@@ -128,19 +128,34 @@ angular.module('managementConsole.api')
               }.bind(this));
             };
 
-            Cluster.prototype.getEndpoints = function () {
+            Cluster.prototype.getEndpoints = function (clusterName) {
               var socketEndpoints = [];
               var socketBindings = this.domain.getServerGroup().getSocketBindings();
               var offset = this.domain.getServerGroupByName(this.getServerGroupName()).getSocketPortBindingOffset();
               var endpoints = this.getProfile().getEndpoints();
-              angular.forEach(endpoints, function(value, key){
-                 var endpoint = value[key];
-                 var bindingName = endpoint['socket-binding'];
-                 var bindingPort = socketBindings[bindingName].port;
-                 var fixedPort = socketBindings[bindingName]['fixed-port'];
-                 socketEndpoints.push(new EndpointModel(bindingName,
-                  !fixedPort? bindingPort + offset: bindingPort,
-                  utils.isNotNullOrUndefined(endpoint.encryption) ? endpoint.encryption : ''));
+
+              var updateEndpoints = function (socketEndpoints, endpoint) {
+                if (endpoint['cache-container'] === clusterName) {
+                  var bindingName = endpoint['socket-binding'];
+                  var bindingPort = socketBindings[bindingName].port;
+                  var fixedPort = socketBindings[bindingName]['fixed-port'];
+                  socketEndpoints.push(new EndpointModel(bindingName,
+                    !fixedPort ? bindingPort + offset : bindingPort,
+                    utils.isNotNullOrUndefined(endpoint.encryption) ? endpoint.encryption : ''));
+                }
+              };
+
+              angular.forEach(endpoints, function (value, key) {
+                // If cacheContainer is null, then we know that multiple endPoints exist
+                var cacheContainer = value['cacheContainer'];
+                if (utils.isNullOrUndefined(cacheContainer)) {
+                  angular.forEach(value, function (endpoint) {
+                    updateEndpoints(socketEndpoints, endpoint);
+                  });
+                } else {
+                  var endpoint = value[key];
+                  updateEndpoints(socketEndpoints, endpoint);
+                }
               });
               return socketEndpoints;
             };

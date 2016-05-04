@@ -44,7 +44,7 @@
             group.fields.forEach(function (attrName) {
               scope.cleanFieldMetadata(attrName);
               if (utils.isNotNullOrUndefined(scope.data[attrName])) {
-                scope.prevData[attrName] = scope.data[attrName];
+                scope.prevData[attrName] = angular.copy(scope.data[attrName]);
               } else {
                 scope.prevData[attrName] = '';
               }
@@ -125,6 +125,17 @@
 
         scope.isSingleValue = function (field) {
           return !scope.isMultiValue(field);
+        };
+
+        scope.createOrUpdateProperty = function (field, key, value) {
+          scope.data[field] = scope.data[field] || {};
+          scope.data[field][key] = value;
+          scope.fieldValueModified(field);
+        };
+
+        scope.removeProperty = function (field, key) {
+          delete scope.data[field][key];
+          scope.fieldValueModified(field);
         };
 
         scope.fieldValueModified = function (field) {

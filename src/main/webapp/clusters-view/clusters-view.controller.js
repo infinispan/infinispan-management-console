@@ -104,7 +104,7 @@ angular.module('managementConsole')
               } else {
                 $scope.relays[cluster.getName()] = ['N/A'];
               }
-              $scope.endpoints.push(cluster.getEndpoints());
+              $scope.endpoints.push(cluster.getEndpoints(cluster['name']));
               clusterNodesService.getAvailability(cluster).then(function (result) {
                 cluster.availability = result;
               }).catch(function () {

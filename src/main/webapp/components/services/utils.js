@@ -177,6 +177,7 @@
           if (this.isNotNullOrUndefined(resolvedField)) {
             var fieldType;
             switch (resolvedField.type.TYPE_MODEL_VALUE) {
+              case 'DOUBLE':
               case 'LONG':
               case 'INT':
               case 'STRING':
@@ -184,6 +185,9 @@
                 break;
               case 'BOOLEAN':
                 fieldType = 'checkbox';
+                break;
+              case 'OBJECT':
+                fieldType = 'table';
                 break;
             }
             return fieldType;

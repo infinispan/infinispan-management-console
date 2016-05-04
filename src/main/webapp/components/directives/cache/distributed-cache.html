@@ -44,13 +44,6 @@
                              outside-controller="outsideController"/>
     </uib-tab>
 
-    <uib-tab heading="Backup">
-      <configuration-section fields="[{name: 'Backup policy', fields: ['after-failures', 'enabled', 'failure-policy', 'min-wait', 'strategy', 'timeout']}]"
-                             data="data['backup'].BACKUP" metadata="resolveDescription('backup')"
-                             init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
-    </uib-tab>
-
     <uib-tab heading="Security">
       <configuration-section fields="[{name: 'Security', fields:['enabled', 'roles']}]" data="data.security.SECURITY.authorization.AUTHORIZATION"
                              metadata="resolveDescription('authorization')"

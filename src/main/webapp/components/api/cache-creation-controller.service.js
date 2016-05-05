@@ -117,6 +117,7 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('locking', 'LOCKING'), configuration.locking);
           this.createHelper(steps, address.concat('eviction', 'EVICTION'), configuration.eviction);
           this.createHelper(steps, address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+          this.createHelper(steps, address.concat('indexing', 'INDEXING'), configuration.indexing);
           this.createHelper(steps, address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
           this.createHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
           this.createHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
@@ -171,6 +172,7 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('locking', 'LOCKING'), configuration.locking);
           this.updateHelper(steps, address.concat('eviction', 'EVICTION'), configuration.eviction);
           this.updateHelper(steps, address.concat('expiration', 'EXPIRATION'), configuration.expiration);
+          this.updateHelper(steps, address.concat('indexing', 'INDEXING'), configuration.indexing);
           this.updateHelper(steps, address.concat('compatibility', 'COMPATIBILITY'), configuration.compatibility);
           this.updateHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
           this.updateHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
@@ -309,6 +311,7 @@ angular.module('managementConsole.api')
         } else {
           //otherwise we just overwrite all attributes with new values
           this.composeWriteAttributeOperations(steps, address, prop, excludeAttributeList);
+          this.composeWriteObjectOperations(steps, address, prop, ['indexing-properties']);
         }
       };
 

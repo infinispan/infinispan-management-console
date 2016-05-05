@@ -1,15 +1,12 @@
 'use strict';
 angular.module('ispn.directives.finishrender', [])
-  .directive('onFinishRender', ['utils', function (utils) {
+  .directive('onFinishRender', ['$timeout', function ($timeout) {
     return {
       restrict: 'A',
       link: function (scope, element, attr) {
-        var functionToCall = attr.onFinishRender;
-        if (scope.$last) {
-          if (utils.isNotNullOrUndefined(functionToCall)) {
-            scope.$evalAsync(functionToCall);
-          }
-        }
+        //Calling a scoped method
+        //http://stackoverflow.com/questions/11953348/angularjs-callback-after-render-work-with-dom-after-render/
+        $timeout(scope.matchHeight, 0);
       }
     };
   }]);

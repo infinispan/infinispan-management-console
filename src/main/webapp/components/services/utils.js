@@ -142,6 +142,7 @@
         map.locking = 'children.locking.model-description.LOCKING.attributes';
         map.eviction = 'children.eviction.model-description.EVICTION.attributes';
         map.expiration = 'children.expiration.model-description.EXPIRATION.attributes';
+        map.indexing = 'children.indexing.model-description.INDEXING.attributes';
         map.compatibility = 'children.compatibility.model-description.*.attributes';
         map['partition-handling'] = 'children.partition-handling.model-description.PARTITION_HANDLING.attributes';
         map.tx = 'children.transaction.model-description.TRANSACTION.attributes';

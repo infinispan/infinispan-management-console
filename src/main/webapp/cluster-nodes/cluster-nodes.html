@@ -65,7 +65,7 @@
         </a>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="server in filtered = (getServersInCluster()
-      | nameFilter:searchNameQuery)" ng-show="server.show" on-finish-render="matchHeight()">
+      | nameFilter:searchNameQuery)" ng-show="server.show" on-finish-render>
         <a ui-sref="nodeStatus({
             clusterName:cluster.name,
             nodeName:server.name,

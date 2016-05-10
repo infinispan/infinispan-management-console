@@ -137,6 +137,17 @@
         return o;
       },
 
+      deepValue: function deepValue(obj, path){
+        for (var i=0, path=path.split('.'), len=path.length; i<len; i++){
+          if (this.isNotNullOrUndefined(obj)) {
+            obj = obj[path[i]];
+          } else {
+            return null;
+          }
+        };
+        return obj;
+      },
+
       makeResourceDescriptionMap: function makeResourceDescriptionMap(map) {
         map.general = '.attributes';
         map.locking = 'children.locking.model-description.LOCKING.attributes';
@@ -181,6 +192,7 @@
               case 'LONG':
               case 'INT':
               case 'STRING':
+              case 'LIST':
                 fieldType = 'text';
                 break;
               case 'BOOLEAN':

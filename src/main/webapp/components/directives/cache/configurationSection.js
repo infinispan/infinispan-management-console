@@ -38,10 +38,23 @@
           }
         };
 
+        /**
+         * When model gets loaded into this controller inspect if the value is an array/list and if so convert it to JSON array
+         * for a better visual representation
+         *
+         * @param field
+         */
+        scope.convertFieldValue = function (field) {
+          if (utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field].type.TYPE_MODEL_VALUE === "LIST"){
+            scope.data[field] = JSON.stringify(scope.data[field]);
+          }
+        };
+
 
         scope.cleanMetadata = function () {
           scope.fields.forEach(function (group) {
             group.fields.forEach(function (attrName) {
+              scope.convertFieldValue(attrName);
               scope.cleanFieldMetadata(attrName);
               if (utils.isNotNullOrUndefined(scope.data[attrName])) {
                 scope.prevData[attrName] = angular.copy(scope.data[attrName]);

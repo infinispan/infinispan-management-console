@@ -124,7 +124,7 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
           this.createHelper(steps, address.concat('store', 'STORE'), configuration.store);
           this.createHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-          this.createHelper(steps, address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
+          this.createHelper(steps, address.concat('leveldb-store', 'LEVELDB_STORE'), configuration['leveldb-store']);
           this.createHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
           this.createHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
@@ -178,7 +178,7 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
           this.updateHelper(steps, address.concat('store', 'STORE'), configuration.store);
           this.updateHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-          this.updateHelper(steps, address.concat('leveldb-store', 'LEVEL_DB_STORE'), configuration['leveldb-store']);
+          this.updateHelper(steps, address.concat('leveldb-store', 'LEVELDB_STORE'), configuration['leveldb-store']);
           this.updateHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
           this.updateHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);

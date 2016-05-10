@@ -1,0 +1,195 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancelModal()">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="form-horizontal">
+
+      <!--TODO Reduce repetition with ng-repeats -->
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Prefix</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('prefix')"
+                 ng-style="getStyle('prefix')" ng-model="data['prefix']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{metadata['prefix'].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('prefix')"><a ng-click="undoFieldChange('prefix')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('prefix')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Batch Size</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('batch-size')"
+                 ng-style="getStyle('batch-size')" ng-model="data['batch-size']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{metadata['batch-size'].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('batch-size')"><a ng-click="undoFieldChange('batch-size')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('batch-size')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Fetch Size</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('fetch-size')"
+                 ng-style="getStyle('fetch-size')" ng-model="data['fetch-size']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{metadata['fetch-size'].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('fetch-size')"><a ng-click="undoFieldChange('fetch-size')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('fetch-size')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Id Column Name</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('name', 'id-column')"
+                 ng-style="getStyle('name', 'id-column')" ng-model="data['id-column']['name']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('name', 'id-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('name', 'id-column')"><a ng-click="undoFieldChange('name', 'id-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('name', 'id-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Id Column Type</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('type', 'id-column')"
+                 ng-style="getStyle('type', 'id-column')" ng-model="data['id-column']['type']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('type', 'id-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('type', 'id-column')"><a ng-click="undoFieldChange('type', 'id-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('type', 'id-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Data Column Name</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('name', 'data-column')"
+                 ng-style="getStyle('name', 'data-column')" ng-model="data['data-column']['name']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('name', 'data-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('name', 'data-column')"><a ng-click="undoFieldChange('name', 'data-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('name', 'data-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Data Column Type</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('type', 'data-column')"
+                 ng-style="getStyle('type', 'data-column')" ng-model="data['data-column']['type']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('type', 'data-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('type', 'data-column')"><a ng-click="undoFieldChange('type', 'data-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('type', 'data-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Timestamp Column Name</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('name', 'timestamp-column')"
+                 ng-style="getStyle('name', 'timestamp-column')" ng-model="data['timestamp-column']['name']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('name', 'timestamp-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('name', 'timestamp-column')"><a ng-click="undoFieldChange('name', 'timestamp-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('name', 'timestamp-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Timestamp Column Type</label>
+
+        <div class="col-md-4">
+          <input type="text" ng-change="fieldValueModified('type', 'timestamp-column')"
+                 ng-style="getStyle('type', 'timestamp-column')" ng-model="data['timestamp-column']['type']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription('type', 'timestamp-column')}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('type', 'timestamp-column')"><a ng-click="undoFieldChange('type', 'timestamp-column')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('type', 'timestamp-column')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Create on Start</label>
+
+        <div class="col-md-4">
+          <input type="checkbox" ng-change="fieldValueModified('create-on-start')"
+                 ng-style="getStyle('create-on-start')" ng-model="data['create-on-start']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{metadata['create-on-start'].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('create-on-start')"><a ng-click="undoFieldChange('create-on-start')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('create-on-start')">Restart needed</span></span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label">Drop on Exit</label>
+
+        <div class="col-md-4">
+          <input type="checkbox" ng-change="fieldValueModified('drop-on-exit')"
+                 ng-style="getStyle('drop-on-exit')" ng-model="data['drop-on-exit']"/>
+        </div>
+
+        <div class="col-md-4 pull-left">
+          <i class="fa fa-info-circle" tooltip="{{metadata['drop-on-exit'].description}}"
+             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+          <span ng-if="isFieldValueModified('drop-on-exit')"><a ng-click="undoFieldChange('drop-on-exit')">(Undo)</a>
+          <span ng-if="fieldChangeRequiresRestart('drop-on-exit')">Restart needed</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+    <button id="okButton" type="button" class="btn btn-primary" ng-click="submitModal()">Ok</button>
+  </div>
+</div>

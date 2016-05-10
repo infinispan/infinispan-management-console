@@ -160,7 +160,7 @@
         map.statetransfer = 'children.state-transfer.model-description.STATE_TRANSFER.attributes';
         map.filestore = 'children.file-store.model-description.*.attributes';
         map.remotestore = 'children.remote-store.model-description.*.attributes';
-        map.jdbcstore = 'children.string-keyed-jdbc-store.model-description.*.attributes';
+        map.jdbcstore = 'children.mixed-keyed-jdbc-store.model-description.*.attributes';
         map.leveldbstore = 'children.leveldb-store.model-description.*.attributes';
         map.store = 'children.store.model-description.*.attributes';
         map['rest-store'] = 'children.rest-store.model-description.*.attributes';

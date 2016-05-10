@@ -181,6 +181,7 @@
               case 'LONG':
               case 'INT':
               case 'STRING':
+              case 'LIST':
                 fieldType = 'text';
                 break;
               case 'BOOLEAN':

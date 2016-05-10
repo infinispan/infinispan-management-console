@@ -137,6 +137,13 @@
         return o;
       },
 
+      deepValue: function deepValue(obj, path){
+        for (var i=0, path=path.split('.'), len=path.length; i<len; i++){
+          obj = obj[path[i]];
+        };
+        return obj;
+      },
+
       makeResourceDescriptionMap: function makeResourceDescriptionMap(map) {
         map.general = '.attributes';
         map.locking = 'children.locking.model-description.LOCKING.attributes';

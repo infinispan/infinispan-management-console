@@ -96,8 +96,8 @@ angular.module('managementConsole.api')
             };
 
             Cache.prototype.isSecured = function () {
-              return utils.isNotNullOrUndefined(this.configuration.security) &&
-                utils.isNotNullOrUndefined(this.configuration.security.SECURITY.authorization);
+              var auth = utils.deepValue(this.configuration, 'security.SECURITY.authorization.AUTHORIZATION');
+              return utils.isNotNullOrUndefined(auth) && auth['enabled'];
             };
 
             return Cache;

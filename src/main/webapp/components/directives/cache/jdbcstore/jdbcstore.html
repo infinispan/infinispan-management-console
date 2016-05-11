@@ -10,153 +10,107 @@
             <label class="col-md-4 control-label">Type</label>
 
             <div class="col-md-4">
-              <select class="form-control" ng-model="data.type" ng-options="item as item for item in metadata.storeTypes" ng-disabled="readOnly"/>
+              <select class="form-control" ng-model="data['jdbc-type']"
+                      ng-options="item as item for item in metadata.storeTypes"
+                      ng-disabled="readOnly" ng-change="updateStoreType('{{data['jdbc-type']}}')"
+                      ng-style="getStyle(field)"/>
             </div>
 
             <div class="col-md-4 pull-left">
               <i class="fa fa-info-circle" tooltip="The type of JDBC store" tooltip-trigger tooltip-animation="true"
                  tooltip-placement="top"></i>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-md-4 control-label">Datasource</label>
-
-            <div class="col-md-4">
-              <input class="form-control" type="text" ng-model="data.datasource" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.datasource.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('jdbc-type')"><a ng-click="undoTypeChange()">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('jdbc-type')">Restart needed</span></span>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="col-md-4 control-label">Dialect</label>
+          <div ng-if="data['jdbc-type']">
+            <div class="form-group">
+              <label class="col-md-4 control-label">Datasource</label>
 
-            <div class="col-md-4">
-              <select class="form-control" ng-model="data.dialect" ng-options="item as item for item in metadata.dialect.allowed" ng-disabled="readOnly"/>
+              <div class="col-md-4">
+                <input class="form-control" type="text" ng-model="store['datasource']" ng-disabled="readOnly"
+                       ng-change="fieldValueModified('datasource')" ng-style="getStyle('datasource')"/>
+              </div>
+
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata.datasource.description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('datasource')"><a ng-click="undoFieldChange('datasource')">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('datasource')">Restart needed</span></span>
+              </div>
             </div>
 
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.dialect.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
+            <div class="form-group">
+              <label class="col-md-4 control-label">Dialect</label>
 
-          <div class="form-group" ng-if="data.type === 'string-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store' || hasStringKeyedTable()">
-            <label class="col-md-4 control-label">String keyed table</label>
+              <div class="col-md-4">
+                <select class="form-control" ng-model="store['dialect']"
+                        ng-options="item as item for item in metadata.dialect.allowed"
+                        ng-disabled="readOnly" ng-change="fieldValueModified('dialect')"
+                        ng-style="getStyle('dialect')"/>
+              </div>
 
-            <div class="col-md-4">
-              <input class="form-control" type="text" ng-model="data['string-keyed-table']" ng-disabled="readOnly"/>
-            </div>
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['string-keyed-table'].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-          <div class="form-group" ng-if="data.type === 'binary-keyed-jdbc-store' || data.type === 'mixed-keyed-jdbc-store' || hasBinaryKeyedTable()">
-            <label class="col-md-4 control-label">Binary keyed table</label>
-
-            <div class="col-md-4">
-              <input class="form-control" type="text" ng-model="data['binary-keyed-table']" ng-disabled="readOnly"/>
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata.dialect.description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('dialect')"><a ng-click="undoFieldChange('dialect')">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('dialect')">Restart needed</span></span>
+              </div>
             </div>
 
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['-keyed-table'].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
+            <div class="form-group"
+                 ng-if="data['jdbc-type'] === 'string-keyed-jdbc-store' || data['jdbc-type'] === 'mixed-keyed-jdbc-store' || hasStringKeyedTable()">
+              <label class="col-md-4 control-label">String keyed table</label>
 
-          <div class="form-group">
-            <label class="col-md-4 control-label">Fetch state</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data['fetch-state']" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['fetch-state'].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Passivation</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data.passivation" ng-disabled="readOnly"/>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-link" ng-click="openModal('string-keyed-table')"
+                ng-style="getStyle('string-keyed-table')">
+                  <span class="glyphicon glyphicon-option-horizontal" />
+                </button>
+              </div>
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata['string-keyed-table'].description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+                <span ng-if="isFieldValueModified('string-keyed-table')"><a ng-click="undoFieldChange('string-keyed-table')">(Undo)</a>
+                <span ng-if="fieldChangeRequiresRestart('string-keyed-table')">Restart needed</span></span>
+              </div>
             </div>
 
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.passivation.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
+            <div class="form-group"
+                 ng-if="data['jdbc-type'] === 'binary-keyed-jdbc-store' || data['jdbc-type'] === 'mixed-keyed-jdbc-store' || hasBinaryKeyedTable()">
+              <label class="col-md-4 control-label">Binary keyed table</label>
 
-          <div class="form-group">
-            <label class="col-md-4 control-label">Preload</label>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-link" ng-click="openModal('binary-keyed-table')"
+                        ng-style="getStyle('binary-keyed-table')">
+                  <span class="glyphicon glyphicon-option-horizontal" />
+                </button>
+              </div>
 
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data.preload" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.preload.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Purge</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data.purge" ng-disabled="readOnly"/>
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata['binary-keyed-table'].description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+                <span ng-if="isFieldValueModified('binary-keyed-table')"><a ng-click="undoFieldChange('binary-keyed-table')">(Undo)</a>
+                <span ng-if="fieldChangeRequiresRestart('binary-keyed-table')">Restart needed</span></span>
+              </div>
             </div>
 
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.purge.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
+            <div class="form-group" ng-repeat="field in metadata.checkboxes">
+              <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
 
-          <div class="form-group">
-            <label class="col-md-4 control-label">Read only</label>
+              <div class="col-md-4">
+                <input type="checkbox" ng-model="store[field]" ng-disabled="readOnly"
+                       ng-change="fieldValueModified(field)"
+                       ng-style="getStyle(field)"/>
+              </div>
 
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data['read-only']" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['read-only'].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Shared</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data.shared" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.shared.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-md-4 control-label">Singleton</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data.singleton" ng-disabled="readOnly"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata.singleton.description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata[field].description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>
+              </div>
             </div>
           </div>
         </div>

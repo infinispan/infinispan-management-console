@@ -129,7 +129,6 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
-          this.updateSecurityAuthorization(configuration.security);
           this.createHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.createHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
@@ -185,7 +184,7 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
-          this.updateSecurityAuthorization(configuration.security);
+          this.updateSecurityAuthorization(configuration);
           this.updateHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.updateHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
@@ -435,11 +434,11 @@ angular.module('managementConsole.api')
         }
       };
 
-      CacheCreationControllerClient.prototype.updateSecurityAuthorization = function(security) {
-        //if we are creating new node AUTHORIZATION we have to flag its ancestor SECURITY as new node as well
-        var auth = utils.deepValue(security, 'SECURITY.authorization.AUTHORIZATION');
-        if (utils.isNotNullOrUndefined(auth) && auth['is-new-node']) {
-          var sec = utils.deepValue(security, 'SECURITY');
+      CacheCreationControllerClient.prototype.updateSecurityAuthorization = function(conf) {
+        //if we are creating new node AUTHORIZATION for a template conf we have to flag its ancestor SECURITY as new node as well
+        var auth = utils.deepValue(conf.security, 'SECURITY.authorization.AUTHORIZATION');
+        if (utils.isNotNullOrUndefined(auth) && auth['is-new-node'] && auth['enabled']) {
+          var sec = utils.deepValue(conf.security, 'SECURITY');
           sec['is-new-node'] = true;
         }
       };

@@ -20,6 +20,23 @@
         },
         link: function (scope, element, attrs) {
           var rootMetadataObjectPath = 'children.configurations.model-description.CONFIGURATIONS.children.' + attrs.cacheType + '-configuration.model-description.*.attributes';
+
+          //tmp fix for ISPN-6531 until proper solution is developed
+          var authorizationOverride = {
+            enabled: {
+              description: "Enables authorization checks for a cache.",
+              default: false,
+              type: {
+                TYPE_MODEL_VALUE: 'BOOLEAN'
+              }
+            },
+            roles: {
+              description: "The list of roles which are allowed access the cache. If changing the list of roles, please specify the list of roles as JSON list e.g. [\"admin\", \"writer\"].",
+              type: {
+                TYPE_MODEL_VALUE: 'LIST'
+              }
+            }
+          };
           if (!scope.readOnly) {
             scope.readOnly = false;
           }
@@ -56,8 +73,22 @@
           utils.makeResourceDescriptionMap(scope.resourceDescriptionMap);
 
 
+          scope.resolveOverridenDescription = function (elementPath) {
+            if (elementPath === 'authorization') {
+              return authorizationOverride;
+            } else {
+              return null;
+            }
+          };
+
           scope.resolveDescription = function (elementPath) {
-            return utils.resolveDescription(scope.metadata, scope.resourceDescriptionMap, elementPath, scope.cacheType);
+            var overriden = scope.resolveOverridenDescription(elementPath);
+            if (overriden) {
+              return overriden;
+            } else {
+              var desc = utils.resolveDescription(scope.metadata, scope.resourceDescriptionMap, elementPath, scope.cacheType);
+              return desc;
+            }
           };
         }
       };

@@ -129,6 +129,14 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
           this.createHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
+
+          //if we are creating new node AUTHORIZATION we have to flag its ancestor SECURITY as new node as well
+          var auth = utils.deepValue(configuration.security, 'SECURITY.authorization.AUTHORIZATION');
+          if (utils.isNotNullOrUndefined(auth) && auth['is-new-node']) {
+            var sec = utils.deepValue(configuration.security, 'SECURITY');
+            sec['is-new-node'] = true;
+          }
+
           this.createHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.createHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
@@ -184,6 +192,13 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('binary-keyed-jdbc-store', 'BINARY_KEYED_JDBC_STORE'), configuration['binary-keyed-jdbc-store']);
           this.updateHelper(steps, address.concat('mixed-keyed-jdbc-store', 'MIXED_KEYED_JDBC_STORE'), configuration['mixed-keyed-jdbc-store']);
           this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
+
+          //if we are creating new node AUTHORIZATION we have to flag its ancestor SECURITY as new node as well
+          var auth = utils.deepValue(configuration.security, 'SECURITY.authorization.AUTHORIZATION');
+          if (utils.isNotNullOrUndefined(auth) && auth['is-new-node']) {
+            var sec = utils.deepValue(configuration.security, 'SECURITY');
+            sec['is-new-node'] = true;
+          }
           this.updateHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.updateHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 

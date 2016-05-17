@@ -4,7 +4,7 @@
 
    <groupId>org.infinispan</groupId>
    <artifactId>infinispan-management-console</artifactId>
-   <version>8.2.2-SNAPSHOT</version>
+   <version>8.2.3-SNAPSHOT</version>
    <packaging>jar</packaging>
    <name>Infinispan Management Console</name>
    <description>Web Management Console for Infinispan</description>

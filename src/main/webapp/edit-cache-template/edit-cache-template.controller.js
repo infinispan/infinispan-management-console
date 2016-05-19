@@ -129,4 +129,8 @@ angular.module('managementConsole')
         });
       };
 
+      // It is ok to change template-type when creating a template, as it is not possible for any cache to be using a
+      // template that has not be created yet (obviously)
+      $scope.configurationModel['is-create-mode'] = $scope.isCreateMode();
+      $scope.configurationModel['is-create-with-bare-template'] = $scope.isCreateMode();
     }]);

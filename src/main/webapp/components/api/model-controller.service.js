@@ -113,9 +113,8 @@ angular.module('managementConsole.api')
                 var deferred = $q.defer();
                 var http = new XMLHttpRequest();
 
-                http.withCredentials = true;
                 http.open('POST', url, true, this.credentials.username, this.credentials.password);
-
+                http.withCredentials = true;
 
                 http.setRequestHeader('Content-type', 'application/json');
                 http.setRequestHeader('Accept', 'application/json');
@@ -217,8 +216,8 @@ angular.module('managementConsole.api')
 
               //Third, we open http connection
               if (this.credentials.username) {
-                http.withCredentials = true;
                 http.open('POST', this.uploadUrl, true, this.credentials.username, this.credentials.password);
+                http.withCredentials = true;
               } else {
                 http.open('POST', this.uploadUrl, true);
               }
@@ -351,6 +350,9 @@ angular.module('managementConsole.api')
               return this.readChildrenResources([],'deployment');
             };
 
-            return new ModelControllerClient(window.location.origin);
+            // IE won't support window.location.origin
+            var windowOrigin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+
+            return new ModelControllerClient(windowOrigin);
     }
   ]);

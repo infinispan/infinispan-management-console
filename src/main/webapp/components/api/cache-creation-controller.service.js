@@ -479,6 +479,9 @@ angular.module('managementConsole.api')
         }
       };
 
-      return new CacheCreationControllerClient(window.location.origin);
+      // IE won't support window.location.origin
+      var windowOrigin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+
+      return new CacheCreationControllerClient(windowOrigin);
     }
   ]);

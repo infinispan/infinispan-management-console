@@ -30,8 +30,8 @@ angular.module('managementConsole.api')
                 var http = new XMLHttpRequest();
                 var username = modelController.credentials.username;
                 var password = modelController.credentials.password;
-                http.withCredentials = true;
                 http.open('POST', this.url, true, username, password);
+                http.withCredentials = true;
                 http.setRequestHeader('Content-type', 'application/json');
                 http.setRequestHeader('Accept', 'application/json');
                 http.onreadystatechange = function () {
@@ -75,6 +75,10 @@ angular.module('managementConsole.api')
 
               return this.execute(op);
             };
-            return new NodeCreateController(window.location.origin);
+
+            // IE won't support window.location.origin
+            var windowOrigin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+
+            return new NodeCreateController(windowOrigin);
     }
   ]);

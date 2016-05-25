@@ -101,11 +101,13 @@ angular.module('managementConsole')
               scope: $scope
             });
 
+            $scope.saveWithoutRestart();
             dialog.result.then(function (requiresRestart) {
               if (requiresRestart) {
                 $rootScope.requiresRestartFlag = true;
+                clusterNodesService.restartCluster();
+                $scope.cancel(); // Cleans metadata and changes to cluster view
               }
-              $scope.saveWithoutRestart();
             });
           } else {
             $scope.saveWithoutRestart();

@@ -4,64 +4,76 @@
       <configuration-section fields="[{name: 'Main', fields: ['type', 'template-name']},
                                       {name: 'Clustering', fields: ['mode', 'remote-timeout']},
                                       {name: 'Monitoring', fields: ['statistics', 'jndi-name']}]" data='data'
-                             metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('general')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="Locking">
       <configuration-section fields="[{name: 'Locking', fields: ['acquire-timeout', 'concurrency-level', 'isolation', 'striping']}]"
                              data='data.locking.LOCKING' metadata="resolveDescription('locking')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="Eviction">
       <configuration-section fields="[{name: 'Eviction', fields:['type', 'strategy', 'size']}]" data='data.eviction.EVICTION'
-                             metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('eviction')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="Expiration">
       <configuration-section fields="[{name: 'Expiration', fields: ['lifespan', 'interval', 'max-idle']}]"
                              data='data.expiration.EXPIRATION' metadata="resolveDescription('expiration')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="Indexing">
       <configuration-section fields="[{name: 'Indexing', fields: ['indexing', 'auto-config', 'indexing-properties']}]"
                              data='data.indexing.INDEXING' metadata="resolveDescription('indexing')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="Compatibility">
       <configuration-section fields="[{name: 'Compatibility', fields: ['enabled', 'marshaller']}]" data='data.compatibility.COMPATIBILITY'
-                             metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('compatibility')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Transactions">
 
       <configuration-section fields="[{name: 'Transactions', fields:['locking', 'mode', 'stop-timeout']}]" data="data.transaction.TRANSACTION"
-                             metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('tx')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Security">
       <configuration-section fields="[{name: 'Security', fields:['enabled', 'roles']}]" data="data.security.SECURITY.authorization.AUTHORIZATION"
                              metadata="resolveDescription('authorization')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Partition handling">
       <configuration-section fields="[{name: 'Partition handling', fields: ['enabled']}]" data="data['partition-handling'].PARTITION_HANDLING"
-                             metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('partition-handling')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="State transfer">
       <configuration-section fields="[{name: 'State transfer', fields: ['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']}]" data="data['state-transfer'].STATE_TRANSFER"
-                     metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"/>
+                     metadata="resolveDescription('statetransfer')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Loader">
       <configuration-section fields="[{name: 'Loader', fields: ['class', 'preload', 'shared']}]" data="data['loader'].LOADER"
                              metadata="resolveDescription('loader')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Generic store">
       <configuration-section fields="[{name: 'Generic store', fields:['class', 'fetch-state', 'passivation', 'preload', 'purge', 'read-only', 'shared', 'singleton']}]"
                              data="data['store'].STORE"
-                             metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="File store">
@@ -69,7 +81,8 @@
       <configuration-section fields="[{name: 'File store', fields: ['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
             'preload', 'purge', 'read-only', 'shared', 'singleton']}]" data="data['file-store'].FILE_STORE"
                              metadata="resolveDescription('filestore')"
-                             init-defaults="initDefaults" read-only="readOnly"/>
+                             init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
     <uib-tab heading="JDBC store">
       <jdbcstore data="data" metadata="resolveDescription('jdbcstore')"
@@ -80,7 +93,8 @@
     <uib-tab heading="LevelDB store">
       <configuration-section fields="[{name: 'LevelDB store', fields: ['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
             'preload', 'purge', 'read-only', 'shared', 'singleton']}]" data="data['leveldb-store'].LEVELDB_STORE"
-                             metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"/>
+                             metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"
+                             outside-controller="outsideController"/>
     </uib-tab>
   </uib-tabset>
 </div>

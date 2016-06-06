@@ -20,7 +20,7 @@
     <div class="alert alert-success alert-dismissable" ng-if="successTaskLaunch">
       <span class="pficon pficon-ok"></span>
       <strong>Success!</strong> The task has been successfully launched.
-        <span ng-if="taskOutput">Click to see <a href="#" ng-click="displayOutput = !displayOutput" class="alert-link">the task output</a>
+        <span ng-if="taskOutput">Click to see <a ng-click="displayOutput = !displayOutput" class="alert-link">the task output</a>
           <span class="fa fa-angle-down"></span>
         <br>
         <pre ng-if="displayOutput">{{taskOutput}}</pre>

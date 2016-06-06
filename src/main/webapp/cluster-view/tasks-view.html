@@ -67,7 +67,7 @@
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
         <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}">Caches</a></li>
-        <li class="active"><a href="#">Tasks execution</a></li>
+        <li class="active"><a>Tasks execution</a></li>
       </ul>
     </div>
   </div>
@@ -75,9 +75,9 @@
   <div class="row">
     <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
       <ul class="nav nav-tabs nav-tabs-pf">
-        <li ng-class="selectedView=='running' ? 'active' : ''"><a href="#" ng-click="selectedView='running';">Running
+        <li ng-class="selectedView=='running' ? 'active' : ''"><a ng-click="selectedView='running';">Running
           tasks</a></li>
-        <li ng-class="selectedView=='history' ? 'active' : ''"><a href="#" ng-click="selectedView='history';">Task
+        <li ng-class="selectedView=='history' ? 'active' : ''"><a ng-click="selectedView='history';">Task
           history</a></li>
       </ul>
     </div>
@@ -87,7 +87,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
         <div class="btn-group" role="group">
-          <a href="#" role="button" class="btn btn-default" ng-click="openTaskDialog()"><span
+          <a role="button" class="btn btn-default" ng-click="openTaskDialog()"><span
             class="pficon pficon-add-circle-o"></span> Launch new task</a>
         </div>
       </div>
@@ -152,7 +152,7 @@
             <td style="padding: 10px">{{task.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
             <td style="padding: 10px">{{task.who ? task.who : '-'}}</td>
             <td style="padding: 10px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-              <span ng-if="task.detail"><a href="#" ng-click="displayEventDetails(task)"><span class="pficon pficon-info"></span></a>
+              <span ng-if="task.detail"><a ng-click="displayEventDetails(task)"><span class="pficon pficon-info"></span></a>
               {{task.detail}}
               </span>
               <span ng-if="!task.detail">-</span>

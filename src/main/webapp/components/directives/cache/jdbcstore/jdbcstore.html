@@ -59,6 +59,38 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label class="col-md-4 control-label">DB Major Version</label>
+
+              <div class="col-md-4">
+                <input class="form-control" type="text" ng-model="store['db-major-version']" ng-disabled="readOnly"
+                       ng-change="fieldValueModified('db-major-version')" ng-style="getStyle('db-major-version')"/>
+              </div>
+
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata['db-major-version'].description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('db-major-version')"><a ng-click="undoFieldChange('db-major-version')">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('db-major-version')">Restart needed</span></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-md-4 control-label">DB Minor Version</label>
+
+              <div class="col-md-4">
+                <input class="form-control" type="text" ng-model="store['db-minor-version']" ng-disabled="readOnly"
+                       ng-change="fieldValueModified('db-minor-version')" ng-style="getStyle('db-minor-version')"/>
+              </div>
+
+              <div class="col-md-4 pull-left">
+                <i class="fa fa-info-circle" tooltip="{{metadata['db-minor-version'].description}}"
+                   tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('db-minor-version')"><a ng-click="undoFieldChange('db-minor-version')">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('db-minor-version')">Restart needed</span></span>
+              </div>
+            </div>
+
             <div class="form-group"
                  ng-if="data['jdbc-type'] === 'string-keyed-jdbc-store' || data['jdbc-type'] === 'mixed-keyed-jdbc-store' || hasStringKeyedTable()">
               <label class="col-md-4 control-label">String keyed table</label>

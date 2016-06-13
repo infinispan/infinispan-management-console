@@ -31,7 +31,7 @@
 #cache-cards a {
     text-decoration: none;
 }
-  
+
 #cache-cards a p {
     color: black;
 }
@@ -43,5 +43,17 @@
 
 #filter-accordion fieldset label {
     display: block;
+}
+
+/**
+ * Do not allow clicking on disabled menu/list items
+ * https://issues.jboss.org/browse/ISPN-6747
+ */
+li.disabled {
+  cursor: not-allowed;
+}
+
+li.disabled a {
+  pointer-events: none;
 }
 

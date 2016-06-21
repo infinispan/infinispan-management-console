@@ -7,10 +7,13 @@ angular.module('managementConsole.api')
     'DomainModel',
     'utils',
     'localStorageService',
-    function ($http, $q, DomainModel, utils, localStorageService) {
+    '$interval',
+    '$rootScope',
+    function ($http, $q, DomainModel, utils, localStorageService, $interval, $rootScope) {
 
             var randomUsername = 'kmyZf1qpQWPJe95lCCg0';
-            var randomPassword = '2RAwgCZ0zBCU0ZyuSGQB'
+            var randomPassword = '2RAwgCZ0zBCU0ZyuSGQB';
+            var connectionChecker;
             /**
              * Represents a client to the ModelController
              * @constructor
@@ -70,6 +73,11 @@ angular.module('managementConsole.api')
                     } else if (launchType === 'STANDALONE') {
                         throw "We only support Domain mode. Standalone mode is not supported in this release!"
                     }
+                    connectionChecker = $interval(function(){
+                      this.isDomainControllerAlive().then(function (result) {
+                        $rootScope.isDomainControllerAlive = result;
+                      });
+                    }.bind(this), 5000);
                 }.bind(this)).catch(function(e) {
                   this.logout();
                   throw e;
@@ -89,6 +97,9 @@ angular.module('managementConsole.api')
                 localStorageService.remove('password');
                 this.authenticated = false;
                 this.server = null;
+                if (utils.isNotNullOrUndefined(connectionChecker)){
+                  $interval.cancel(connectionChecker);
+                }
             };
 
             ModelControllerClient.prototype.getUser = function() {
@@ -150,6 +161,10 @@ angular.module('managementConsole.api')
                     }
                   }
                 };
+                http.timeout = 2000; // time in milliseconds
+                http.ontimeout = function (e) {
+                  deferred.reject("Request timeout " + e);
+                };
                 http.send(JSON.stringify(op));
                 return deferred.promise;
             };
@@ -193,21 +208,11 @@ angular.module('managementConsole.api')
                 }
               };
 
-              /*http.addEventListener("readystatechange", function (e) {
-                // upload completed
-                if (this.readyState === 4) {
-                  console.log('Success: Upload done', e);
 
-                  var response = e.target.response;
-                  if (response) {
-                    try {
-                      response = JSON.parse(response);
-                    } catch (e) {
-                      console.log('JSON.parse()', e);
-                    }
-                  }
-                }
-              }); */
+              http.timeout = 2000; // time in milliseconds
+              http.ontimeout = function (e) {
+                deferred.reject("Request timeout " + e);
+              };
 
               http.addEventListener('error', function (e) {
                 console.log('Error: Upload failed', e);
@@ -344,6 +349,14 @@ angular.module('managementConsole.api')
                 }]
               };
               return this.execute(op);
+            };
+
+            ModelControllerClient.prototype.isDomainControllerAlive = function () {
+              return this.readResource([], false, false).then(function(){
+                return true;
+              }).catch(function(){
+                return false;
+              });
             };
 
             ModelControllerClient.prototype.getDeployedArtifacts = function () {

@@ -398,6 +398,8 @@ angular.module('managementConsole', [
  * Use it just like normal apply: $scope.safeApply(myFunc).
  */
   .run(['$rootScope', '$timeout', '$modal', 'utils', function ($rootScope, $timeout, $modal, utils) {
+      //isDomainControllerAlive is used for web app to server connectivity checking
+      $rootScope.isDomainControllerAlive = true;
       $rootScope.safeApply = function (f) {
         var scope = this;
         $timeout(function () {
@@ -467,8 +469,8 @@ angular.module('managementConsole', [
       };
     }])
   .run([
-    '$rootScope', 'modelController', '$urlRouter', '$state',
-    function ($rootScope, modelController, $urlRouter, $state) {
+    '$rootScope', 'modelController', '$urlRouter', '$state', '$interval',
+    function ($rootScope, modelController, $urlRouter, $state, $interval) {
       $rootScope.$on('$stateChangeStart', function (event, toState) {
         // redirect to login page if not logged in
         if (toState.name !== 'login' && !modelController.isAuthenticated()) {

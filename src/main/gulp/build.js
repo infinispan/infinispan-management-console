@@ -15,6 +15,7 @@ var paths = {
   scripts: 'src/main/webapp/**/*.js',
   styles: ['src/main/webapp/**/*.less','src/main/webapp/**/*.css'],
   images: 'src/main/assets/images/**/*',
+  languages: 'src/main/assets/languages/*',
   index: 'src/main/webapp/index.html',
   partials: ['src/main/webapp/**/*.html', '!src/main/webapp/index.html'],
   distDev: 'dist',
@@ -82,6 +83,15 @@ pipes.buildIndex = function(srcPath, destPath) {
     .pipe(plugins.size());
 };
 
+pipes.buildLangs = function(srcPath, destPath) {
+  srcPath = srcPath || paths.languages;
+  destPath = destPath || paths.distDev + '/assets/languages';
+
+  return gulp.src(srcPath)
+    .pipe(gulp.dest(destPath))
+    .pipe(plugins.size());
+};
+
 pipes.buildImages = function(srcPath, destPath) {
   srcPath = srcPath || paths.images;
   destPath = destPath || paths.distDev + '/assets/images';
@@ -108,7 +118,7 @@ pipes.buildFonts = function() {
 
 pipes.buildApp = function () {
   return es.merge(pipes.buildStyles(), pipes.buildScripts(),
-    pipes.buildPartials(), pipes.buildIndex(), pipes.buildImages(), pipes.buildFonts());
+    pipes.buildPartials(), pipes.buildLangs(), pipes.buildIndex(), pipes.buildImages(), pipes.buildFonts());
 };
 
 gulp.task('clean', function () {

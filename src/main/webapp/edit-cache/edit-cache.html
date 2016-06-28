@@ -5,23 +5,23 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb" ng-if="isEditMode()">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li>
           <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li>{{currentCacheName}}<small>({{currentCacheType()}}, {{currentCacheMode}}, {{currentCacheNumOwners()}} )</small></li>
-        <li class="active"><strong>Configuration</strong></li>
+        <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>
       <ol class="breadcrumb" ng-if="isCreateMode()">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li>
           <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
         </li>
         <li>{{currentCacheName}}</li>
-        <li class="active"><strong>Configuration</strong></li>
+        <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>
 
       <h1>
@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <h2>View / Edit cache configuration:</h2>
+  <h2 translate>VIEW_EDIT_CONFIGURATION</h2>
 
         <div id="distributedCacheConfiguration" ng-if="cacheConfigurationType == 'distributed-cache'">
           <cache-configuration cache-type="distributed-cache" data="configurationModel" metadata="currentCluster.getMetadata()"
@@ -57,9 +57,9 @@
         <br>
         <div class="form-group">
           <div class="col-md-6 col-md-offset-6">
-            <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="isCreateMode()" ng-click="onCacheCreateClick()">Create</button>
-            <button id="updateCacheButton" type="button" class="btn btn-primary" ng-if="isEditMode()" ng-click="onCacheCreateClick()">Apply changes</button>
-            <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button id="createCacheButton" type="button" class="btn btn-primary" ng-if="isCreateMode()" ng-click="onCacheCreateClick()" translate>CREATE</button>
+            <button id="updateCacheButton" type="button" class="btn btn-primary" ng-if="isEditMode()" ng-click="onCacheCreateClick()" translate>APPLY_CHANGES</button>
+            <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="cancel()" translate>CANCEL</button>
           </div>
         </div>
 

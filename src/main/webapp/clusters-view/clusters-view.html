@@ -2,18 +2,18 @@
   <div class="row header-row">
     <div class="col-sm-8 col-md-9">
       <ol class="breadcrumb">
-        <li>Cache containers</li>
+        <li translate>CACHE_CONTAINERS</li>
       </ol>
-      <h1>Cache containers</h1>
+      <h1 translate>CACHE_CONTAINERS</h1>
       <br>
       <table class="table ispn-aligned">
         <tr>
-          <th>Name</th>
-          <th>Status</th>
-          <th># Caches</th>
-          <th>Clustering info</th>
-          <th>Endpoints</th>
-          <th>Sites</th>
+          <th translate>NAME</th>
+          <th translate>STATUS</th>
+          <th translate>NUMBER_OF_CACHES</th>
+          <th translate>CLUSTERING_INFO</th>
+          <th translate>ENDPOINTS</th>
+          <th translate>SITES</th>
         </tr>
 
         <tr ng-repeat="cluster in clusters track by $index">
@@ -39,7 +39,7 @@
     </div>
     <div class="col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height: 923px;">
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
-        <h2 class="h5">Latest Grid Events:</h2>
+        <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>
       </div>
       <ul class="list-group"  ng-if="gridEvents.length > 0" >
         <li class="list-group-item" ng-repeat="event in gridEvents">

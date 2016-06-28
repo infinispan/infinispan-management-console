@@ -3,7 +3,7 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a href="#/clusters-view-physical">Clusters</a>
+          <a href="#/clusters-view-physical" translate>CLUSTERS</a>
         </li>
         <li><a ui-sref="clusterNodes({clusterName: clusterName, refresh: true})" ui-sref-opts="{reload:true}">{{clusterName}}</a></li>
         <li class="active"><strong>{{nodeName}}</strong></li>
@@ -11,15 +11,15 @@
 
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
-          <span class="pficon pficon-refresh"></span> Refresh
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
-                data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
+                data-toggle="dropdown" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('start')">Start</a></li>
-          <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="openModal('stop')">Stop</a></li>
-          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('remove')">Remove</a></li>
+          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('start')" translate>START</a></li>
+          <li role="presentation" ng-class="!serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="openModal('stop')" translate>STOP</a></li>
+          <li role="presentation" ng-class="serverNode.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="openModal('remove')" translate>REMOVE</a></li>
         </ul>
       </div>
       <h1><span class="label" ng-class="serverNode.isRunning()?'label-success':'label-danger'">{{serverNode.getState()}}</span> {{nodeName}}
@@ -35,7 +35,7 @@
       <div class="col-xs-2 col-sm-2 col-md-2">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
-            <h2 class="card-pf-title">Performance</h2>
+            <h2 class="card-pf-title" translate>PERFORMANCE</h2>
           </div>
           <div class="card-pf-body">
             <div class="row">
@@ -66,7 +66,7 @@
       <div class="col-xs-2 col-sm-2 col-md-2">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
-            <h2 class="card-pf-title">Caching activity</h2>
+            <h2 class="card-pf-title" translate>CACHING_ACTIVITY</h2>
           </div>
           <div class="card-pf-body">
             <div class="row">
@@ -103,7 +103,7 @@
       <div class="col-xs-6 col-sm-6 col-md-6" match-height="ispn-card">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
-            <h2 class="card-pf-title">Performance metrics</h2>
+            <h2 class="card-pf-title" translate>PERFORMANCE_METRICS</h2>
           </div>
           <div class="card-pf-body">
             <div class="row">

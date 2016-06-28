@@ -7,26 +7,26 @@
   </div>
   <div class="modal-body">
 
-    <h3 ng-if="mode === 'enable'">Enabling cache <strong>'{{cacheName}}'</strong> will attach it to all active remote endpoints.</h3>
-    <h3 ng-if="mode === 'disable'">Disabling cache <strong>'{{cacheName}}'</strong> will detach it from all active remote endpoints.</h3>
-    <h3 ng-if="mode === 'clear'">Clearing cache <strong>'{{cacheName}}'</strong> will remove all of its cache entries both from memory and from any associated persistent stores. </h3>
+    <h3 ng-if="mode === 'enable'" translate translate-values="{cacheName:cacheName}">ENABLE_CACHE</h3>
+    <h3 ng-if="mode === 'disable'" translate translate-values="{cacheName:cacheName}">DISABLE_CACHE</h3>
+    <h3 ng-if="mode === 'clear'" translate translate-values="{cacheName:cacheName}">CLEAR_CACHE</h3>
     <div class="alert alert-warning" ng-if="mode === 'clear'">
       <span class="pficon pficon-warning-triangle-o"></span>
       <strong>This operation is destructive and cannot be undone !</strong>
     </div>
-    <h3 ng-if="mode === 'flush'">Flushing cache <strong>'{{cacheName}}'</strong> will passivate all its cache entries.</h3>
-    <h3 ng-if="mode === 'reindex'">Re-indexing cache <strong>'{{cacheName}}'</strong> will remove its current index and recreate it according to the cache contents' schema.</h3>
-    <h3 ng-if="mode === 'enable-rebalance'">Enabling rebalancing of <strong>'{{cacheName}}'</strong> will automatically redistribute data across the cluster when nodes are added/removed.</h3>
-    <h3 ng-if="mode === 'disable-rebalance'">Disabling rebalancing of <strong>'{{cacheName}}'</strong> will <em>NOT</em> automatically redistribute data across the cluster when nodes are added/removed.</h3>
+    <h3 ng-if="mode === 'flush'" translate translate-values="{cacheName:cacheName}">FLUSH_CACHE</h3>
+    <h3 ng-if="mode === 'reindex'" translate translate-values="{cacheName:cacheName}">REINDEX_CACHE</h3>
+    <h3 ng-if="mode === 'enable-rebalance'" translate translate-values="{cacheName:cacheName}">ENABLE_REBALANCING_DIALOG</h3>
+    <h3 ng-if="mode === 'disable-rebalance'" translate translate-values="{cacheName:cacheName}">DISABLE_REBALANCING_DIALOG</h3>
   </div>
   <div class="modal-footer">
-    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
-    <button id="enableButton" ng-if="mode === 'enable'" type="button" class="btn btn-primary" ng-click="enable();cancelModal()">Enable</button>
-    <button id="disableButton" ng-if="mode === 'disable'" type="button" class="btn btn-warning" ng-click="disable();cancelModal()">Disable</button>
-    <button id="clearButton" ng-if="mode === 'clear'" type="button" class="btn btn-danger" ng-click="clear();cancelModal()">Clear</button>
-    <button id="flushButton" ng-if="mode === 'flush'" type="button" class="btn btn-primary" ng-click="flush();cancelModal()">Flush</button>
-    <button id="indexButton" ng-if="mode === 'reindex'" type="button" class="btn btn-primary" ng-click="reindex();cancelModal()">Reindex</button>
-    <button id="enableRebalanceButton" ng-if="mode  === 'enable-rebalance'"  type="button" class="btn btn-primary" ng-click="setCacheRebalance(true); cancelModal()">Enable rebalance</button>
-    <button id="disableRebalanceButton" ng-if="mode === 'disable-rebalance'" type="button" class="btn btn-warning" ng-click="setCacheRebalance(false);cancelModal()">Disable rebalance</button>
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()" translate>CANCEL</button>
+    <button id="enableButton" ng-if="mode === 'enable'" type="button" class="btn btn-primary" ng-click="enable();cancelModal()" translate>ENABLE</button>
+    <button id="disableButton" ng-if="mode === 'disable'" type="button" class="btn btn-warning" ng-click="disable();cancelModal()" translate>DISABLE</button>
+    <button id="clearButton" ng-if="mode === 'clear'" type="button" class="btn btn-danger" ng-click="clear();cancelModal()" translate>CLEAR</button>
+    <button id="flushButton" ng-if="mode === 'flush'" type="button" class="btn btn-primary" ng-click="flush();cancelModal()" translate>FLUSH</button>
+    <button id="indexButton" ng-if="mode === 'reindex'" type="button" class="btn btn-primary" ng-click="reindex();cancelModal()" translate>REINDEX</button>
+    <button id="enableRebalanceButton" ng-if="mode  === 'enable-rebalance'"  type="button" class="btn btn-primary" ng-click="setCacheRebalance(true); cancelModal()" translate>ENABLE_REBALANCING</button>
+    <button id="disableRebalanceButton" ng-if="mode === 'disable-rebalance'" type="button" class="btn btn-warning" ng-click="setCacheRebalance(false);cancelModal()" translate>DISABLE_REBALANCING</button>
   </div>
 </div>

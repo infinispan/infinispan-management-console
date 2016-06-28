@@ -7,15 +7,15 @@
   </div>
   <div class="modal-body">
 
-    <h3 ng-if="mode === 'start'">Starting {{serverNode}} will add it to {{clusterName}} cluster. Start {{serverNode}}?</h3>
-    <h3 ng-if="mode === 'stop'">Stopping {{serverNode}} will remove it from {{clusterName}} cluster. Stop {{serverNode}}?</h3>
-    <h3 ng-if="mode === 'remove'">Removing {{serverNode}} from {{clusterName}} will destroy it. It can not be restarted after removal. Remove {{serverNode}}?</h3>
+    <h3 ng-if="mode === 'start'" translate translate-values="{serverNode:serverNode}">STARTING_SERVER</h3>
+    <h3 ng-if="mode === 'stop'" translate translate-values="{serverNode:serverNode}">STOPPING_SERVER</h3>
+    <h3 ng-if="mode === 'remove'" translate translate-values="{serverNode:serverNode},{clusterName:clusterName}">REMOVE_SERVER</h3>
   </div>
   <div class="modal-footer">
 
-    <button id="cancelButton" type="button" class="btn btn-primary" ng-click="cancelModal()">Cancel</button>
-    <button id="startNodeButton" ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()">Start</button>
-    <button id="stopNodeButton" ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()">Stop</button>
-    <button id="removeNodeButton" ng-if="mode === 'remove'" type="button" class="btn btn-default" ng-click="removeNode();cancelModal()">Remove</button>
+    <button id="cancelButton" type="button" class="btn btn-primary" ng-click="cancelModal()" translate>CANCEL</button>
+    <button id="startNodeButton" ng-if="mode === 'start'" type="button" class="btn btn-default" ng-click="startNode();cancelModal()" translate>START</button>
+    <button id="stopNodeButton" ng-if="mode === 'stop'" type="button" class="btn btn-default" ng-click="stopNode();cancelModal()" translate>STOP</button>
+    <button id="removeNodeButton" ng-if="mode === 'remove'" type="button" class="btn btn-default" ng-click="removeNode();cancelModal()" translate>REMOVE</button>
   </div>
 </div>

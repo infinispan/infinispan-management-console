@@ -3,7 +3,7 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView">CACHE_CONTAINERS</a>
         </li>
         <li>
           <a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a>
@@ -12,20 +12,20 @@
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
-          <span class="pficon pficon-refresh"></span> Refresh
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>
-          Actions
+          <span translate>ACTIONS</span>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" class="enabled">
-            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="resetStats()">Reset statistics</a>
+            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="resetStats()" translate>RESET_STATISTICS</a>
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})">View configuration</a>
+            <a role="menuitem" tabindex="-1" ui-sref="editCache({clusterName: currentCluster.name, cacheName: currentCache.name})" translate>VIEW_CONFIGURATION</a>
           </li>
         </ul>
       </div>
@@ -52,14 +52,14 @@
     <br>
     <table class="datatable table table-striped table-bordered display" id="cachesTable">
       <thead>
-      <tr><th>Name</th>
-        <th>Average reads</th>
-        <th>Average writes</th>
-        <th>Total entries</th>
-        <th>Total reads</th>
-        <th>Total failed reads</th>
-        <th>Total writes</th>
-        <th>Total failed writes</th>
+      <tr><th translate>NAME</th>
+        <th translate>AVERAGE_READS</th>
+        <th translate>AVERAGE_WRITES</th>
+        <th translate>TOTAL_ENTRIES</th>
+        <th translate>TOTAL_READS</th>
+        <th translate>TOTAL_FAILED_READS</th>
+        <th translate>TOTAL_WRITES</th>
+        <th translate>TOTAL_FAILED_WRITES</th>
       </tr></thead>
       <tbody>
         <tr ng-repeat="stats in currentCacheStats.nodeStats">

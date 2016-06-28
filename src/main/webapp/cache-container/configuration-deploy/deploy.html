@@ -3,12 +3,12 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li><a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
-        <li class="active"><strong>Configuration</strong></li>
+        <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>
-      <h1>Cache container configuration</h1>
+      <h1 translate>CACHE_CONTAINER_CONFIGURATION</h1>
     </div>
   </div>
 
@@ -17,13 +17,13 @@
 
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs nav-tabs-pf">
-        <li><a ui-sref="editCacheContainerSchemas({groupName:currentCluster.getServerGroupName(), groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Schemas</a></li>
-        <li><a ui-sref="editCacheContainerTransport({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Transport</a></li>
-        <li><a ui-sref="editCacheContainerThreadpools({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Thread pools</a></li>
-        <li><a ui-sref="editCacheContainerSecurity({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Security</a></li>
-        <li><a ui-sref="editCacheContainerTemplates({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Templates</a></li>
-        <li><a ui-sref="editCacheContainerTasks({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})">Tasks</a></li>
-        <li class="active"><a href="">Deployments</a></li>
+        <li><a ui-sref="editCacheContainerSchemas({groupName:currentCluster.getServerGroupName(), groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>SCHEMAS</a></li>
+        <li><a ui-sref="editCacheContainerTransport({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>TRANSPORT</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>THREAD_POOLS</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>SECURITY</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>TEMPLATES</a></li>
+        <li><a ui-sref="editCacheContainerTasks({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name})" translate>TASKS</a></li>
+        <li class="active"><a href="" translate>DEPLOYMENTS</a></li>
       </ul>
 
       <div class="row">
@@ -35,7 +35,7 @@
               <th colspan="6" class="text-right">
                 <div class="btn-group" role="group">
                   <a role="button" class="btn btn-default" ng-click="openUploadModal()"><span
-                      class="pficon pficon-add-circle-o"></span> Upload</a>
+                      class="pficon pficon-add-circle-o"></span> <span translate>UPLOAD</span></a>
                 </div>
               </th>
             </tr>
@@ -52,13 +52,13 @@
               <td>
                 <form name="myForm">
                   <div class="btn-group">
-                    <button class="btn btn-default" ng-disabled='canDeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name,'deploy')">Deploy</button>
+                    <button class="btn btn-default" ng-disabled='canDeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name,'deploy')"><span translate>DEPLOY</span></button>
                   </div>
                   <div class="btn-group">
-                    <button class="btn btn-default" ng-disabled='canUndeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name, 'undeploy')">Undeploy</button>
+                    <button class="btn btn-default" ng-disabled='canUndeploy(artifact.name)' ng-click="openConfirmationModal(artifact.name, 'undeploy')"><span translate>UNDEPLOY</span></button>
                   </div>
                   <div class="btn-group">
-                    <button class="btn btn-default" ng-click="openConfirmationModal(artifact.name, 'remove')"><i class="pficon pficon-delete"></i> Remove</button>
+                    <button class="btn btn-default" ng-click="openConfirmationModal(artifact.name, 'remove')"><i class="pficon pficon-delete"></i> <span translate>REMOVE</span></button>
                   </div>
                 </form>
               </td>

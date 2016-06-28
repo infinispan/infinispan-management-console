@@ -3,32 +3,31 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li class="active"><strong>{{currentCluster.name}} - ({{group}})</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
-          <span class="pficon pficon-refresh"></span> Refresh
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">
-          <span class="pficon pficon-settings"></span> Configuration
+          <span class="pficon pficon-settings"></span> <span translate>CONFIGURATION</span>
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
                 data-toggle="dropdown" uib-dropdown-toggle>
-          Actions
-          <span class="caret"></span>
+          <span class="caret"></span> <span translate>ACTIONS</span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'disabled' : 'enabled'">
-            <a  id="dropdownMenuEnableRebalance"  role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');">Enable rebalancing</a>
+            <a  id="dropdownMenuEnableRebalance"  role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');" translate>ENABLE_REBALANCING</a>
           </li>
           <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'enabled'  : 'disabled'">
-            <a id="dropdownMenuDisableRebalance" role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');">Disable rebalancing</a>
+            <a id="dropdownMenuDisableRebalance" role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');" translate>DISABLE_REBALANCING</a>
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation" >
-            <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()">Manage backup sites</a>
+            <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()" translate>MANAGE_BACKUP_SITES</a>
           </li>
         </ul>
       </div>
@@ -36,7 +35,7 @@
          ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{currentCluster.name}}
-        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong>Rebalancing is disabled</strong></small></span>
+        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong translate>REBALANCING_IS_DISABLED</strong></small></span>
       </h1>
     </div>
   </div>
@@ -67,8 +66,8 @@
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
-        <li class="active"><a>Caches</a></li>
-        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}/tasks">Tasks execution</a></li>
+        <li class="active"><a translate>CACHES</a></li>
+        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}/tasks" translate>TASK_EXECUTION</a></li>
       </ul>
     </div>
   </div>
@@ -97,7 +96,7 @@
           </div>
         </a>
       </div>
-      <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
+      <div ng-show="!currentCluster.hasCaches()" translate>THERE_ARE_NO_CACHES_TO_SHOW</div>
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() |
       filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes | cacheStatus:this)" ng-show="cache.show" on-finish-render>
         <a ui-sref="cacheStatus({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: cache.name})" title="View Cache Details">
@@ -107,10 +106,10 @@
               </h2>
 
               <div class="card-pf-body">
-                <p ng-if="cache.isReplicated()">Replicated</p>
-                <p ng-if="cache.isDistributed()">Distributed</p>
-                <p ng-if="cache.isLocal()">Local</p>
-                <p ng-if="cache.isInvalidation()">Invalidation</p>
+                <p ng-if="cache.isReplicated()" translate>REPLICATED</p>
+                <p ng-if="cache.isDistributed()" translate>DISTRIBUTED</p>
+                <p ng-if="cache.isLocal()" translate>LOCAL</p>
+                <p ng-if="cache.isInvalidation()" translate>INVALIDATION</p>
                 <p class="card-pf-aggregate-status-notifications cache-traits">
                   <span class="card-pf-aggregate-status-notification">
                       <span class="fa fa-database" title="Persistent" ng-if="cache.isPersistent()"></span>
@@ -163,10 +162,10 @@
           <div id="filter-type-accordion" class="panel-collapse" ng-class="isCollapsedType?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" id="typeCheckboxLocal" value="local" ng-model="typeCheckboxes.local"/> Local</label>
-                <label><input type="checkbox" id="typeCheckboxReplicated" value="replicated" ng-model="typeCheckboxes.replicated"/> Replicated</label>
-                <label><input type="checkbox" id="typeCheckboxDistributed" value="distributed" ng-model="typeCheckboxes.distributed"/>Distributed</label>
-                <label><input type="checkbox" id="typeCheckboxInvalidation" value="invalidation" ng-model="typeCheckboxes.invalidation"/> Invalidation</label>
+                <label><input type="checkbox" id="typeCheckboxLocal" value="local" ng-model="typeCheckboxes.local"/> <span translate> LOCAL</span></label>
+                <label><input type="checkbox" id="typeCheckboxReplicated" value="replicated" ng-model="typeCheckboxes.replicated"/> <span translate> REPLICATED</span></label>
+                <label><input type="checkbox" id="typeCheckboxDistributed" value="distributed" ng-model="typeCheckboxes.distributed"/> <span translate> DISTRIBUTED</span></label>
+                <label><input type="checkbox" id="typeCheckboxInvalidation" value="invalidation" ng-model="typeCheckboxes.invalidation"/> <span translate> INVALIDATION</span></label>
               </fieldset>
             </div>
           </div>
@@ -183,13 +182,13 @@
           <div id="filter-trait-accordion" class="panel-collapse" ng-class="isCollapsedTrait?'collapse':''">
             <div class="panel-body">
               <fieldset>
-                <label><input type="checkbox" id="traitCheckboxBounded" value="bounded" ng-model="traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded</label>
-                <label><input type="checkbox" id="traitCheckboxCompatible" value="compatible" ng-model="traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible</label>
-                <label><input type="checkbox" id="traitCheckboxIndexed" value="indexed" ng-model="traitCheckboxes.indexed"/> <span class="fa fa-list-ol" title="Indexed"></span> Indexed</label>
-                <label><input type="checkbox" id="traitCheckboxPersistent" value="persistent" ng-model="traitCheckboxes.persistent"/> <span class="fa fa-database" title="Persistent"></span> Persistent</label>
-                <label><input type="checkbox" id="traitCheckboxRemotebackup" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> <span class="pficon pficon-history" title="Remote backup"></span> Remote Backup</label>
-                <label><input type="checkbox" id="traitCheckboxSecure" value="secure" ng-model="traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span> Secure</label>
-                <label><input type="checkbox" id="traitCheckboxTransactional" value="transactional" ng-model="traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional</label>
+                <label><input type="checkbox" id="traitCheckboxBounded" value="bounded" ng-model="traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow" title="Bounded"></span> <span translate>BOUNDED</span></label>
+                <label><input type="checkbox" id="traitCheckboxCompatible" value="compatible" ng-model="traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece" title="Compatible"></span> <span translate>COMPATIBLE</span></label>
+                <label><input type="checkbox" id="traitCheckboxIndexed" value="indexed" ng-model="traitCheckboxes.indexed"/> <span class="fa fa-list-ol" title="Indexed"></span> <span translate>INDEXED</span></label>
+                <label><input type="checkbox" id="traitCheckboxPersistent" value="persistent" ng-model="traitCheckboxes.persistent"/> <span class="fa fa-database" title="Persistent"></span> <span translate>PERSISTENT</span></label>
+                <label><input type="checkbox" id="traitCheckboxRemotebackup" value="remotebackup" ng-model="traitCheckboxes.remotebackup"/> <span class="pficon pficon-history" title="Remote backup"></span> <span translate>REMOTE_BACKUP</span></label>
+                <label><input type="checkbox" id="traitCheckboxSecure" value="secure" ng-model="traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span> <span translate>SECURE</span></label>
+                <label><input type="checkbox" id="traitCheckboxTransactional" value="transactional" ng-model="traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> <span translate>TRANSACTIONAL</span></label>
               </fieldset>
             </div>
           </div>

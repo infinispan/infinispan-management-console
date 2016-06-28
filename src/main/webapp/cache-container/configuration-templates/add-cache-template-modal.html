@@ -3,16 +3,16 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="myModalLabel">Add new cache configuration template</h4>
+    <h4 class="modal-title" id="myModalLabel" translate>ADD_CACHE_CONF_TEMPLATE</h4>
   </div>
   <div class="modal-body">
 
-    <h4><b>Step 1</b>: Please, enter the required cache configuration template properties:</h4>
+    <h4><b>Step 1:</b> <span translate>PLEASE_ADD_REQUIRED_CACHE_PROPS</span></h4>
     <br>
 
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-md-4 control-label">* Template name:</label>
+        <label class="col-md-4 control-label">* <span translate>TEMPLATE_NAME</span></label>
 
         <div class="col-md-6">
           <input type="text" class="form-control" ng-model="newTemplateName" required="">
@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-md-4 control-label">* Base configuration:</label>
+        <label class="col-md-4 control-label">* <span translate>BASE_CONFIGURATION</span></label>
 
         <div class="col-md-6">
           <select ng-model="selectedTemplate" class="form-control"
@@ -38,7 +38,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
-    <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="createNewTemplate()">Next</button>
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancel()" translate>CANCEL</button>
+    <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="createNewTemplate()" translate>NEXT</button>
   </div>
 </div>

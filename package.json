@@ -13,7 +13,8 @@
     "d3": "3.5.0",
     "jquery": "2.1.4",
     "jquery-match-height": "0.6.0",
-    "patternfly": "3.2.0"
+    "patternfly": "3.2.0",
+    "angular-translate": "^2.11.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",

@@ -3,12 +3,12 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="myModalLabel">Permissions</h4>
+    <h4 class="modal-title" id="myModalLabel" translate>PERMISSIONS</h4>
   </div>
   <div class="modal-body">
     <form class="form-horizontal">
       <div class="form-group">
-        <label class="col-md-4 control-label">* Role name:</label>
+        <label class="col-md-4 control-label" >* <span translate>ROLE_NAME</span></label>
         <div class="col-md-6">
           <input type="text" class="form-control" ng-model="roleName" ng-readonly="!isNewRole">
         </div>
@@ -59,9 +59,9 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
-    <button ng-if="isNewRole" type="button" class="btn btn-primary" ng-click="createNewRole()">Save changes</button>
-    <button ng-if="!isNewRole" type="button" class="btn btn-primary" ng-click="editExistingRole()">Save changes</button>
+    <button type="button" class="btn btn-default" ng-click="cancel()" translate>CLOSE</button>
+    <button ng-if="isNewRole" type="button" class="btn btn-primary" ng-click="createNewRole()" translate>SAVE</button>
+    <button ng-if="!isNewRole" type="button" class="btn btn-primary" ng-click="editExistingRole()" translate>SAVE</button>
   </div>
 </div>
 

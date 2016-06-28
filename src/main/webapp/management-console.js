@@ -5,7 +5,8 @@ angular.module('managementConsole', [
   'gridshore.c3js.chart',
   'ui.router',
   'ui.bootstrap',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'pascalprecht.translate',
 ]).constant('CONSTANTS', {
   'NO_BASE_CONFIGURATION_TEMPLATE': '<none>'
 }).directive('fileModel', ['$parse', function ($parse) {
@@ -391,6 +392,13 @@ angular.module('managementConsole', [
       .setPrefix('infinispan-management-console')
       .setStorageType('sessionStorage');
   }])
+  .config(function ($translateProvider) {
+    $translateProvider.useStaticFilesLoader({
+      prefix: '/assets/languages/',
+      suffix: '.txt'
+    });
+    $translateProvider.preferredLanguage('enUS');
+  })
 
 /**
  * Safe apply method. It should be used when normal $scope.$apply happens to execute

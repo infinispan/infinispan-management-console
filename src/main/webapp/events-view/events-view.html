@@ -2,9 +2,9 @@
   <div class="row header-row">
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
-        <li>Status events</li>
+        <li translate>STATUS_EVENTS</li>
       </ol>
-      <h1>Latest status events </span> </h1>
+      <h1 translate>LATEST_STATUS_EVENTS </span> </h1>
       <br>
       <form class="form-inline">
         <div class="form-group">
@@ -24,12 +24,12 @@
       <table class="table ispn-table">
         <tbody>
         <tr>
-          <th style="width: 100px">Type</th>
-          <th style="width: 220px">Timestamp</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Scope</th>
-          <th>Context</th>
+          <th style="width: 100px" translate>TYPE</th>
+          <th style="width: 220px" translate>TIMESTAMP</th>
+          <th translate>DESCRIPTION</th>
+          <th translate>CATEGORY</th>
+          <th translate>SCOPE</th>
+          <th translate>CONTEXT</th>
         </tr>
         <tr ng-repeat="event in gridEvents">
           <td style="padding: 10px">

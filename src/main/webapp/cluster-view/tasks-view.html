@@ -3,16 +3,16 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li class="active"><strong>{{currentCluster.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh()">
-          <span class="pficon pficon-refresh"></span> Refresh
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button class="btn btn-default" type="button" id="viewEditConfigurationButton" ui-sref="editCacheContainerSchemas({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">
-          <span class="pficon pficon-settings"></span> Configuration
+          <span class="pficon pficon-settings"></span> <span translate>CONFIGURATION</span>
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
                 data-toggle="dropdown" uib-dropdown-toggle>
@@ -21,14 +21,14 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'disabled' : 'enabled'">
-            <a  id="dropdownMenuEnableRebalance"  role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');">Enable rebalancing</a>
+            <a  id="dropdownMenuEnableRebalance"  role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');" translate>ENABLE_REBALANCING</a>
           </li>
           <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'enabled'  : 'disabled'">
-            <a id="dropdownMenuDisableRebalance" role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');">Disable rebalancing</a>
+            <a id="dropdownMenuDisableRebalance" role="menuitem" ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');" translate>DISABLE_REBALANCING</a>
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()">Manage backup sites</a>
+            <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()" translate>MANAGE_BACKUP_SITES</a>
           </li>
         </ul>
       </div>
@@ -36,7 +36,7 @@
                 ng-class="currentClusterAvailability() ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{currentCluster.name}}
-        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong>Rebalancing is disabled</strong></small></span>
+        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong translate>REBALANCING_IS_DISABLED</strong></small></span>
       </h1>
     </div>
   </div>
@@ -49,7 +49,7 @@
           <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon pficon-ok"></span>
-        <strong>Success!</strong> The operation has been successfully executed.
+        <strong>Success!</strong> <span translate>SUCCESSFUL_OP</span>
       </div>
 
       <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
@@ -57,7 +57,7 @@
           <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon  pficon-error-circle-o"></span>
-        <strong>Error</strong> There has been an error executing the operation: {{errorDescription}}
+        <strong>Error</strong> <span translate translate_values="{errorDescription:errorDescription}">ERROR_OP</span>
       </div>
     </div>
   </div>
@@ -66,8 +66,8 @@
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
-        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}">Caches</a></li>
-        <li class="active"><a>Tasks execution</a></li>
+        <li><a href="#/cluster/{{currentCluster.getServerGroupName()}}/{{currentCluster.name}}" translate>CACHES</a></li>
+        <li class="active"><a translate>TASK_EXECUTION</a></li>
       </ul>
     </div>
   </div>
@@ -75,10 +75,8 @@
   <div class="row">
     <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
       <ul class="nav nav-tabs nav-tabs-pf">
-        <li ng-class="selectedView=='running' ? 'active' : ''"><a ng-click="selectedView='running';">Running
-          tasks</a></li>
-        <li ng-class="selectedView=='history' ? 'active' : ''"><a ng-click="selectedView='history';">Task
-          history</a></li>
+        <li ng-class="selectedView=='running' ? 'active' : ''"><a ng-click="selectedView='running';" translate>RUNNING_TASKS</a></li>
+        <li ng-class="selectedView=='history' ? 'active' : ''"><a ng-click="selectedView='history';" translate>TASK_HISTORY</a></li>
       </ul>
     </div>
   </div>
@@ -88,7 +86,7 @@
       <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
         <div class="btn-group" role="group">
           <a role="button" class="btn btn-default" ng-click="openTaskDialog()"><span
-            class="pficon pficon-add-circle-o"></span> Launch new task</a>
+            class="pficon pficon-add-circle-o"></span> <span translate>LAUNCH_NEW_TASK</span></a>
         </div>
       </div>
       <div class="col-sm-12 col-md-12">
@@ -120,7 +118,7 @@
           <br>
           <br>
           <span class="pficon pficon-info"></span>
-          <strong>No running tasks have been found.</strong>
+          <strong translate>NO_RUNNING_TASKS</strong>
           <br>
           <br>
         </div>
@@ -165,7 +163,7 @@
           <br>
           <br>
           <span class="pficon pficon-info"></span>
-          <strong>No failed or completed tasks have been found.</strong>
+          <strong translate>NO_FAILED</strong>
           <br>
           <br>
         </div>

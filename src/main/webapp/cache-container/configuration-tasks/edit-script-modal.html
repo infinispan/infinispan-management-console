@@ -3,8 +3,8 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="myModalLabel"><span ng-if="!task.editing">Create new script task</span><span
-      ng-if="task.editing">Edit script task</span></h4>
+    <h4 class="modal-title" id="myModalLabel"><span ng-if="!task.editing" translate>CREATE_NEW_SCRIPT_TASK</span><span
+      ng-if="task.editing" translate>EDIT_SCRIPT_TASK</span></h4>
   </div>
   <div class="modal-body">
 
@@ -16,7 +16,7 @@
             <span class="pficon pficon-close"></span>
           </button>
           <span class="pficon pficon-ok"></span>
-          <strong>Success!</strong> The operation has been successfully executed.
+          <strong>Success!</strong> <span translate>SUCCESSFUL_OP</span>
         </div>
 
         <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
@@ -24,7 +24,7 @@
             <span class="pficon pficon-close"></span>
           </button>
           <span class="pficon  pficon-error-circle-o"></span>
-          <strong>Error</strong> There has been an error executing the operation: {{errorDescription}}
+          <strong>Error</strong> <span translate>ERROR_OP</span>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
 
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group">
-        <label class="col-md-3 control-label">* Task name:</label>
+        <label class="col-md-3 control-label">* <span translate>TASK_NAME</span>:</label>
 
         <div class="col-md-8">
           <input type="text" class="form-control" name="taskName" ng-model="task.name" ng-required="true"
@@ -47,7 +47,7 @@
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group" ng-show="!task.editing">
-        <label class="col-md-3 control-label">* Language:</label>
+        <label class="col-md-3 control-label">* <span translate>LANGUAGE</span>:</label>
 
         <div class="col-md-8">
           <select class="form-control" ng-model="task.language" ng-required="true">
@@ -62,7 +62,7 @@
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group" ng-show="!task.editing">
-        <label class="col-md-3 control-label">Parameters:</label>
+        <label class="col-md-3 control-label"><span translate>PARAMETERS</span>:</label>
 
         <div class="col-md-8">
           <input class="form-control" type="text" name="taskParameters" ng-model="task.parameters" ng-required="false">
@@ -74,7 +74,7 @@
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group" ng-show="!task.editing">
-        <label class="col-md-3 control-label">* Execution mode:</label>
+        <label class="col-md-3 control-label">* <span translate>EXECUTION_MODE</span>:</label>
 
         <div class="col-md-8">
           <select class="form-control" name="taskExecutionMode" ng-model="task.mode" ng-required="true">
@@ -89,7 +89,7 @@
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group" ng-show="!task.editing">
-        <label class="col-md-3 control-label">Security role:</label>
+        <label class="col-md-3 control-label"><span translate>SECURITY_ROLE</span>:</label>
 
         <div class="col-md-8">
           <input class="form-control" type="text" name="taskRole" ng-model="task.role" ng-required="false">
@@ -101,7 +101,7 @@
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
       <div class="form-group">
-        <label class="col-md-3 control-label">* Script body:</label>
+        <label class="col-md-3 control-label">* <span translate>SCRIPT_BODY</span>:</label>
 
         <div class="col-md-8">
           <textarea class="form-control" rows="15" ng-model="task.body" name="taskBody" ng-required="true"></textarea>
@@ -112,15 +112,13 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id="cancelButton" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button id="cancelButton" class="btn btn-default" ng-click="cancel()" translate>CANCEL</button>
     <button id="createScriptButton" ng-show="!task.editing" ng-disabled="!taskForm.$valid" class="btn btn-primary"
-            ng-click="createScript();">Create
-      script task
+            ng-click="createScript();"><span>CREATE_SCRIPT_TASK</span>
     </button>
     <button id="editScriptButton" ng-show="task.editing"
             ng-disabled="!taskForm.taskName.$valid || !taskForm.taskBody.$valid " class="btn btn-primary"
-            ng-click="createScript();">Update
-      script task
+            ng-click="createScript();"><span>UPDATE_SCRIPT_TASK</span>
     </button>
   </div>
 </div>

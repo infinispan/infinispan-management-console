@@ -3,23 +3,23 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersViewPhysical">Clusters</a>
+          <a ui-sref="clustersViewPhysical" translate>CLUSTERS</a>
         </li>
         <li class="active"><strong>{{cluster.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="refresh(true)">
-          <span class="pficon pficon-refresh"></span> Refresh
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button class="btn btn-default dropdown-toggle" type="button"
-                id="dropdownMenu" data-toggle="dropdown" uib-dropdown-toggle>Actions<span class="caret"></span>
+                id="dropdownMenu" data-toggle="dropdown" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="cluster.status === 'STARTED' ? 'disabled' : 'enabled'" ng-click="openClusterModal('start')">
-            <a id="dropdownMenuStart" role="menuitem">Start</a>
+            <a id="dropdownMenuStart" role="menuitem" translate>START</a>
           </li>
           <li role="presentation" ng-class="cluster.status === 'STARTED' ? 'enabled' : 'disabled'" ng-click="openClusterModal('stop')">
-            <a id="dropdownMenuStop" role="menuitem">Stop</a>
+            <a id="dropdownMenuStop" role="menuitem" translate>STOP</a>
           </li>
         </ul>
       </div>
@@ -77,7 +77,7 @@
 
             <div class="card-pf-body">
               <h4>{{server.getHost()}}</h4>
-              <p ng-show="isCoordinator(server)">Coordinator</p>
+              <p ng-show="isCoordinator(server)" translate>COORDINATOR</p>
               <p ng-show="!isCoordinator(server)">&nbsp;</p>
               <p class="card-pf-aggregate-status-notifications">
                 <span class="card-pf-aggregate-status-notification">{{server.getInetAddress()}}</span>

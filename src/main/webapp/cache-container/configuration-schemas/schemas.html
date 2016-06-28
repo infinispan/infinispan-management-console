@@ -3,25 +3,25 @@
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
         <li><a ui-sref="clusterView({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">{{currentCluster.name}}</a></li>
-        <li class="active"><strong>Configuration</strong></li>
+        <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>
-      <h1>Cache container configuration</h1>
+      <h1 translate>CACHE_CONTAINER_CONFIGURATION</h1>
     </div>
   </div>
 
   <div class="row">
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs nav-tabs-pf">
-        <li class="active"><a>Schemas</a></li>
-        <li><a ui-sref="editCacheContainerTransport({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Transport</a></li>
-        <li><a ui-sref="editCacheContainerThreadpools({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Thread pools</a></li>
-        <li><a ui-sref="editCacheContainerSecurity({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Security</a></li>
-        <li><a ui-sref="editCacheContainerTemplates({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Templates</a></li>
-        <li><a ui-sref="editCacheContainerTasks({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Tasks</a></li>
-        <li><a ui-sref="editCacheContainerDeploy({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})">Deployments</a></li>
+        <li class="active"><a translate>SCHEMAS</a></li>
+        <li><a ui-sref="editCacheContainerTransport({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>TRANSPORT</a></li>
+        <li><a ui-sref="editCacheContainerThreadpools({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>THREAD_POOLS</a></li>
+        <li><a ui-sref="editCacheContainerSecurity({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>SECURITY</a></li>
+        <li><a ui-sref="editCacheContainerTemplates({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>TEMPLATES</a></li>
+        <li><a ui-sref="editCacheContainerTasks({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>TASKS</a></li>
+        <li><a ui-sref="editCacheContainerDeploy({groupName:currentCluster.getServerGroupName(),clusterName: currentCluster.name})" translate>DEPLOYMENTS</a></li>
       </ul>
 
       <br>

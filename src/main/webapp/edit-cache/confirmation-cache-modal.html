@@ -6,19 +6,16 @@
     <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
   </div>
   <div class="modal-body">
-
-    <h3 ng-if="mode === 'dirty'">Configuration template {{configurationModel.template}} has been modified. The configuration template has to be
-      saved under a new name prior to creation of {{configurationModel.name}} cache. Please change configuration template name on the 'General'
-      tab in order to proceed with {{configurationModel.name}} creation.</h3>
-    <h3 ng-if="mode === 'cache'">Create {{configurationModel.name}} cache using {{configurationModel['template-name']}} configuration template?</h3>
-    <h3 ng-if="mode === 'template'">Update configuration template {{configurationModel['template-name']}}?</h3>
+    <h3 ng-if="mode === 'dirty'" translate translate-values="{configurationModelName:configurationModel.name, configurationModelTemplate:configurationModel.template">CONFIGURATION_TEMPLATE_MODIFIED</h3>
+    <h3 ng-if="mode === 'cache'" translate translate-values="{configurationModelName:configurationModel.name, configurationModelTemplate:configurationModel['template-name']}">CREATE_CACHE_WITH_TEMPLATE</h3>
+    <h3 ng-if="mode === 'template'" translate translate-values="{configurationModelTemplate:configurationModel['template-name']}">UPDATE_CONFIGURATION_TEMPLATE</h3>
   </div>
   <div class="modal-footer">
 
-    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()">Cancel</button>
+    <button id="cancelButton" type="button" class="btn btn-default" ng-click="cancelModal()" translate>CANCEL</button>
     <button id="okButton" ng-if="mode === 'dirty'" type="button" class="btn btn-primary" ng-click="cancelModal()">Ok</button>
-    <button id="createCacheButton" ng-if="mode === 'cache'" type="button" class="btn btn-primary" ng-click="cancelModal();createCacheWithTemplate()">Create</button>
-    <button id="updateCacheButton" ng-if="mode === 'template'" type="button" class="btn btn-primary" ng-click="cancelModal();updateTemplate()">Update</button>
+    <button id="createCacheButton" ng-if="mode === 'cache'" type="button" class="btn btn-primary" ng-click="cancelModal();createCacheWithTemplate()" translate>CREATE</button>
+    <button id="updateCacheButton" ng-if="mode === 'template'" type="button" class="btn btn-primary" ng-click="cancelModal();updateTemplate()" translate>UPDATE</button>
 
   </div>
 </div>

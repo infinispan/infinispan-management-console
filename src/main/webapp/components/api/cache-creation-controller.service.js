@@ -123,16 +123,12 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
           this.createHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
           this.createHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
-          this.createHelper(steps, address.concat('store', 'STORE'), configuration.store);
-          this.createHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-          this.createHelper(steps, address.concat('leveldb-store', 'LEVELDB_STORE'), configuration['leveldb-store']);
           this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
           this.createHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.createHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
-          this.createJDBCStore(steps, address, configuration);
-
+          this.createCacheStore(steps, address, configuration);
           //ok now, lets send composite op to server
           return this.execute(compositeOp);
         }.bind(this));
@@ -144,8 +140,8 @@ angular.module('managementConsole.api')
         // all exclusionList elements are not native to DMR
         if (utils.isNotNullOrUndefined(configurationElement)) {
           // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
-          var exclusionList = ['is-new-node', 'jdbc-type', 'jdbc-original-type'];
-          if (utils.isNullOrUndefined(configurationElement['EVICTION'])) {
+          var exclusionList = ['is-new-node', 'store-type', 'store-original-type'];
+          if (utils.isNullOrUndefined(configurationElement['EVICTION']) && utils.isNullOrUndefined(configurationElement['COMPRESSION'])) {
             exclusionList.push('type');
           }
           this.addNodeComposite(steps, address, configurationElement, exclusionList, true);
@@ -153,15 +149,31 @@ angular.module('managementConsole.api')
 
       };
 
-      CacheCreationControllerClient.prototype.createJDBCStore = function(steps, address, configuration) {
-        var jdbcType = configuration['jdbc-type'];
-        if (utils.isNullOrUndefined(jdbcType) || jdbcType.length < 1 || utils.isNullOrUndefined(configuration[jdbcType])) {
+      CacheCreationControllerClient.prototype.createCacheStore = function(steps, address, configuration) {
+        var storeType = configuration['store-type'];
+        if (utils.isNullOrUndefined(storeType) || storeType === 'None' || utils.isNullOrUndefined(configuration[storeType])) {
           return;
         }
 
-        // Add step to create/update JDBC store
-        var objectKey = jdbcType.toUpperCase().replace(/-/g, '_');
-        this.createHelper(steps, address.concat(jdbcType, objectKey), configuration[jdbcType]);
+        // Add step to create/update store
+        var objectKey = storeType.toUpperCase().replace(/-/g, '_');
+        configuration[storeType][objectKey]['required-node'] = true;
+        this.createHelper(steps, address.concat(storeType, objectKey), configuration[storeType]);
+
+        // Add all children objects
+        var store = configuration[storeType][objectKey];
+        if (utils.isNotNullOrUndefined(store)) {
+          for (var key in store) {
+            var nestedObject = store[key];
+            if (utils.isObject(nestedObject)) {
+              var nestedKey = key.toUpperCase().replace(/-/g, '_');
+              if (utils.isNotNullOrUndefined(nestedObject[nestedKey])) {
+                var nestedAddress = address.concat(storeType, objectKey, key, nestedKey);
+                this.updateHelper(steps, nestedAddress, nestedObject);
+              }
+            }
+          }
+        }
       };
 
       /**
@@ -179,7 +191,6 @@ angular.module('managementConsole.api')
           address: [],
           steps:steps
         };
-
         return this.updateCacheConfigurationNode(address, configuration).then(function () {
           this.updateHelper(steps, address.concat('locking', 'LOCKING'), configuration.locking);
           this.updateHelper(steps, address.concat('eviction', 'EVICTION'), configuration.eviction);
@@ -190,16 +201,13 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
           this.updateHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
           this.updateHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
-          this.updateHelper(steps, address.concat('store', 'STORE'), configuration.store);
-          this.updateHelper(steps, address.concat('file-store', 'FILE_STORE'), configuration['file-store']);
-          this.updateHelper(steps, address.concat('leveldb-store', 'LEVELDB_STORE'), configuration['leveldb-store']);
           this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
           this.updateSecurityAuthorization(configuration);
           this.updateHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.updateHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
-          this.updateJDBCStore(steps, address, configuration);
+          this.updateCacheStore(steps, address, configuration);
 
           //ok now, lets send composite op to server
           return this.execute(compositeOp);
@@ -212,30 +220,51 @@ angular.module('managementConsole.api')
         // all exclusionList elements are not native to DMR
         if (utils.isNotNullOrUndefined(configurationElement)) {
           // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
-          var exclusionList = ['is-new-node', 'jdbc-type', 'jdbc-original-type'];
-          if (utils.isNullOrUndefined(configurationElement['EVICTION'])) {
+          // Same for LevelDB->Compression. TODO need a better way to make exceptions
+          var exclusionList = ['is-new-node', 'store-type', 'store-original-type'];
+          if (utils.isNullOrUndefined(configurationElement['EVICTION']) && utils.isNullOrUndefined(configurationElement['COMPRESSION'])) {
             exclusionList.push('type');
           }
-          this.addNodeComposite(steps, address, configurationElement, exclusionList, false);
+          this.addNodeComposite(steps, address, configurationElement, exclusionList);
         }
       };
 
-      CacheCreationControllerClient.prototype.updateJDBCStore = function(steps, address, configuration) {
-        var jdbcType = configuration['jdbc-type'];
-        if (utils.isNullOrUndefined(jdbcType) || jdbcType.length < 1 || utils.isNullOrUndefined(configuration[jdbcType])) {
-          return;
-        }
+      CacheCreationControllerClient.prototype.updateCacheStore = function(steps, address, configuration) {
+        var newStoreType = configuration['store-type'];
+        var originalStoreType = configuration['store-original-type'];
+        var newStore = newStoreType !== originalStoreType;
 
         // Add step to create/update JDBC store
-        var objectKey = jdbcType.toUpperCase().replace(/-/g, '_');
-        this.updateHelper(steps, address.concat(jdbcType, objectKey), configuration[jdbcType]);
+        if (newStoreType !== 'None') {
+          // We update the store followed by all of its children
+          var objectKey = newStoreType.toUpperCase().replace(/-/g, '_');
+          if (newStore) {
+            configuration[newStoreType][objectKey]['required-node'] = true;
+          }
+          this.updateHelper(steps, address.concat(newStoreType, objectKey), configuration[newStoreType], newStore);
 
-        // If a new JDBC type has been specified, then remove the previous configuration
-        var existingStore = configuration[jdbcType][objectKey]['jdbc-original-type'];
-        if (utils.isNotNullOrUndefined(existingStore) && utils.isNonEmptyString(existingStore) && jdbcType !== existingStore) {
+          // Update all children objects
+          var store = configuration[newStoreType][objectKey];
+          if (utils.isNotNullOrUndefined(store)) {
+            for (var key in store) {
+              var nestedObject = store[key];
+              if (utils.isObject(nestedObject)) {
+                var nestedKey = key.toUpperCase().replace(/-/g, '_');
+                if (utils.isNotNullOrUndefined(nestedObject[nestedKey])) {
+                  var nestedAddress = address.concat(newStoreType, objectKey, key, nestedKey);
+                  this.updateHelper(steps, nestedAddress, nestedObject);
+                }
+              }
+            }
+          }
+        }
+
+        // If a new Store type has been specified (can be None), then remove the previous store's configuration
+        if (utils.isNotNullOrUndefined(originalStoreType) && originalStoreType !== 'None'
+        && newStore) {
           var op = {
             'operation': 'remove',
-            'address': address.concat(existingStore, existingStore.toUpperCase().replace(/-/g, '_'))
+            'address': address.concat(originalStoreType, originalStoreType.toUpperCase().replace(/-/g, '_'))
           };
           steps.push(op);
         }
@@ -294,7 +323,7 @@ angular.module('managementConsole.api')
         };
         if (utils.isNotNullOrUndefined(prop)) {
           this.composeWriteAttributeOperations(steps, address, prop, ['name','type','template-name', 'is-new-node',
-          'is-create-with-bare-template', 'is-create-mode', 'jdbc-type']);
+          'is-create-with-bare-template', 'is-create-mode', 'store-type', 'store-original-type', 'required-node']);
           this.composeWriteObjectOperations(steps, address, prop, ['indexing-properties', 'string-keyed-table', 'binary-keyed-table']);
         }
         return this.execute(compositeOp);
@@ -337,9 +366,11 @@ angular.module('managementConsole.api')
         var createAddOperation = forceAdd || prop['is-new-node']; //TODO make is-new-node a constant somewhere
         if (createAddOperation) {
           var op = this.createAddOperation(address, prop, excludeAttributeList);
-          if (Object.keys(op).length > 2) {
+          if (Object.keys(op).length > 2 || prop['required-node']) {
             //ok cool, we actually have at least address and operation
             //therefore - add this op to composite steps
+            // Or if 'required-node' is present, then we know that this node must be forced even if empty
+            // (required for when child nodes may also have been defined without the parent)
             steps.push(op);
           }
         } else {
@@ -366,8 +397,11 @@ angular.module('managementConsole.api')
             var propKey = keys[i];
             var propValue = prop[keys[i]];
             if (utils.isNotNullOrUndefined(propValue)) {
-              if (utils.isObject(propValue) && allowedObjects.indexOf(propKey) > -1) {
-                op[propKey] = propValue;
+              if (utils.isObject(propValue)) {
+                // Only process allowed objects, these should be objects which are dmr attributes not children
+                if (allowedObjects.indexOf(propKey) > -1) {
+                  op[propKey] = propValue;
+                }
               } else {
                 //assign only primitives (strings, numbers, integers)
                 // i.e disregard potential branches of prop object tree

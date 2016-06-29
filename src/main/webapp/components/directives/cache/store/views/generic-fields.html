@@ -1,0 +1,27 @@
+<div class="form-group" ng-repeat="field in fields">
+  <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
+
+  <div class="col-md-4" ng-init="multiValue = isMultiValue(field); type = resolveFieldType(field)">
+    <input class="form-control" type="text" ng-model="store[field]" ng-disabled="readOnly"
+           ng-change="fieldValueModified(field)" ng-style="getStyle(field)"
+           ng-if="!multiValue && type === 'text'"/>
+
+    <div class="checkbox" ng-if="!multiValue && type === 'checkbox'">
+      <label>
+        <input type="checkbox" ng-style="getStyle(field)" ng-model="store[field]"
+               ng-change="fieldValueModified(field)"/>
+      </label>
+    </div>
+
+    <select class="form-control" ng-style="getStyle(field)" ng-model="store[field]"
+            ng-options="item as item for item in getFieldMetaObject(field).allowed"
+            ng-if="multiValue" ng-change="fieldValueModified(field)"/>
+  </div>
+
+  <div class="col-md-4 pull-left">
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject(field).description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>
+  </div>
+</div>

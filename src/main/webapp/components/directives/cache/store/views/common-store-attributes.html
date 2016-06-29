@@ -1,0 +1,36 @@
+<div class="form-group" ng-repeat="field in metadata.checkboxes">
+  <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
+
+  <div class="col-md-4">
+    <input type="checkbox" ng-model="store[field]" ng-disabled="readOnly"
+           ng-change="fieldValueModified(field)"
+           ng-style="getStyle(field)"/>
+  </div>
+
+  <div class="col-md-4 pull-left">
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject(field).description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label">Write Behind</label>
+
+  <div class="col-md-4">
+    <modal-dialog data="store" field="write-behind.WRITE_BEHIND" field-meta="getFieldMetaObject('write-behind')"
+                  outside-controller="internalController" parent-meta="getFieldMetaObject('write-behind')"
+                  previous-values="prevData['write-behind']['WRITE_BEHIND']" title="Write Behind"
+                  modal-fields="[{name: 'modification-queue-size'}, {name: 'thread-pool-size'}]"/>
+  </div>
+
+  <div class="col-md-4 pull-left">(
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject('write-behind').description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified('write-behind')">
+        <a ng-click="undoFieldChange('write-behind')">(Undo)</a>
+        <span ng-if="fieldChangeRequiresRestart('write-behind')">Restart needed</span>
+      </span>
+  </div>
+</div>

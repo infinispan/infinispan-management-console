@@ -1,0 +1,65 @@
+<!--Expiration-->
+<div class="form-group">
+  <label class="col-md-4 control-label">Expiration</label>
+
+  <div class="col-md-4">
+    <modal-dialog data="store" field="expiration.EXPIRATION" field-meta="getFieldMetaObject('expiration')"
+                  outside-controller="internalController" parent-meta="getFieldMetaObject('expiration')"
+                  previous-values="prevData['expiration']['EXPIRATION']" title="Expiration"
+                  modal-fields="[{name: 'path'}, {name: 'queue-size'}]"/>
+  </div>
+
+  <div class="col-md-4 pull-left">(
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject('expiration').description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified('expiration')">
+        <a ng-click="undoFieldChange('expiration')">(Undo)</a>
+        <span ng-if="fieldChangeRequiresRestart('expiration')">Restart needed</span>
+      </span>
+  </div>
+</div>
+
+<!--Implementation-->
+<div class="form-group" ng-if="data['store-type'] === 'leveldb-store'">
+  <label class="col-md-4 control-label">Implementation</label>
+
+  <div class="col-md-4">
+    <select class="form-control" ng-style="getStyle('implementation', 'implementation')"
+            ng-model="levelDb.impl.implementation"
+            ng-options="o as o for o in getFieldMetaObject('implementation', 'implementation').allowed"
+            ng-change="levelDbSelectModified('implementation', 'implementation')"/>
+  </div>
+
+  <div class="col-md-4 pull-left">
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject('implementation', 'implementation').description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified('implementation', 'implementation')">
+      <a ng-click="undoLevelDbSelectChange('implementation', 'implementation')">(Undo)</a>
+      <span ng-if="fieldChangeRequiresRestart('implementation', 'implementation')">Restart needed</span>
+    </span>
+  </div>
+</div>
+
+<!--Compression-->
+<div class="form-group" ng-if="data['store-type'] === 'leveldb-store'">
+  <label class="col-md-4 control-label">Compression</label>
+
+  <div class="col-md-4">
+    <select class="form-control" ng-style="getStyle('type', 'compression')"
+            ng-model="levelDb.comp.type"
+            ng-options="o as o for o in getFieldMetaObject('type', 'compression').allowed"
+            ng-change="levelDbSelectModified('type', 'compression')"/>
+  </div>
+
+  <div class="col-md-4 pull-left">
+    <i class="fa fa-info-circle" tooltip="{{getFieldMetaObject('type', 'compression').description}}"
+       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+    <span ng-if="isFieldValueModified('type', 'compression')">
+      <a ng-click="undoLevelDbSelectChange('type', 'compression')">(Undo)</a>
+      <span ng-if="fieldChangeRequiresRestart('type', 'compression')">Restart needed</span>
+    </span>
+  </div>
+</div>
+
+<!--Normal Input-->
+<div ng-include="'components/directives/cache/store/views/generic-fields.html'"></div>

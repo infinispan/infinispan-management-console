@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Store</h3>
+      </div>
+      <div class="panel-body">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-4 control-label">Type</label>
+
+            <div class="col-md-4">
+              <select class="form-control" ng-model="data['store-type']"
+                      ng-options="item.id as item.label for item in metadata.storeTypes"
+                      ng-disabled="readOnly" ng-change="updateStoreType('{{data['store-type']}}')"
+                      ng-style="getStyle('store-type')"/>
+            </div>
+
+            <div class="col-md-4 pull-left">
+              <i class="fa fa-info-circle" tooltip="The type of cache store" tooltip-trigger tooltip-animation="true"
+                 tooltip-placement="top"></i>
+              <span ng-if="isFieldValueModified('store-type')"><a ng-click="undoStoreTypeChange()">(Undo)</a>
+              <span ng-if="fieldChangeRequiresRestart('store-type')">Restart needed</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel panel-default" ng-if="data['store-type'] !== 'None'">
+      <div class="panel-heading">
+        <h3 class="panel-title">Store Properties</h3>
+      </div>
+      <div class="panel-body">
+        <div class="form-horizontal">
+          <div ng-if="!isNoStoreSelected()">
+            <div ng-include="'components/directives/cache/store/views/common-store-attributes.html'"></div>
+            <hr>
+            <!--Load specific Store fields here-->
+            <div ng-include="storeView"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

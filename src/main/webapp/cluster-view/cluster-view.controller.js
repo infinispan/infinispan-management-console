@@ -244,7 +244,7 @@ var app = angular.module('managementConsole')
 
       $scope.isCollapsedTrait = false;
       $scope.isCollapsedType = false;
-      $scope.isCollapsedStatus = true;
+      $scope.isCollapsedStatus = false;
 
       $scope.matchHeight = function () {
         utils.matchHeight(document, '.card-pf');
@@ -488,6 +488,67 @@ var app = angular.module('managementConsole')
         return cachesInput;
       }
     };
+  }).filter('cacheStatus', function (modelController, clusterNodesService, cacheService) {
+    var cachedIsDisabled = {};
+    var cachedIsRebalancing = {};
+    var cachedIsSplitBrain = {};
+
+    function cacheStatusFilter(cachesInput, scope) {
+      var checkboxes = scope.statusCheckboxes;
+      var atLeastOneFilterOn = checkboxes.indexing || checkboxes.offline || checkboxes.rebalancing || checkboxes.splitbrain;
+      if (atLeastOneFilterOn) {
+        var caches = [];
+        angular.forEach(cachesInput, function (cache) {
+          if (checkboxes.offline) {
+            if (cache.name in cachedIsDisabled) {
+              var isDisabled = typeof cachedIsDisabled[cache.name] === 'boolean' ? cachedIsDisabled[cache.name] : undefined;
+              if (isDisabled) {
+                caches.push(cache);
+              }
+            } else {
+              cacheService.isEnabled(cache).then(function (response) {
+                cachedIsDisabled[cache.name] = response[cache.name];
+              });
+            }
+          }
+          if (checkboxes.rebalancing) {
+            if (cache.name in cachedIsRebalancing) {
+              var rebalancing = typeof cachedIsRebalancing[cache.name] === 'boolean' ? cachedIsRebalancing[cache.name] : undefined;
+              if (rebalancing) {
+                caches.push(cache);
+              }
+            } else {
+              modelController.getServer().fetchCacheStats(scope.currentCluster, cache).then(function (response) {
+                var stats = response[0];
+                cachedIsRebalancing[cache.name] = stats['cache-rebalancing-status'] === 'IN_PROGRESS' ? true : false;
+              });
+            }
+          }
+          if (checkboxes.splitbrain) {
+            if (cache.name in cachedIsSplitBrain) {
+              var splitBrain = typeof cachedIsSplitBrain[cache.name] === 'boolean' ? cachedIsSplitBrain[cache.name] : undefined;
+              if (splitBrain) {
+                caches.push(cache);
+              }
+            } else {
+              clusterNodesService.getAvailability(scope.currentCluster).then(function (result) {
+                scope.currentCluster.availability = result;
+                cachedIsSplitBrain[cache.name] = result === 'DEGRADED' ? true : false;
+              }).catch(function () {
+                scope.currentCluster.availability = 'UNAVAILABLE';
+                cachedIsSplitBrain[cache.name] = false;
+              });
+            }
+          }
+        });
+        return caches;
+      } else {
+        return cachesInput;
+      }
+    }
+
+    cacheStatusFilter.$stateful = true;
+    return cacheStatusFilter;
   });
 
 app.directive('validCacheName', function($stateParams, modelController) {

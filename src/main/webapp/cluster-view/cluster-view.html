@@ -99,7 +99,7 @@
       </div>
       <div ng-show="!currentCluster.hasCaches()">There are no caches to show.</div>
       <div class="col-xs-6 col-sm-4 col-md-2" ng-repeat="cache in filtered = (currentCluster.getCachesAsArray() |
-      filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes)" ng-show="cache.show" on-finish-render>
+      filter: {name: searchNameQuery} | cacheTrait:traitCheckboxes | cacheType:typeCheckboxes | cacheStatus:this)" ng-show="cache.show" on-finish-render>
         <a ui-sref="cacheStatus({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: cache.name})" title="View Cache Details">
             <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
               <h2 class="card-pf-title">
@@ -194,7 +194,6 @@
             </div>
           </div>
         </div>
-        <!--- Removed until we develop DMR structure for these
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">
@@ -214,7 +213,7 @@
               </fieldset>
             </div>
           </div>
-        </div>----->
+        </div>
       </div>
     </div>
   </div>

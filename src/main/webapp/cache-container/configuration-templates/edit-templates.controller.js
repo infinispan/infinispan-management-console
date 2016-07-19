@@ -70,7 +70,8 @@ angular.module('managementConsole')
         if (utils.isNotNullOrUndefined(template.transaction) && (template.transaction.TRANSACTION.mode !== 'NONE')){
           traits = traits.concat('Transactional ');
         }
-        if (utils.isNotNullOrUndefined(template.security) && utils.isNotNullOrUndefined(template.security.SECURITY.authorization)){
+        if (utils.isNotNullOrUndefined(template.security) && utils.isNotNullOrUndefined(template.security.SECURITY.authorization)
+          && template.security.SECURITY.authorization.AUTHORIZATION.enabled){
           traits = traits.concat('Secured ');
         }
         return traits;

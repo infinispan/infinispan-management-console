@@ -12,7 +12,8 @@
           initDefaults: '=',
           readOnly: '=',
           cacheType: '@',
-          outsideController: '='
+          outsideController: '=',
+          cluster: '='
         },
         replace: false,
         templateUrl: function(elem, attrs) {

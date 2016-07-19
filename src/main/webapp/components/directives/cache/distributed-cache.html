@@ -45,10 +45,9 @@
     </uib-tab>
 
     <uib-tab heading="Security">
-      <configuration-section fields="[{name: 'Security', fields:['enabled', 'roles']}]" data="data.security.SECURITY.authorization.AUTHORIZATION"
-                             metadata="resolveDescription('authorization')"
-                             init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
+      <security  data="data.security.SECURITY.authorization.AUTHORIZATION" cluster="cluster" metadata="resolveDescription('authorization')"
+                 init-defaults="initDefaults" read-only="readOnly"
+                 outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Partition handling">

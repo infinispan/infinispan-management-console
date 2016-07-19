@@ -415,7 +415,7 @@ angular.module('managementConsole.api')
             var propValue = prop[keys[i]];
             var excludeAttribute = excludeAttributeList.some(function (attribute){ return propKey === attribute;});
             if(!excludeAttribute) {
-              if (utils.isNotNullOrUndefined(propValue) && !utils.isObject(propValue)) {
+              if (utils.isNotNullOrUndefined(propValue)) {
                 //assign only primitives (strings, numbers, integers)
                 // i.e disregard potential branches of prop object tree
 
@@ -435,8 +435,8 @@ angular.module('managementConsole.api')
                     steps.push(this.createCompositeWriteAttributeOperation(address, propKey, propValue));
                   }
                 }
-                // numbers, integers, booleans etc
-                else {
+                // arrays, numbers, integers, booleans etc
+                else if (utils.isArray(propValue) || utils.isNumber(propValue) || utils.isBoolean(propValue)){
                   steps.push(this.createCompositeWriteAttributeOperation(address, propKey, propValue));
                 }
               }

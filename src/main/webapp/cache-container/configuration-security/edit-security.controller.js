@@ -32,6 +32,8 @@ angular.module('managementConsole')
             }, {reload: true});
           }).catch(function (e) {
             $scope.openErrorModal(e);
+          }).finally(function(){
+            modelController.refresh();
           });
         };
 
@@ -139,6 +141,8 @@ angular.module('managementConsole')
           }, {reload: true});
         }).catch(function (e) {
           $scope.openErrorModal(e);
+        }).finally(function(){
+          modelController.refresh();
         });
       };
 

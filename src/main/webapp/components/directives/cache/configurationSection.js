@@ -152,14 +152,17 @@
         };
 
         scope.fieldValueModified = function (field) {
-          if (scope.prevData[field] !== scope.data[field]) {
-            scope.metadata[field].uiModified = true;
-            scope.metadata[field].style = {'background-color': '#fbeabc'};
-            scope.$emit('configurationFieldDirty', field);
-          } else {
+          var original = scope.prevData[field];
+          var latest = scope.data[field];
+
+          if (((utils.isNullOrUndefined(original) || original === '') && !latest) || original === latest || original == latest) {
             scope.$emit('configurationFieldClean', field);
             scope.metadata[field].uiModified = false;
             scope.metadata[field].style = null;
+          } else {
+            scope.metadata[field].uiModified = true;
+            scope.metadata[field].style = {'background-color': '#fbeabc'};
+            scope.$emit('configurationFieldDirty', field);
           }
         };
 

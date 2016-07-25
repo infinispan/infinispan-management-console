@@ -122,12 +122,12 @@ angular.module('managementConsole.api')
           this.createHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
           this.createHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
           this.createHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
-          this.createHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
           this.createHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
           this.createHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.createHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
+          this.createCacheLoader(steps, address, configuration);
           this.createCacheStore(steps, address, configuration);
           //ok now, lets send composite op to server
           return this.execute(compositeOp);
@@ -147,6 +147,15 @@ angular.module('managementConsole.api')
           this.addNodeComposite(steps, address, configurationElement, exclusionList, true);
         }
 
+      };
+
+      CacheCreationControllerClient.prototype.createCacheLoader = function (steps, address, configuration) {
+        var loaderClass = utils.deepGet(configuration, 'loader.LOADER.class');
+        if (utils.isNullOrUndefined(loaderClass) || loaderClass === 'None') {
+          return;
+        }
+
+        this.createHelper(steps, address.concat('loader', 'LOADER'), configuration.loader)
       };
 
       CacheCreationControllerClient.prototype.createCacheStore = function(steps, address, configuration) {
@@ -200,13 +209,13 @@ angular.module('managementConsole.api')
           this.updateHelper(steps, address.concat('partition-handling', 'PARTITION_HANDLING'), configuration['partition-handling']);
           this.updateHelper(steps, address.concat('transaction', 'TRANSACTION'), configuration.transaction);
           this.updateHelper(steps, address.concat('state-transfer', 'STATE_TRANSFER'), configuration['state-transfer']);
-          this.updateHelper(steps, address.concat('loader', 'LOADER'), configuration.loader);
           this.updateHelper(steps, address.concat('backup', 'BACKUP'), configuration.backup);
 
           this.updateSecurityAuthorization(configuration);
           this.updateHelper(steps, address.concat('security', 'SECURITY'), configuration.security);
           this.updateHelper(steps, address.concat('security', 'SECURITY', 'authorization', 'AUTHORIZATION'), configuration.security.SECURITY.authorization);
 
+          this.updateCacheLoader(steps, address, configuration);
           this.updateCacheStore(steps, address, configuration);
 
           //ok now, lets send composite op to server
@@ -227,6 +236,23 @@ angular.module('managementConsole.api')
           }
           this.addNodeComposite(steps, address, configurationElement, exclusionList);
         }
+      };
+
+      CacheCreationControllerClient.prototype.updateCacheLoader = function (steps, address, configuration) {
+        var loaderAddress = address.concat('loader', 'LOADER');
+        var loaderClass = utils.deepGet(configuration, 'loader.LOADER.class');
+        if (utils.isNullOrUndefined(loaderClass) || loaderClass === 'None') {
+          var previousLoaderExisted = !configuration.loader['is-new-node'];
+          if (previousLoaderExisted) {
+            // Delete loader node as loader.class field cannot be empty
+            steps.push({
+              'operation': 'remove',
+              'address': loaderAddress
+            });
+          }
+          return;
+        }
+        this.updateHelper(steps, loaderAddress, configuration.loader);
       };
 
       CacheCreationControllerClient.prototype.updateCacheStore = function(steps, address, configuration) {

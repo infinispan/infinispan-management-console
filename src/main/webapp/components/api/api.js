@@ -10,5 +10,6 @@ angular.module('managementConsole.api', [
   'ispn.directives.cache.configurationsection',
   'ispn.directives.cache.cachestore',
   'ispn.directives.cache.modaldialog',
+  'ispn.directives.cache.cacheLoader',
   'LocalStorageModule'
 ]);

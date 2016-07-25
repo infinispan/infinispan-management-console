@@ -49,10 +49,8 @@
     </uib-tab>
 
     <uib-tab heading="Loader">
-      <configuration-section fields="[{name: 'Loader', fields: ['class', 'preload', 'shared']}]" data="data['loader'].LOADER"
-                             metadata="resolveDescription('loader')"
-                             init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
+      <cache-loader data="data['loader'].LOADER" metadata="resolveDescription('loader')" init-defaults="initDefaults"
+                    read-only="readOnly" outside-controller="outsideController"/>
     </uib-tab>
 
     <uib-tab heading="Store">

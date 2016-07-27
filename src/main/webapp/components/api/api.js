@@ -6,6 +6,7 @@
 angular.module('managementConsole.api', [
   'ispn.directives.matchheight',
   'ispn.directives.finishrender',
+  'ispn.directives.formgroup',
   'ispn.directives.cache.cacheconfiguration',
   'ispn.directives.cache.configurationsection',
   'ispn.directives.cache.security',

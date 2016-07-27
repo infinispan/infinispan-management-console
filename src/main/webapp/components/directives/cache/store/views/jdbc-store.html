@@ -14,13 +14,9 @@
                   {name: 'name', parent: 'timestamp-column'}, {name: 'type', parent: 'timestamp-column'},
                   {name: 'create-on-start'}, {name: 'drop-on-exit'}]"/>
   </div>
-  <div class="col-md-4 pull-left">
-    <i class="fa fa-info-circle" tooltip="{{metadata.currentStore['string-keyed-table'].description}}"
-       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-    <span ng-if="isFieldValueModified('string-keyed-table')"><a
-      ng-click="undoFieldChange('string-keyed-table')">(Undo)</a>
-                <span ng-if="fieldChangeRequiresRestart('string-keyed-table')">Restart needed</span></span>
-  </div>
+
+  <field-info data="store" meta="getFieldMetaObject('string-keyed-table')" field="string-keyed-table"
+              previous-value="prevData['string-keyed-table']"/>
 </div>
 
 <div class="form-group"
@@ -38,11 +34,6 @@
                   {name: 'create-on-start'}, {name: 'drop-on-exit'}]"/>
   </div>
 
-  <div class="col-md-4 pull-left">
-    <i class="fa fa-info-circle" tooltip="{{metadata.currentStore['binary-keyed-table'].description}}"
-       tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-    <span ng-if="isFieldValueModified('binary-keyed-table')"><a
-      ng-click="undoFieldChange('binary-keyed-table')">(Undo)</a>
-                <span ng-if="fieldChangeRequiresRestart('binary-keyed-table')">Restart needed</span></span>
-  </div>
+  <field-info data="store" meta="getFieldMetaObject('binary-keyed-table')" field="binary-keyed-table"
+              previous-value="prevData['binary-keyed-table']"/>
 </div>

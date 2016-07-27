@@ -6,64 +6,20 @@
     <h4 class="modal-title" id="myModalLabel">{{title}}</h4>
   </div>
   <div class="modal-body">
-    <div class="form-horizontal">
+    <div class="form-horizontal" ng-repeat="field in fields">
 
       <!--Currently we have code repeated as ng-model can't be dynamically assigned.-->
       <!--There must be a less repetitive way to achieve the same thing-->
 
-      <div class="form-group" ng-repeat="field in fields">
-        <label class="col-md-4 control-label">{{resolveFieldName(field.name, field.parent)}}</label>
+      <div>
+        <form-group data="data[field.parent]" field="{{field.name}}" meta="getMetadataObject(field.name, field.parent)"
+                    previous-value="prevData[field.parent][field.name]" read-only="readOnly"
+                    label="{{resolveFieldName(field.name, field.parent)}}" ng-if="isParentDefined(field)"/>
+      </div>
 
-        <div class="col-md-4" ng-if="isParentDefined(field)"
-             ng-init="multiValue = isMultiValue(field.name, field.parent); type = resolveFieldType(field.name, field.parent)">
-
-          <input class="form-control" type="text" ng-model="data[field.parent][field.name]"
-                 ng-change="fieldValueModified(field.name, field.parent)"
-                 ng-if="!multiValue && type === 'text'"
-                 ng-style="getStyle(field.name, field.parent)"/>
-
-          <div class="checkbox" ng-if="!multiValue && type === 'checkbox'">
-            <label>
-              <input type="checkbox"
-                     ng-model="data[field.parent][field.name]"
-                     ng-change="fieldValueModified(field.name, field.parent)"
-                     ng-style="getStyle(field.name, field.parent)"/>
-            </label>
-          </div>
-
-          <select class="form-control"
-                  ng-model="data[field.parent][field.name]"
-                  ng-options="item as item for item in getMetadataObject(field.name, field.parent).allowed"
-                  ng-if="multiValue" ng-change="fieldValueModified(field.name, field.parent)"
-                  ng-style="getStyle(field.name, field.parent)"/>
-        </div>
-
-        <div class="col-md-4" ng-if="!isParentDefined(field)"
-             ng-init="multiValue = isMultiValue(field.name); type = resolveFieldType(field.name)">
-          <input class="form-control" type="text" ng-model="data[field.name]"
-                 ng-change="fieldValueModified(field.name)" ng-style="getStyle(field.name)"
-                 ng-if="!multiValue && type === 'text'"/>
-
-          <div class="checkbox" ng-if="!multiValue && type === 'checkbox'">
-            <label>
-              <input type="checkbox" ng-style="getStyle(field.name)" ng-model="data[field.name]"
-                     ng-change="fieldValueModified(field.name)"/>
-            </label>
-          </div>
-
-          <select class="form-control" ng-style="getStyle(field.name)"
-                  ng-model="data[field.name]"
-                  ng-options="item as item for item in getMetadataObject(field.name).allowed"
-                  ng-if="multiValue" ng-change="fieldValueModified(field.name)"/>
-        </div>
-
-        <div class="col-md-4 pull-left">
-          <i class="fa fa-info-circle" tooltip="{{resolveFieldDescription(field.name, field.parent)}}"
-             tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-          <span ng-if="isFieldValueModified(field.name, field.parent)"><a
-            ng-click="undoFieldChange(field.name, field.parent)">(Undo)</a>
-              <span ng-if="fieldChangeRequiresRestart(field.name, field.parent)">Restart needed</span></span>
-        </div>
+      <div>
+        <form-group data="data" field="{{field.name}}" meta="getMetadataObject(field.name)"
+                    previous-value="prevData[field.name]" read-only="readOnly" ng-if="!isParentDefined(field)"/>
       </div>
     </div>
   </div>

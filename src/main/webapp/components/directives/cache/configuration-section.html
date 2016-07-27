@@ -7,78 +7,8 @@
       <div class="panel-body">
         <div class="form-horizontal" ng-repeat="field in group.fields">
 
-          <div class="form-group">
-            <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
-
-            <div class="col-md-4" ng-init="elementType = resolveFieldType(field); readOnlyField = isReadOnly(field)">
-              <select class="form-control" ng-class="field" ng-style="getStyle(field)" ng-model="data[field]" ng-options="item as item for item in metadata[field].allowed"
-                      ng-disabled="readOnlyField" ng-if="isMultiValue(field)" ng-change="fieldValueModified(field)"/>
-              <input class="form-control" ng-class="field" ng-style="getStyle(field)" type="{{elementType}}" ng-model="data[field]" placeholder="{{placeholder[field]}}" ng-disabled="readOnlyField"
-                     ng-if="isSingleValue(field) && elementType === 'text'" ng-change="fieldValueModified(field)"/>
-
-              <div class="checkbox" ng-if="elementType === 'checkbox'">
-                <label>
-                  <input type="checkbox" ng-class="field" ng-style="getStyle(field)" ng-model="data[field]" ng-disabled="readOnlyField" ng-change="fieldValueModified(field)">
-                </label>
-              </div>
-
-              <div ng-if="elementType === 'table'">
-                <form name="propertyForm" ng-class="field" ng-style="getStyle(field)">
-                  <table class="table">
-                    <thead>
-                    <tr>
-                      <td>Property</td>
-                      <td>Value</td>
-                      <td></td>
-                    </tr>
-                    </thead>
-                    <tr ng-repeat="(key, value) in data[field] track by key">
-                      <td>
-                        <input class="form-control" type="text" ng-model="key" ng-disabled="true"
-                               ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                               ng-change="createOrUpdateProperty(field, key, value)"/>
-                      </td>
-                      <td>
-                        <input class="form-control" type="text" ng-model="value"
-                               ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                               ng-change="createOrUpdateProperty(field, key, value)"/>
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-link" ng-click="removeProperty(field, key)">
-                          <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <input class="form-control" type="text" ng-model="newKey"
-                               ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                               required/>
-                      </td>
-                      <td>
-                        <input class="form-control" type="text" ng-model="newValue"
-                               ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                               required/>
-                      </td>
-                      <td>
-                        <button type="button" class="btn btn-link"
-                                ng-click="createOrUpdateProperty(field, newKey, newValue);newKey=null;newValue=null"
-                                ng-disabled="propertyForm.$invalid">
-                          <span class="glyphicon glyphicon-plus-sign"></span>
-                        </button>
-                      </td>
-                    </tr>
-                  </table>
-                </form>
-              </div>
-            </div>
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle " tooltip="{{metadata[field].description}} The default value is {{resolveDefaultValue(field)}}."
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-              <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
-              <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>
-            </div>
-          </div>
+          <form-group data="data" field="{{field}}" meta="metadata[field]" placeholder="{{placeholder[field]}}"
+                      previous-value="prevData[field]" read-only="isReadOnly(field)"/>
 
         </div>
       </div>

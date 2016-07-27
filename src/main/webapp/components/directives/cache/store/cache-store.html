@@ -5,24 +5,12 @@
         <h3 class="panel-title">Store</h3>
       </div>
       <div class="panel-body">
-        <div class="form-horizontal">
-          <div class="form-group">
-            <label class="col-md-4 control-label">Type</label>
+        <div class="form-horizontal" ng-init="prevType = getCurrentStoreType()">
 
-            <div class="col-md-4">
-              <select class="form-control" ng-model="data['store-type']"
-                      ng-options="item.id as item.label for item in metadata.storeTypes"
-                      ng-disabled="readOnly" ng-change="updateStoreType('{{data['store-type']}}')"
-                      ng-style="getStyle('store-type')"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="The type of cache store" tooltip-trigger tooltip-animation="true"
-                 tooltip-placement="top"></i>
-              <span ng-if="isFieldValueModified('store-type')"><a ng-click="undoStoreTypeChange()">(Undo)</a>
-              <span ng-if="fieldChangeRequiresRestart('store-type')">Restart needed</span></span>
-            </div>
-          </div>
+          <form-group data="data" field="store-type" meta="metadata['store-type']"
+                      previous-value="prevData['store-type']" read-only="readOnly"
+                      option-string="item.id as item.label for item" option-values="metadata.storeTypes"
+                      change-callback="updateStoreType" undo-callback="undoStoreTypeChange"/>
         </div>
       </div>
     </div>

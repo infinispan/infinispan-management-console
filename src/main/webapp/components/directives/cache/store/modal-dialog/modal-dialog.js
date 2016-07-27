@@ -38,7 +38,6 @@
         };
 
         scope.openModal = function () {
-
           var modalInstance = modal.open({
             templateUrl: 'components/directives/cache/store/modal-dialog/views/modal-template.html',
             resolve: {
@@ -88,14 +87,6 @@
                 return false;
               };
 
-              $scope.getMetadata = function (parent) {
-                if (utils.isNotNullOrUndefined(parent)) {
-                  return $scope.metadata[parent]['value-type'];
-                } else {
-                  return $scope.metadata;
-                }
-              };
-
               $scope.getMetadataObject = function (field, parent) {
                 if (utils.isNotNullOrUndefined(parent)) {
                   return $scope.metadata[parent]['value-type'][field];
@@ -104,59 +95,9 @@
                 }
               };
 
-              $scope.getObject = function (object, field, parent) {
-                if (utils.isNullOrUndefined(object)) {
-                  return null
-                }
-
-                if (utils.isNotNullOrUndefined(parent)) {
-                  if (utils.isNullOrUndefined(object[parent])) {
-                    object[parent] = {
-                      field: null
-                    };
-                  }
-                  return object[parent][field];
-                } else {
-                  return object[field];
-                }
-              };
-
-              $scope.resolveFieldDescription = function (field, parent) {
-                return $scope.getMetadataObject(field, parent).description;
-              };
-
-              $scope.getStyle = function (field, parent) {
-                return $scope.getMetadataObject(field, parent).style;
-              };
-
-              $scope.isFieldValueModified = function (field, parent) {
-                return $scope.getMetadataObject(field, parent).uiModified === true;
-              };
-
-              $scope.fieldChangeRequiresRestart = function (field, parent) {
-                return $scope.getMetadataObject(field, parent)['restart-required'] !== 'no-services';
-              };
-
-              $scope.fieldValueModified = function (field, parent) {
-                var currentVal = $scope.getObject($scope.data, field, parent);
-                var previousVal = $scope.getObject($scope.prevData, field, parent);
-                var meta = $scope.getMetadataObject(field, parent);
-
-                if (currentVal === previousVal || currentVal == previousVal ||
-                  (utils.isBoolean(currentVal) && !currentVal && utils.isNullOrUndefined(previousVal)) ||
-                  (!currentVal && utils.isNullOrUndefined(previousVal))) {
-                  meta.uiModified = false;
-                  meta.style = null;
-                } else {
-                  meta.uiModified = true;
-                  meta.style = {'background-color': '#fbeabc'};
-                }
-              };
-
               $scope.undoFieldChange = function (field, parent) {
                 var meta = $scope.getMetadataObject(field, parent);
-                meta.uiModified = false;
-                meta.style = null;
+                utils.makeFieldClean(meta);
 
                 if (utils.isNotNullOrUndefined(parent)) {
                   $scope.data[parent][field] = angular.copy($scope.prevData[parent][field]);
@@ -179,12 +120,6 @@
                 }
               };
 
-              $scope.isMultiValue = function(field, parent) {
-                var meta = $scope.getMetadataObject(field, parent);
-                var hasField = utils.has(meta, 'allowed');
-                return hasField ? utils.isNotNullOrUndefined(meta.allowed) : false;
-              };
-
               $scope.isParentDefined = function (field) {
                 return utils.isNotNullOrUndefined(field.parent);
               };
@@ -195,10 +130,6 @@
                   fieldName = utils.convertCacheAttributeIntoFieldName(parent) + ' ' + fieldName
                 }
                 return fieldName;
-              };
-
-              $scope.resolveFieldType = function (field, parent) {
-                return utils.resolveFieldType($scope.getMetadata(parent), field);
               };
             }]
           });
@@ -211,9 +142,7 @@
               delete storeObject.modified;
 
               scope.data[scope.field] = storeObject;
-              scope.parentMeta.uiModified = true;
-              scope.parentMeta.style = {'background-color': '#fbeabc'};
-              scope.$emit('configurationFieldDirty', scope.field);
+              utils.makeFieldDirty(scope.parentMeta, scope.field, true, scope);
 
               if (utils.isNotNullOrUndefined(scope.outsideController)) {
                 scope.outsideController.requiresRestart = function () {
@@ -224,8 +153,7 @@
           };
 
           var modalCancelledCallback = function() {
-            scope.parentMeta.uiModified = false;
-            scope.parentMeta.style = null;
+            utils.makeFieldClean(scope.parentMeta);
           };
 
           modalInstance.result.then(modalSuccessCallback, modalCancelledCallback);

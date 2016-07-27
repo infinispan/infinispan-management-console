@@ -15,21 +15,11 @@
 
         </div>
         <div class="form-horizontal" ng-if="hasSecurityBeenDefinedGlobally()">
+          <form-group data="data" field="enabled" meta="metadata['enabled']" previous-value="prevData['enabled']"
+                      read-only="readOnly"/>
+        </div>
+        <div class="form-horizontal" ng-if="isSecurityEnabled()">
           <div class="form-group">
-            <label class="col-md-4 control-label">Enabled</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-change="fieldValueModified('enabled')" ng-style="getStyle('enabled')" ng-model="data['enabled']"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['enabled'].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-              <span ng-if="isFieldValueModified('enabled')"><a ng-click="undoFieldChange('enabled')">(Undo)</a></span>
-            </div>
-          </div>
-
-          <div class="form-group" ng-if="isSecurityEnabled()">
             <label class="col-md-4 control-label">Roles</label>
             <div class="col-md-4">
               <div class="col-md-12" ng-repeat="role in getRoleNames()">

@@ -6,61 +6,23 @@
       </div>
       <div class="panel-body">
         <div class="form-horizontal">
-          <div class="form-group">
-            <label class="col-md-4 control-label">Type</label>
-
-            <div class="col-md-4">
-              <select class="form-control" ng-model="type"
-                      ng-options="item.class as item.label for item in cacheLoaders"
-                      ng-disabled="readOnly" ng-change="changeLoaderClass()"
-                      ng-style="getStyle('class')"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata['class'].description}}" tooltip-trigger tooltip-animation="true"
-                 tooltip-placement="top"></i>
-              <span ng-if="isFieldValueModified('class')"><a ng-click="undoClassChange()">(Undo)</a>
-              <span ng-if="fieldChangeRequiresRestart('class')">Restart needed</span></span>
-            </div>
-          </div>
-
-          <div class="form-group" ng-if="type !== 'None'">
-            <label class="col-md-4 control-label">Class String</label>
-
-            <div class="col-md-4">
-              <input class="form-control" type="text" ng-model="data.class"
-                     ng-change="fieldValueModified('class')" ng-style="getStyle('class')"
-                     ng-disabled="readOnly || !isCustomLoader()">
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="The full package name of the Loader implementation." tooltip-trigger tooltip-animation="true"
-                 tooltip-placement="top"></i>
-              <span ng-if="isCustomLoader() && isFieldValueModified('class')">
-                <a ng-click="undoClassChange()">(Undo)</a>
-                <span ng-if="fieldChangeRequiresRestart('class')">Restart needed</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group" ng-repeat="field in fields" ng-if="type !== 'None'">
-            <label class="col-md-4 control-label">{{resolveFieldName(field)}}</label>
-
-            <div class="col-md-4">
-              <input type="checkbox" ng-model="data[field]" ng-disabled="readOnly"
-                     ng-change="fieldValueModified(field)"
-                     ng-style="getStyle(field)"/>
-            </div>
-
-            <div class="col-md-4 pull-left">
-              <i class="fa fa-info-circle" tooltip="{{metadata[field].description}}"
-                 tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
-              <span ng-if="isFieldValueModified(field)"><a ng-click="undoFieldChange(field)">(Undo)</a>
-              <span ng-if="fieldChangeRequiresRestart(field)">Restart needed</span></span>
-            </div>
-          </div>
-
+          <form-group data="type" field="type" meta="metadata['class']"
+                      previous-value="prevData['class']" read-only="readOnly"
+                      option-string="item.class as item.label for item" option-values="cacheLoaders"
+                      change-callback="changeLoaderClass" undo-callback="undoClassChange"/>
         </div>
+
+        <div class="form-horizontal" ng-if="type.type !== 'None'">
+          <form-group data="data" field="class" meta="metadata['class']"
+                      previous-value="prevData['class']" read-only="readOnly || !isCustomLoader()"/>
+        </div>
+
+
+        <div class="form-horizontal" ng-repeat="field in fields" ng-if="type.type !== 'None'">
+          <form-group data="data" field="{{field}}" meta="metadata[field]"
+                      previous-value="prevData[field]" read-only="readOnly" />
+        </div>
+
       </div>
     </div>
   </div>

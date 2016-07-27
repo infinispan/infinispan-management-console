@@ -205,7 +205,7 @@
             scope.prevData = {};
             angular.forEach(scope.metadata.currentStore, function (value, key) {
               if (utils.isObject(value)) {
-                scope.makeFieldClean(value);
+                utils.makeFieldClean(value);
                 scope.prevData[key] = angular.copy(scope.store[key]);
               }
             });
@@ -218,16 +218,21 @@
             scope.data['store-original-type'] = scope.prevData['store-type'];
           };
 
-          scope.updateStoreType = function (previousType) {
+          scope.getCurrentStoreType = function () {
+            return data['store-type'];
+          };
+
+          scope.updateStoreType = function () {
             var storeType = scope.data['store-type'];
             var previousStore = scope.store;
+            var previousType = scope.prevType; // Defined in ng-init as workaround for previous val
             var storeTypeChanged = scope.prevData['store-type'] !== storeType;
 
             if (storeTypeChanged) {
-              scope.makeFieldDirty(scope.metadata['store-type'], 'store-type', true);
+              utils.makeFieldDirty(scope.metadata['store-type'], 'store-type', true, scope);
               scope.$emit('configurationFieldDirty', storeType);
             } else {
-              scope.makeFieldClean(scope.metadata['store-type'], 'store-type', true);
+              utils.makeFieldClean(scope.metadata['store-type'], 'store-type', true, scope);
             }
 
             scope.storeView = scope.getStoreView(storeType);
@@ -260,7 +265,7 @@
             scope.data['is-new-node'] = !nonNullStore;
 
             scope.updateStoreAttributesAndMeta(originalStoreType, currentStoreType);
-            scope.makeFieldClean(scope.getFieldMetaObject('store-type'), 'store-type', true);
+            utils.makeFieldClean(scope.getFieldMetaObject('store-type'), 'store-type', true, scope);
           };
 
           scope.getStoreType = function () {
@@ -335,56 +340,6 @@
             return utils.isNotNullOrUndefined(scope.data) && utils.isNotNullOrUndefined(scope.data['binary-keyed-table']);
           };
 
-          scope.fieldValueModified = function (field, parent) {
-            var original = scope.prevData[field];
-            var latest = scope.store[field];
-
-            var meta = scope.getFieldMetaObject(field, parent);
-            if ((utils.isNullOrUndefined(original) && !latest) || original === latest || original == latest) {
-              scope.makeFieldClean(meta, field, true);
-            } else {
-              scope.makeFieldDirty(meta, field, true);
-            }
-          };
-
-          scope.makeFieldDirty = function (field, fieldName, emit) {
-            field.uiModified = true;
-            field.style = {'background-color': '#fbeabc'};
-            if (emit) {
-              scope.$emit('configurationFieldDirty', fieldName);
-            }
-          };
-
-          scope.makeFieldClean = function (field, fieldName, emit) {
-            field.uiModified = false;
-            field.style = null;
-            if (emit) {
-              scope.$emit('configurationFieldClean', fieldName);
-            }
-          };
-
-          scope.makeAllFieldsClean = function (metadata) {
-            if (utils.isNotNullOrUndefined(metadata.uiModified)) {
-              scope.makeFieldClean(metadata);
-            }
-
-            if (metadata.hasOwnProperty('value-type')) {
-              angular.forEach(metadata['value-type'], function (value) {
-                  scope.makeAllFieldsClean(value);
-              });
-            }
-          };
-
-          scope.isFieldValueModified = function (field, parent) {
-            var fieldMeta = scope.getFieldMetaObject(field, parent);
-            return utils.isNotNullOrUndefined(fieldMeta) && fieldMeta.uiModified === true;
-          };
-
-          scope.fieldChangeRequiresRestart = function (field, parent) {
-            var fieldMeta = scope.getFieldMetaObject(field, parent);
-            return utils.isNotNullOrUndefined(fieldMeta) && fieldMeta['restart-required'] !== 'no-services';
-          };
-
           scope.requiresRestart = function () {
             var restartRequired = scope.prevData['store-type'] !== scope.data['store-type'];
             if (restartRequired) {
@@ -393,33 +348,11 @@
 
             if (utils.isNotNullOrUndefined(scope.metadata.currentStore)) {
               return Object.keys(scope.metadata.currentStore).some(function (field) {
-                return scope.isFieldValueModified(field) && scope.fieldChangeRequiresRestart(field);
+                var meta = scope.getFieldMetaObject(field);
+                return utils.isFieldValueModified(meta) && utils.fieldChangeRequiresRestart(meta);
               });
             }
             return false;
-          };
-
-          scope.undoFieldChange = function (field, parent) {
-            scope.store[field] = angular.copy(scope.prevData[field]);
-            var meta = scope.getFieldMetaObject(field, parent);
-            scope.makeFieldClean(meta, field, false);
-
-            if (meta.type.TYPE_MODEL_VALUE === 'OBJECT') {
-              scope.makeAllFieldsClean(meta);
-            }
-          };
-
-          scope.getStyle = function (field, parent) {
-            var fieldMeta = scope.getFieldMetaObject(field, parent);
-            return utils.isNotNullOrUndefined(fieldMeta) ? fieldMeta.style : '';
-          };
-
-          scope.resolveFieldName = function (field) {
-            return utils.convertCacheAttributeIntoFieldName(field);
-          };
-
-          scope.resolveFieldType = function (field) {
-            return utils.resolveFieldType(scope.metadata.currentStore, field);
           };
 
           scope.resolveDescription = function (elementPath) {
@@ -440,43 +373,34 @@
             return scope.getFieldMetaObject(field)['value-type'];
           };
 
-          scope.isMultiValue = function (field) {
-            var meta = scope.getFieldMetaObject(field);
-            var hasField = utils.has(meta, 'allowed');
-            return hasField ? utils.isNotNullOrUndefined(meta.allowed) : false;
-          };
-
-          scope.getFieldDefault = function (field, parent) {
-            var meta = scope.getFieldMetaObject(field, parent);
-            if (utils.isNotNullOrUndefined(meta)) {
-              return meta.default;
-            }
-          };
-
           // Different to normal fields as we have to ensure that only the actual ng-model value is changed
           scope.undoLevelDbSelectChange = function (field, parent) {
             var path = utils.createPath('.', [parent, scope.getStoreObjectKey(parent)]);
             var storeObject = utils.deepGet(scope.store, path);
             var prevObject = utils.deepGet(scope.prevData, path);
-            storeObject[field] = angular.copy(prevObject[field]);
 
-            var meta = scope.getFieldMetaObject(field, parent);
-            scope.makeFieldClean(meta, field, false);
+            if (utils.isNullOrUndefined(prevObject)) {
+              // If no prevVal exists, then restore to the default value
+              var meta = scope.getFieldMetaObject(field, parent);
+              storeObject[field] = angular.copy(meta.default);
+            } else {
+              storeObject[field] = angular.copy(prevObject[field]);
+            }
           };
 
-          scope.levelDbSelectModified = function (field, parent) {
+          scope.getLevelDbPrevVal = function (field, parent) {
             var path = utils.createPath('.', [parent, scope.getStoreObjectKey(parent)]);
-            var storeObject = utils.deepGet(scope.store, path);
             var prevObject = utils.deepGet(scope.prevData, path);
-            var original = utils.isNotNullOrUndefined(prevObject) ? prevObject[field] : undefined;
-            var latest = storeObject[field];
+            return utils.isNotNullOrUndefined(prevObject) ? prevObject[field] : undefined;
+          };
 
-            var meta = scope.getFieldMetaObject(field, parent);
-            if ((utils.isNullOrUndefined(original) && !latest) || original === latest) {
-              scope.makeFieldClean(meta, field, true);
-            } else {
-              scope.makeFieldDirty(meta, field, true);
-            }
+          // Workaround methods as we cannot (AFAIK) pass parameters with callback functions
+          scope.undoLdbImplementationChange = function () {
+            scope.undoLevelDbSelectChange('implementation', 'implementation');
+          };
+
+          scope.undoLdbCompressionChange = function () {
+            scope.undoLevelDbSelectChange('type', 'compression');
           };
 
           // Initialise scope variables

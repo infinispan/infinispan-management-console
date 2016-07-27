@@ -192,29 +192,33 @@
       resolveFieldType: function resolveFieldType(metadata, field) {
         if (this.isNotNullOrUndefined(metadata) && this.isNotNullOrUndefined(field)) {
           var resolvedField = metadata[field];
-          if (this.isNotNullOrUndefined(resolvedField)) {
-            var fieldType;
-            switch (resolvedField.type.TYPE_MODEL_VALUE) {
-              case 'DOUBLE':
-              case 'LONG':
-              case 'INT':
-              case 'STRING':
-              case 'LIST':
-                fieldType = 'text';
-                break;
-              case 'BOOLEAN':
-                fieldType = 'checkbox';
-                break;
-              case 'OBJECT':
-                fieldType = 'table';
-                break;
-            }
-            return fieldType;
-          } else {
-            throw new this.ISPNException('Unresolved field for ' + metadata + ' and field ' + field);
-          }
+          return this.getTypeModelType(resolvedField);
         } else {
             throw new this.ISPNException('Invalid metadata ' + metadata + ' or field ' + field);
+        }
+      },
+
+      getTypeModelType: function (field) {
+        if (this.isNotNullOrUndefined(field)) {
+          var fieldType;
+          switch (field.type.TYPE_MODEL_VALUE) {
+            case 'DOUBLE':
+            case 'LONG':
+            case 'INT':
+            case 'STRING':
+            case 'LIST':
+              fieldType = 'text';
+              break;
+            case 'BOOLEAN':
+              fieldType = 'checkbox';
+              break;
+            case 'OBJECT':
+              fieldType = 'table';
+              break;
+          }
+          return fieldType;
+        } else {
+          throw new this.ISPNException('Unresolved field for ' + metadata + ' and field ' + field);
         }
       },
 
@@ -351,6 +355,42 @@
           return path;
         }
         return null;
+      },
+
+      isFieldValueModified: function isFieldValueModified(meta) {
+        return this.isNotNullOrUndefined(meta) && meta.uiModified === true;
+      },
+
+      fieldChangeRequiresRestart: function fieldChangeRequiresRestart(meta) {
+        return this.isNotNullOrUndefined(meta) && meta['restart-required'] !== 'no-services';
+      },
+
+      makeFieldDirty: function makeFieldDirty(field, fieldName, emit, scope) {
+        field.uiModified = true;
+        field.style = {'background-color': '#fbeabc'};
+        if (emit && this.isNotNullOrUndefined(scope)) {
+          scope.$emit('configurationFieldDirty', fieldName);
+        }
+      },
+
+      makeFieldClean: function makeFieldClean(field, fieldName, emit, scope) {
+        field.uiModified = false;
+        field.style = null;
+        if (emit && this.isNotNullOrUndefined(scope)) {
+          scope.$emit('configurationFieldClean', fieldName);
+        }
+      },
+
+      makeAllFieldsClean: function makeAllFieldsClean(metadata) {
+        if (this.isNotNullOrUndefined(metadata.uiModified)) {
+          this.makeFieldClean(metadata);
+        }
+
+        if (metadata.hasOwnProperty('value-type')) {
+          angular.forEach(metadata['value-type'], function (value) {
+            this.makeAllFieldsClean(value);
+          });
+        }
       }
     };
   });

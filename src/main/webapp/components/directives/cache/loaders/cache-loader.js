@@ -108,13 +108,14 @@
           }
 
           scope.data['is-new-node'] = utils.isNullOrUndefined(scope.data['class']);
-          scope.type = scope.getStoreType(scope.data.class, scope.cacheLoaders);
+          scope.type = {
+            type: scope.getStoreType(scope.data.class, scope.cacheLoaders)
+          }
         };
 
         scope.cleanFieldMetadata = function (field) {
           if (utils.isNotNullOrUndefined(scope.metadata[field])) {
-            scope.metadata[field].uiModified = false;
-            scope.metadata[field].style = null;
+            utils.makeFieldClean(scope.metadata[field]);
           } else {
             console.log("Cleaning metadata for configuration field " + field + ", that field does not exist in DMR model")
           }
@@ -129,75 +130,51 @@
               scope.prevData[attrName] = '';
             }
           });
-          scope.prevData['type'] = scope.type;
+          scope.prevData['type'] = scope.type.type;
           scope.cleanFieldMetadata('class');
-        };
-
-        scope.isFieldValueModified = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field].uiModified === true;
         };
 
         scope.undoFieldChange = function (field) {
           scope.data[field] = scope.prevData[field];
-          scope.metadata[field].uiModified = false;
-          scope.metadata[field].style = null;
-        };
-
-        scope.resolveDefaultValue = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field]) ? scope.metadata[field].default : 'unspecified';
-        };
-
-        scope.resolveFieldName = function (field) {
-          return utils.convertCacheAttributeIntoFieldName(field);
+          utils.makeFieldClean(scope.metadata[field]);
         };
 
         scope.resolveFieldType = function (field) {
           return utils.resolveFieldType(scope.metadata, field);
         };
 
-        scope.isFieldModified = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field]) ? scope.metadata[field].uiModified : false;
-        };
-
         scope.isAnyFieldModified = function () {
           return scope.allFields.some(function (attrName) {
-            return scope.isFieldModified(attrName);
+            return utils.isFieldValueModified(scope.metadata[attrName]);
           });
-        };
-
-        scope.fieldChangeRequiresRestart = function (field) {
-          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field]['restart-required'] !== 'no-services';
         };
 
         scope.requiresRestart = function () {
           return scope.allFields.some(function (attrName) {
-            return scope.isFieldModified(attrName) && (scope.fieldChangeRequiresRestart(attrName));
+            return utils.isFieldValueModified(scope.metadata[attrName]) && (utils.fieldChangeRequiresRestart(scope.metadata[attrName]));
           });
         };
 
         scope.fieldValueModified = function (field) {
+          var meta= scope.metadata[field];
           var original = scope.prevData[field];
           var latest = scope.data[field];
 
           if (((utils.isNullOrUndefined(original) || original === '') && !latest) || original === latest) {
-            scope.$emit('configurationFieldClean', field);
-            scope.metadata[field].uiModified = false;
-            scope.metadata[field].style = null;
+            utils.makeFieldClean(meta, field, true, scope);
           } else {
-            scope.metadata[field].uiModified = true;
-            scope.metadata[field].style = {'background-color': '#fbeabc'};
-            scope.$emit('configurationFieldDirty', field);
+            utils.makeFieldDirty(meta, field, true, scope);
           }
         };
 
         scope.changeLoaderClass = function () {
-          scope.data['class'] = utils.isNullOrUndefined(scope.type) ? null : angular.copy(scope.type);
+          scope.data['class'] = utils.isNullOrUndefined(scope.type.type) ? null : angular.copy(scope.type.type);
           scope.fieldValueModified('class');
         };
 
         scope.undoClassChange = function () {
           scope.undoFieldChange('class');
-          scope.type = scope.getStoreType(scope.data['class'], scope.cacheLoaders);
+          scope.type.type = scope.getStoreType(scope.data['class'], scope.cacheLoaders);
         };
 
         scope.getStyle = function (field) {
@@ -216,7 +193,7 @@
         };
 
         scope.isCustomLoader = function () {
-          if (utils.isNotNullOrUndefined(scope.type) && scope.type.length == 0) {
+          if (utils.isNotNullOrUndefined(scope.type.type) && scope.type.type.length == 0) {
             return true;
           } else {
             return !scope.cacheLoaders.some(function (loader) {

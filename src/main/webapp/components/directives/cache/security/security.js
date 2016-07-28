@@ -3,7 +3,7 @@
 
   var module = angular.module('ispn.directives.cache.security', ['ispn.services.utils']);
 
-  module.directive('security', ['utils', '$modal', function (utils, modal) {
+  module.directive('security', ['utils', function (utils, modal) {
     return {
       restrict: 'E',
       scope: {
@@ -35,6 +35,8 @@
         if (utils.isNullOrUndefined(scope.data)) {
           scope.data = {};
           utils.deepSet(scope.data, "SECURITY.authorization.AUTHORIZATION", {});
+          scope.data.SECURITY[ 'is-new-node'] = true;
+          scope.data.SECURITY.authorization.AUTHORIZATION[ 'is-new-node'] = true;
           scope.data = scope.data.SECURITY.authorization.AUTHORIZATION;
         }
 
@@ -137,7 +139,7 @@
         };
 
         scope.requiresRestart = function () {
-          return false;
+          return true;
         };
 
         scope.prevData = {};

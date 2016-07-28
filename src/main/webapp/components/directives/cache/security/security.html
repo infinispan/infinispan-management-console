@@ -19,8 +19,7 @@
             <label class="col-md-4 control-label">Enabled</label>
 
             <div class="col-md-4">
-              <input type="checkbox" ng-change="fieldValueModified('enabled')"
-                     ng-style="getStyle('enabled')" ng-model="data['enabled']" ng-change="fieldValueModified('enabled')"/>
+              <input type="checkbox" ng-change="fieldValueModified('enabled')" ng-style="getStyle('enabled')" ng-model="data['enabled']"/>
             </div>
 
             <div class="col-md-4 pull-left">
@@ -35,8 +34,8 @@
             <div class="col-md-4">
               <div class="col-md-12" ng-repeat="role in getRoleNames()">
                 <label>
-                  <input type="checkbox" value="{{role}}" ng-checked="isRoleSelected(role)"
-                         ng-click="toggleSelection(role)"> {{role}}</label>
+                  <input ng-model="data.roles[role]" ng-click="toggleSelection(role);fieldValueModified('roles')"
+                         type="checkbox" value="{{role}}" ng-checked="isRoleSelected(role)"> {{role}}</label>
               </div>
             </div>
             <div class="col-md-4 pull-left">

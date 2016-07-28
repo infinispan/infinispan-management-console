@@ -117,7 +117,7 @@
         };
 
         scope.cleanMetadata = function () {
-          var fields = ['enabled'];
+          var fields = ['enabled', 'roles'];
           fields.forEach(function (field) {
             scope.cleanFieldMetadata(field);
             if (utils.isNotNullOrUndefined(scope.data[field])) {

@@ -52,38 +52,15 @@
     </uib-tab>
 
     <uib-tab heading="Loader">
-      <configuration-section fields="[{name: 'Loader', fields: ['class', 'preload', 'shared']}]" data="data['loader'].LOADER"
-                             metadata="resolveDescription('loader')"
-                             init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
+      <cache-loader data="data['loader'].LOADER" metadata="resolveDescription('loader')" init-defaults="initDefaults"
+                    read-only="readOnly" outside-controller="outsideController"/>
     </uib-tab>
 
-    <uib-tab heading="Generic store">
-      <configuration-section fields="[{name: 'Generic store', fields:['class', 'fetch-state', 'passivation', 'preload', 'purge', 'read-only', 'shared', 'singleton']}]"
-                             data="data['store'].STORE"
-                             metadata="resolveDescription('store')" init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
+    <uib-tab heading="Store">
+      <cachestore data="data" metadata="resolveDescription('jdbcstore')"
+                  init-defaults="initDefaults" read-only="readOnly"
+                  outside-controller="outsideController"/>
     </uib-tab>
 
-    <uib-tab heading="File store">
-
-      <configuration-section fields="[{name: 'File store', fields: ['path', 'relative-to', 'max-entries', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']}]" data="data['file-store'].FILE_STORE"
-                             metadata="resolveDescription('filestore')"
-                             init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
-    </uib-tab>
-    <uib-tab heading="JDBC store">
-      <jdbcstore data="data" metadata="resolveDescription('jdbcstore')"
-                 init-defaults="initDefaults" read-only="readOnly"
-                 outside-controller="outsideController"/>
-    </uib-tab>
-
-    <uib-tab heading="LevelDB store">
-      <configuration-section fields="[{name: 'LevelDB store', fields: ['path', 'cache-size', 'block-size', 'clear-threshold', 'fetch-state', 'passivation',
-            'preload', 'purge', 'read-only', 'shared', 'singleton']}]" data="data['leveldb-store'].LEVELDB_STORE"
-                             metadata="resolveDescription('leveldbstore')" init-defaults="initDefaults" read-only="readOnly"
-                             outside-controller="outsideController"/>
-    </uib-tab>
   </uib-tabset>
 </div>

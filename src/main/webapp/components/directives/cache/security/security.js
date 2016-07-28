@@ -55,6 +55,16 @@
           return roles;
         };
 
+        scope.isSecurityEnabled = function () {
+          return scope.data['enabled'] === true;
+        };
+
+        scope.undoFieldChange = function (field) {
+          scope.data[field] = scope.prevData[field];
+          scope.metadata[field].uiModified = false;
+          scope.metadata[field].style = null;
+        };
+
         // toggle selection for a given role by name
         scope.toggleSelection = function toggleSelection(role) {
           var idx = scope.data.roles.indexOf(role);
@@ -74,12 +84,52 @@
           return scope.data.roles.indexOf(role) > -1;
         };
 
+        scope.isFieldValueModified = function (field) {
+          return utils.isNotNullOrUndefined(scope.metadata[field]) && scope.metadata[field].uiModified === true;
+        };
+
         scope.isAnyFieldModified = function () {
-          return true;
+          return scope.isFieldValueModified('enabled');
+        };
+
+
+        scope.fieldValueModified = function (field) {
+          if (scope.prevData[field] !== scope.data[field]) {
+            scope.metadata[field].uiModified = true;
+            scope.metadata[field].style = {'background-color': '#fbeabc'};
+            scope.$emit('configurationFieldDirty', field);
+          } else {
+            scope.$emit('configurationFieldClean', field);
+            scope.metadata[field].uiModified = false;
+            scope.metadata[field].style = null;
+          }
+        };
+
+        scope.cleanFieldMetadata = function (field) {
+          if (utils.isNotNullOrUndefined(scope.metadata[field])){
+            scope.metadata[field].uiModified = false;
+            scope.metadata[field].style = null;
+          } else {
+            console.log("Cleaning metadata for configuration field " + field + ", that field does not exist in DMR model")
+          }
         };
 
         scope.cleanMetadata = function () {
-          //todo
+          var fields = ['enabled'];
+          fields.forEach(function (field) {
+            scope.cleanFieldMetadata(field);
+            if (utils.isNotNullOrUndefined(scope.data[field])) {
+              scope.prevData[field] = angular.copy(scope.data[field]);
+            } else {
+              scope.prevData[field] = '';
+            }
+          });
+        };
+
+        scope.undoFieldChange = function (field) {
+          scope.data[field] = scope.prevData[field];
+          scope.metadata[field].uiModified = false;
+          scope.metadata[field].style = null;
         };
 
         scope.fieldChangeRequiresRestart = function (field) {
@@ -89,6 +139,14 @@
         scope.requiresRestart = function () {
           return false;
         };
+
+        scope.prevData = {};
+        //if not initializing to defaults then make root node in the model tree (if not existing already)
+        if (!utils.isNotNullOrUndefined(scope.data)) {
+          scope.data = {};
+        }
+        scope.cleanMetadata();
+
 
         scope.internalController.requiresRestart = scope.requiresRestart;
         scope.internalController.cleanMetadata = scope.cleanMetadata;

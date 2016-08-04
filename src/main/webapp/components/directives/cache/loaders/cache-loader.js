@@ -124,13 +124,9 @@
         scope.cleanMetadata = function () {
           scope.allFields.forEach(function (attrName) {
             scope.cleanFieldMetadata(attrName);
-            if (utils.isNotNullOrUndefined(scope.data[attrName])) {
-              scope.prevData[attrName] = angular.copy(scope.data[attrName]);
-            } else {
-              scope.prevData[attrName] = '';
-            }
+            scope.prevData[attrName] = angular.copy(scope.data[attrName]);
           });
-          scope.prevData['type'] = scope.type.type;
+          scope.prevData.type = utils.isNullOrUndefined(scope.type) ? 'None' : scope.type.type;
           scope.cleanFieldMetadata('class');
         };
 
@@ -155,21 +151,20 @@
           });
         };
 
-        scope.fieldValueModified = function (field) {
-          var meta= scope.metadata[field];
-          var original = scope.prevData[field];
-          var latest = scope.data[field];
-
-          if (((utils.isNullOrUndefined(original) || original === '') && !latest) || original === latest) {
-            utils.makeFieldClean(meta, field, true, scope);
-          } else {
-            utils.makeFieldDirty(meta, field, true, scope);
-          }
-        };
-
         scope.changeLoaderClass = function () {
           scope.data['class'] = utils.isNullOrUndefined(scope.type.type) ? null : angular.copy(scope.type.type);
-          scope.fieldValueModified('class');
+
+          var meta = scope.metadata['class'];
+          var original = scope.prevData['class'];
+          var latest = scope.data['class'];
+          var customLoaderSelected = latest === '' && utils.isNullOrUndefined(original);
+          var noValueOrPrevData = (utils.isNullOrUndefined(original) || original === '') && !latest;
+
+          if (!customLoaderSelected && noValueOrPrevData || original === latest) {
+            utils.makeFieldClean(meta, 'class', true, scope);
+          } else {
+            utils.makeFieldDirty(meta, 'class', true, scope);
+          }
         };
 
         scope.undoClassChange = function () {

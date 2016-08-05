@@ -147,14 +147,16 @@ angular.module('managementConsole.api')
 
               angular.forEach(endpoints, function (value, key) {
                 // If cacheContainer is null, then we know that multiple endPoints exist
-                var cacheContainer = value['cacheContainer'];
-                if (utils.isNullOrUndefined(cacheContainer)) {
-                  angular.forEach(value, function (endpoint) {
+                if (utils.isNotNullOrUndefined(value)) {
+                  var cacheContainer = value['cacheContainer'];
+                  if (utils.isNullOrUndefined(cacheContainer)) {
+                    angular.forEach(value, function (endpoint) {
+                      updateEndpoints(socketEndpoints, endpoint);
+                    });
+                  } else {
+                    var endpoint = value[key];
                     updateEndpoints(socketEndpoints, endpoint);
-                  });
-                } else {
-                  var endpoint = value[key];
-                  updateEndpoints(socketEndpoints, endpoint);
+                  }
                 }
               });
               return socketEndpoints;

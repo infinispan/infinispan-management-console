@@ -394,7 +394,7 @@ angular.module('managementConsole', [
   }])
   .config(function ($translateProvider) {
     $translateProvider.useStaticFilesLoader({
-      prefix: '/assets/languages/',
+      prefix: 'assets/languages/locale-',
       suffix: '.txt'
     });
     $translateProvider.preferredLanguage('enUS');

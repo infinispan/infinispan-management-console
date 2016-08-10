@@ -6,6 +6,11 @@ var browserSync = require('browser-sync');
 
 var middleware = require('./proxy');
 
+var paths = {
+  dist: 'dist',
+  test: '.tmp'
+};
+
 function browserSyncInit(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
 
@@ -21,9 +26,14 @@ function browserSyncInit(baseDir, files, browser) {
 }
 
 gulp.task('serve', ['build', 'watch'], function () {
-  browserSyncInit('dist',
-    ['dist/**/*.html',
-      'dist/**/*.css',
-      'dist/**/*.js',
+  browserSyncInit(paths.test,
+    [
+      paths.test + '/**/*.html',
+      paths.test + '/**/*.css',
+      paths.test + '/**/*.js'
     ]);
+});
+
+gulp.task('serve:dist', ['build'], function () {
+  browserSyncInit(paths.dist);
 });

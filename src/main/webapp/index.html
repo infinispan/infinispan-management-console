@@ -6,13 +6,18 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css({src/main}) styles/vendor.css -->
+    <!-- build:css(dist) styles/vendor.css -->
     <!-- components:css -->
     <link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly.css" media="screen, print"/>
     <link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly-additions.css" media="screen, print"/>
 
     <link rel="stylesheet" href="built_components/c3/c3.css" type="text/css"/>
 
+    <!-- endcomponents -->
+    <!-- endbuild -->
+
+    <!-- build:css(dist) styles/management.css -->
+    <!-- compnents:css -->
     <link rel="stylesheet" href="management-console.css">
     <!-- endcomponents -->
     <!-- endbuild -->
@@ -31,7 +36,7 @@
         <div ui-view></div>
     </div>
 
-    <!-- build:js(src/main) scripts/vendor.js -->
+    <!-- build:js(dist) scripts/vendor.js -->
     <!-- components:js -->
     <script src="built_components/jquery/dist/jquery.js"></script>
     <script src="built_components/angular/angular.js"></script>
@@ -50,7 +55,7 @@
     <!-- endcomponents -->
     <!-- endbuild -->
 
-    <!-- build:js({src/main/webapp}) scripts/main.js -->
+    <!-- build:js(src/main/webapp) scripts/main.js -->
     <script src="management-console.js"></script>
     <script src="login/login.controller.js"></script>
     <script src="clusters-view/clusters-view.controller.js"></script>

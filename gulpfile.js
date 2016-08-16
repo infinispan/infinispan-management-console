@@ -5,11 +5,11 @@ const config = {
   projectDir: __dirname,
   configDir: path.join(__dirname, 'config'),
   taskDir: path.join(__dirname, 'tasks'),
-  srcDir: path.join(__dirname, 'src'),
+  srcDir: path.join(__dirname, 'src/main/webapp'),
   docsDir: path.join(__dirname, 'docs'),
   distDir: path.join(__dirname, 'dist'),
-  tsLintSrcConf: path.join(__dirname, configDir, 'tslint.json'),
-  watchDir: path.join(__dirname, 'src')
+  tsLintSrcConf: path.join(__dirname, 'tslint.json'),
+  watchDir: path.join(__dirname, 'src/main/webapp')
 };
 
 gulp.task('clean:src', require('./tasks/clean')(gulp, config.srcDir));

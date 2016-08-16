@@ -1,29 +1,51 @@
-'use strict';
+module.exports = (gulp, serverRootDir, watchDir, openBrowser) => {
+  const path = require('path');
+  const TS_WATCH_FLAG = '--watch-ts';
 
-var gulp = require('gulp');
+  return () => {
+    const proxy = require('http-proxy-middleware');
+    const browserSync = require('browser-sync').init({
+      server: {
+        baseDir: [serverRootDir],
+        middleware: [proxy('http://localhost:9990/management')]
+      },
+      open: openBrowser,
+      host: 'localhost',
+      browser: 'default',
+      notify: false
+    });
 
-var browserSync = require('browser-sync');
+    setWatchers(browserSync.reload);
 
-var middleware = require('./proxy');
+    return browserSync;
+  };
 
-function browserSyncInit(baseDir, files, browser) {
-  browser = browser === undefined ? 'default' : browser;
+  function setWatchers(reloadCallback) {
+    var onOffFlag = '✗';
 
-  browserSync.instance = browserSync.init(files, {
-    startPath: '/index.html',
-    server: {
-      baseDir: baseDir,
-      middleware: middleware
-    },
-    browser: browser
-  });
+    if (watchDir) {
+      var fileExtensionToWatch = 'js';
+      var callback = (event) => {
+        console.info(`File ${event.path} was ${event.type}`);
+        reloadCallback();
+      };
 
-}
+      if (shouldWatchTypeScript()) {
+        fileExtensionToWatch = 'ts';
+        callback = (event) => {
+          require('./compile')(gulp, watchDir, reloadCallback, event.path)();
+          console.info(`File ${event.path} was ${event.type}, running compilation...`);
+        };
+        onOffFlag = '✓';
+      }
 
-gulp.task('serve', ['build', 'watch'], function () {
-  browserSyncInit('dist',
-    ['dist/**/*.html',
-      'dist/**/*.css',
-      'dist/**/*.js',
-    ]);
-});
+      gulp.watch(path.join(watchDir, '**', `*.${fileExtensionToWatch}`), callback);
+    }
+
+    console.info(`\n\tWatching TypeScript ${onOffFlag}\n`);
+  }
+
+  function shouldWatchTypeScript() {
+    return process.argv.slice(3).indexOf(TS_WATCH_FLAG) !== -1;
+  }
+};

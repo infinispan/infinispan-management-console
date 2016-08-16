@@ -11,3 +11,6 @@ src/main/bower_components
 target
 *.iml
 *.pyc
+vendor/
+typings/
+report/

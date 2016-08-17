@@ -1,23 +1,20 @@
 'use strict';
-
 angular.module('managementConsole')
-  .controller('NavBarCtrl', [
+    .controller('NavBarCtrl', [
     '$scope',
     '$state',
     'modelController',
     function ($scope, $state, modelController) {
-      $scope.modelController = modelController;
-
-      $scope.isVisible = function () {
-        return modelController.isAuthenticated();
-      };
-
-      $scope.getUser = function () {
-        return modelController.getUser();
-      };
-
-      $scope.logout = function () {
-        modelController.logout();
-        $state.go('login');
-      };
+        $scope.modelController = modelController;
+        $scope.isVisible = function () {
+            return modelController.isAuthenticated();
+        };
+        $scope.getUser = function () {
+            return modelController.getUser();
+        };
+        $scope.logout = function () {
+            modelController.logout();
+            $state.go('login');
+        };
     }]);
+//# sourceMappingURL=navbar.controller.js.map

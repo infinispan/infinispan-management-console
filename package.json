@@ -3,7 +3,7 @@
   "version": "9.0.0-SNAPSHOT",
   "license": "Apache-2.0",
   "dependencies": {
-    "angular": "1.4.4",
+    "angular": "1.5.8",
     "angular-local-storage": "0.2.2",
     "angular-ui-bootstrap": "0.14.0",
     "angular-ui-router": "0.2.13",
@@ -14,10 +14,10 @@
     "jquery": "2.1.4",
     "jquery-match-height": "0.6.0",
     "patternfly": "3.2.0",
-    "angular-translate": "^2.11.0"
+    "angular-translate": "^2.11.1"
   },
   "devDependencies": {
-    "browser-sync": "~2.12.3",
+    "browser-sync": "~2.14.0",
     "chai": "~3.5.0",
     "del": "~2.2.0",
     "eslint": "~2.9.0",
@@ -42,6 +42,7 @@
     "phantomjs-prebuilt": "~2.1.7",
     "protractor": "~3.3.0",
     "run-sequence": "~1.1.5",
+    "serve-static": "1.11.1",
     "sinon": "~1.17.3",
     "sinon-chai": "~2.8.0",
     "tslint": "~3.10.1",
@@ -69,6 +70,7 @@
       "angular": "github:angular/bower-angular@^1.5.8",
       "angular-local-storage": "npm:angular-local-storage@^0.2.7",
       "angular-translate": "github:angular-translate/bower-angular-translate@^2.11.1",
+      "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@^2.11.1",
       "angular-ui-bootstrap": "npm:angular-ui-bootstrap@0.14.0",
       "angular-ui-router": "github:angular-ui/angular-ui-router-bower@^0.3.1",
       "bootstrap": "github:twbs/bootstrap@^3.3.7",

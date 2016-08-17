@@ -29,6 +29,7 @@ System.config({
     "angular-local-storage": "npm:angular-local-storage@0.2.7",
     "angular-mocks": "github:angular/bower-angular-mocks@1.5.8",
     "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1",
+    "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@0.14.0",
     "angular-ui-router": "github:angular-ui/angular-ui-router-bower@0.3.1",
     "babel": "npm:babel-core@5.8.38",
@@ -43,6 +44,9 @@ System.config({
     "patternfly": "npm:patternfly@3.8.1",
     "ts": "github:frankwallis/plugin-typescript@4.0.5",
     "typescript": "npm:typescript@1.8.10",
+    "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1": {
+      "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
+    },
     "github:angular-translate/bower-angular-translate@2.11.1": {
       "angular": "github:angular/bower-angular@1.5.8"
     },

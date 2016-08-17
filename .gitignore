@@ -16,3 +16,5 @@ vendor/
 typings/
 report/
 docs/
+src/**/*.js
+src/**/*.js.map

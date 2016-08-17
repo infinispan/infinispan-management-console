@@ -1,110 +1,110 @@
-<!doctype html>
-<html class="no-js" ng-app="managementConsole" ng-class="[page.htmlClass]">
-  <head>
-    <meta charset="utf-8">
-    <title>Infinispan Server Management Console</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css({src/main}) styles/vendor.css -->
-    <!-- components:css -->
-    <link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly.css" media="screen, print"/>
-    <link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly-additions.css" media="screen, print"/>
+<!--<!doctype html>-->
+<!--<html class="no-js" ng-app="managementConsole" ng-class="[page.htmlClass]">-->
+  <!--<head>-->
+    <!--<meta charset="utf-8">-->
+    <!--<title>Infinispan Server Management Console</title>-->
+    <!--<meta name="description" content="">-->
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1.0">-->
+    <!--&lt;!&ndash; Place favicon.ico and apple-touch-icon.png in the root directory &ndash;&gt;-->
+    <!--&lt;!&ndash; build:css({src/main}) styles/vendor.css &ndash;&gt;-->
+    <!--&lt;!&ndash; components:css &ndash;&gt;-->
+    <!--<link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly.css" media="screen, print"/>-->
+    <!--<link rel="stylesheet" href="built_components/patternfly/dist/css/patternfly-additions.css" media="screen, print"/>-->
 
-    <link rel="stylesheet" href="built_components/c3/c3.css" type="text/css"/>
+    <!--<link rel="stylesheet" href="built_components/c3/c3.css" type="text/css"/>-->
 
-    <link rel="stylesheet" href="management-console.css">
-    <!-- endcomponents -->
-    <!-- endbuild -->
+    <!--<link rel="stylesheet" href="management-console.css">-->
+    <!--&lt;!&ndash; endcomponents &ndash;&gt;-->
+    <!--&lt;!&ndash; endbuild &ndash;&gt;-->
 
-    <!-- modernizr does not provide built files and thus requires special treatment during build process, use CDN instead -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-    <!-- endbuild -->
-  </head>
-  <body>
-    <!--[if lt IE 10]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+    <!--&lt;!&ndash; modernizr does not provide built files and thus requires special treatment during build process, use CDN instead &ndash;&gt;-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>-->
+    <!--&lt;!&ndash; endbuild &ndash;&gt;-->
+  <!--</head>-->
+  <!--<body>-->
+    <!--&lt;!&ndash;[if lt IE 10]>-->
+      <!--<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>-->
+    <!--<![endif]&ndash;&gt;-->
 
-    <div ng-controller="NavBarCtrl">
-        <ng-include src="'components/navbar/navbar.html'"></ng-include>
-        <div ui-view></div>
-    </div>
+    <!--<div ng-controller="NavBarCtrl">-->
+        <!--<ng-include src="'components/navbar/navbar.html'"></ng-include>-->
+        <!--<div ui-view></div>-->
+    <!--</div>-->
 
-    <!-- build:js(src/main) scripts/vendor.js -->
-    <!-- components:js -->
-    <script src="built_components/jquery/dist/jquery.js"></script>
-    <script src="built_components/angular/angular.js"></script>
-    <script src="built_components/bootstrap/js/alert.js"></script>
-    <script src="built_components/angular-local-storage/dist/angular-local-storage.js"></script>
-    <script src="built_components/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="built_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="built_components/patternfly/dist/js/patternfly.js"></script>
-    <script src="built_components/jquery-match-height/jquery.matchHeight-min.js"></script>
-    <script src="built_components/d3/d3.js" charset="utf-8"></script>
-    <script src="built_components/c3/c3.js"></script>
-    <script src="built_components/c3-angular/c3-angular.min.js"></script>
-    <script src="built_components/angular-translate/dist/angular-translate.min.js"></script>
-    <script src="built_components/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <!--&lt;!&ndash; build:js(src/main) scripts/vendor.js &ndash;&gt;-->
+    <!--&lt;!&ndash; components:js &ndash;&gt;-->
+    <!--<script src="built_components/jquery/dist/jquery.js"></script>-->
+    <!--<script src="built_components/angular/angular.js"></script>-->
+    <!--<script src="built_components/bootstrap/js/alert.js"></script>-->
+    <!--<script src="built_components/angular-local-storage/dist/angular-local-storage.js"></script>-->
+    <!--<script src="built_components/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>-->
+    <!--<script src="built_components/angular-ui-router/release/angular-ui-router.js"></script>-->
+    <!--<script src="built_components/patternfly/dist/js/patternfly.js"></script>-->
+    <!--<script src="built_components/jquery-match-height/jquery.matchHeight-min.js"></script>-->
+    <!--<script src="built_components/d3/d3.js" charset="utf-8"></script>-->
+    <!--<script src="built_components/c3/c3.js"></script>-->
+    <!--<script src="built_components/c3-angular/c3-angular.min.js"></script>-->
+    <!--<script src="built_components/angular-translate/dist/angular-translate.min.js"></script>-->
+    <!--<script src="built_components/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>-->
 
-    <!-- endcomponents -->
-    <!-- endbuild -->
+    <!--&lt;!&ndash; endcomponents &ndash;&gt;-->
+    <!--&lt;!&ndash; endbuild &ndash;&gt;-->
 
-    <!-- build:js({src/main/webapp}) scripts/main.js -->
-    <script src="management-console.js"></script>
-    <script src="login/login.controller.js"></script>
-    <script src="clusters-view/clusters-view.controller.js"></script>
-    <script src="cluster-view/cluster-view.controller.js"></script>
-    <script src="cluster-view/tasks-view.controller.js"></script>
-    <script src="clusters-view-physical/clusters-view.controller.js"></script>
-    <script src="cluster-nodes/cluster-nodes.controller.js"></script>
-    <script src="cache-status/cache-status.controller.js"></script>
-    <script src="node-status/node-status.controller.js"></script>
-    <script src="cache-nodes/cache-nodes.controller.js"></script>
-    <script src="edit-cache/edit-cache.controller.js"></script>
-    <script src="edit-cache-template/edit-cache-template.controller.js"></script>
+    <!--&lt;!&ndash; build:js({src/main/webapp}) scripts/main.js &ndash;&gt;-->
+    <!--<script src="management-console.js"></script>-->
+    <!--<script src="login/login.controller.js"></script>-->
+    <!--<script src="clusters-view/clusters-view.controller.js"></script>-->
+    <!--<script src="cluster-view/cluster-view.controller.js"></script>-->
+    <!--<script src="cluster-view/tasks-view.controller.js"></script>-->
+    <!--<script src="clusters-view-physical/clusters-view.controller.js"></script>-->
+    <!--<script src="cluster-nodes/cluster-nodes.controller.js"></script>-->
+    <!--<script src="cache-status/cache-status.controller.js"></script>-->
+    <!--<script src="node-status/node-status.controller.js"></script>-->
+    <!--<script src="cache-nodes/cache-nodes.controller.js"></script>-->
+    <!--<script src="edit-cache/edit-cache.controller.js"></script>-->
+    <!--<script src="edit-cache-template/edit-cache-template.controller.js"></script>-->
 
-    <script src="events-view/cluster-events-service.js"></script>
-    <script src="cluster-view/task-service.js"></script>
-    <script src="cache-status/cache-service.js"></script>
-    <script src="cluster-nodes/cluster-nodes-service.js"></script>
-    <script src="cache-container/cache-container-configuration-service.js"></script>
-    <script src="cache-container/configuration-schemas/edit-schemas.controller.js"></script>
-    <script src="cache-container/configuration-transport/edit-transport.controller.js"></script>
-    <script src="cache-container/configuration-security/edit-security.controller.js"></script>
-    <script src="cache-container/configuration-templates/edit-templates.controller.js"></script>
-    <script src="cache-container/configuration-threadpools/edit-threadpools.controller.js"></script>
-    <script src="cache-container/configuration-tasks/tasks.controller.js"></script>
-    <script src="cache-container/configuration-deploy/deploy.controller.js"></script>
-    <script src="events-view/events-view.controller.js"></script>
+    <!--<script src="events-view/cluster-events-service.js"></script>-->
+    <!--<script src="cluster-view/task-service.js"></script>-->
+    <!--<script src="cache-status/cache-service.js"></script>-->
+    <!--<script src="cluster-nodes/cluster-nodes-service.js"></script>-->
+    <!--<script src="cache-container/cache-container-configuration-service.js"></script>-->
+    <!--<script src="cache-container/configuration-schemas/edit-schemas.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-transport/edit-transport.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-security/edit-security.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-templates/edit-templates.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-threadpools/edit-threadpools.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-tasks/tasks.controller.js"></script>-->
+    <!--<script src="cache-container/configuration-deploy/deploy.controller.js"></script>-->
+    <!--<script src="events-view/events-view.controller.js"></script>-->
 
-    <script src="components/api/api.js"></script>
-    <script src="components/api/cache-creation-controller.service.js"></script>
-    <script src="components/api/node-creation-controller.service.js"></script>
-    <script src="components/api/cache-model.service.js"></script>
-    <script src="components/api/cluster-model.service.js"></script>
-    <script src="components/api/domain-model.service.js"></script>
-    <script src="components/api/model-controller.service.js"></script>
-    <script src="components/api/profile-model.service.js"></script>
-    <script src="components/api/endpoint-model.service.js"></script>
-    <script src="components/api/server-model.service.js"></script>
-    <script src="components/api/servergroup-model.service.js"></script>
-    <script src="components/navbar/navbar.controller.js"></script>
-    <script src="components/services/utils.js"></script>
-    <script src="components/directives/match-height/match-height.js"></script>
-    <script src="components/directives/finishRender/finishRender.js"></script>
-    <script src="components/directives/form-group/form-group.js"></script>
-    <script src="components/directives/cache/security/security.js"></script>
-    <script src="components/directives/cache/store/cache-store.js"></script>
-    <script src="components/directives/cache/store/modal-dialog/modal-dialog.js"></script>
-    <script src="components/directives/cache/configurationViewer.js"></script>
-    <script src="components/directives/cache/configurationSection.js"></script>
-    <script src="components/directives/cache/loaders/cache-loader.js"></script>
+    <!--<script src="components/api/api.js"></script>-->
+    <!--<script src="components/api/cache-creation-controller.service.js"></script>-->
+    <!--<script src="components/api/node-creation-controller.service.js"></script>-->
+    <!--<script src="components/api/cache-model.service.js"></script>-->
+    <!--<script src="components/api/cluster-model.service.js"></script>-->
+    <!--<script src="components/api/domain-model.service.js"></script>-->
+    <!--<script src="components/api/model-controller.service.js"></script>-->
+    <!--<script src="components/api/profile-model.service.js"></script>-->
+    <!--<script src="components/api/endpoint-model.service.js"></script>-->
+    <!--<script src="components/api/server-model.service.js"></script>-->
+    <!--<script src="components/api/servergroup-model.service.js"></script>-->
+    <!--<script src="components/navbar/navbar.controller.js"></script>-->
+    <!--<script src="components/services/utils.js"></script>-->
+    <!--<script src="components/directives/match-height/match-height.js"></script>-->
+    <!--<script src="components/directives/finishRender/finishRender.js"></script>-->
+    <!--<script src="components/directives/form-group/form-group.js"></script>-->
+    <!--<script src="components/directives/cache/security/security.js"></script>-->
+    <!--<script src="components/directives/cache/store/cache-store.js"></script>-->
+    <!--<script src="components/directives/cache/store/modal-dialog/modal-dialog.js"></script>-->
+    <!--<script src="components/directives/cache/configurationViewer.js"></script>-->
+    <!--<script src="components/directives/cache/configurationSection.js"></script>-->
+    <!--<script src="components/directives/cache/loaders/cache-loader.js"></script>-->
 
-    <!-- inject:partials -->
-    <!-- angular templates will be automaticaly converted in js and inserted here -->
-    <!-- endinject -->
-    <!-- endbuild -->
+    <!--&lt;!&ndash; inject:partials &ndash;&gt;-->
+    <!--&lt;!&ndash; angular templates will be automaticaly converted in js and inserted here &ndash;&gt;-->
+    <!--&lt;!&ndash; endinject &ndash;&gt;-->
+    <!--&lt;!&ndash; endbuild &ndash;&gt;-->
 
-  </body>
-</html>
+  <!--</body>-->
+<!--</html>-->

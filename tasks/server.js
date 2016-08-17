@@ -6,12 +6,12 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser) => {
     const proxy = require('http-proxy-middleware');
     const browserSync = require('browser-sync').init({
       server: {
-        baseDir: [serverRootDir],
+        baseDir: serverRootDir,
         middleware: [proxy('http://localhost:9990/management')]
       },
       open: openBrowser,
       host: 'localhost',
-      browser: 'default',
+      browser: 'gDev',
       notify: false
     });
 

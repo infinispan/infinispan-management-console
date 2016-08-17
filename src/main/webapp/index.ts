@@ -1,5 +1,6 @@
 import {App} from "./App";
 import "./management-console";
+import "./clusters-view/clusters-view";
 import "./error404/error404";
 import "./login/login";
 import "./components/api/api";
@@ -16,6 +17,7 @@ import "./components/services/utils";
 App.element(document).ready(() => {
   App.bootstrap(document, [
     "managementConsole",
+    "managementConsole.clusters-view",
     "managementConsole.error",
     "managementConsole.login",
     "managementConsole.api.model-controller",

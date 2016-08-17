@@ -1,5 +1,6 @@
-define(["require", "exports", ".././App"], function (require, exports, App_1) {
+define(["require", "exports", "../App"], function (require, exports, App_1) {
     "use strict";
+    // TODO when we re-work controller as Typescript objects we should not register to module, but just export class
     var module = App_1.App.module("managementConsole", []);
     module.controller('LoginCtrl', [
         '$scope',

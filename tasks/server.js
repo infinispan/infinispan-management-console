@@ -10,7 +10,8 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
         middleware: [proxy('http://localhost:9990/management')],
         routes: {
           "/vendor": path.join(projectRoot, "vendor"),
-          "/assets": path.join(projectRoot, "/assets"),
+          "/assets": path.join(projectRoot, "assets"),
+          "/fonts": path.join(projectRoot, "dist/fonts")
         },
         index: "./index.html"
       },

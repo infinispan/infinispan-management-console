@@ -12,13 +12,15 @@ const config = {
   distDir: path.join(__dirname, 'dist'),
   tsLintSrcConf: path.join(__dirname, 'tslint.json'),
   watchDir: path.join(__dirname, 'src'),
-  npmDir: path.join(__dirname, 'node_modules')
+  npmDir: path.join(__dirname, 'node_modules'),
+  fonts: path.join('fonts')
 };
 
 gulp.task('clean:src', require('./tasks/clean')(gulp, config.srcDir));
 gulp.task('clean', ['clean:src']);
 
-gulp.task('less', ['clean:src'], require('./tasks/less')(gulp, config));
+gulp.task('less', ['fonts'], require('./tasks/less')(gulp, config));
+gulp.task('fonts', ['clean:src'], require('./tasks/fonts')(gulp, config));
 
 gulp.task('compile:src', ['less'], require('./tasks/compile')(gulp, config.srcDir));
 gulp.task('compile', ['compile:src']);

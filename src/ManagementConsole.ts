@@ -17,14 +17,13 @@ import "jquery-match-height";
 import "patternfly";
 import "angular-translate";
 import "angular-translate-loader-static-files";
-import "patternfly/dist/css/patternfly.css!";
-import "patternfly/dist/css/patternfly-additions.css!";
 import "./ManagementConsole.css!";
 import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 
 const App:ng.IAngularStatic = angular;
 const module:ng.IModule = angular.module("managementConsole", [
   "ui.router",
+  'ui.bootstrap',
   'pascalprecht.translate'
 ]);
 

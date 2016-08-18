@@ -4,11 +4,11 @@ import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 
-const module:ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
+const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
 
 export class AuthenticationService {
 
-  static $inject:string[] = ["$http", "$q", "$location", "localStorageService", "launchType"];
+  static $inject: string[] = ["$http", "$q", "$location", "localStorageService", "launchType"];
 
   credentials: ICredentials = <ICredentials>{};
 
@@ -17,9 +17,8 @@ export class AuthenticationService {
               private $location: ng.ILocationService,
               private localStorageService: ILocalStorageService,
               private launchType: LaunchTypeService) {
-                this.credentials.username = localStorageService.get<string>("username");
-                this.credentials.username = localStorageService.get<string>("password");
-              }
+    this.getCredentials();
+  }
 
   isLoggedIn(): boolean {
     return this.credentials.username !== undefined;
@@ -54,11 +53,21 @@ export class AuthenticationService {
   }
 
   getCredentials(): ICredentials {
+    if (this.credentials.username === undefined || this.credentials.password === undefined) {
+      this.credentials = this.getLocalCredentials();
+    }
     return this.credentials;
   }
 
   getUser(): string {
     return this.credentials.username;
+  }
+
+  private getLocalCredentials(): ICredentials {
+    var credentials: ICredentials = <ICredentials>{};
+    credentials.username = this.localStorageService.get<string>("username");
+    credentials.username = this.localStorageService.get<string>("password");
+    return credentials;
   }
 
   private setCredentials(credentials: ICredentials): void {

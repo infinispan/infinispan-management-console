@@ -1,10 +1,12 @@
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {IStateService} from "angular-ui-router";
+import {ServerService} from "../../services/server/ServerService";
 
 export class NavbarCtrl {
-  static $inject: string[] = ["$scope", "$state", "authService"];
+  static $inject: string[] = ["$scope", "$state", "authService", "serverService"];
 
-  constructor(private $scope: ng.IScope, private $state: IStateService, private authenticationService: AuthenticationService) {
+  constructor(private $scope: ng.IScope, private $state: IStateService, private authenticationService: AuthenticationService,
+              private serverService: ServerService) {
   }
 
   isVisible(): boolean {
@@ -18,5 +20,9 @@ export class NavbarCtrl {
   logOut(): void {
     this.authenticationService.logout();
     this.$state.go("login");
+  }
+
+  isServerAlive(): boolean {
+    return this.serverService.isManagementApiAccessible();
   }
 }

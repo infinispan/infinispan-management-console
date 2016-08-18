@@ -18,3 +18,5 @@ report/
 docs/
 src/**/*.js
 src/**/*.js.map
+src/**/*.css
+old-source/

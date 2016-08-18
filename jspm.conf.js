@@ -8,12 +8,12 @@ System.config({
     ]
   },
   typescriptOptions: {
-    "tsconfig": "src/main/webapp/tsconfig.json"
+    "tsconfig": "src/tsconfig.json"
   },
   paths: {
     "github:*": "vendor/jspm_packages/github/*",
     "npm:*": "vendor/jspm_packages/npm/*",
-    "app/*": "src/main/webapp/*"
+    "app/*": "src/*"
   },
 
   packages: {
@@ -35,15 +35,19 @@ System.config({
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "bootstrap": "github:twbs/bootstrap@3.3.7",
+    "bootstrap-css": "npm:bootstrap-css@3.0.0",
+    "c3": "npm:c3@0.4.10",
+    "c3-angular": "npm:c3-angular@1.0.1",
     "clean-css": "npm:clean-css@3.4.19",
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.26",
+    "d3": "npm:d3@3.5.0",
     "http-proxy": "npm:http-proxy@1.14.0",
     "jquery": "npm:jquery@3.1.0",
     "jquery-match-height": "npm:jquery-match-height@0.7.0",
-    "patternfly": "npm:patternfly@3.8.1",
+    "patternfly": "npm:patternfly@3.9.0",
     "ts": "github:frankwallis/plugin-typescript@4.0.5",
-    "typescript": "npm:typescript@1.8.10",
+    "typescript": "npm:typescript@1.8.9",
     "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1": {
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },
@@ -57,7 +61,7 @@ System.config({
       "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:frankwallis/plugin-typescript@4.0.5": {
-      "typescript": "npm:typescript@1.8.10"
+      "typescript": "npm:typescript@1.8.9"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
@@ -91,6 +95,9 @@ System.config({
     "github:jspm/nodelibs-stream@0.1.0": {
       "stream-browserify": "npm:stream-browserify@1.0.0"
     },
+    "github:jspm/nodelibs-string_decoder@0.1.0": {
+      "string_decoder": "npm:string_decoder@0.10.31"
+    },
     "github:jspm/nodelibs-url@0.1.0": {
       "url": "npm:url@0.10.3"
     },
@@ -121,6 +128,9 @@ System.config({
     "npm:babel-runtime@5.8.38": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
+    "npm:bootstrap-css@3.0.0": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:bootstrap-datepicker@1.6.4": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "jquery": "npm:jquery@3.1.0",
@@ -145,6 +155,14 @@ System.config({
       "ieee754": "npm:ieee754@1.1.6",
       "isarray": "npm:isarray@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:c3-angular@1.0.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:c3@0.4.10": {
+      "d3": "npm:d3@3.5.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:c3@0.4.11": {
       "d3": "npm:d3@3.5.17",
@@ -181,6 +199,9 @@ System.config({
     "npm:core-util-is@1.0.2": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
+    "npm:d3@3.5.0": {
+      "jsdom": "npm:jsdom@1.0.0"
+    },
     "npm:datatables.net-colreorder@1.3.2": {
       "datatables.net": "npm:datatables.net@1.10.12",
       "jquery": "npm:jquery@3.1.0",
@@ -194,9 +215,23 @@ System.config({
       "css": "github:systemjs/plugin-css@0.1.26",
       "jquery": "npm:jquery@3.1.0"
     },
+    "npm:dom-serializer@0.1.0": {
+      "domelementtype": "npm:domelementtype@1.1.3",
+      "entities": "npm:entities@1.1.1"
+    },
+    "npm:domhandler@2.3.0": {
+      "domelementtype": "npm:domelementtype@1.3.0"
+    },
+    "npm:domutils@1.5.1": {
+      "dom-serializer": "npm:dom-serializer@0.1.0",
+      "domelementtype": "npm:domelementtype@1.3.0"
+    },
     "npm:drmonty-datatables-colvis@1.1.2": {
       "jquery": "npm:jquery@3.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:entities@1.1.1": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:eonasdan-bootstrap-datetimepicker@4.15.35": {
       "bootstrap": "npm:bootstrap@3.3.7",
@@ -213,6 +248,19 @@ System.config({
     },
     "npm:graceful-readlink@1.0.1": {
       "fs": "github:jspm/nodelibs-fs@0.1.2"
+    },
+    "npm:htmlparser2@3.9.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "domelementtype": "npm:domelementtype@1.3.0",
+      "domhandler": "npm:domhandler@2.3.0",
+      "domutils": "npm:domutils@1.5.1",
+      "entities": "npm:entities@1.1.1",
+      "events": "github:jspm/nodelibs-events@0.1.1",
+      "inherits": "npm:inherits@2.0.1",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "stream": "github:jspm/nodelibs-stream@0.1.0",
+      "string_decoder": "github:jspm/nodelibs-string_decoder@0.1.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:http-proxy@1.14.0": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
@@ -242,13 +290,33 @@ System.config({
     "npm:jquery@3.1.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
+    "npm:jsdom@1.0.0": {
+      "assert": "github:jspm/nodelibs-assert@0.1.0",
+      "cssom": "npm:cssom@0.3.1",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "htmlparser2": "npm:htmlparser2@3.9.1",
+      "http": "github:jspm/nodelibs-http@1.7.1",
+      "https": "github:jspm/nodelibs-https@0.1.0",
+      "nwmatcher": "npm:nwmatcher@1.3.8",
+      "parse5": "npm:parse5@1.5.1",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "url": "github:jspm/nodelibs-url@0.1.0",
+      "xmlhttprequest": "npm:xmlhttprequest@1.8.0"
+    },
+    "npm:nwmatcher@1.3.8": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:os-browserify@0.1.2": {
       "os": "github:jspm/nodelibs-os@0.1.0"
+    },
+    "npm:parse5@1.5.1": {
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:patternfly-bootstrap-combobox@1.0.0": {
+    "npm:patternfly-bootstrap-combobox@1.1.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:patternfly-bootstrap-treeview@1.0.1": {
@@ -257,13 +325,14 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
-    "npm:patternfly@3.8.1": {
+    "npm:patternfly@3.9.0": {
       "bootstrap": "npm:bootstrap@3.3.7",
       "bootstrap-datepicker": "npm:bootstrap-datepicker@1.6.4",
       "bootstrap-select": "npm:bootstrap-select@1.10.0",
       "bootstrap-switch": "npm:bootstrap-switch@3.3.2",
       "bootstrap-touchspin": "npm:bootstrap-touchspin@3.1.1",
       "c3": "npm:c3@0.4.11",
+      "d3": "npm:d3@3.5.17",
       "datatables": "npm:datatables@1.10.12",
       "datatables.net-colreorder": "npm:datatables.net-colreorder@1.3.2",
       "drmonty-datatables-colvis": "npm:drmonty-datatables-colvis@1.1.2",
@@ -274,7 +343,7 @@ System.config({
       "jquery": "npm:jquery@2.1.4",
       "jquery-match-height": "npm:jquery-match-height@0.7.0",
       "moment": "npm:moment@2.14.1",
-      "patternfly-bootstrap-combobox": "npm:patternfly-bootstrap-combobox@1.0.0",
+      "patternfly-bootstrap-combobox": "npm:patternfly-bootstrap-combobox@1.1.7",
       "patternfly-bootstrap-treeview": "npm:patternfly-bootstrap-treeview@1.0.1",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -297,6 +366,9 @@ System.config({
       "stream-browserify": "npm:stream-browserify@1.0.0",
       "string_decoder": "npm:string_decoder@0.10.31"
     },
+    "npm:requires-port@1.0.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
     "npm:source-map@0.4.4": {
       "amdefine": "npm:amdefine@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
@@ -309,7 +381,7 @@ System.config({
     "npm:string_decoder@0.10.31": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
     },
-    "npm:typescript@1.8.10": {
+    "npm:typescript@1.8.9": {
       "os": "github:jspm/nodelibs-os@0.1.0"
     },
     "npm:url@0.10.3": {
@@ -324,6 +396,15 @@ System.config({
     },
     "npm:vm-browserify@0.0.4": {
       "indexof": "npm:indexof@0.0.1"
+    },
+    "npm:xmlhttprequest@1.8.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "http": "github:jspm/nodelibs-http@1.7.1",
+      "https": "github:jspm/nodelibs-https@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "url": "github:jspm/nodelibs-url@0.1.0"
     }
   }
 });

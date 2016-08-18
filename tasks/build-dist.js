@@ -13,7 +13,7 @@ module.exports = (gulp, config) => () => {
 
   function beginBuild() {
     builder.reset();
-    return builder.loadConfig(path.join(config.projectDir, packageJson.jspm.configFile))
+    return builder.loadConfig(path.join(config.projectDir, packageJson.jspm.configFile));
   }
 
   function buildSFX() {
@@ -28,5 +28,4 @@ module.exports = (gulp, config) => () => {
     };
     return builder.buildStatic(moduleName, outFile, buildConfig);
   }
-
 };

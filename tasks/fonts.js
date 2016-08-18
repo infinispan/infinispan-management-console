@@ -12,9 +12,7 @@ module.exports = (gulp, config) => () => {
   }
 
   return gulp.src(input)
-    // .pipe(debug({title: 'beforeFilter'}))
     .pipe(filter(['**/*.{eot,svg,ttf,woff,woff2}']))
-    // .pipe(debug({title: 'afterFilter'}))
     .pipe(flatten())
     .pipe(gulp.dest(output));
 };

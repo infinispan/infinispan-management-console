@@ -24,7 +24,8 @@ import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 
 const App:ng.IAngularStatic = angular;
 const module:ng.IModule = angular.module("managementConsole", [
-  "ui.router"
+  "ui.router",
+  'pascalprecht.translate'
 ]);
 
 // @ngInject
@@ -41,6 +42,15 @@ module.config(($stateProvider:ng.ui.IStateProvider) => {
       }
     }
   });
+});
+
+// @ngInject
+module.config(function ($translateProvider) {
+  $translateProvider.useStaticFilesLoader({
+    prefix: 'assets/languages/locale-',
+    suffix: '.txt'
+  });
+  $translateProvider.preferredLanguage('enUS');
 });
 
 // @ngInject

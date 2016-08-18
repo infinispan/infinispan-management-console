@@ -3,21 +3,29 @@ import {ICredentials} from "services/authentication/ICredentials";
 import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
+import {AvailabilityCheck} from "./AvailabilityCheck";
 
 const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$http", "$q", "$location", "localStorageService", "launchType"];
+  static $inject: string[] = ["$http", "$q", "$location", "$interval", "localStorageService", "launchType"];
 
-  credentials: ICredentials = <ICredentials>{};
+  private credentials: ICredentials = <ICredentials>{};
+  private availability: AvailabilityCheck;
+  private dmrService: DmrService;
 
   constructor(private $http: ng.IHttpService,
               private $q: ng.IQService,
               private $location: ng.ILocationService,
+              private $interval: ng.IIntervalService,
               private localStorageService: ILocalStorageService,
               private launchType: LaunchTypeService) {
     this.getCredentials();
+
+    // we need to create the DmrService manually to avoid a circular dependency with inject
+    this.dmrService = new DmrService(this.$http, this.$q, this, this.$location);
+    this.availability = new AvailabilityCheck(this.$interval, this.dmrService);
   }
 
   isLoggedIn(): boolean {
@@ -26,14 +34,13 @@ export class AuthenticationService {
 
   login(credentials: ICredentials): ng.IPromise<string> {
     this.setCredentials(credentials);
-    // we need to create the DmrService manually to avoid a circular dependency with inject
-    var dmr: DmrService = new DmrService(this.$http, this.$q, this, this.$location);
     var deferred: ng.IDeferred<string> = this.$q.defer();
 
     var onSuccess: (response: string) => void = (response) => {
       this.setCredentials(credentials);
       try {
         this.launchType.set(response);
+        this.availability.startApiAccessibleCheck();
         deferred.resolve();
       } catch (msg) {
         deferred.reject(msg);
@@ -44,12 +51,13 @@ export class AuthenticationService {
       this.logout();
       deferred.reject(errorMsg);
     };
-    dmr.readAttribute({address: [], name: "launch-type"}).then(onSuccess, onFailure);
+    this.dmrService.readAttribute({address: [], name: "launch-type"}).then(onSuccess, onFailure);
     return deferred.promise;
   }
 
   logout(): void {
     this.setCredentials(<ICredentials>{});
+    this.availability.stopApiAccessibleCheck();
   }
 
   getCredentials(): ICredentials {
@@ -61,6 +69,10 @@ export class AuthenticationService {
 
   getUser(): string {
     return this.credentials.username;
+  }
+
+  isApiAvailable(): boolean {
+    return this.availability.isApiAccesible();
   }
 
   private getLocalCredentials(): ICredentials {

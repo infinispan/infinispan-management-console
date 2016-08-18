@@ -6,12 +6,13 @@
 <body>
 
 <div class="container">
+  <ui-view name="nav"></ui-view>
   <ui-view name="application"></ui-view>
 </div>
 <script src="vendor/jspm_packages/system.js"></script>
 <script src="jspm.conf.js"></script>
 <script language="JavaScript">
-  System.import('./src/index');
+  System.import('./index');
 </script>
 </body>
 </html>

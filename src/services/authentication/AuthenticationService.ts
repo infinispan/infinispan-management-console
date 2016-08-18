@@ -57,6 +57,10 @@ export class AuthenticationService {
     return this.credentials;
   }
 
+  getUser(): string {
+    return this.credentials.username;
+  }
+
   private setCredentials(credentials: ICredentials): void {
     this.credentials = credentials;
     this.localStorageService.set("username", credentials.username);

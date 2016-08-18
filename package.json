@@ -62,7 +62,7 @@
     "directories": {
       "packages": "vendor/jspm_packages"
     },
-    "configFile": "jspm.conf.js",
+    "configFile": "src/jspm.conf.js",
     "dependencies": {
       "angular": "github:angular/bower-angular@^1.5.8",
       "angular-local-storage": "npm:angular-local-storage@^0.2.7",

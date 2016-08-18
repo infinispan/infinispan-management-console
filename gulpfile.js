@@ -26,7 +26,7 @@ gulp.task('compile', ['compile:src']);
 gulp.task('serve:docs', ['build:docs'], require('./tasks/server')(gulp, config.docsDir, false, true));
 gulp.task('serve:e2e', require('./tasks/server')(gulp, __dirname, false));
 gulp.task('serve:dist', ['build:dist'], require('./tasks/server')(gulp, config.distDir, false, true));
-gulp.task('serve', ['compile:src'], require('./tasks/server')(gulp, __dirname, config.watchDir, true));
+gulp.task('serve', ['compile:src'], require('./tasks/server')(gulp, config.srcDir, config.watchDir, true, config.projectDir));
 
 gulp.task('check:eslint', require('./tasks/check-eslint')(gulp, config));
 gulp.task('check:tslint', ['check:tslint:src']);

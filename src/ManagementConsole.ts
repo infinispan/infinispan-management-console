@@ -20,11 +20,28 @@ import "angular-translate-loader-static-files";
 import "patternfly/dist/css/patternfly.css!";
 import "patternfly/dist/css/patternfly-additions.css!";
 import "./ManagementConsole.css!";
+import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 
 const App:ng.IAngularStatic = angular;
 const module:ng.IModule = angular.module("managementConsole", [
   "ui.router"
 ]);
+
+// @ngInject
+module.config(($stateProvider:ng.ui.IStateProvider) => {
+  // Here we defined the default view for nav, all other states should define this as their parent and it will result
+  // in the defined views being applied to that state. Views will automatically be overriden if it is redefined in the child
+  $stateProvider.state("root", {
+    abstract: true,
+    views: {
+      nav: {
+        templateUrl: "module/navbar/view/navbar.html",
+        controller: NavbarCtrl,
+        controllerAs: "ctrl"
+      }
+    }
+  });
+});
 
 // @ngInject
 module.config(($urlRouterProvider:ng.ui.IUrlRouterProvider) => {

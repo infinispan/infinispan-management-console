@@ -1,4 +1,4 @@
-module.exports = (gulp, serverRootDir, watchDir, openBrowser) => {
+module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
   const path = require('path');
   const TS_WATCH_FLAG = '--watch-ts';
 
@@ -7,7 +7,12 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser) => {
     const browserSync = require('browser-sync').init({
       server: {
         baseDir: serverRootDir,
-        middleware: [proxy('http://localhost:9990/management')]
+        middleware: [proxy('http://localhost:9990/management')],
+        routes: {
+          "/vendor": path.join(projectRoot, "vendor"),
+          "/assets": path.join(projectRoot, "/assets"),
+        },
+        index: "./index.html"
       },
       open: openBrowser,
       host: 'localhost',

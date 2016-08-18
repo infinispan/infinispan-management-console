@@ -4,17 +4,23 @@ const path = require('path');
 const config = {
   projectDir: __dirname,
   taskDir: path.join(__dirname, 'tasks'),
-  srcDir: path.join(__dirname, 'src/main/webapp'),
+  configDir: path.join(__dirname, 'config'),
+  srcDir: path.join(__dirname, 'src'),
+  lessFile: path.join(__dirname, 'src/ManagementConsole.less'),
+  cssDir: path.join(__dirname, 'src'),
   docsDir: path.join(__dirname, 'docs'),
   distDir: path.join(__dirname, 'dist'),
   tsLintSrcConf: path.join(__dirname, 'tslint.json'),
-  watchDir: path.join(__dirname, 'src/main/webapp')
+  watchDir: path.join(__dirname, 'src'),
+  npmDir: path.join(__dirname, 'node_modules')
 };
 
 gulp.task('clean:src', require('./tasks/clean')(gulp, config.srcDir));
 gulp.task('clean', ['clean:src']);
 
-gulp.task('compile:src', ['clean:src'], require('./tasks/compile')(gulp, config.srcDir));
+gulp.task('less', ['clean:src'], require('./tasks/less')(gulp, config));
+
+gulp.task('compile:src', ['less'], require('./tasks/compile')(gulp, config.srcDir));
 gulp.task('compile', ['compile:src']);
 
 gulp.task('serve:docs', ['build:docs'], require('./tasks/server')(gulp, config.docsDir, false, true));

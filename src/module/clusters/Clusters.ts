@@ -9,7 +9,7 @@ module.controller("Clusters", ClustersCtrl);
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("clusters", {
     url: "/clusters",
-    parent: 'root',
+    parent: "root",
     views: {
       application: {
         templateUrl: "module/clusters/view/clusters.html",

@@ -3,7 +3,6 @@
   "version": "9.0.0-SNAPSHOT",
   "license": "Apache-2.0",
   "dependencies": {
-    "bootstrap": "3.3.7",
     "patternfly": "3.9.0",
     "gulp-filter": "~4.0.0",
     "gulp-flatten": "~0.3.1"
@@ -76,6 +75,7 @@
       "bootstrap-css": "npm:bootstrap-css@^3.0.0",
       "c3": "npm:c3@0.4.10",
       "c3-angular": "npm:c3-angular@1.0.1",
+      "css": "github:systemjs/plugin-css@^0.1.26",
       "d3": "npm:d3@3.5.0",
       "http-proxy": "npm:http-proxy@^1.14.0",
       "jquery": "npm:jquery@^3.1.0",
@@ -83,9 +83,6 @@
       "patternfly": "npm:patternfly@^3.9.0"
     },
     "devDependencies": {
-      "angular-mocks": "github:angular/bower-angular-mocks@^1.5.3",
-      "clean-css": "npm:clean-css@^3.4.10",
-      "css": "github:systemjs/plugin-css@^0.1.26",
       "ts": "github:frankwallis/plugin-typescript@4.0.5",
       "typescript": "npm:typescript@1.8.9"
     },

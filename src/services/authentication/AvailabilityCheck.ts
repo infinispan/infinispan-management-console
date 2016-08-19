@@ -1,5 +1,4 @@
 import {DmrService} from "../dmr/DmrService";
-import ILocalStorageService = angular.local.storage.ILocalStorageService;
 
 export class AvailabilityCheck {
 

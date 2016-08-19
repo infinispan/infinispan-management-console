@@ -14,6 +14,6 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.services.authentication",
     "managementConsole.services.dmr",
-    "managementConsole.services.launchtype"
+    "managementConsole.services.launchtype",
   ]);
 });

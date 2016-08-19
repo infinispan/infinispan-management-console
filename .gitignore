@@ -1,7 +1,7 @@
 node
 node_modules
-!dist/index.html
 dist
+!dist/index.html
 .idea
 .tmp
 .sass-cache
@@ -19,4 +19,5 @@ docs/
 src/**/*.js
 src/**/*.js.map
 src/**/*.css
+!src/jspm.conf.js
 old-source/

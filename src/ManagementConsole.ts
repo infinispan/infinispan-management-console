@@ -11,31 +11,36 @@ import * as angular from "angular";
 import "jquery";
 import "angular-local-storage";
 import "angular-ui-bootstrap";
-import "angular-ui-bootstrap/ui-bootstrap-tpls.js";
+import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
 import "jquery-match-height";
 import "patternfly";
 import "angular-translate";
 import "angular-translate-loader-static-files";
+import "bootstrap";
+// import "bootstrap/css/bootstrap.css!";
+import "patternfly/dist/css/patternfly.css!";
+import "patternfly/dist/css/patternfly-additions.css!";
 import "./ManagementConsole.css!";
 import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
+import ITranslateProvider = angular.translate.ITranslateProvider;
 
 const App:ng.IAngularStatic = angular;
 const module:ng.IModule = angular.module("managementConsole", [
   "ui.router",
-  'ui.bootstrap',
-  'pascalprecht.translate'
+  "ui.bootstrap",
+  "pascalprecht.translate"
 ]);
 
 // @ngInject
 module.config(($stateProvider:ng.ui.IStateProvider) => {
-  // Here we defined the default view for nav, all other states should define this as their parent and it will result
+  // here we defined the default view for nav, all other states should define this as their parent and it will result
   // in the defined views being applied to that state. Views will automatically be overriden if it is redefined in the child
   $stateProvider.state("root", {
     abstract: true,
     views: {
       nav: {
-        templateUrl: "module/navbar/view/navbar.html",
+        templateUrl: "/module/navbar/view/navbar.html",
         controller: NavbarCtrl,
         controllerAs: "ctrl"
       }
@@ -44,12 +49,12 @@ module.config(($stateProvider:ng.ui.IStateProvider) => {
 });
 
 // @ngInject
-module.config(function ($translateProvider) {
+module.config(($translateProvider: ITranslateProvider) => {
   $translateProvider.useStaticFilesLoader({
-    prefix: 'assets/languages/locale-',
-    suffix: '.txt'
+    prefix: "assets/languages/locale-",
+    suffix: ".txt"
   });
-  $translateProvider.preferredLanguage('enUS');
+  $translateProvider.preferredLanguage("enUS");
 });
 
 // @ngInject

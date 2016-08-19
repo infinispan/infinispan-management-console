@@ -4,16 +4,24 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
 
   return () => {
     const proxy = require('http-proxy-middleware');
+
+    var routes = {};
+    if (projectRoot) {
+      routes = {
+        '/vendor': path.join(projectRoot, 'vendor'),
+        '/assets': path.join(projectRoot, 'assets'),
+        '/fonts': path.join(projectRoot, 'dist/fonts'),
+        '/node_modules': path.join(projectRoot, 'node_modules')
+      };
+    }
+
     const browserSync = require('browser-sync').init({
       server: {
-        baseDir: serverRootDir,
+        baseDir: [serverRootDir],
         middleware: [proxy('http://localhost:9990/management')],
-        routes: {
-          "/vendor": path.join(projectRoot, "vendor"),
-          "/assets": path.join(projectRoot, "assets"),
-          "/fonts": path.join(projectRoot, "dist/fonts")
-        },
-        index: "./index.html"
+        routes: routes,
+        index: './index.html',
+        directory: false
       },
       open: openBrowser,
       host: 'localhost',

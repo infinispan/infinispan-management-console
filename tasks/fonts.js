@@ -7,8 +7,11 @@ module.exports = (gulp, config) => () => {
   const output = path.join(config.distDir, config.fonts);
 
   // If fonts dir already exists, do nothing. TODO make this overridable
-  if (fs.lstatSync(output).isDirectory()) {
+  try {
+    fs.lstatSync(output).isDirectory();
     return;
+  } catch (e) {
+    // ignore
   }
 
   return gulp.src(input)

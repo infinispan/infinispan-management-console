@@ -1,7 +1,13 @@
 <!doctype html>
-<html class="no-js">
+<html id="management-console" class="no-js" ng-class="login-pf">
 <head>
   <meta charset="utf-8">
+  <title>Infinispan Server Management Console</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!--<link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly.css" media="screen, print"/>-->
+  <!--<link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly-additions.css" media="screen, print"/>-->
+  <!--<link rel="stylesheet" href="ManagementConsole.css" media="screen, print"/>-->
 </head>
 <body>
 
@@ -12,7 +18,7 @@
 <script src="vendor/jspm_packages/system.js"></script>
 <script src="jspm.conf.js"></script>
 <script language="JavaScript">
-  System.import('./index');
+  System.import('./index').catch(console.error.bind(console));
 </script>
 </body>
 </html>

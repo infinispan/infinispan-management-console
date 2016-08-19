@@ -19,8 +19,8 @@ module.exports = (gulp, config) => () => {
   function buildSFX() {
     const appName = packageJson.name;
     const distFileName = `${appName}.min.js`;
-    const outFile = path.join(config.distDir, distFileName);
-    const moduleName = 'app';
+    const outFile = path.join(config.scriptsDir, distFileName);
+    const moduleName = config.moduleName;
     const buildConfig = {
       format: 'global',
       minify: true,

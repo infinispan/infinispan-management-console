@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('managementConsole', [
+var coreModule = angular.module('managementConsole', [
   'managementConsole.api',
   'gridshore.c3js.chart',
   'ui.router',
@@ -515,3 +515,14 @@ angular.module('managementConsole', [
         '  </div>\n' +
         '</div>\n');
   }]);
+
+var config = {};
+
+// Import variables if present (from env.js)
+if(window){
+  Object.assign(config, window.__env);
+}
+
+
+coreModule.constant('config', config);
+

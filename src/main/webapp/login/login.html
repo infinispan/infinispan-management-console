@@ -10,7 +10,7 @@
     <div class="row" ng-show="!authenticated">
       <div class="col-sm-12">
         <div id="brand">
-          <img src="assets/images/brand.svg" alt="Infinispan Server Management Console">
+          <img ng-src="{{config.brandImage}}" alt="{{config.brandName}}">
         </div><!--/#brand-->
       </div><!--/.col-*-->
       <div class="col-sm-7 col-md-6 col-lg-5 login">
@@ -49,7 +49,7 @@
           </div>
       </div><!--/.col-*-->
       <div class="col-sm-5 col-md-6 col-lg-7 details">
-          <p><strong>Welcome to the Infinispan Server Management Console</strong></p>
+          <p><strong>Welcome to the {{config.brandName}}</strong></p>
       </div><!--/.col-*-->
     </div><!--/.row-->
   </form>

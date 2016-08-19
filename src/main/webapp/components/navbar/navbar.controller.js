@@ -5,9 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$state',
     'modelController',
-    function ($scope, $state, modelController) {
+    'config',
+    function ($scope, $state, modelController, config) {
       $scope.modelController = modelController;
-
+      $scope.config = config;
       $scope.isVisible = function () {
         return modelController.isAuthenticated();
       };

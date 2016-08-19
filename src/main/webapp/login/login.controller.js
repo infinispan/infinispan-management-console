@@ -5,7 +5,10 @@ angular.module('managementConsole')
     '$scope',
     '$state',
     'modelController',
-    function ($scope, $state, modelController) {
+    'config',
+    function ($scope, $state, modelController, config) {
+
+      $scope.config = config;
 
       $scope.credentials = {
         username: '',

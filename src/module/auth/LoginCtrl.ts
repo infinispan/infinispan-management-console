@@ -5,20 +5,24 @@ import {IStateService} from "angular-ui-router";
 
 export class LoginCtrl {
 
-  static $inject:string[] = ["$scope", "$state", "authService", "dmrService"];
+  static $inject: string[] = ["$scope", "$state", "authService", "dmrService"];
 
-  public credentials: ICredentials =  <ICredentials>{};
-  public authenticated:boolean = false;
+  public credentials: ICredentials = <ICredentials>{};
+  public authenticated: boolean = false;
   public showLoginSpinner: boolean = false;
   public loginError: string;
 
-  constructor(private $scope:ng.IScope, private $state:IStateService, private authenticationService: AuthenticationService, private dmrService: DmrService) {}
+  constructor(private $scope: ng.IScope, private $state: IStateService, private authService: AuthenticationService, private dmrService: DmrService) {
+    var htmlClass: string = authService.isLoggedIn() ? "" : "login-pf";
+    this.$scope.page.htmlClass = htmlClass;
+  }
 
   public login(): void {
     this.showLoginSpinner = true;
 
     var onSuccess: () => void = () => {
       this.showLoginSpinner = false;
+      this.$scope.page.htmlClass = "";
       this.$state.go("clusters");
     };
 
@@ -27,7 +31,7 @@ export class LoginCtrl {
       this.showLoginSpinner = false;
     };
 
-    this.authenticationService.login(this.credentials).then(onSuccess, onFailure);
+    this.authService.login(this.credentials).then(onSuccess, onFailure);
   }
 
   public alertDismissed(): void {

@@ -1,8 +1,6 @@
 System.config({
   defaultJSExtensions: true,
   transpiler: "typescript",
-  buildCSS: true,
-  separateCSS: false,
   babelOptions: {
     "optional": [
       "runtime",
@@ -17,6 +15,9 @@ System.config({
     "github:*": "vendor/jspm_packages/github/*",
     "npm:*": "vendor/jspm_packages/npm/*"
   },
+  buildCSS: true,
+  separateCSS: false,
+
   packages: {
     "app": {
       "main": "index",
@@ -26,15 +27,16 @@ System.config({
         "*.css": {
           "loader": "css"
         }
-      },
+      }
     }
   },
+
   map: {
     "angular": "github:angular/bower-angular@1.5.8",
     "angular-local-storage": "npm:angular-local-storage@0.2.7",
     "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1",
     "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
-    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.0.2",
+    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.0",
     "angular-ui-router": "github:angular-ui/angular-ui-router-bower@0.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",

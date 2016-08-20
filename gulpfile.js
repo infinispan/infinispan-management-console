@@ -57,12 +57,11 @@ gulp.task('compile', ['compile:src', 'compile:test']);
 gulp.task('serve:docs', ['build:docs'], require('./tasks/server')(gulp, config.docsDir, false, true));
 gulp.task('serve:e2e', require('./tasks/server')(gulp, __dirname, false));
 gulp.task('serve:dist', ['build:dist'], require('./tasks/server')(gulp, config.distDir, false, true));
-gulp.task('serve', ['compile:src'], require('./tasks/server')(gulp, __dirname, config.watchDir, true));
+gulp.task('serve', ['compile:src'], require('./tasks/server')(gulp, config.srcDir, config.watchDir, true, config.projectDir));
 
 gulp.task('check:eslint', require('./tasks/check-eslint')(gulp, config));
-gulp.task('check:tslint', ['check:tslint:src', 'check:tslint:test']);
+gulp.task('check:tslint', ['check:tslint:src']);
 gulp.task('check:tslint:src', require('./tasks/check-tslint')(gulp, config.srcDir, config.tsLintSrcConf));
-gulp.task('check:tslint:test', require('./tasks/check-tslint')(gulp, config.testDir, config.tsLintTestConf));
 gulp.task('check', require('./tasks/check')());
 
 gulp.task('ng:directives', ['compile:src'], require('./tasks/ng-directives')(gulp, config));

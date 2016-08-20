@@ -29,7 +29,7 @@ export class AuthenticationService {
   }
 
   isLoggedIn(): boolean {
-    return this.credentials.username !== undefined;
+    return this.getCredentials().username !== null;
   }
 
   login(credentials: ICredentials): ng.IPromise<string> {

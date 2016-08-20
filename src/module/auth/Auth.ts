@@ -16,5 +16,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         controllerAs: "ctrl"
       }
     }
+  }).state("logout", {
+    url: "/logout"
   });
 });

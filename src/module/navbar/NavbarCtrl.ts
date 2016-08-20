@@ -16,8 +16,7 @@ export class NavbarCtrl {
   }
 
   logOut(): void {
-    this.authService.logout();
-    this.$state.go("login");
+    this.$state.go("logout");
   }
 
   isApiAvailable(): boolean {

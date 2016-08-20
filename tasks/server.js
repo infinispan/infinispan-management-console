@@ -6,7 +6,7 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
     const proxy = require('http-proxy-middleware');
 
     var routes = {};
-    if (projectRoot) {
+    if (projectRoot || typeof projectRoot === 'string') {
       routes = {
         '/vendor': path.join(projectRoot, 'vendor'),
         '/assets': path.join(projectRoot, 'assets'),

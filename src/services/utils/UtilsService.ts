@@ -142,7 +142,7 @@ export class UtilsService {
     }
   }
 
-  getTypeModelType(field: Object): string {
+  getTypeModelType(field: any): string {
     if (this.isNotNullOrUndefined(field)) {
       var fieldType: string;
       switch (field.type.TYPE_MODEL_VALUE) {
@@ -169,9 +169,22 @@ export class UtilsService {
   }
 
   // TODO update when cacheModel object has been defined
-  getCacheMode(cacheModel: Object): string {
+  getCacheMode(cacheModel: any): string {
     return cacheModel.configuration.mode === "SYNC" ? "Sync" : "Async";
   }
+
+  traverse(obj: any, callback: Function, trail?: any[]): void {
+    trail = trail || [];
+    Object.keys(obj).forEach(function (key: string) {
+      var value: any = obj[key];
+
+      if (Object.getPrototypeOf(value) === Object.prototype) {
+        this.traverse(value, callback, trail.concat(key));
+      } else {
+        callback.call(obj, key, value, trail);
+      }
+    });
+  };
 
   // TODO implement other methods as required
 

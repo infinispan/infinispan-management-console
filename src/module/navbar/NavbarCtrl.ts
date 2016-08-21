@@ -15,7 +15,7 @@ export class NavbarCtrl {
     return this.authService.getUser();
   }
 
-  logOut(): void {
+  logout(): void {
     this.$state.go("logout");
   }
 

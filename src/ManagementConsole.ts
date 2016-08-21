@@ -26,12 +26,18 @@ import "./ManagementConsole.css!";
 import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 import {AuthenticationService} from "./services/authentication/AuthenticationService";
 import {IUrlRouterService, IStateService} from "angular-ui-router";
+import {IPage} from "./common/IPage";
+import {IRootScopeService} from "./common/IRootScopeService";
+import {ErrorModalCtrl} from "./common/dialogs/ErrorModalCtrl";
+import {RestartModalCtrl} from "./common/dialogs/RestartModalCtrl";
+import {InfoModalCtrl} from "./common/dialogs/InfoModalCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
-import IRootScopeService = angular.IRootScopeService;
 import ITimeoutService = angular.ITimeoutService;
 import IModalService = angular.ui.bootstrap.IModalService;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
+import IScope = angular.IScope;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 
 const App: ng.IAngularStatic = angular;
 const module: ng.IModule = angular.module("managementConsole", [
@@ -73,79 +79,46 @@ module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
     .otherwise("/error404");
 });
 
-// TODO convert to typescript!
 // @ngInject
-module.run(["$rootScope", "$timeout", "$uibModal", "utils", function ($rootScope, $timeout, $uibModal, utils) {
-  // isDomainControllerAlive is used for web app to server connectivity checking
+module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibModal: IModalService) => {
+  $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;
-  $rootScope.safeApply = function (f) {
-    var scope = this;
-    $timeout(function () {
-      scope.$apply(f);
+  $rootScope.safeApply = (f: Function) => $timeout(() => this.$apply(f));
+
+  $rootScope.openErrorModal = (error: string) => {
+    $uibModal.open({
+      templateUrl: "common/dialogs/views/generic-error.html",
+      controller: ErrorModalCtrl,
+      controllerAs: "ctrl",
+      scope: $rootScope,
+      resolve: {
+        errorMsg: error
+      }
     });
   };
-  $rootScope.page = {htmlClass: ""};
 
-  // generic error modal
-  $rootScope.openErrorModal = function (error) {
+  $rootScope.openErrorModal = () => {
     $uibModal.open({
-      templateUrl: "components/dialogs/generic-error.html",
-      controller: function ($scope, $modalInstance) {
-        if (typeof error === "string") {
-          $scope.errorText = "An error has occurred:";
-          $scope.errorTextDetail = error;
-        }
-        else {
-          utils.traverse(error, function (key, value, trail) {
-            $scope.errorText = trail[0];
-            $scope.errorTextDetail = value;
-          });
-        }
-        $scope.ok = function () {
-          $modalInstance.close();
-        };
-      },
+      templateUrl: "common/dialogs/views/requires-restart.html",
+      controller: RestartModalCtrl,
+      controllerAs: "ctrl",
       scope: $rootScope
     });
   };
 
-  // generic info modal
-  $rootScope.openRestartModal = function () {
-    if ($rootScope.requiresRestartFlag) {
-      $uibModal.open({
-        templateUrl: "components/dialogs/requires-restart.html",
-        controller: function ($scope, $modalInstance, clusterNodesService) {
-
-          $scope.ok = function () {
-            clusterNodesService.restartCluster();
-            $rootScope.requiresRestartFlag = false;
-          };
-
-          $scope.cancel = function () {
-            $modalInstance.close();
-          }
-        },
-        scope: $rootScope
-      });
-    }
-  };
-
-  // generic info modal
-  $rootScope.openInfoModal = function (infoText, infoTextDetail) {
+  $rootScope.openErrorModal = (infoText: string, infoTextDetail: string) => {
     $uibModal.open({
-      templateUrl: "components/dialogs/generic-info.html",
-      controller: function ($scope, $modalInstance) {
-        $scope.infoText = infoText;
-        $scope.infoTextDetail = infoTextDetail;
-
-        $scope.ok = function () {
-          $modalInstance.close();
-        };
-      },
-      scope: $rootScope
+      templateUrl: "common/dialogs/views/generic-info.html",
+      controller: InfoModalCtrl,
+      controllerAs: "ctrl",
+      scope: $rootScope,
+      resolve: {
+        infoText: infoText,
+        infoTextDetail: infoTextDetail
+      }
     });
   };
-}]);
+});
 
 // @ngInject
 module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService, authService: AuthenticationService) => {

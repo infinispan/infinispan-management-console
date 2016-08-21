@@ -2,6 +2,7 @@ import {ICredentials} from "../../services/authentication/ICredentials";
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
+import {IScope} from "../../common/IScopeService";
 
 export class LoginCtrl {
 
@@ -12,7 +13,7 @@ export class LoginCtrl {
   public showLoginSpinner: boolean = false;
   public loginError: string;
 
-  constructor(private $scope: ng.IScope, private $state: IStateService, private authService: AuthenticationService, private dmrService: DmrService) {
+  constructor(private $scope: IScope, private $state: IStateService, private authService: AuthenticationService, private dmrService: DmrService) {
     var htmlClass: string = authService.isLoggedIn() ? "" : "login-pf";
     this.$scope.page.htmlClass = htmlClass;
   }

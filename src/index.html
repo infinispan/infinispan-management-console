@@ -5,16 +5,14 @@
   <title>Infinispan Server Management Console</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <!--<link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly.css" media="screen, print"/>-->
-  <!--<link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly-additions.css" media="screen, print"/>-->
-  <!--<link rel="stylesheet" href="ManagementConsole.css" media="screen, print"/>-->
 </head>
 <body>
 
-<div class="container">
-  <ui-view name="nav"></ui-view>
-  <ui-view name="application"></ui-view>
+<div ng-controller="NavbarCtrl as ctrl">
+  <ng-include src="'/module/navbar/view/navbar.html'"></ng-include>
+  <div ui-view name="application"></div>
 </div>
+
 <script src="vendor/jspm_packages/system.js"></script>
 <script src="jspm.conf.js"></script>
 <script language="JavaScript">

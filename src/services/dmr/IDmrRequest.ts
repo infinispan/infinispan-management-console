@@ -4,7 +4,7 @@ export interface IDmrRequest {
   "include-runtime"?: boolean;
   name?: string;
   operation?: string;
-  proxies?: string;
+  proxies?: boolean;
   recursive?: boolean;
   "recursive-depth"?: number;
   value?: string;

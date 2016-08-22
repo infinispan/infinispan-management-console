@@ -4,12 +4,13 @@ import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {AvailabilityCheck} from "./AvailabilityCheck";
+import {UtilsService} from "../utils/UtilsService";
 
 const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$http", "$q", "$location", "$interval", "localStorageService", "launchType"];
+  static $inject: string[] = ["$http", "$q", "$location", "$interval", "localStorageService", "launchType", "utils"];
 
   private credentials: ICredentials = <ICredentials>{};
   private availability: AvailabilityCheck;
@@ -20,7 +21,8 @@ export class AuthenticationService {
               private $location: ng.ILocationService,
               private $interval: ng.IIntervalService,
               private localStorageService: ILocalStorageService,
-              private launchType: LaunchTypeService) {
+              private launchType: LaunchTypeService,
+              private utils: UtilsService) {
     this.getCredentials();
 
     // we need to create the DmrService manually to avoid a circular dependency with inject
@@ -29,7 +31,8 @@ export class AuthenticationService {
   }
 
   isLoggedIn(): boolean {
-    return this.getCredentials().username !== null;
+    var credentials: ICredentials = this.getCredentials();
+    return this.utils.isNotNullOrUndefined(credentials.username) && this.utils.isNotNullOrUndefined(credentials.password);
   }
 
   login(credentials: ICredentials): ng.IPromise<string> {

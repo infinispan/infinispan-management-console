@@ -17,18 +17,29 @@ export class DmrService {
               private $location: ng.ILocationService) {
   }
 
-  readResource(request: IDmrRequest): angular.IPromise<string> {
+  readResource(request: IDmrRequest): angular.IPromise<any> {
     request.operation = "read-resource";
     return this.execute(request);
   }
 
-  readAttribute(request: IDmrRequest): angular.IPromise<string> {
+  readAttribute(request: IDmrRequest): angular.IPromise<any> {
     request.operation = "read-attribute";
     return this.execute(request);
   }
 
-  writeAttribute(request: IDmrRequest): angular.IPromise<string> {
+  readAttributeAndResolveExpression(request: IDmrRequest): angular.IPromise<any> {
+    request.operation = "read-attribute";
+    request["resolve-expressions"] = true;
+    return this.execute(request);
+  }
+
+  writeAttribute(request: IDmrRequest): angular.IPromise<any> {
     request.operation = "write-attribute";
+    return this.execute(request);
+  }
+
+  readChildResources(request: IDmrRequest): angular.IPromise<any> {
+    request.operation = "read-children-resources";
     return this.execute(request);
   }
 

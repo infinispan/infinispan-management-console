@@ -64,11 +64,13 @@ export class DmrService {
       if (status === 401) {
         msg = "Invalid login or password. Please try again";
       } else {
-        var result: any = response.data.result;
+        console.log(response.data);
+        var result: any = response.data
         if (result && result["failure-description"] != null) {
           msg = result["failure-description"];
         }
       }
+      console.log(msg);
       deferred.reject(msg);
     };
 

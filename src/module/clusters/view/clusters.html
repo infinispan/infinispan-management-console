@@ -28,11 +28,11 @@
                  {{socketBinding.name}} : {{socketBinding.port}} {{endpoint.encryption}}</br>
             </span>
           </td>
-          <td ng-init="serverGroupClusterName = cluster.getServerGroupName().concat(cluster.getName())">
-            <div ng-repeat="site in onlineSites[serverGroupClusterName]"><span class="pficon pficon-ok"></span> {{site}}</div>
-            <div ng-repeat="site in mixedSites[serverGroupClusterName]"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
-            <div ng-repeat="site in offlineSites[serverGroupClusterName]"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
-            <div ng-if="(mixedSites[serverGroupClusterName].length + onlineSites[serverGroupClusterName].length + offlineSites[serverGroupClusterName].length) === 0">N/A</div>
+          <td>
+            <div ng-repeat="site in container['online-sites']"><span class="pficon pficon-ok"></span>{{site}}</div>
+            <div ng-repeat="site in container['mixed-sites']"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
+            <div ng-repeat="site in container['offline-sites']"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
+            <div ng-if="ctrl.isSitesEmpty(container)">N/A</div>
           </td>
         </tr>
       </table>

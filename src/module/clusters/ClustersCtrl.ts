@@ -56,4 +56,16 @@ export class ClustersCtrl {
   getAvailability(container: ICacheContainer): string {
     return container.available ? "AVAILABLE" : "DEGRADED";
   }
+
+  isSitesEmpty(container: ICacheContainer): boolean {
+    return this.getArraySize(container["online-sites"]) + this.getArraySize(container["offline-sites"]) +
+      this.getArraySize(container["mixed-sites"]) === 0;
+  }
+
+  getArraySize(array: string[]): number {
+    if (this.utils.isNonEmptyArray(array)) {
+      return array.length;
+    }
+    return 0;
+  }
 }

@@ -63,6 +63,13 @@ export class ContainerService {
       })
       .then((available) => {
         container.available = available;
+        let server: string = container.serverGroup.members[0];
+        return this.getSiteArrays(server, container.name);
+      })
+      .then((sites) => {
+        for (let siteType in sites) {
+          container[siteType] = sites[siteType];
+        }
         deferred.resolve(container);
       });
 
@@ -131,8 +138,24 @@ export class ContainerService {
     return deferred.promise;
   }
 
+  getSiteArrays(server: string, container: string): ng.IPromise<{[id: string]: string[]}> {
+    return this.$q.all({
+      "sites-online": this.getSite("sites-online", server, container),
+      "sites-offline": this.getSite("sites-offline", server, container),
+      "sites-mixed": this.getSite("sites-mixed", server, container)
+    });
+  }
+
   rebalanceContainer(name: string): void {
     // TODO implement
+  }
+
+  private getSite(name: string, server: string, container: string): ng.IPromise<string[]> {
+    let request: IDmrRequest = <IDmrRequest>{
+      address: [].concat("host", "*", "server", server, "subsystem", "datagrid-infinispan", "cache-container", container),
+      name: name
+    };
+    return this.dmrService.readAttribute(request);
   }
 
   private countNumberOfCaches(object: any, cacheTypes: string[]): number {

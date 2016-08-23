@@ -10,6 +10,7 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IDomain} from "../../services/domain/IDomain";
 import {DomainService} from "../../services/domain/DomainService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
+import {IDictionary} from "../../services/utils/IDictionary";
 
 export class ClustersCtrl {
 
@@ -18,7 +19,7 @@ export class ClustersCtrl {
 
   containers: ICacheContainer[];
   domain: IDomain;
-  defaultStack: string;
+  stacks: IDictionary<string>;
 
   constructor(private $scope: IScope, private $state: IStateService, private dmrService: DmrService,
               private containerService: ContainerService, private endpointService: EndpointService,
@@ -26,9 +27,16 @@ export class ClustersCtrl {
               private domainService: DomainService, private jGroupsService: JGroupsService) {
 
     this.containerService.getAllContainers().then((containers) => this.containers = containers);
-    this.domainService.getControllerAndServers().then((domain): ng.IPromise<string> => {
-      this.domain = domain;
-      return this.jGroupsService.getDefaultStack(domain.master, domain.servers[0]);
-    }).then((stack) => this.defaultStack = stack);
+    this.domainService.getControllerAndServers()
+      .then((domain) => {
+        this.domain = domain;
+        return this.jGroupsService.getDefaultStackServerGroupDict(domain.master);
+      })
+      .then((stacks) => this.stacks = stacks);
+  }
+
+  getDefaultStack(container: ICacheContainer): string {
+    let serverGroup: string = container.serverGroup.name;
+    return this.stacks[serverGroup];
   }
 }

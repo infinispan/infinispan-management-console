@@ -21,7 +21,7 @@
           <td><span class="label isCacheAvailable" ng-class="(cluster.isAvailable())?'label-success':'label-danger'">{{cluster.getAvailability()}}</span></td>
           <td><span class="numberOfCaches label label-default">{{container.numberOfCaches}}</span></td>
           <td><a class="clusterName" ui-sref="clusterNodes({clusterName: group})">{{container.serverGroup.name}}</a><br>
-            <small class="stack">{{ctrl.defaultStack}}</small>
+            <small class="stack">{{ctrl.getDefaultStack(container)}}</small>
           </td>
           <td>
             <span class="endpoint" ng-repeat="endpoint in container.endpoints" ng-init="socketBinding = endpoint['socket-binding']">

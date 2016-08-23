@@ -10,9 +10,13 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IDomain} from "../../services/domain/IDomain";
 import {DomainService} from "../../services/domain/DomainService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
-import {IDictionary} from "../../services/utils/IDictionary";
+import {IMap} from "../../services/utils/IDictionary";
 import {UtilsService} from "../../services/utils/UtilsService";
 
+/**
+ * Known limitations:
+ *  - If a profile is utilised by two server-groups, then only the first group and endpoints are displayed
+ */
 export class ClustersCtrl {
 
   static $inject: string[] = ["$scope", "$state", "dmrService", "containerService", "endpointService", "profileService",
@@ -20,7 +24,7 @@ export class ClustersCtrl {
 
   containers: ICacheContainer[];
   domain: IDomain;
-  stacks: IDictionary<string>;
+  stacks: IMap<string>;
 
   constructor(private $scope: IScope, private $state: IStateService, private dmrService: DmrService,
               private containerService: ContainerService, private endpointService: EndpointService,
@@ -29,10 +33,10 @@ export class ClustersCtrl {
               private utils: UtilsService) {
 
     this.containerService.getAllContainers().then((containers) => this.containers = containers);
-    this.domainService.getControllerAndServers()
+    this.domainService.getHostsAndServers()
       .then((domain) => {
         this.domain = domain;
-        return this.jGroupsService.getDefaultStackServerGroupDict(domain.master);
+        return this.jGroupsService.getDefaultStackServerGroupDict(domain.controller);
       })
       .then((stacks) => this.stacks = stacks);
   }
@@ -43,5 +47,13 @@ export class ClustersCtrl {
       return this.stacks[serverGroup];
     }
     return "";
+  }
+
+  getAvailabilityClass(container: ICacheContainer): string {
+    return container.available ? "label-success" : "label-danger";
+  }
+
+  getAvailability(container: ICacheContainer): string {
+    return container.available ? "AVAILABLE" : "DEGRADED";
   }
 }

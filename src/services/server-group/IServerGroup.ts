@@ -3,4 +3,5 @@ export interface IServerGroup {
   profile: string;
   "socket-binding-group": string;
   "socket-binding-port-offset": number;
+  members: string[];
 }

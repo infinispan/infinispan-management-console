@@ -8,17 +8,19 @@ import IQService = angular.IQService;
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {UtilsService} from "../utils/UtilsService";
+import {DomainService} from "../domain/DomainService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "utils"];
+    "jGroupsService", "domainService", "utils"];
 
   constructor(private $q: IQService, private dmrService: DmrService, private endpointService: EndpointService,
               private profileService: ProfileService, private serverGroupService: ServerGroupService,
-              private jGroupsService: JGroupsService, private utils: UtilsService) {
+              private jGroupsService: JGroupsService, private domainService: DomainService,
+              private utils: UtilsService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {
@@ -57,6 +59,10 @@ export class ContainerService {
       })
       .then((numberOfCaches) => {
         container.numberOfCaches = numberOfCaches;
+        return this.isContainerAvailable(container.name, container.serverGroup.members);
+      })
+      .then((available) => {
+        container.available = available;
         deferred.resolve(container);
       });
 
@@ -105,6 +111,23 @@ export class ContainerService {
         let cacheTypes: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
         deferred.resolve(this.countNumberOfCaches(response, cacheTypes));
       });
+    return deferred.promise;
+  }
+
+  isContainerAvailable(name: string, servers: string[]): ng.IPromise<boolean> {
+    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
+    let promises: ng.IPromise<string[]>[] = [];
+    for (let server of servers) {
+      promises.push(this.domainService.getServerView(server, name));
+    }
+    this.$q.all(promises).then((views: [string[]]) => {
+      if (views.length === 1) {
+        deferred.resolve(true);
+        return;
+      }
+      let firstView: string[] = views[0];
+      deferred.resolve(views.every((view) => view === firstView));
+    });
     return deferred.promise;
   }
 

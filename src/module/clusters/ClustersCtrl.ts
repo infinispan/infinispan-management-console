@@ -1,10 +1,3 @@
-import {IStateService} from "angular-ui-router";
-import {IScope} from "../../common/IScopeService";
-import {DmrService} from "../../services/dmr/DmrService";
-import {EndpointService} from "../../services/endpoint/EndpointService";
-import {IEndpoint} from "../../services/endpoint/IEndpoint";
-import {ProfileService} from "../../services/profile/ProfileService";
-import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {ContainerService} from "../../services/container/ContainerService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IDomain} from "../../services/domain/IDomain";
@@ -12,6 +5,8 @@ import {DomainService} from "../../services/domain/DomainService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {IMap} from "../../services/utils/IDictionary";
 import {UtilsService} from "../../services/utils/UtilsService";
+import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
+import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 
 /**
  * Known limitations:
@@ -19,26 +14,35 @@ import {UtilsService} from "../../services/utils/UtilsService";
  */
 export class ClustersCtrl {
 
-  static $inject: string[] = ["$scope", "$state", "dmrService", "containerService", "endpointService", "profileService",
-    "serverGroupService", "domainService", "jGroupsService", "utils"];
+  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils"];
 
   containers: ICacheContainer[];
   domain: IDomain;
   stacks: IMap<string>;
+  gridEvents: IClusterEvent[] = [];
 
-  constructor(private $scope: IScope, private $state: IStateService, private dmrService: DmrService,
-              private containerService: ContainerService, private endpointService: EndpointService,
-              private profileService: ProfileService, private serverGroupService: ServerGroupService,
-              private domainService: DomainService, private jGroupsService: JGroupsService,
+  constructor(private containerService: ContainerService, private domainService: DomainService,
+              private jGroupsService: JGroupsService, private clusterEventsService: ClusterEventsService,
               private utils: UtilsService) {
 
-    this.containerService.getAllContainers().then((containers) => this.containers = containers);
+    // this.containerService.getAllContainers().then((containers) => this.containers = containers);
+
+    this.containerService.getAllContainers()
+      .then((containers) => {
+        this.containers = containers;
+        return this.clusterEventsService.fetchClusterEvents(containers[0], 10);
+      })
+      .then((events) => {
+        this.gridEvents = this.gridEvents.concat(events);
+      });
+
     this.domainService.getHostsAndServers()
       .then((domain) => {
         this.domain = domain;
-        return this.jGroupsService.getDefaultStackServerGroupDict(domain.controller);
+        return this.jGroupsService.getDefaultStackServerGroupMap(domain.controller);
       })
       .then((stacks) => this.stacks = stacks);
+
   }
 
   getDefaultStack(container: ICacheContainer): string {

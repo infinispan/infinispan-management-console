@@ -43,6 +43,16 @@ export class DmrService {
     return this.execute(request);
   }
 
+  readChildName(request: IDmrRequest): ng.IPromise<any> {
+    request.operation = "read-children-names";
+    return this.execute(request);
+  }
+
+  readEventLog(request: IDmrRequest): ng.IPromise<any> {
+    request.operation = "read-event-log";
+    return this.execute(request);
+  }
+
   private execute(request: IDmrRequest): ng.IPromise<any> {
     var config: any = {
       timeout: 2000,

@@ -41,15 +41,15 @@
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>
       </div>
-      <ul class="list-group"  ng-if="gridEvents.length > 0" >
-        <li class="list-group-item" ng-repeat="event in gridEvents">
+      <ul class="list-group"  ng-if="ctrl.gridEvents.length > 0">
+        <li class="list-group-item" ng-repeat="event in ctrl.gridEvents">
           <h3 class="list-group-item-heading">
             <span ng-if="event.level=='WARN'"  class="icon-class pficon-warning-triangle-o"></span>
             <span ng-if="event.level=='INFO'"  class="icon-class pficon-info"></span>
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
             {{event.message}}.</h3>
           <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}<br></small>
-          <small ng-if="event.scope">{{event.scope}}<br></small>
+          <small ng-if="event.server">{{event.server.host}}:{{event.server.name}}<br></small>
           <small ng-if="event.context">{{event.context}}</small>
         </li>
       </ul>

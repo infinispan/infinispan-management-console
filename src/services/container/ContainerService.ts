@@ -9,6 +9,8 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {UtilsService} from "../utils/UtilsService";
 import {DomainService} from "../domain/DomainService";
+import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
+import {IServerAddress} from "../server/IServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -63,8 +65,7 @@ export class ContainerService {
       })
       .then((available) => {
         container.available = available;
-        let server: string = container.serverGroup.members[0];
-        return this.getSiteArrays(server, container.name);
+        return this.getSiteArrays(container);
       })
       .then((sites) => {
         for (let siteType in sites) {
@@ -121,12 +122,16 @@ export class ContainerService {
     return deferred.promise;
   }
 
-  isContainerAvailable(name: string, servers: string[]): ng.IPromise<boolean> {
+  isContainerAvailable(name: string, serverGroup: IServerGroupMembers): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     let promises: ng.IPromise<string[]>[] = [];
-    for (let server of servers) {
-      promises.push(this.domainService.getServerView(server, name));
+
+    for (let host in serverGroup) {
+      for (let server of serverGroup[host]) {
+        promises.push(this.domainService.getServerView(host, server, name));
+      }
     }
+
     this.$q.all(promises).then((views: [string[]]) => {
       if (views.length === 1) {
         deferred.resolve(true);
@@ -138,22 +143,26 @@ export class ContainerService {
     return deferred.promise;
   }
 
-  getSiteArrays(server: string, container: string): ng.IPromise<{[id: string]: string[]}> {
-    return this.$q.all({
-      "sites-online": this.getSite("sites-online", server, container),
-      "sites-offline": this.getSite("sites-offline", server, container),
-      "sites-mixed": this.getSite("sites-mixed", server, container)
+  getSiteArrays(container: ICacheContainer): ng.IPromise<{[id: string]: string[]}> {
+    let deferred: ng.IDeferred<{[id: string]: string[]}> = this.$q.defer<{[id: string]: string[]}>();
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coordinator) => {
+      deferred.resolve(this.$q.all({
+        "sites-online": this.getSite("sites-online", coordinator, container.name),
+        "sites-offline": this.getSite("sites-offline", coordinator, container.name),
+        "sites-mixed": this.getSite("sites-mixed", coordinator, container.name)
+      }));
     });
+    return deferred.promise;
   }
 
   rebalanceContainer(name: string): void {
     // TODO implement
   }
 
-  private getSite(name: string, server: string, container: string): ng.IPromise<string[]> {
+  private getSite(type: string, server: IServerAddress, container: string): ng.IPromise<string[]> {
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", "*", "server", server, "subsystem", "datagrid-infinispan", "cache-container", container),
-      name: name
+      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container),
+      name: type
     };
     return this.dmrService.readAttribute(request);
   }

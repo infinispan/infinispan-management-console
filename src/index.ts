@@ -1,6 +1,7 @@
 import {App} from "./ManagementConsole";
 import "./services/authentication/AuthenticationService";
 import "./services/cache/CacheService";
+import "./services/cluster-events/ClusterEventsService";
 import "./services/container/ContainerService";
 import "./services/dmr/DmrService";
 import "./services/domain/DomainService";
@@ -23,6 +24,7 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
+    "managementConsole.services.cluster-events",
     "managementConsole.services.container",
     "managementConsole.services.dmr",
     "managementConsole.services.domain",

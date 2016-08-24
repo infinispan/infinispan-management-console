@@ -3,25 +3,26 @@ import {DmrService} from "../dmr/DmrService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "./IServerGroup";
 import {IMap} from "../utils/IDictionary";
+import {UtilsService} from "../utils/UtilsService";
 import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
 export class ServerGroupService {
 
-  static $inject: string[] = ["$q", "dmrService"];
+  static $inject: string[] = ["$q", "dmrService", "utils"];
 
-  static parseServerGroup(name: string, object: any, members?: string[]): IServerGroup {
+  static parseServerGroup(name: string, object: any, members?: IMap<string[]>): IServerGroup {
     return <IServerGroup> {
       name: name,
       profile: object.profile,
       "socket-binding-group": object["socket-binding-group"],
       "socket-binding-port-offset": object["socket-binding-port-offset"],
-      members: (members != null && members !== undefined) ? members : []
+      members: (members != null && members !== undefined) ? members : {}
     };
   }
 
-  constructor(private $q: IQService, private dmrService: DmrService) {
+  constructor(private $q: IQService, private dmrService: DmrService, private utils: UtilsService) {
   }
 
   getServerGroupMap(): ng.IPromise<IMap<IServerGroup>> {
@@ -32,12 +33,12 @@ export class ServerGroupService {
 
     let deferred: ng.IDeferred<IMap<IServerGroup>> = this.$q.defer<IMap<IServerGroup>>();
     this.dmrService.readChildResources(request).then((serverGroups: any) => {
-      let dict: IMap<IServerGroup> = <IMap<IServerGroup>>{};
+      let map: IMap<IServerGroup> = <IMap<IServerGroup>>{};
       for (let serverGroupName in serverGroups) {
         let serverGroup: any = serverGroups[serverGroupName];
-        dict[serverGroupName] = ServerGroupService.parseServerGroup(serverGroupName, serverGroup);
+        map[serverGroupName] = ServerGroupService.parseServerGroup(serverGroupName, serverGroup);
       }
-      deferred.resolve(dict);
+      deferred.resolve(map);
     });
     return deferred.promise;
   }
@@ -53,13 +54,19 @@ export class ServerGroupService {
     this.getServerGroupMap()
       .then((map) => {
         this.dmrService.readChildResources(request).then((response) => {
+          // Iterate all hosts and servers, populating allServerGroups map as we go
           for (let host in response) {
-            let serverConfig: any = host["server-config"];
+            let serverConfig: any = response[host]["server-config"];
             for (let server in serverConfig) {
-              let serverGroup: string = serverConfig[server].group;
-              map[serverGroup].members.push(server);
+              let serverGroupName: string = serverConfig[server].group;
+              let serverGroup: IServerGroup = map[serverGroupName];
+              if (this.utils.isNullOrUndefined(serverGroup.members[host])) {
+                serverGroup.members[host] = [];
+              }
+              serverGroup.members[host].push(server);
             }
           }
+
           deferred.resolve(map);
         });
       });

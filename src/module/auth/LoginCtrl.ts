@@ -24,7 +24,7 @@ export class LoginCtrl {
     var onSuccess: () => void = () => {
       this.showLoginSpinner = false;
       this.$scope.page.htmlClass = "";
-      this.$state.go("clusters");
+      this.$state.go("containers");
     };
 
     var onFailure: (errorMsg: string) => void = (errorMsg) => {

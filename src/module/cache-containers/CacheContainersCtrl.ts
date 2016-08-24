@@ -8,7 +8,7 @@ import {UtilsService} from "../../services/utils/UtilsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 
-export class ClustersCtrl {
+export class CacheContainersCtrl {
 
   static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils", "containers"];
 

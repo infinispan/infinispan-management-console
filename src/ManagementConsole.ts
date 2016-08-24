@@ -116,7 +116,7 @@ module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state
       event.preventDefault();
       $state.go("login");
     } else if (toState.name === "login" && authService.isLoggedIn()) {
-      $state.go("clusters");
+      $state.go("containers");
     }
   });
 });

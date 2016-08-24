@@ -13,7 +13,7 @@ import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
 import "./services/utils/UtilsService";
 import "./module/auth/Auth";
-import "./module/clusters/Clusters";
+import "./module/cache-containers/CacheContainers";
 import "./module/events/Events";
 import "./module/navbar/Navbar";
 
@@ -21,7 +21,7 @@ App.element(document).ready(() => {
   App.bootstrap(document, [
     "managementConsole",
     "managementConsole.auth",
-    "managementConsole.clusters",
+    "managementConsole.cache-containers",
     "managementConsole.events",
     "managementConsole.navbar",
     "managementConsole.services.authentication",

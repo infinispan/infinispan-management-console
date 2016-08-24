@@ -8,7 +8,6 @@ export interface ICacheContainer {
   available: boolean;
   numberOfCaches: number;
   endpoints: IEndpoint[];
-  stack: string;
   "online-sites": string[];
   "offline-sites": string[];
   "mixed-sites": string[];

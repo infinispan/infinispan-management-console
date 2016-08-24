@@ -7,6 +7,7 @@ import {UtilsService} from "../utils/UtilsService";
 import {IServerGroup} from "../server-group/IServerGroup";
 import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
 import {IServerAddress} from "../server/IServerAddress";
+import {ServerAddress} from "../server/ServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
@@ -17,9 +18,9 @@ export class JGroupsService {
   constructor(private $q: IQService, private dmrService: DmrService, private utils: UtilsService) {
   }
 
-  getDefaultStack(host: string, server: string): ng.IPromise<string> {
+  getDefaultStack(server: IServerAddress): ng.IPromise<string> {
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", host, "server", server, "subsystem", "datagrid-jgroups"),
+      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-jgroups"),
       name: "default-stack"
     };
     return this.dmrService.readAttributeAndResolveExpression(request);
@@ -45,7 +46,7 @@ export class JGroupsService {
           let serverGroup: string = response[serverName]["server-group"];
           // We only need to receive the stack once per server-group
           if (this.utils.isNullOrUndefined(stackPromises[serverGroup])) {
-            stackPromises[serverGroup] = this.getDefaultStack(host, serverName);
+            stackPromises[serverGroup] = this.getDefaultStack(new ServerAddress(host, serverName));
           }
         }
         return this.$q.all(stackPromises);
@@ -68,7 +69,7 @@ export class JGroupsService {
 
     this.getChannelNamesByProfile(serverGroup.profile)
       .then((channelNames) => {
-        return this.getChannelCoordinator({host: host, name: server}, channelNames[0]);
+        return this.getChannelCoordinator(new ServerAddress(host, server), channelNames[0]);
       })
       .then((view): void => {
         let coordinator: IServerAddress = this.extractAddressFromView(view);
@@ -99,10 +100,7 @@ export class JGroupsService {
     let hostServerSplitIndex: number = view.indexOf(":");
     let host: string = view.substring(1, hostServerSplitIndex);
     let server: string = view.substring(hostServerSplitIndex + 1, lastIndex);
-    let coordinatorAddress: IServerAddress = <IServerAddress>{
-      host: host,
-      name: server
-    };
+    let coordinatorAddress: IServerAddress = new ServerAddress(host, server);
     return coordinatorAddress;
   }
 

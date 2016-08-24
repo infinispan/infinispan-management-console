@@ -11,6 +11,7 @@ import {UtilsService} from "../utils/UtilsService";
 import {DomainService} from "../domain/DomainService";
 import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
 import {IServerAddress} from "../server/IServerAddress";
+import {ServerAddress} from "../server/ServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -128,7 +129,7 @@ export class ContainerService {
 
     for (let host in serverGroup) {
       for (let server of serverGroup[host]) {
-        promises.push(this.domainService.getServerView(host, server, name));
+        promises.push(this.domainService.getServerView(new ServerAddress(host, server), name));
       }
     }
 

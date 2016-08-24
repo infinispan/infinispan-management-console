@@ -5,6 +5,7 @@ import {ICacheContainer} from "../container/ICacheContainer";
 import {IClusterEvent} from "./IClusterEvent";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerAddress} from "../server/IServerAddress";
+import {ServerAddress} from "../server/ServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.cluster-events", []);
 
@@ -19,10 +20,7 @@ export class ClusterEventsService {
       context: object.context,
       level: object.level,
       message: object.message,
-      server: !scopeExists ? undefined : <IServerAddress>{
-        host: address[0],
-        name: address[1]
-      },
+      server: !scopeExists ? undefined : new ServerAddress(address[0], address[1]),
       when: object.when
     };
   }
@@ -34,7 +32,8 @@ export class ClusterEventsService {
     let deferred: ng.IDeferred<IClusterEvent[]> = this.$q.defer<IClusterEvent[]>();
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
       .then((coordinator) => {
-        return this.getEventLog(coordinator.host, coordinator.name, container.name, maxLines);
+        let server: IServerAddress = new ServerAddress(coordinator.host, coordinator.name);
+        return this.getEventLog(server, container.name, maxLines);
       })
       .then((eventLog) => {
         let events: IClusterEvent[] = eventLog.map((event) => ClusterEventsService.parseEvent(event));
@@ -43,9 +42,9 @@ export class ClusterEventsService {
     return deferred.promise;
   }
 
-  private getEventLog(host: string, server: string, container: string, maxLines: number): ng.IPromise<any> {
+  private getEventLog(server: IServerAddress, container: string, maxLines: number): ng.IPromise<any> {
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", host, "server", server, "subsystem", "datagrid-infinispan",
+      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan",
         "cache-container", container),
       lines: maxLines
     };

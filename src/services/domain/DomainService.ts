@@ -4,6 +4,7 @@ import IQService = angular.IQService;
 import {IDomain} from "./IDomain";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {UtilsService} from "../utils/UtilsService";
+import {IServerAddress} from "../server/IServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.domain", []);
 
@@ -38,10 +39,10 @@ export class DomainService {
     return deferred.promise;
   }
 
-  getServerView(host: string, server: string, container: string): ng.IPromise<string[]> {
+  getServerView(server: IServerAddress, container: string): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", host, "server", server, "subsystem", "datagrid-infinispan", "cache-container", container),
+      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container),
       name: "members"
     };
     this.dmrService.readAttribute(request).then((response) => deferred.resolve(response.result));

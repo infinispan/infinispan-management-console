@@ -1,6 +1,6 @@
-import {IMap} from "../utils/IDictionary";
+import {IServerAddress} from "../server/IServerAddress";
 
 export interface IDomain {
   controller: string;
-  servers: IMap<string[]>; // Map of format hostname: [server1, server2]
+  servers: IServerAddress[]; // Map of format hostname: [server1, server2]
 }

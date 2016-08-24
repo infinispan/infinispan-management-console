@@ -8,13 +8,9 @@ import {UtilsService} from "../../services/utils/UtilsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 
-/**
- * Known limitations:
- *  - If a profile is utilised by two server-groups, then only the first group and endpoints are displayed
- */
 export class ClustersCtrl {
 
-  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils"];
+  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils", "containers"];
 
   containers: ICacheContainer[];
   domain: IDomain;
@@ -23,19 +19,9 @@ export class ClustersCtrl {
 
   constructor(private containerService: ContainerService, private domainService: DomainService,
               private jGroupsService: JGroupsService, private clusterEventsService: ClusterEventsService,
-              private utils: UtilsService) {
+              private utils: UtilsService, containers: ICacheContainer[]) {
 
-    // this.containerService.getAllContainers().then((containers) => this.containers = containers);
-
-    this.containerService.getAllContainers()
-      .then((containers) => {
-        this.containers = containers;
-        return this.clusterEventsService.fetchClusterEvents(containers[0], 10);
-      })
-      .then((events) => {
-        this.gridEvents = this.gridEvents.concat(events);
-      });
-
+    this.containers = containers;
     this.domainService.getHostsAndServers()
       .then((domain) => {
         this.domain = domain;
@@ -43,6 +29,7 @@ export class ClustersCtrl {
       })
       .then((stacks) => this.stacks = stacks);
 
+    this.getAllClusterEvents();
   }
 
   getDefaultStack(container: ICacheContainer): string {
@@ -71,5 +58,12 @@ export class ClustersCtrl {
       return array.length;
     }
     return 0;
+  }
+
+  getAllClusterEvents(): void {
+    for (let container of this.containers) {
+      this.clusterEventsService.fetchClusterEvents(container, 10)
+        .then((events) => this.gridEvents = this.gridEvents.concat(events));
+    }
   }
 }

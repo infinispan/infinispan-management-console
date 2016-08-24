@@ -14,6 +14,7 @@ import "./services/socket-binding/SocketBindingService";
 import "./services/utils/UtilsService";
 import "./module/auth/Auth";
 import "./module/clusters/Clusters";
+import "./module/events/Events";
 import "./module/navbar/Navbar";
 
 App.element(document).ready(() => {
@@ -21,6 +22,7 @@ App.element(document).ready(() => {
     "managementConsole",
     "managementConsole.auth",
     "managementConsole.clusters",
+    "managementConsole.events",
     "managementConsole.navbar",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",

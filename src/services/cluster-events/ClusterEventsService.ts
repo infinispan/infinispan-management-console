@@ -17,6 +17,7 @@ export class ClusterEventsService {
     let scopeExists: boolean = object.scope !== undefined;
     let address: string[] = scopeExists ? object.scope.split(":") : [];
     return <IClusterEvent> {
+      category: object.category,
       context: object.context,
       level: object.level,
       message: object.message,

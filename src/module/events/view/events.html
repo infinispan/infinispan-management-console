@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li translate>STATUS_EVENTS</li>
+      </ol>
+      <h1 translate>LATEST_STATUS_EVENTS </span> </h1>
+      <br>
+      <form class="form-inline">
+        <div class="form-group">
+          <label class="control-label" for="maxLines">Retrieve &nbsp;</label>
+          <select
+            class="form-control"
+            id="maxLines"
+            name="maxLines"
+            ng-model="ctrl.lineCount"
+            ng-options="option as option for option in ctrl.allPossibleLineCounts"
+            ng-change="ctrl.refreshClusterEvents()">
+          </select>
+          <label> &nbsp; logs per cluster. Showing {{ctrl.clusterEvents.length}} events.</label>
+        </div>
+      </form>
+      <br>
+      <table class="table ispn-table">
+        <tbody>
+        <tr>
+          <th style="width: 100px" translate>TYPE</th>
+          <th style="width: 220px" translate>TIMESTAMP</th>
+          <th translate>DESCRIPTION</th>
+          <th translate>CATEGORY</th>
+          <th translate>SCOPE</th>
+          <th translate>CONTEXT</th>
+        </tr>
+        <tr ng-repeat="event in ctrl.clusterEvents">
+          <td style="padding: 10px">
+            <span ng-if="event.level=='WARN'" class="label label-warning">Warn</span>
+            <span ng-if="event.level=='INFO'" class="label label-info">Info</span>
+            <span ng-if="event.level=='ERROR'" class="label label-danger">Error</span>
+          </td>
+          <td style="padding: 10px">{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+          <td style="padding: 10px">
+            <span ng-if="event.level=='WARN'" class="icon-class pficon-warning-triangle-o"></span>
+            <span ng-if="event.level=='INFO'" class="icon-class pficon-info"></span>
+            <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
+            {{event.message}}
+          </td>
+          <td>
+            {{event.category}}
+          </td>
+          <td>
+            {{ctrl.getServerOutput(event)}}
+          </td>
+          <td>
+            {{event.context}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

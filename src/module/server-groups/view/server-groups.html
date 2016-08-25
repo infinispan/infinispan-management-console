@@ -15,12 +15,12 @@
           </th>
         </tr>
 
-        <tr ng-repeat="cluster in ctrl.serverGroups track by $index">
-          <td><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: cluster.name})">{{cluster.name}}</a></strong></td>
+        <tr ng-repeat="serverGroup in ctrl.serverGroups track by $index">
+          <td><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: serverGroup.name})">{{serverGroup.name}}</a></strong></td>
           <td><span class="label clusterStatus"
-                    ng-class="ctrl.getSGStatusClass(cluster)">{{ctrl.getSGStatus(cluster)}}</span></td>
-          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(cluster)}}</span></td>
-          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(cluster)}}</span></td>
+                    ng-class="ctrl.getSGStatusClass(serverGroup)">{{ctrl.getSGStatus(serverGroup)}}</span></td>
+          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(serverGroup)}}</span></td>
+          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(serverGroup)}}</span></td>
         </tr>
       </table>
     </div>

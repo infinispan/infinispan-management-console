@@ -63,6 +63,18 @@ module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
 });
 
 // @ngInject
+module.config(($stateProvider: ng.ui.IStateProvider) => {
+  $stateProvider.state("404", {
+    url: "/404",
+    views: {
+      application: {
+        templateUrl: "common/views/error404.html",
+      }
+    }
+  });
+});
+
+// @ngInject
 module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibModal: IModalService) => {
   $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;

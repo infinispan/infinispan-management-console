@@ -26,7 +26,7 @@ export class AuthenticationService {
     this.getCredentials();
 
     // we need to create the DmrService manually to avoid a circular dependency with inject
-    this.dmrService = new DmrService(this.$http, this.$q, this, this.$location);
+    this.dmrService = new DmrService(this.$http, this.$q, this, this.$location, this.utils);
     this.availability = new AvailabilityCheck(this.$interval, this.dmrService);
   }
 

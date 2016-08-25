@@ -59,7 +59,7 @@ module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
   $urlRouterProvider
     .when("/", "/login")
     .when("", "/login")
-    .otherwise("/error404");
+    .otherwise("/404");
 });
 
 // @ngInject

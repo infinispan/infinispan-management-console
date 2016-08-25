@@ -2,7 +2,7 @@ import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
 import IQService = angular.IQService;
 import {IDmrRequest} from "../dmr/IDmrRequest";
-import {IMap} from "../utils/IDictionary";
+import {IMap} from "../utils/IMap";
 import {UtilsService} from "../utils/UtilsService";
 import {IServerGroup} from "../server-group/IServerGroup";
 import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
@@ -62,16 +62,20 @@ export class JGroupsService {
   }
 
   getServerGroupCoordinator(serverGroup: IServerGroup): ng.IPromise<IServerAddress> {
-    let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
     let groupMembers: IServerGroupMembers = serverGroup.members;
     let host: string = Object.keys(groupMembers)[0];
     let server: string = groupMembers[host][0];
 
-    this.getChannelNamesByProfile(serverGroup.profile)
+    return this.getCoordinatorByServer(new ServerAddress(host, server), serverGroup.profile);
+  }
+
+  getCoordinatorByServer(server: IServerAddress, profile: string): ng.IPromise<IServerAddress> {
+    let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
+    this.getChannelNamesByProfile(profile)
       .then((channelNames) => {
-        return this.getChannelCoordinator(new ServerAddress(host, server), channelNames[0]);
+        return this.getChannelCoordinator(server, channelNames[0]);
       })
-      .then((view): void => {
+      .then((view: string): void => {
         let coordinator: IServerAddress = this.extractAddressFromView(view);
         deferred.resolve(coordinator);
       });

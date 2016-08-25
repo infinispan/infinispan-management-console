@@ -3,7 +3,7 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IDomain} from "../../services/domain/IDomain";
 import {DomainService} from "../../services/domain/DomainService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
-import {IMap} from "../../services/utils/IDictionary";
+import {IMap} from "../../services/utils/IMap";
 import {UtilsService} from "../../services/utils/UtilsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
@@ -12,16 +12,14 @@ export class CacheContainersCtrl {
 
   static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils", "containers"];
 
-  containers: ICacheContainer[];
   domain: IDomain;
   stacks: IMap<string>;
   gridEvents: IClusterEvent[] = [];
 
   constructor(private containerService: ContainerService, private domainService: DomainService,
               private jGroupsService: JGroupsService, private clusterEventsService: ClusterEventsService,
-              private utils: UtilsService, containers: ICacheContainer[]) {
+              private utils: UtilsService, public containers: ICacheContainer[]) {
 
-    this.containers = containers;
     this.domainService.getHostsAndServers()
       .then((domain) => {
         this.domain = domain;

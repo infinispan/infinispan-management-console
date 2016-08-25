@@ -16,6 +16,7 @@ import "./module/auth/Auth";
 import "./module/cache-containers/CacheContainers";
 import "./module/events/Events";
 import "./module/navbar/Navbar";
+import "./module/server-groups/ServerGroups";
 
 App.element(document).ready(() => {
   App.bootstrap(document, [
@@ -24,6 +25,7 @@ App.element(document).ready(() => {
     "managementConsole.cache-containers",
     "managementConsole.events",
     "managementConsole.navbar",
+    "managementConsole.server-groups",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
     "managementConsole.services.cluster-events",

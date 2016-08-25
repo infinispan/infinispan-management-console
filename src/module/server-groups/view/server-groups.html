@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-8 col-md-9">
+      <ol class="breadcrumb">
+        <li>Domain</li>
+      </ol>
+      <h1 translate>CLUSTERS</h1>
+      <br>
+      <table class="table ispn-aligned">
+        <tr>
+          <th translate>NAME</th>
+          <th translate>STATUS</th>
+          <th translate>NUMBER_OF_HOSTS</th>
+          <th translate>NUMBER_OF_NODES</span>
+          </th>
+        </tr>
+
+        <tr ng-repeat="cluster in ctrl.serverGroups track by $index">
+          <td><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: cluster.name})">{{cluster.name}}</a></strong></td>
+          <td><span class="label clusterStatus"
+                    ng-class="ctrl.getSGStatusClass(cluster)">{{ctrl.getSGStatus(cluster)}}</span></td>
+          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(cluster)}}</span></td>
+          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(cluster)}}</span></td>
+        </tr>
+      </table>
+    </div>
+    <div class="pre-scrollable col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height: 923px;">
+      <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
+        <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>
+      </div>
+      <ul class="list-group"  ng-if="ctrl.gridEvents.length > 0">
+        <li class="list-group-item" ng-repeat="event in ctrl.gridEvents">
+          <h3 class="list-group-item-heading">
+            <span ng-if="event.level=='WARN'"  class="icon-class pficon-warning-triangle-o"></span>
+            <span ng-if="event.level=='INFO'"  class="icon-class pficon-info"></span>
+            <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
+            {{event.message}}.</h3>
+          <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}<br></small>
+          <small ng-if="event.server">{{event.server.host}}:{{event.server.name}}<br></small>
+          <small ng-if="event.context">{{event.context}}</small>
+        </li>
+      </ul>
+
+    </div>
+    <!-- /col -->
+  </div>
+  <!-- /row -->
+</div>

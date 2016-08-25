@@ -2,15 +2,20 @@ import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "./IServerGroup";
-import {IMap} from "../utils/IDictionary";
+import {IMap} from "../utils/IMap";
 import {UtilsService} from "../utils/UtilsService";
 import IQService = angular.IQService;
+import {ServerAddress} from "../server/ServerAddress";
+import {DomainService} from "../domain/DomainService";
+import {JGroupsService} from "../jgroups/JGroupsService";
+import {IServerAddress} from "../server/IServerAddress";
+import {IServerGroupMembers} from "./IServerGroupMembers";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
 export class ServerGroupService {
 
-  static $inject: string[] = ["$q", "dmrService", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "utils"];
 
   static parseServerGroup(name: string, object: any, members?: IMap<string[]>): IServerGroup {
     return <IServerGroup> {
@@ -22,7 +27,8 @@ export class ServerGroupService {
     };
   }
 
-  constructor(private $q: IQService, private dmrService: DmrService, private utils: UtilsService) {
+  constructor(private $q: IQService, private dmrService: DmrService, private domainService: DomainService,
+              private jGroupsService: JGroupsService, private utils: UtilsService) {
   }
 
   getServerGroupMap(): ng.IPromise<IMap<IServerGroup>> {
@@ -89,6 +95,27 @@ export class ServerGroupService {
           }
         }
       });
+    });
+    return deferred.promise;
+  }
+
+  areAllServerViewsTheSame(serverGroup: IServerGroup): ng.IPromise<boolean> {
+    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
+    let promises: ng.IPromise<IServerAddress>[] = [];
+    let members: IServerGroupMembers = serverGroup.members;
+    for (let host in members) {
+      for (let server of members[host]) {
+        promises.push(this.jGroupsService.getCoordinatorByServer(new ServerAddress(host, server), serverGroup.profile));
+      }
+    }
+
+    this.$q.all(promises).then((views: [IServerAddress]) => {
+      if (views.length === 1) {
+        deferred.resolve(true);
+        return;
+      }
+      let firstView: IServerAddress = views[0];
+      deferred.resolve(views.every((view) => firstView.equals(view)));
     });
     return deferred.promise;
   }

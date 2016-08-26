@@ -17,11 +17,11 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.available ? 'disabled' : 'enabled'"
-              ng-click="ctrl.openClusterModal('start')">
+              ng-click="ctrl.createConfirmationModal('start')">
             <a id="dropdownMenuStart" role="menuitem" translate>START</a>
           </li>
           <li role="presentation" ng-class="ctrl.available ? 'enabled' : 'disabled'"
-              ng-click="ctrl.openClusterModal('stop')">
+              ng-click="ctrl.createConfirmationModal('stop')">
             <a id="dropdownMenuStop" role="menuitem" translate>STOP</a>
           </li>
         </ul>

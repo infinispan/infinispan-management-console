@@ -10,9 +10,11 @@ import {ServerService} from "../../services/server/ServerService";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {INewServerInstance} from "../../services/server/INewServerInstance";
+import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
+import {IRootScopeService} from "../../common/IRootScopeService";
 
 export class ServerGroupCtrl {
-  static $inject: string[] = ["$state", "$uibModal", "serverGroupService", "serverService",
+  static $inject: string[] = ["$rootScope", "$state", "$uibModal", "serverGroupService", "serverService",
     "jGroupsService", "utils", "serverGroup"];
 
   available: boolean = false;
@@ -22,7 +24,7 @@ export class ServerGroupCtrl {
   coordinator: IServerAddress;
   hosts: string[];
 
-  constructor(private $state: IStateService, private $uibModal: IModalService,
+  constructor(private $rootScope: IRootScopeService, private $state: IStateService, private $uibModal: IModalService,
               private serverGroupService: ServerGroupService, private serverService: ServerService,
               private jGroupsService: JGroupsService, private utils: UtilsService, public serverGroup: IServerGroup) {
     this.fetchSGStatus();
@@ -101,6 +103,31 @@ export class ServerGroupCtrl {
     return this.$uibModal.open({
       templateUrl: "module/server-group/view/booting-modal.html"
     });
+  }
+
+  createConfirmationModal(operation: string): void {
+    let modal: IModalServiceInstance = this.$uibModal.open({
+      templateUrl: "module/server-group/view/confirmation-modal.html",
+      controller: ConfirmationModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        operation: (): string => {
+          return operation;
+        }
+      }
+    });
+
+    modal.result
+      .then(() => {
+        // If we get here, then we know the modal was submitted
+        if (operation === "start") {
+          return this.serverGroupService.startServers(this.serverGroup);
+        } else {
+          return this.serverGroupService.stopServers(this.serverGroup);
+        }
+      })
+      .then(() => this.refresh())
+      .catch((error) => this.$rootScope.openErrorModal(error));
   }
 
   private filterUniqueHosts(): string[] {

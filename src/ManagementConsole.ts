@@ -148,4 +148,13 @@ module.run(($templateCache: ITemplateCacheService) => {
     "</div>\n");
 });
 
+// TODO remove if only used for debugging
+// @ngInject
+module.run(($rootScope: IRootScopeService) => {
+  $rootScope.$on("$stateChangeError",
+    function(event: IAngularEvent, toState, toParams, fromState, fromParams, error) {
+      alert("error: " + error);
+    });
+});
+
 export {App};

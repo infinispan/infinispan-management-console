@@ -131,6 +131,22 @@ export class ServerGroupService {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerInetAddress(server));
   }
 
+  startServers(serverGroup: IServerGroup): ng.IPromise<void> {
+    return this.executeOp(serverGroup, "start-servers");
+  }
+
+  stopServers(serverGroup: IServerGroup): ng.IPromise<void> {
+    return this.executeOp(serverGroup, "stop-servers");
+  }
+
+  private executeOp(serverGroup: IServerGroup, operation: string): ng.IPromise<void> {
+    return this.dmrService.executePost({
+      address: [].concat("server-group", serverGroup.name),
+      operation: operation,
+      blocking: true
+    }, true);
+  }
+
   private getStringFromAllMembers(serverGroup: IServerGroup,
                                   serviceCall: (server: IServerAddress) => ng.IPromise<string>): ng.IPromise<IMap<string>> {
     let deferred: ng.IDeferred<IMap<string>> = this.$q.defer<IMap<string>>();

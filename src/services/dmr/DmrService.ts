@@ -19,6 +19,11 @@ export class DmrService {
               private utils: UtilsService) {
   }
 
+  add(request: IDmrRequest): angular.IPromise<any> {
+    request.operation = "add";
+    return this.executePost(request);
+  }
+
   readResource(request: IDmrRequest): angular.IPromise<any> {
     request.operation = "resource";
     return this.executeGet(request);
@@ -55,6 +60,33 @@ export class DmrService {
     return this.executePost(request);
   }
 
+  executePost(request: IDmrRequest, noTimeout?: boolean): ng.IPromise<any> {
+    let config: ng.IRequestShortcutConfig = {
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-type": "application/json"
+      }
+    };
+
+    if (!noTimeout) {
+      config.timeout = 2000;
+    }
+
+    let deferred: ng.IDeferred<any> = this.$q.defer<any>();
+
+    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials()) : this.url;
+    this.$http.post(this.url, JSON.stringify(request), config)
+      .then(
+        (success: any) => deferred.resolve(success.data.result),
+        (failure: any) => {
+          let msg: string = this.processDmrFailure(failure);
+          console.log(msg);
+          deferred.reject(msg);
+        });
+    return deferred.promise;
+  }
+
   private executeGet(request: IDmrRequest): ng.IPromise<any> {
     let config: ng.IRequestShortcutConfig = {
       timeout: 2000,
@@ -77,30 +109,6 @@ export class DmrService {
       console.log(msg);
       deferred.reject();
     });
-    return deferred.promise;
-  }
-
-  private executePost(request: IDmrRequest): ng.IPromise<any> {
-    let config: ng.IRequestShortcutConfig = {
-      timeout: 2000,
-      withCredentials: true,
-      headers: {
-        "Accept": "application/json",
-        "Content-type": "application/json"
-      }
-    };
-
-    let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-
-    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials()) : this.url;
-    this.$http.post(this.url, JSON.stringify(request), config)
-      .then(
-        (success: any) => deferred.resolve(success.data.result),
-        (failure: any) => {
-          let msg: string = this.processDmrFailure(failure);
-          console.log(msg);
-          deferred.reject(msg);
-        });
     return deferred.promise;
   }
 

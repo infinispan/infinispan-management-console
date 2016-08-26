@@ -5,23 +5,31 @@ import {ServerGroupService} from "../../services/server-group/ServerGroupService
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {IStateService} from "angular-ui-router";
+import {AddNodeModalCtrl} from "./AddNodeModalCtrl";
+import {ServerService} from "../../services/server/ServerService";
+import IModalService = angular.ui.bootstrap.IModalService;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {INewServerInstance} from "../../services/server/INewServerInstance";
 
 export class ServerGroupCtrl {
-  static $inject: string[] = ["$state", "serverGroupService", "jGroupsService", "utils", "serverGroup"];
+  static $inject: string[] = ["$state", "$uibModal", "serverGroupService", "serverService",
+    "jGroupsService", "utils", "serverGroup"];
 
   available: boolean = false;
   status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
+  hosts: string[];
 
-  constructor(private $state: IStateService, private serverGroupService: ServerGroupService,
-              private jGroupsService: JGroupsService, private utils: UtilsService,
-              public serverGroup: IServerGroup) {
+  constructor(private $state: IStateService, private $uibModal: IModalService,
+              private serverGroupService: ServerGroupService, private serverService: ServerService,
+              private jGroupsService: JGroupsService, private utils: UtilsService, public serverGroup: IServerGroup) {
     this.fetchSGStatus();
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
+    this.hosts = this.filterUniqueHosts();
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -56,6 +64,49 @@ export class ServerGroupCtrl {
     }, {
       reload: true
     });
+  }
+
+  createServerModal(): void {
+    let modal: IModalServiceInstance = this.$uibModal.open({
+      templateUrl: "module/server-group/view/add-node-modal.html",
+      controller: AddNodeModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        hosts: (): string[] => {
+          return this.hosts;
+        }
+      }
+    });
+
+    let bootModal: IModalServiceInstance = undefined;
+    modal.result
+      .then((newServer) => {
+        newServer["server-group"] = this.serverGroup.name;
+        newServer["socket-binding-group"] = this.serverGroup["socket-binding-group"];
+        return this.serverService.createServer(newServer)
+          .then(() => {
+            bootModal = this.createBootingModal();
+            return this.serverService.startServer(newServer);
+          });
+      })
+      .finally(() => {
+        if (this.utils.isNotNullOrUndefined(bootModal)) {
+          bootModal.close();
+        }
+        this.refresh();
+      });
+  }
+
+  createBootingModal(): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/view/booting-modal.html"
+    });
+  }
+
+  private filterUniqueHosts(): string[] {
+    return this.serverGroup.members
+      .map((server) => server.host)
+      .filter((item, post, array) => array.indexOf(item) === post);
   }
 
   private fetchServerStatuses(): void {

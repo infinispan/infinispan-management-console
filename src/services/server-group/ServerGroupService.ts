@@ -4,34 +4,35 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "./IServerGroup";
 import {IMap} from "../utils/IMap";
 import {UtilsService} from "../utils/UtilsService";
-import IQService = angular.IQService;
 import {ServerAddress} from "../server/ServerAddress";
 import {DomainService} from "../domain/DomainService";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {IServerAddress} from "../server/IServerAddress";
-import {IServerGroupMembers} from "./IServerGroupMembers";
+import {ServerService} from "../server/ServerService";
+import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
 export class ServerGroupService {
 
-  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "serverService", "utils"];
 
-  static parseServerGroup(name: string, object: any, members?: IMap<string[]>): IServerGroup {
+  static parseServerGroup(name: string, object: any, members?: IServerAddress[]): IServerGroup {
     return <IServerGroup> {
       name: name,
       profile: object.profile,
       "socket-binding-group": object["socket-binding-group"],
       "socket-binding-port-offset": object["socket-binding-port-offset"],
-      members: (members != null && members !== undefined) ? members : {}
+      members: (members != null && members !== undefined) ? members : []
     };
   }
 
   constructor(private $q: IQService, private dmrService: DmrService, private domainService: DomainService,
-              private jGroupsService: JGroupsService, private utils: UtilsService) {
+              private jGroupsService: JGroupsService, private serverService: ServerService,
+              private utils: UtilsService) {
   }
 
-  getServerGroupMap(): ng.IPromise<IMap<IServerGroup>> {
+  getAllServerGroupsMap(): ng.IPromise<IMap<IServerGroup>> {
     let request: IDmrRequest = <IDmrRequest> {
       address: [],
       "child-type": "server-group"
@@ -49,7 +50,7 @@ export class ServerGroupService {
     return deferred.promise;
   }
 
-  getServerGroupMapWithMembers(): ng.IPromise<IMap<IServerGroup>> {
+  getAllServerGroupsMapWithMembers(): ng.IPromise<IMap<IServerGroup>> {
     let request: IDmrRequest = <IDmrRequest>{
       address: [],
       "child-type": "host",
@@ -57,7 +58,7 @@ export class ServerGroupService {
     };
 
     let deferred: ng.IDeferred<IMap<IServerGroup>> = this.$q.defer<IMap<IServerGroup>>();
-    this.getServerGroupMap()
+    this.getAllServerGroupsMap()
       .then((map) => {
         this.dmrService.readChildResources(request).then((response) => {
           // Iterate all hosts and servers, populating allServerGroups map as we go
@@ -66,16 +67,19 @@ export class ServerGroupService {
             for (let server in serverConfig) {
               let serverGroupName: string = serverConfig[server].group;
               let serverGroup: IServerGroup = map[serverGroupName];
-              if (this.utils.isNullOrUndefined(serverGroup.members[host])) {
-                serverGroup.members[host] = [];
-              }
-              serverGroup.members[host].push(server);
+              serverGroup.members.push(new ServerAddress(host, server));
             }
           }
-
           deferred.resolve(map);
         });
       });
+    return deferred.promise;
+  }
+
+  // Here we just wrap the getAll.. methods as it still requires the same number of http requests
+  getServerGroupMapWithMembers(serverGroup: string): ng.IPromise<IServerGroup> {
+    let deferred: ng.IDeferred<IServerGroup> = this.$q.defer<IServerGroup>();
+    this.getAllServerGroupsMapWithMembers().then((serverGroups) => deferred.resolve(serverGroups[serverGroup]));
     return deferred.promise;
   }
 
@@ -85,7 +89,7 @@ export class ServerGroupService {
       "child-type": "server-group"
     };
     let deferred: ng.IDeferred<IServerGroup> = this.$q.defer<IServerGroup>();
-    this.getServerGroupMapWithMembers().then((sgMap) => {
+    this.getAllServerGroupsMapWithMembers().then((sgMap) => {
       this.dmrService.readChildResources(request).then((serverGroups: any) => {
         for (let serverGroupName in serverGroups) {
           let serverGroup: any = sgMap[serverGroupName];
@@ -102,11 +106,9 @@ export class ServerGroupService {
   areAllServerViewsTheSame(serverGroup: IServerGroup): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     let promises: ng.IPromise<IServerAddress>[] = [];
-    let members: IServerGroupMembers = serverGroup.members;
-    for (let host in members) {
-      for (let server of members[host]) {
-        promises.push(this.jGroupsService.getCoordinatorByServer(new ServerAddress(host, server), serverGroup.profile));
-      }
+
+    for (let server of serverGroup.members) {
+      promises.push(this.jGroupsService.getCoordinatorByServer(server, serverGroup.profile));
     }
 
     this.$q.all(promises).then((views: [IServerAddress]) => {
@@ -120,6 +122,28 @@ export class ServerGroupService {
     return deferred.promise;
   }
 
+  // Can't set IMap key type to anything other than string/number, so we use ServerAddress.toString as key/string
+  getServerStatuses(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
+    return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerStatus(server));
+  }
+
+  getServerInetAddress(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
+    return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerInetAddress(server));
+  }
+
+  private getStringFromAllMembers(serverGroup: IServerGroup,
+                                  serviceCall: (server: IServerAddress) => ng.IPromise<string>): ng.IPromise<IMap<string>> {
+    let deferred: ng.IDeferred<IMap<string>> = this.$q.defer<IMap<string>>();
+    let servers: ServerAddress[] = serverGroup.members;
+    let promises: ng.IPromise<string>[] = servers.map(serviceCall);
+
+    this.$q.all(promises).then((statuses: string[]) => {
+      let statusMap: IMap<string> = {};
+      servers.forEach((server) => statusMap[server.toString()] = statuses.shift());
+      deferred.resolve(statusMap);
+    });
+    return deferred.promise;
+  }
 }
 
 module.service("serverGroupService", ServerGroupService);

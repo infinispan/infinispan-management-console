@@ -5,6 +5,7 @@ import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 import {IMap} from "../../services/utils/IMap";
 import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
+import {IServerAddress} from "../../services/server/IServerAddress";
 
 export class ServerGroupsCtrl {
   static $inject: string[] = ["clusterEventsService", "serverGroupService", "utils", "containers", "serverGroups"];
@@ -20,20 +21,29 @@ export class ServerGroupsCtrl {
   }
 
   getSGHostCount(serverGroup: IServerGroup): number {
-    return Object.keys(serverGroup.members).length;
+    let members: IServerAddress[] = serverGroup.members;
+    if (members.length > 1) {
+      let hostCount: number = 1;
+      let host: string = members[0].host;
+      for (let server of members) {
+        if (server.host !== host) {
+          hostCount++;
+          host = server.host;
+        }
+      }
+      return hostCount;
+    }
+    return members.length;
   }
 
   getSGServerCount(serverGroup: IServerGroup): number {
-    let count: number = 0;
-    for (let host in serverGroup.members) {
-      count += serverGroup.members[host].length;
-    }
-    return count;
+    return serverGroup.members.length;
   }
 
   getSGStatus(serverGroup: IServerGroup): string {
     return this.status[serverGroup.name];
   }
+
   getSGStatusClass(serverGroup: IServerGroup): string {
     return this.status[serverGroup.name] === "STARTED" ? "label-success" : "label-danger";
   }

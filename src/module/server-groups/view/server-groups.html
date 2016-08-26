@@ -16,11 +16,19 @@
         </tr>
 
         <tr ng-repeat="serverGroup in ctrl.serverGroups track by $index">
-          <td><strong><a class="clusterName" ui-sref="clusterNodes({clusterName: serverGroup.name})">{{serverGroup.name}}</a></strong></td>
+          <td>
+            <strong>
+              <a class="clusterName"
+                 ui-sref="server-group({serverGroup: serverGroup.name})">{{serverGroup.name}}
+              </a>
+            </strong>
+          </td>
           <td><span class="label clusterStatus"
                     ng-class="ctrl.getSGStatusClass(serverGroup)">{{ctrl.getSGStatus(serverGroup)}}</span></td>
-          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(serverGroup)}}</span></td>
-          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(serverGroup)}}</span></td>
+          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(serverGroup)}}</span>
+          </td>
+          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(serverGroup)}}</span>
+          </td>
         </tr>
       </table>
     </div>
@@ -28,11 +36,11 @@
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>
       </div>
-      <ul class="list-group"  ng-if="ctrl.gridEvents.length > 0">
+      <ul class="list-group" ng-if="ctrl.gridEvents.length > 0">
         <li class="list-group-item" ng-repeat="event in ctrl.gridEvents">
           <h3 class="list-group-item-heading">
-            <span ng-if="event.level=='WARN'"  class="icon-class pficon-warning-triangle-o"></span>
-            <span ng-if="event.level=='INFO'"  class="icon-class pficon-info"></span>
+            <span ng-if="event.level=='WARN'" class="icon-class pficon-warning-triangle-o"></span>
+            <span ng-if="event.level=='INFO'" class="icon-class pficon-info"></span>
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
             {{event.message}}.</h3>
           <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}<br></small>

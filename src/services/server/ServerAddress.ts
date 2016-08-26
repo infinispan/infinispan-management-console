@@ -6,4 +6,8 @@ export class ServerAddress implements IServerAddress {
   equals(other: IServerAddress): boolean {
     return this.host === other.host && this.name === other.name;
   }
+
+  toString(): string {
+    return this.host + ":" + this.name;
+  }
 }

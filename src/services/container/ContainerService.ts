@@ -4,14 +4,13 @@ import {ICacheContainer} from "./ICacheContainer";
 import {EndpointService} from "../endpoint/EndpointService";
 import {ProfileService} from "../profile/ProfileService";
 import {ServerGroupService} from "../server-group/ServerGroupService";
-import IQService = angular.IQService;
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {UtilsService} from "../utils/UtilsService";
 import {DomainService} from "../domain/DomainService";
-import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
 import {IServerAddress} from "../server/IServerAddress";
-import {ServerAddress} from "../server/ServerAddress";
+import {IServerGroup} from "../server-group/IServerGroup";
+import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -62,7 +61,7 @@ export class ContainerService {
       })
       .then((numberOfCaches) => {
         container.numberOfCaches = numberOfCaches;
-        return this.isContainerAvailable(container.name, container.serverGroup.members);
+        return this.isContainerAvailable(container.name, container.serverGroup);
       })
       .then((available) => {
         container.available = available;
@@ -123,14 +122,12 @@ export class ContainerService {
     return deferred.promise;
   }
 
-  isContainerAvailable(name: string, serverGroup: IServerGroupMembers): ng.IPromise<boolean> {
+  isContainerAvailable(name: string, serverGroup: IServerGroup): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     let promises: ng.IPromise<string[]>[] = [];
 
-    for (let host in serverGroup) {
-      for (let server of serverGroup[host]) {
-        promises.push(this.domainService.getServerView(new ServerAddress(host, server), name));
-      }
+    for (let server of serverGroup.members) {
+      promises.push(this.domainService.getServerView(server, name));
     }
 
     this.$q.all(promises).then((views: [string[]]) => {

@@ -1,13 +1,12 @@
 import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
-import IQService = angular.IQService;
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IMap} from "../utils/IMap";
 import {UtilsService} from "../utils/UtilsService";
 import {IServerGroup} from "../server-group/IServerGroup";
-import {IServerGroupMembers} from "../server-group/IServerGroupMembers";
 import {IServerAddress} from "../server/IServerAddress";
 import {ServerAddress} from "../server/ServerAddress";
+import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
@@ -62,11 +61,7 @@ export class JGroupsService {
   }
 
   getServerGroupCoordinator(serverGroup: IServerGroup): ng.IPromise<IServerAddress> {
-    let groupMembers: IServerGroupMembers = serverGroup.members;
-    let host: string = Object.keys(groupMembers)[0];
-    let server: string = groupMembers[host][0];
-
-    return this.getCoordinatorByServer(new ServerAddress(host, server), serverGroup.profile);
+    return this.getCoordinatorByServer(serverGroup.members[0], serverGroup.profile);
   }
 
   getCoordinatorByServer(server: IServerAddress, profile: string): ng.IPromise<IServerAddress> {

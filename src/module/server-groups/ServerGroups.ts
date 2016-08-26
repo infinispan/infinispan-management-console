@@ -20,7 +20,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
             return containerService.getAllContainers();
           }],
           serverGroups: ["serverGroupService", (serverGroupService) => {
-            return serverGroupService.getServerGroupMapWithMembers();
+            return serverGroupService.getAllServerGroupsMapWithMembers();
           }]
         }
       }

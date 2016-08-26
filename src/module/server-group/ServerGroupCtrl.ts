@@ -4,9 +4,10 @@ import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
+import {IStateService} from "angular-ui-router";
 
 export class ServerGroupCtrl {
-  static $inject: string[] = ["serverGroupService", "jGroupsService", "utils", "serverGroup"];
+  static $inject: string[] = ["$state", "serverGroupService", "jGroupsService", "utils", "serverGroup"];
 
   available: boolean = false;
   status: string = "DEGRADED";
@@ -14,7 +15,7 @@ export class ServerGroupCtrl {
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
 
-  constructor(private serverGroupService: ServerGroupService,
+  constructor(private $state: IStateService, private serverGroupService: ServerGroupService,
               private jGroupsService: JGroupsService, private utils: UtilsService,
               public serverGroup: IServerGroup) {
     this.fetchSGStatus();
@@ -47,6 +48,14 @@ export class ServerGroupCtrl {
       return "";
     }
     return this.serverInetMap[server.toString()];
+  }
+
+  refresh(): void {
+    this.$state.go("server-group", {
+      serverGroup: this.serverGroup.name,
+    }, {
+      reload: true
+    });
   }
 
   private fetchServerStatuses(): void {

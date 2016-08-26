@@ -80,7 +80,7 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibMod
   $rootScope.isDomainControllerAlive = true;
   $rootScope.safeApply = (f: Function) => $timeout(() => this.$apply(f));
 
-  $rootScope.openErrorModal = (error: string) => {
+  $rootScope.openInfoModal = (error: string) => {
     $uibModal.open({
       templateUrl: "common/dialogs/views/generic-error.html",
       controller: ErrorModalCtrl,
@@ -92,7 +92,7 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibMod
     });
   };
 
-  $rootScope.openErrorModal = () => {
+  $rootScope.openRestartModal = () => {
     $uibModal.open({
       templateUrl: "common/dialogs/views/requires-restart.html",
       controller: RestartModalCtrl,

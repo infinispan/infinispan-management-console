@@ -11,18 +11,19 @@ import {DomainService} from "../domain/DomainService";
 import {IServerAddress} from "../server/IServerAddress";
 import {IServerGroup} from "../server-group/IServerGroup";
 import IQService = angular.IQService;
+import {ServerService} from "../server/ServerService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "domainService", "utils"];
+    "jGroupsService", "domainService", "serverService", "utils"];
 
   constructor(private $q: IQService, private dmrService: DmrService, private endpointService: EndpointService,
               private profileService: ProfileService, private serverGroupService: ServerGroupService,
               private jGroupsService: JGroupsService, private domainService: DomainService,
-              private utils: UtilsService) {
+              private serverService: ServerService, private utils: UtilsService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {
@@ -65,6 +66,10 @@ export class ContainerService {
       })
       .then((available) => {
         container.available = available;
+        if (!available) {
+          deferred.resolve(container);
+          return;
+        }
         return this.getSiteArrays(container);
       })
       .then((sites) => {
@@ -124,20 +129,37 @@ export class ContainerService {
 
   isContainerAvailable(name: string, serverGroup: IServerGroup): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
-    let promises: ng.IPromise<string[]>[] = [];
+    let statusPromises: ng.IPromise<string>[] = [];
 
     for (let server of serverGroup.members) {
-      promises.push(this.domainService.getServerView(server, name));
+      statusPromises.push(this.serverService.getServerStatus(server));
     }
 
-    this.$q.all(promises).then((views: [string[]]) => {
-      if (views.length === 1) {
-        deferred.resolve(true);
-        return;
-      }
-      let firstView: string[] = views[0];
-      deferred.resolve(views.every((view) => view === firstView));
-    });
+    // Get the status of all nodes in a server group, if a node is stopeed then the container is not available
+    // Otherwise, ensure that the views of all nodes within the server group are the same. Is this second step necessary?
+    this.$q.all(statusPromises)
+      .then((statuses: string[]) => deferred.resolve(statuses.indexOf("STOPPED") === -1))
+      .then((allServersRunning) => {
+        if (allServersRunning) {
+          let viewPromisies: ng.IPromise<string[]>[] = [];
+          for (let server of serverGroup.members) {
+            viewPromisies.push(this.serverService.getServerView(server, name));
+          }
+
+          this.$q.all(viewPromisies)
+            .then((views: [string[]]) => {
+              if (views.length === 1) {
+                deferred.resolve(true);
+                return;
+              }
+              let firstView: string[] = views[0];
+              deferred.resolve(views.every((view) => view === firstView));
+            });
+
+        } else {
+          deferred.resolve(false);
+        }
+      });
     return deferred.promise;
   }
 

@@ -55,7 +55,7 @@ export class ServerGroupsCtrl {
   }
 
   private setSGStatus(serverGroup: IServerGroup): void {
-    this.serverGroupService.areAllServerViewsTheSame(serverGroup)
+    this.serverGroupService.isGroupAvailable(serverGroup)
       .then((result) => {
         if (result) {
           this.status[serverGroup.name] = "STARTED";

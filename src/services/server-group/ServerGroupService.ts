@@ -103,21 +103,44 @@ export class ServerGroupService {
     return deferred.promise;
   }
 
-  areAllServerViewsTheSame(serverGroup: IServerGroup): ng.IPromise<boolean> {
+  // Returns true only if all running servers in the group have the same view and there is at least one running server
+  isGroupAvailable(serverGroup: IServerGroup): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     let promises: ng.IPromise<IServerAddress>[] = [];
 
-    for (let server of serverGroup.members) {
-      promises.push(this.jGroupsService.getCoordinatorByServer(server, serverGroup.profile));
-    }
-
-    this.$q.all(promises).then((views: [IServerAddress]) => {
-      if (views.length === 1) {
-        deferred.resolve(true);
+    this.getRunningServerInstances(serverGroup).then(servers => {
+      if (servers.length === 0) {
+        deferred.resolve(false);
         return;
       }
-      let firstView: IServerAddress = views[0];
-      deferred.resolve(views.every((view) => firstView.equals(view)));
+
+      for (let server of servers) {
+        promises.push(this.jGroupsService.getCoordinatorByServer(server, serverGroup.profile));
+      }
+
+      this.$q.all(promises).then((views: [IServerAddress]) => {
+        if (views.length === 1) {
+          deferred.resolve(true);
+          return;
+        }
+        let firstView: IServerAddress = views[0];
+        deferred.resolve(views.every((view) => firstView.equals(view)));
+      });
+    });
+    return deferred.promise;
+  }
+
+  getRunningServerInstances(serverGroup: IServerGroup): ng.IPromise<IServerAddress[]> {
+    let deferred: ng.IDeferred<IServerAddress[]> = this.$q.defer<IServerAddress[]>();
+    let promises: ng.IPromise<string>[] = serverGroup.members.map(server => this.serverService.getServerStatus(server));
+    this.$q.all(promises).then(statuses => {
+      let activeServers: IServerAddress[] = [];
+      for (let index in statuses) {
+        if (statuses[index] !== "STOPPED") {
+          activeServers.push(serverGroup.members[index]);
+        }
+      }
+      deferred.resolve(activeServers);
     });
     return deferred.promise;
   }
@@ -127,7 +150,7 @@ export class ServerGroupService {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerStatus(server));
   }
 
-  getServerInetAddress(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
+  getServerInetAddresses(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerInetAddress(server));
   }
 

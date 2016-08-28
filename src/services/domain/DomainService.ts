@@ -39,16 +39,6 @@ export class DomainService {
     return deferred.promise;
   }
 
-  getServerView(server: IServerAddress, container: string): ng.IPromise<string[]> {
-    let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
-    let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container),
-      name: "members"
-    };
-    this.dmrService.readAttribute(request).then((response) => deferred.resolve(response.result));
-    return deferred.promise;
-  }
-
 }
 
 module.service("domainService", DomainService);

@@ -7,11 +7,10 @@ import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {IStateService} from "angular-ui-router";
 import {AddNodeModalCtrl} from "./AddNodeModalCtrl";
 import {ServerService} from "../../services/server/ServerService";
-import IModalService = angular.ui.bootstrap.IModalService;
-import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
-import {INewServerInstance} from "../../services/server/INewServerInstance";
 import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
 import {IRootScopeService} from "../../common/IRootScopeService";
+import IModalService = angular.ui.bootstrap.IModalService;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$rootScope", "$state", "$uibModal", "serverGroupService", "serverService",
@@ -141,7 +140,7 @@ export class ServerGroupCtrl {
   }
 
   private fetchSGStatus(): void {
-    this.serverGroupService.areAllServerViewsTheSame(this.serverGroup).then((result) => {
+    this.serverGroupService.isGroupAvailable(this.serverGroup).then((result) => {
       this.available = result;
       this.status = result ? "STARTED" : "DEGRADED";
     });
@@ -152,6 +151,6 @@ export class ServerGroupCtrl {
   }
 
   private fetchInetAddresses(): void {
-    this.serverGroupService.getServerInetAddress(this.serverGroup).then((inetMap) => this.serverInetMap = inetMap);
+    this.serverGroupService.getServerInetAddresses(this.serverGroup).then((inetMap) => this.serverInetMap = inetMap);
   }
 }

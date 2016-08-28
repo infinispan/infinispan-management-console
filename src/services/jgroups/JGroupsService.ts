@@ -7,22 +7,31 @@ import {IServerGroup} from "../server-group/IServerGroup";
 import {IServerAddress} from "../server/IServerAddress";
 import {ServerAddress} from "../server/ServerAddress";
 import IQService = angular.IQService;
+import {ServerService} from "../server/ServerService";
 
 const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
 export class JGroupsService {
 
-  static $inject: string[] = ["$q", "dmrService", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "serverService", "utils"];
 
-  constructor(private $q: IQService, private dmrService: DmrService, private utils: UtilsService) {
+  constructor(private $q: IQService, private dmrService: DmrService, private serverService: ServerService,
+              private utils: UtilsService) {
   }
 
   getDefaultStack(server: IServerAddress): ng.IPromise<string> {
-    let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-jgroups"),
-      name: "default-stack"
-    };
-    return this.dmrService.readAttributeAndResolveExpression(request);
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
+    this.serverService.getServerStatus(server).then(status => {
+      if (status === "STOPPED") {
+        deferred.reject();
+      } else {
+        deferred.resolve(this.dmrService.readAttributeAndResolveExpression({
+          address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-jgroups"),
+          name: "default-stack"
+        }));
+      }
+    });
+    return deferred.promise;
   }
 
   /**
@@ -66,14 +75,22 @@ export class JGroupsService {
 
   getCoordinatorByServer(server: IServerAddress, profile: string): ng.IPromise<IServerAddress> {
     let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
-    this.getChannelNamesByProfile(profile)
-      .then((channelNames) => {
-        return this.getChannelCoordinator(server, channelNames[0]);
-      })
-      .then((view: string): void => {
-        let coordinator: IServerAddress = this.extractAddressFromView(view);
-        deferred.resolve(coordinator);
-      });
+
+    this.serverService.getServerStatus(server).then(status => {
+      if (status === "STOPPED") {
+        deferred.reject();
+      } else {
+
+        this.getChannelNamesByProfile(profile)
+          .then((channelNames) => {
+            return this.getChannelCoordinator(server, channelNames[0]);
+          })
+          .then((view: string): void => {
+            let coordinator: IServerAddress = this.extractAddressFromView(view);
+            deferred.resolve(coordinator);
+          });
+      }
+    });
     return deferred.promise;
   }
 

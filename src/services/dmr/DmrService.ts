@@ -135,7 +135,7 @@ export class DmrService {
       msg = "Invalid login or password. Please try again";
     } else {
       console.log(response.data);
-      let result: any = response.data
+      let result: any = response.data;
       if (result && result["failure-description"] != null) {
         msg = result["failure-description"];
       }

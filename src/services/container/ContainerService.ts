@@ -138,7 +138,9 @@ export class ContainerService {
     // Get the status of all nodes in a server group, if a node is stopeed then the container is not available
     // Otherwise, ensure that the views of all nodes within the server group are the same. Is this second step necessary?
     this.$q.all(statusPromises)
-      .then((statuses: string[]) => deferred.resolve(statuses.indexOf("STOPPED") === -1))
+      .then((statuses: string[]) => {
+        return statuses.indexOf("STOPPED") === -1;
+      })
       .then((allServersRunning) => {
         if (allServersRunning) {
           let viewPromisies: ng.IPromise<string[]>[] = [];

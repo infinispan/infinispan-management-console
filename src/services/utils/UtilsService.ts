@@ -3,6 +3,7 @@ import {ISPNException} from "./ISPNException";
 
 const module: ng.IModule = App.module("managementConsole.services.utils", []);
 
+// TODO just export the class and then call static class methods. No need for this to be an angular service
 export class UtilsService {
 
   static resourceDescriptionMap: Object = {
@@ -128,7 +129,7 @@ export class UtilsService {
 
   convertCacheAttributeIntoFieldName(attribute: string): string {
     var str: string = attribute.replace(/-/g, " ");
-    return str.replace(/\w\S*/g, function (txt) {
+    return str.replace(/\w\S*/g, (txt) => {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   }

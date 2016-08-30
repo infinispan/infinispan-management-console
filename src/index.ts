@@ -15,6 +15,7 @@ import "./services/socket-binding/SocketBindingService";
 import "./services/utils/UtilsService";
 import "./module/auth/Auth";
 import "./module/cache-containers/CacheContainers";
+import "./module/caches/Caches";
 import "./module/events/Events";
 import "./module/navbar/Navbar";
 import "./module/server-group/ServerGroup";
@@ -25,6 +26,7 @@ App.element(document).ready(() => {
     "managementConsole",
     "managementConsole.auth",
     "managementConsole.cache-containers",
+    "managementConsole.caches",
     "managementConsole.events",
     "managementConsole.navbar",
     "managementConsole.server-group",

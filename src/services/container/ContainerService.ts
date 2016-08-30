@@ -12,18 +12,19 @@ import {IServerAddress} from "../server/IServerAddress";
 import {IServerGroup} from "../server-group/IServerGroup";
 import IQService = angular.IQService;
 import {ServerService} from "../server/ServerService";
+import {CACHE_TYPES, CacheService} from "../cache/CacheService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "domainService", "serverService", "utils"];
+    "jGroupsService", "domainService", "serverService", "cacheService", "utils"];
 
   constructor(private $q: IQService, private dmrService: DmrService, private endpointService: EndpointService,
               private profileService: ProfileService, private serverGroupService: ServerGroupService,
               private jGroupsService: JGroupsService, private domainService: DomainService,
-              private serverService: ServerService, private utils: UtilsService) {
+              private serverService: ServerService, private cacheService: CacheService, private utils: UtilsService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {
@@ -58,10 +59,10 @@ export class ContainerService {
       })
       .then((endpoints) => {
         container.endpoints = endpoints;
-        return this.getNumberOfCachesInContainer(container.profile, container.name);
+        return this.cacheService.getAllCachesInContainer(container.name, container.profile);
       })
-      .then((numberOfCaches) => {
-        container.numberOfCaches = numberOfCaches;
+      .then((caches) => {
+        container.numberOfCaches = caches.length;
         return this.isContainerAvailable(container.name, container.serverGroup);
       })
       .then((available) => {
@@ -111,20 +112,6 @@ export class ContainerService {
 
         return this.$q.all(promises);
       });
-  }
-
-  getNumberOfCachesInContainer(profile: string, container: string): ng.IPromise<number> {
-    let deferred: ng.IDeferred<number> = this.$q.defer<number>();
-    let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("profile", profile, "subsystem", "datagrid-infinispan", "cache-container", container)
-    };
-
-    this.dmrService.readResource(request)
-      .then((response) => {
-        let cacheTypes: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
-        deferred.resolve(this.countNumberOfCaches(response, cacheTypes));
-      });
-    return deferred.promise;
   }
 
   isContainerAvailable(name: string, serverGroup: IServerGroup): ng.IPromise<boolean> {
@@ -187,16 +174,6 @@ export class ContainerService {
       name: type
     };
     return this.dmrService.readAttribute(request);
-  }
-
-  private countNumberOfCaches(object: any, cacheTypes: string[]): number {
-    let numberOfCaches: number = 0;
-    for (let cache of cacheTypes) {
-      if (this.utils.isNotNullOrUndefined(object[cache])) {
-        numberOfCaches += Object.keys(object[cache]).length;
-      }
-    }
-    return numberOfCaches;
   }
 }
 

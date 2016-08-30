@@ -11,9 +11,10 @@ import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
 import {IRootScopeService} from "../../common/IRootScopeService";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {DmrService} from "../../services/dmr/DmrService";
 
 export class ServerGroupCtrl {
-  static $inject: string[] = ["$rootScope", "$state", "$uibModal", "serverGroupService", "serverService",
+  static $inject: string[] = ["$rootScope", "$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
     "jGroupsService", "utils", "serverGroup"];
 
   available: boolean = false;
@@ -23,9 +24,15 @@ export class ServerGroupCtrl {
   coordinator: IServerAddress;
   hosts: string[];
 
-  constructor(private $rootScope: IRootScopeService, private $state: IStateService, private $uibModal: IModalService,
-              private serverGroupService: ServerGroupService, private serverService: ServerService,
-              private jGroupsService: JGroupsService, private utils: UtilsService, public serverGroup: IServerGroup) {
+  constructor(private $rootScope: IRootScopeService,
+              private $state: IStateService,
+              private $uibModal: IModalService,
+              private dmrService: DmrService,
+              private serverGroupService: ServerGroupService,
+              private serverService: ServerService,
+              private jGroupsService: JGroupsService,
+              private utils: UtilsService,
+              public serverGroup: IServerGroup) {
     this.fetchSGStatus();
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
@@ -60,11 +67,8 @@ export class ServerGroupCtrl {
   }
 
   refresh(): void {
-    this.$state.go("server-group", {
-      serverGroup: this.serverGroup.name,
-    }, {
-      reload: true
-    });
+    this.dmrService.clearGetCache();
+    this.$state.reload();
   }
 
   createServerModal(): void {
@@ -104,6 +108,12 @@ export class ServerGroupCtrl {
     });
   }
 
+  createStoppingModal(): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/view/stopping-modal.html"
+    });
+  }
+
   createConfirmationModal(operation: string): void {
     let modal: IModalServiceInstance = this.$uibModal.open({
       templateUrl: "module/server-group/view/confirmation-modal.html",
@@ -116,16 +126,22 @@ export class ServerGroupCtrl {
       }
     });
 
+    let bootModal: IModalServiceInstance = undefined;
     modal.result
       .then(() => {
         // If we get here, then we know the modal was submitted
         if (operation === "start") {
+          bootModal = this.createBootingModal();
           return this.serverGroupService.startServers(this.serverGroup);
         } else {
+          bootModal = this.createStoppingModal();
           return this.serverGroupService.stopServers(this.serverGroup);
         }
       })
-      .then(() => this.refresh())
+      .then(() => {
+        bootModal.close();
+        this.refresh();
+      })
       .catch((error) => this.$rootScope.openErrorModal(error));
   }
 

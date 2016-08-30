@@ -10,13 +10,14 @@ const module: ng.IModule = App.module("managementConsole.services.authentication
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$http", "$q", "$location", "$interval", "localStorageService", "launchType", "utils"];
+  static $inject: string[] = ["$http", "$cacheFactory", "$q", "$location", "$interval", "localStorageService", "launchType", "utils"];
 
   private credentials: ICredentials = <ICredentials>{};
   private availability: AvailabilityCheck;
   private dmrService: DmrService;
 
   constructor(private $http: ng.IHttpService,
+              private $cacheFactory: ng.ICacheFactoryService,
               private $q: ng.IQService,
               private $location: ng.ILocationService,
               private $interval: ng.IIntervalService,
@@ -26,7 +27,7 @@ export class AuthenticationService {
     this.getCredentials();
 
     // we need to create the DmrService manually to avoid a circular dependency with inject
-    this.dmrService = new DmrService(this.$http, this.$q, this, this.$location, this.utils);
+    this.dmrService = new DmrService(this.$http, this.$cacheFactory, this.$q, this, this.$location, this.utils);
     this.availability = new AvailabilityCheck(this.$interval, this.dmrService);
   }
 

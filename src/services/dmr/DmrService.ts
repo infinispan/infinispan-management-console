@@ -8,11 +8,12 @@ const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
 export class DmrService {
 
-  static $inject: string[] = ["$http", "$q", "authService", "$location", "utils"];
+  static $inject: string[] = ["$http", "$cacheFactory", "$q", "authService", "$location", "utils"];
 
   url: string;
 
   constructor(private $http: ng.IHttpService,
+              private $cacheFactory: ng.ICacheFactoryService,
               private $q: ng.IQService,
               private authService: AuthenticationService,
               private $location: ng.ILocationService,
@@ -85,6 +86,10 @@ export class DmrService {
           deferred.reject(msg);
         });
     return deferred.promise;
+  }
+
+  clearGetCache(): void {
+    this.$cacheFactory.get("$http").removeAll();
   }
 
   private executeGet(request: IDmrRequest): ng.IPromise<any> {

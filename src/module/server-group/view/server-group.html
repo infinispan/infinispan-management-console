@@ -72,10 +72,10 @@
       <div class="col-xs-6 col-sm-4 col-md-2"
            ng-repeat="server in filtered = (ctrl.serverGroup.members | serverFilter:ctrl.serverInetMap:searchNameQuery)"
            ng-show="true" on-finish-render>
-        <a ui-sref="nodeStatus({
-            clusterName:cluster.name,
-            nodeName:server.name,
-            inetAddress:ctrl.getServerInetAddress(server)})" title="View Node Details">
+        <a ui-sref="server-instance({
+            serverGroupName:ctrl.serverGroup.name,
+            host:server.host,
+            server:server.name})" title="View Node Details">
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
             <h2 class="card-pf-title">
               <span class="pficon" ng-class="ctrl.isServerStopped(server)?'fa fa-power-off':'pficon-ok'"></span>{{server.name}}

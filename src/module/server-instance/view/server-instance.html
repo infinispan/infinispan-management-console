@@ -1,0 +1,163 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a href="#/clusters-view-physical" translate>CLUSTERS</a>
+        </li>
+        <li><a ui-sref="server-group({serverGroup: ctrl.serverInstance.serverGroup})" ui-sref-opts="{reload:true}">{{ctrl.serverInstance.serverGroup}}</a></li>
+        <li class="active"><strong>{{ctrl.serverInstance.address.name}}</strong></li>
+      </ol>
+  
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refreshStats()">
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
+        </button>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
+                data-toggle="dropdown" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>
+          <li role="presentation" ng-class="!ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
+        </ul>
+      </div>
+      <h1><span class="label" ng-class="ctrl.serverInstance.isRunning()?'label-success':'label-danger'">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}
+        <span ng-show="ctrl.isCoordinator()">(coordinator) </span><small>IP: {{ctrl.serverInstance.inetAddress}} - {{ctrl.nodeStats['number-of-entries']}} entries</small>
+      </h1>
+    </div>
+  </div>
+  <!--div class="cards-pf" style="padding:20px"-->
+  <div style="padding-top: 0px">
+    <div class="row row-cards-pf">
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title" translate>PERFORMANCE</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th>Avg Reads</th>
+                    <td id="averageReads">{{ctrl.nodeStats['average-read-time'] | number}} ms</td>
+                  </tr>
+                  <tr>
+                    <th>Avg Writes</th>
+                    <td id="averageWrites">{{ctrl.nodeStats['average-write-time'] | number}} ms</td>
+                  </tr>
+                  <tr>
+                    <th>Avg Removes</th>
+                    <td id="averageRemoves">{{ctrl.nodeStats['average-remove-time'] | number}} ms</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-2 col-sm-2 col-md-2">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title" translate>CACHING_ACTIVITY</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th>READ Hits</th>
+                    <td id="numberOfReadHits">{{ctrl.nodeStats['hits'] | number}}</td>
+                  </tr>
+                  <tr>
+                    <th>READ misses</th>
+                    <td id="numberOfReadMisses">{{ctrl.nodeStats['misses'] | number}}</td>
+                  </tr>
+                  <tr>
+                    <th>REMOVE hits</th>
+                    <td id="numberOfRemoveHits">{{ctrl.nodeStats['remove-hits'] | number}}</td>
+                  </tr>
+                  <tr>
+                    <th>REMOVE misses</th>
+                    <td id="numberOfRemoveMisses">{{ctrl.nodeStats['remove-misses'] | number}}</td>
+                  </tr>
+                  <tr>
+                    <th>PUTS</th>
+                    <td id="numberOfPuts">{{ctrl.nodeStats['stores'] | number}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END CARD -->
+
+      <div class="col-xs-6 col-sm-6 col-md-6" match-height="ispn-card">
+        <div class="card-pf card-pf-accented ispn-card">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title" translate>PERFORMANCE_METRICS</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-8" ng-show="ctrl.serverInstance.isRunning()">
+                <h4>Heap Memory Usage</h4>
+                <div id="chart"></div>
+              </div>
+              <div class="col-md-8" ng-show="false">
+                <h4>Node is stopped</h4>
+              </div>
+              <div class="col-md-4">
+                <h4>Threads</h4>
+                <table class="col-md-12">
+                  <tr>
+                    <th>Count</th>
+                    <td id="threadCount">{{ctrl.threadCount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Peak</th>
+                    <td id="threadPeakCount">{{ctrl.threadPeakCount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Daemon</th>
+                    <td id="threadDaemonCount">{{ctrl.threadDaemonCount}}</td>
+                  </tr>
+                </table>
+                <h4>Direct Buffers</h4>
+                <table class="col-md-12">
+                  <tr>
+                    <th>Count</th>
+                    <td id="directBufferPoolCount">{{ctrl.directBufferPoolCount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Memory</th>
+                    <td id="directBufferPoolMemoryUsed">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
+                  </tr>
+                </table>
+                <h4>Mapped Buffers</h4>
+                <table class="col-md-12">
+                  <tr>
+                    <th>Count</th>
+                    <td id="mappedBufferPoolCount">{{ctrl.mappedBufferPoolCount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Memory</th>
+                    <td id="mappedBufferPoolMemoryUsed">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

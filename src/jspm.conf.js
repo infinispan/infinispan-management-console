@@ -44,7 +44,6 @@ System.config({
     "bootstrap-css": "npm:bootstrap-css@3.0.0",
     "browser-sync": "npm:browser-sync@2.14.3",
     "c3": "npm:c3@0.4.10",
-    "c3-angular": "npm:c3-angular@1.0.1",
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.26",
     "d3": "npm:d3@3.5.0",

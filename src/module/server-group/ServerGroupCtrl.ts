@@ -89,7 +89,7 @@ export class ServerGroupCtrl {
         return this.serverService.createServer(newServer)
           .then(() => {
             bootModal = this.createBootingModal();
-            return this.serverService.startServer(newServer);
+            return this.serverService.startServer(newServer.address);
           });
       })
       .finally(() => {

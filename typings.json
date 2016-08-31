@@ -15,6 +15,8 @@
   "globalDependencies": {
     "angular-local-storage": "registry:dt/angular-local-storage#0.1.5+20160602154142",
     "angular-translate": "registry:dt/angular-translate#2.4.0+20160729132354",
-    "angular-ui-bootstrap": "registry:dt/angular-ui-bootstrap#0.13.3+20160705221453"
+    "angular-ui-bootstrap": "registry:dt/angular-ui-bootstrap#0.13.3+20160705221453",
+    "c3": "registry:dt/c3#0.0.0+20160811144020",
+    "d3": "registry:dt/d3#0.0.0+20160727131401"
   }
 }

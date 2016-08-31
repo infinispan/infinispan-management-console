@@ -82,11 +82,9 @@ export class JGroupsService {
         deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
 
-        this.getChannelNamesByProfile(profile)
-          .then((channelNames) => {
+        this.getChannelNamesByProfile(profile).then(channelNames => {
             return this.getChannelCoordinator(server, channelNames[0]);
-          })
-          .then((view: string): void => {
+          }).then(view => {
             let coordinator: IServerAddress = this.extractAddressFromView(view);
             deferred.resolve(coordinator);
           });

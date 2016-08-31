@@ -39,7 +39,7 @@
       </div>
       <h1><span class="label"
                 ng-class="ctrl.container.available ? 'label-success' : 'label-danger'">
-        {{currentClusterAvailabilityAsString()}}
+        {{ctrl.getAvailability()}}
       </span>&nbsp;{{ctrl.name}}
         <span ng-if="!ctrl.isRebalancingEnabled" id="rebalancingIsDisabledLabel"> - <small
           class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong translate>REBALANCING_IS_DISABLED</strong></small></span>

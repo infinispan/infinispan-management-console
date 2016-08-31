@@ -36,6 +36,10 @@ export class CachesCtrl {
     this.$state.reload();
   }
 
+  getAvailability(): string {
+    return this.container.available ? "AVAILABLE" : "DEGRADED";
+  }
+
   private getRebalancingEnabled(): void {
     this.containerService.isRebalancingEnabled(this.container).then(enabled => this.isRebalancingEnabled = enabled);
   }

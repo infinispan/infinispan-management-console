@@ -31,12 +31,10 @@ import {ErrorModalCtrl} from "./common/dialogs/ErrorModalCtrl";
 import {RestartModalCtrl} from "./common/dialogs/RestartModalCtrl";
 import {InfoModalCtrl} from "./common/dialogs/InfoModalCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
-import ITimeoutService = angular.ITimeoutService;
 import IModalService = angular.ui.bootstrap.IModalService;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
-import IScope = angular.IScope;
-import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 
 const App: ng.IAngularStatic = angular;
 const module: ng.IModule = angular.module("managementConsole", [
@@ -59,18 +57,33 @@ module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
   $urlRouterProvider
     .when("/", "/login")
     .when("", "/login")
+    .when("/containers/{profile}/{container}/tasks", "/containers/{profile}/{container}/tasks/running")
     .otherwise("/404");
 });
 
 // @ngInject
+module.config(($urlMatcherFactoryProvider: ng.ui.IUrlMatcherFactory) => {
+  $urlMatcherFactoryProvider.caseInsensitive(true);
+  $urlMatcherFactoryProvider.strictMode(false);
+});
+
+// @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
-  $stateProvider.state("404", {
-    url: "/404",
+  $stateProvider.state("root", {
+    url: "/",
     views: {
-      application: {
-        templateUrl: "common/views/error404.html",
+      main: {
+        templateUrl: "module/navbar/view/navbar.html",
+        controller: NavbarCtrl,
+        controllerAs: "ctrl"
       }
     }
+  });
+
+  $stateProvider.state("404", {
+    parent: "root",
+    url: "404",
+    templateUrl: "common/views/error404.html",
   });
 });
 
@@ -152,7 +165,7 @@ module.run(($templateCache: ITemplateCacheService) => {
 // @ngInject
 module.run(($rootScope: IRootScopeService) => {
   $rootScope.$on("$stateChangeError",
-    function(event: IAngularEvent, toState, toParams, fromState, fromParams, error) {
+    function (event: IAngularEvent, toState, toParams, fromState, fromParams, error) {
       alert("error: " + error);
     });
 });

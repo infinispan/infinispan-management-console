@@ -1,0 +1,85 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
+        </li>
+        <li>{{ctrl.container.profile}}</li>
+        <li class="active"><strong>{{ctrl.name}}</strong></li>
+      </ol>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
+          <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
+        </button>
+        <button class="btn btn-default" type="button" id="viewEditConfigurationButton"
+                ui-sref="editCacheContainerSchemas({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name})">
+          <span class="pficon pficon-settings"></span> <span translate>CONFIGURATION</span>
+        </button>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
+                data-toggle="dropdown" uib-dropdown-toggle>
+          <span class="caret"></span> <span translate>ACTIONS</span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'disabled' : 'enabled'">
+            <a id="dropdownMenuEnableRebalance" role="menuitem"
+               ng-click="ctrl.enableContainerRebalance()"
+               translate>ENABLE_REBALANCING</a>
+          </li>
+          <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'enabled'  : 'disabled'">
+            <a id="dropdownMenuDisableRebalance" role="menuitem"
+               ng-click="ctrl.disableContainerRebalance()"
+               translate>DISABLE_REBALANCING</a>
+          </li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation">
+            <a id="dropdownManageSites" role="menuitem" ng-click="ctrl.createSiteModal()" translate>MANAGE_BACKUP_SITES</a>
+          </li>
+        </ul>
+      </div>
+      <h1><span class="label"
+                ng-class="ctrl.container.available ? 'label-success' : 'label-danger'">
+        {{ctrl.getAvailability()}}
+      </span>&nbsp;{{ctrl.name}}
+        <span ng-if="!ctrl.isRebalancingEnabled" id="rebalancingIsDisabledLabel"> - <small
+          class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong translate>REBALANCING_IS_DISABLED</strong></small></span>
+      </h1>
+    </div>
+  </div>
+
+  <!-- User feedback reporting -->
+  <div class="row" ng-if="ctrl.errorExecuting || ctrl.successfulOperation">
+    <div class="col-sm-12 col-md-12">
+      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successfulOperation">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
+        <strong>Success!</strong> The operation has been successfully executed.
+      </div>
+
+      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon  pficon-error-circle-o"></span>
+        <strong>Error</strong><span translate translate_values="{errorDescription:ctrl.errorDescription}">ERROR_OP</span>
+      </div>
+    </div>
+  </div>
+  <!-- End of user feedback -->
+
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs">
+        <li ui-sref-active="active" ui-sref=".caches"><a translate>CACHES</a></li>
+        <li ui-sref-active="active" ui-sref=".tasks.running"><a translate>TASK_EXECUTION</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sub views are inserted here -->
+  <div ui-view="" />
+</div>
+

@@ -2,27 +2,17 @@ import {ContainerService} from "../../services/container/ContainerService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
-import {ICache} from "../../services/cache/ICache";
-import {TraitCheckboxes} from "./filters/CacheTraitFilter";
-import {StatusCheckboxes} from "./filters/CacheStatusFilter";
-import {TypeCheckboxes} from "./filters/CacheTypeFilter";
-import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
-import IModalService = angular.ui.bootstrap.IModalService;
 import {SiteManagementModalCtrl} from "./SiteManagementModalCtrl";
 import {ConfirmationModalCtrl} from "../../common/dialogs/ConfirmationModalCtrl";
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import IModalService = angular.ui.bootstrap.IModalService;
 
-export class CachesCtrl {
+export class CacheContainerCtrl {
 
-  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "container", "caches"];
+  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "container"];
 
   name: string;
   serverGroup: string;
-  traitCheckboxes: TraitCheckboxes = new TraitCheckboxes();
-  typeCheckboxes: TypeCheckboxes = new TypeCheckboxes();
-  statusCheckboxes: StatusCheckboxes = new StatusCheckboxes();
-  isCollapsedTrait: boolean = false;
-  isCollapsedType: boolean = false;
-  isCollapsedStatus: boolean = false;
   isRebalancingEnabled: boolean = false;
   errorExecuting: boolean = false;
   errorDescription: string = "";
@@ -32,8 +22,7 @@ export class CachesCtrl {
               private $uibModal: IModalService,
               private containerService: ContainerService,
               private dmrService: DmrService,
-              public container: ICacheContainer,
-              public caches: ICache[]) {
+              public container: ICacheContainer) {
     this.name = container.name;
     this.serverGroup = container.serverGroup.name;
     this.getRebalancingEnabled();
@@ -58,7 +47,7 @@ export class CachesCtrl {
 
   createSiteModal(): void {
     this.$uibModal.open({
-      templateUrl: "module/caches/view/manage-sites-modal.html",
+      templateUrl: "module/cache-container/view/manage-sites-modal.html",
       controller: SiteManagementModalCtrl,
       controllerAs: "ctrl",
       resolve: {

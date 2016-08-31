@@ -9,18 +9,15 @@ module.controller("Events", EventsCtrl);
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("events", {
-    url: "/events",
-    views: {
-      application: {
-        templateUrl: "module/events/view/events.html",
-        controller: EventsCtrl,
-        controllerAs: "ctrl",
-        resolve: {
-          containers: ["containerService", (containerService) => {
-            return containerService.getAllContainers();
-          }]
-        }
-      }
+    parent: "root",
+    url: "events",
+    templateUrl: "module/events/view/events.html",
+    controller: EventsCtrl,
+    controllerAs: "ctrl",
+    resolve: {
+      containers: ["containerService", (containerService) => {
+        return containerService.getAllContainers();
+      }]
     }
   });
 });

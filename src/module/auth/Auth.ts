@@ -8,15 +8,13 @@ module.controller("Login", LoginCtrl);
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("login", {
-    url: "/login",
-    views: {
-      application: {
-        templateUrl: "module/auth/view/login.html",
-        controller: LoginCtrl,
-        controllerAs: "ctrl"
-      }
-    }
+    parent: "root",
+    url: "login",
+    templateUrl: "module/auth/view/login.html",
+    controller: LoginCtrl,
+    controllerAs: "ctrl"
   }).state("logout", {
-    url: "/logout"
+    parent: "root",
+    url: "logout"
   });
 });

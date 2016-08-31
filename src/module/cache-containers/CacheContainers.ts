@@ -10,18 +10,15 @@ module.controller("CacheContainersCtrl", CacheContainersCtrl);
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("containers", {
-    url: "/containers",
-    views: {
-      application: {
-        templateUrl: "module/cache-containers/view/cache-containers.html",
-        controller: CacheContainersCtrl,
-        controllerAs: "ctrl",
-        resolve: {
-          containers: ["containerService", (containerService) => {
-            return containerService.getAllContainers();
-          }]
-        }
-      }
+    parent: "root",
+    url: "containers",
+    templateUrl: "module/cache-containers/view/cache-containers.html",
+    controller: CacheContainersCtrl,
+    controllerAs: "ctrl",
+    resolve: {
+      containers: ["containerService", (containerService) => {
+        return containerService.getAllContainers();
+      }]
     }
   });
 });

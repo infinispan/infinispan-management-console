@@ -9,21 +9,18 @@ module.controller("ServerGroupsCtrl", ServerGroupsCtrl);
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("server-groups", {
-    url: "/server-groups",
-    views: {
-      application: {
-        templateUrl: "module/server-groups/view/server-groups.html",
-        controller: ServerGroupsCtrl,
-        controllerAs: "ctrl",
-        resolve: {
-          containers: ["containerService", (containerService) => {
-            return containerService.getAllContainers();
-          }],
-          serverGroups: ["serverGroupService", (serverGroupService) => {
-            return serverGroupService.getAllServerGroupsMapWithMembers();
-          }]
-        }
-      }
+    parent: "root",
+    url: "server-groups",
+    templateUrl: "module/server-groups/view/server-groups.html",
+    controller: ServerGroupsCtrl,
+    controllerAs: "ctrl",
+    resolve: {
+      containers: ["containerService", (containerService) => {
+        return containerService.getAllContainers();
+      }],
+      serverGroups: ["serverGroupService", (serverGroupService) => {
+        return serverGroupService.getAllServerGroupsMapWithMembers();
+      }]
     }
   });
 });

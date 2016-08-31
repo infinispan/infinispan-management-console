@@ -6,9 +6,10 @@ import {ICache} from "../../services/cache/ICache";
 import {TraitCheckboxes} from "./filters/CacheTraitFilter";
 import {StatusCheckboxes} from "./filters/CacheStatusFilter";
 import {TypeCheckboxes} from "./filters/CacheTypeFilter";
-import {RebalanceModalCtrl} from "./RebalanceModalCtrl";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
+import {SiteManagementModalCtrl} from "./SiteManagementModalCtrl";
+import {ConfirmationModalCtrl} from "../../common/dialogs/ConfirmationModalCtrl";
 
 export class CachesCtrl {
 
@@ -55,10 +56,27 @@ export class CachesCtrl {
     this.createRebalanceModal(false, "DISABLE rebalancing for cache container?");
   }
 
+  createSiteModal(): void {
+    this.$uibModal.open({
+      templateUrl: "module/caches/view/manage-sites-modal.html",
+      controller: SiteManagementModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        container: (): ICacheContainer => {
+          return this.container;
+        },
+        siteArrays: (): ng.IPromise<{[id: string]: string[]}> => {
+          return this.containerService.getSiteArrays(this.container);
+        }
+      },
+      size: "lg"
+    });
+  }
+
   private createRebalanceModal(enableRebalance: boolean, message: string): void {
     let modal: IModalServiceInstance = this.$uibModal.open({
-      templateUrl: "module/caches/view/cluster-rebalance-modal.html",
-      controller: RebalanceModalCtrl,
+      templateUrl: "common/dialogs/views/confirmation.html",
+      controller: ConfirmationModalCtrl,
       controllerAs: "ctrl",
       resolve: {
         confirmationMessage: (): string => {

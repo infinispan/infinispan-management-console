@@ -1,0 +1,77 @@
+import {getArraySize} from "../../common/utils/Utils";
+import {ContainerService} from "../../services/container/ContainerService";
+import {ICacheContainer} from "../../services/container/ICacheContainer";
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {ConfirmationModalCtrl} from "../../common/dialogs/ConfirmationModalCtrl";
+import IModalService = angular.ui.bootstrap.IModalService;
+
+export class SiteManagementModalCtrl {
+  static $inject: string[] = ["$uibModal", "containerService", "container", "siteArrays"];
+
+  onlineSites: string[];
+  offlineSites: string[];
+  mixedSites: string[];
+
+  errorExecuting: boolean = false;
+  errorDescription: string = "";
+  successfulOperation: boolean = false;
+
+  constructor(private $uibModal: IModalService,
+              private containerService: ContainerService,
+              private container: ICacheContainer,
+              private siteArrays: {[id: string]: string[]}) {
+    this.initSites(siteArrays);
+  }
+
+  initSites(siteArrays: {[id: string]: string[]}): void {
+    this.onlineSites = siteArrays["online-sites"];
+    this.offlineSites = siteArrays["offline-sites"];
+    this.mixedSites = siteArrays["mixed-sites"];
+  }
+
+  isSitesEmpty(): boolean {
+    return getArraySize(this.onlineSites) + getArraySize(this.offlineSites) + getArraySize(this.mixedSites) < 1;
+  }
+
+  refresh(): void {
+    this.containerService.getSiteArrays(this.container)
+      .then(sites => {
+          this.initSites(sites);
+        },
+        error => {
+          this.errorExecuting = true;
+          this.errorDescription = error;
+        }
+      );
+  }
+
+  executeSiteOperation(operation: string, siteName: string, message: string): void {
+    let modal: IModalServiceInstance = this.createConfirmationModal(message);
+
+    modal.result.then(() => {
+      this.containerService.executeSiteOperation(operation, siteName, this.container)
+        .then(() => {
+          this.successfulOperation = true;
+          this.refresh();
+        }, error => {
+          alert(error);
+          this.errorExecuting = true;
+          this.errorDescription = error;
+          this.refresh();
+        });
+    });
+  }
+
+  private createConfirmationModal(message: string): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "common/dialogs/views/confirmation.html",
+      controller: ConfirmationModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        confirmationMessage: (): string => {
+          return message;
+        }
+      }
+    });
+  }
+}

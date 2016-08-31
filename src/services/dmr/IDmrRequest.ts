@@ -10,6 +10,7 @@ export interface IDmrRequest {
   proxies?: boolean;
   recursive?: boolean;
   "recursive-depth"?: number;
+  "site-name"?: string;
   "socket-binding-group"?: string;
   "socket-binding-port-offset"?: number;
   value?: string;

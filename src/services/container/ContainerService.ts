@@ -169,6 +169,20 @@ export class ContainerService {
     return deferred.promise;
   }
 
+  executeSiteOperation(operation: string, siteName: string, container: ICacheContainer): ng.IPromise<void> {
+    let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+      .then(coordinator => {
+        deferred.resolve(this.dmrService.executePost({
+          operation: operation,
+          address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
+            "cache-container", container.name),
+          "site-name": siteName
+        }));
+      }, error => deferred.reject(error));
+    return deferred.promise;
+  }
+
   isRebalancingEnabled(container: ICacheContainer): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)

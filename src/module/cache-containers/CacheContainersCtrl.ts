@@ -6,7 +6,7 @@ import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 import {IMap} from "../../common/utils/IMap";
-import {isNonEmptyArray, isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNonEmptyArray, isNotNullOrUndefined, getArraySize} from "../../common/utils/Utils";
 
 export class CacheContainersCtrl {
 
@@ -49,15 +49,8 @@ export class CacheContainersCtrl {
   }
 
   isSitesEmpty(container: ICacheContainer): boolean {
-    return this.getArraySize(container["online-sites"]) + this.getArraySize(container["offline-sites"]) +
-      this.getArraySize(container["mixed-sites"]) === 0;
-  }
-
-  getArraySize(array: string[]): number {
-    if (isNonEmptyArray(array)) {
-      return array.length;
-    }
-    return 0;
+    return getArraySize(container["online-sites"]) + getArraySize(container["offline-sites"]) +
+      getArraySize(container["mixed-sites"]) === 0;
   }
 
   getAllClusterEvents(): void {

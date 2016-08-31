@@ -33,7 +33,7 @@
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a id="dropdownManageSites" role="menuitem" ng-click="openSiteDialog()" translate>MANAGE_BACKUP_SITES</a>
+            <a id="dropdownManageSites" role="menuitem" ng-click="ctrl.createSiteModal()" translate>MANAGE_BACKUP_SITES</a>
           </li>
         </ul>
       </div>
@@ -63,7 +63,7 @@
           <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon  pficon-error-circle-o"></span>
-        <strong>Error</strong> There has been an error executing the operation: {{ctrl.errorDescription}}
+        <strong>Error</strong><span translate translate_values="{errorDescription:ctrl.errorDescription}">ERROR_OP</span>
       </div>
     </div>
   </div>

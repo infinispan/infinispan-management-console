@@ -19,6 +19,7 @@ export class CachesCtrl {
   isCollapsedTrait: boolean = false;
   isCollapsedType: boolean = false;
   isCollapsedStatus: boolean = false;
+  isRebalancingEnabled: boolean = false;
 
   constructor(private $state: IStateService,
               private containerService: ContainerService,
@@ -27,10 +28,15 @@ export class CachesCtrl {
               public caches: ICache[]) {
     this.name = container.name;
     this.serverGroup = container.serverGroup.name;
+    this.getRebalancingEnabled();
   }
 
   refresh(): void {
     this.dmrService.clearGetCache();
     this.$state.reload();
+  }
+
+  private getRebalancingEnabled(): void {
+    this.containerService.isRebalancingEnabled(this.container).then(enabled => this.isRebalancingEnabled = enabled);
   }
 }

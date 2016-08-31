@@ -168,6 +168,19 @@ export class ContainerService {
     return deferred.promise;
   }
 
+  isRebalancingEnabled(container: ICacheContainer): ng.IPromise<boolean> {
+    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+      let request: IDmrRequest = {
+        address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
+          "cache-container", container.name),
+        name: "cluster-rebalance"
+      };
+      this.dmrService.readAttribute(request).then(response => deferred.resolve(response));
+    }, () => deferred.resolve(false));
+    return deferred.promise;
+  }
+
   rebalanceContainer(name: string): void {
     // TODO implement
   }

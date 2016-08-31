@@ -5,7 +5,8 @@
         <li>
           <a ui-sref="clustersView" translate>CACHE_CONTAINERS</a>
         </li>
-        <li class="active"><strong>{{ctrl.name}} - ({{ctrl.serverGroup}})</strong></li>
+        <li>{{ctrl.container.profile}}</li>
+        <li class="active"><strong>{{ctrl.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
@@ -40,7 +41,7 @@
                 ng-class="ctrl.container.available ? 'label-success' : 'label-danger'">
         {{currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{ctrl.name}}
-        <span ng-if="!currentCluster.rebalancingStatus" id="rebalancingIsDisabledLabel"> - <small
+        <span ng-if="!ctrl.isRebalancingEnabled" id="rebalancingIsDisabledLabel"> - <small
           class="text-danger"><span class="pficon pficon-warning-triangle-o"></span> <strong translate>REBALANCING_IS_DISABLED</strong></small></span>
       </h1>
     </div>

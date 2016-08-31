@@ -2,7 +2,7 @@ import {ContainerService} from "../../services/container/ContainerService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
-import {ICache} from "../../services/ICache";
+import {ICache} from "../../services/cache/ICache";
 import {TraitCheckboxes} from "./filters/CacheTraitFilter";
 import {StatusCheckboxes} from "./filters/CacheStatusFilter";
 import {TypeCheckboxes} from "./filters/CacheTypeFilter";

@@ -1,4 +1,4 @@
-import {ICache} from "../ICache";
+import {ICache} from "./ICache";
 import {ICacheConfiguration} from "./ICacheConfiguration";
 import {isNotNullOrUndefined, deepValue} from "../../common/utils/Utils";
 

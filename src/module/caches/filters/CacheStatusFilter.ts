@@ -1,4 +1,4 @@
-import {ICache} from "../../../services/ICache";
+import {ICache} from "../../../services/cache/ICache";
 
 export class StatusCheckboxes {
   indexing: boolean = false;

@@ -32,7 +32,7 @@ export function isString(object: any): boolean {
 }
 
 export function isNonEmptyString(str: string): boolean {
-  return this.isString(str) && str.length > 0;
+  return isString(str) && str.length > 0;
 }
 
 export function isBoolean(object: any): boolean {
@@ -45,11 +45,11 @@ export function isNumber(object: any): boolean {
 }
 
 export function isObject(object: any): boolean {
-  return this.isNotNullOrUndefined(object) && !this.isBoolean(object) && !this.isString(object) && !this.isNumber(object);
+  return isNotNullOrUndefined(object) && !isBoolean(object) && !isString(object) && !isNumber(object);
 }
 
 export function isNotNullOrUndefined(value: any): boolean {
-  return !(this.isNullOrUndefined(value));
+  return !(isNullOrUndefined(value));
 }
 
 export function isNullOrUndefined(value: any): boolean {
@@ -58,7 +58,14 @@ export function isNullOrUndefined(value: any): boolean {
 }
 
 export function isNonEmptyArray(array: any[]): boolean {
-  return this.isNotNullOrUndefined(array) && array.length > 0;
+  return isNotNullOrUndefined(array) && array.length > 0;
+}
+
+export function getArraySize(array: string[]): number {
+  if (isNonEmptyArray(array)) {
+    return array.length;
+  }
+  return 0;
 }
 
 export function isArray(value: any) {
@@ -105,7 +112,7 @@ export function deepGet(object: Object, path: string): any {
 
 export function deepValue(object: Object, path: string): any {
   for (var i: number = 0, pathArray: string[] = path.split("."), len: number = pathArray.length; i < len; i++) {
-    if (this.isNotNullOrUndefined(object)) {
+    if (isNotNullOrUndefined(object)) {
       object = object[pathArray[i]];
     } else {
       return null;
@@ -117,8 +124,8 @@ export function deepValue(object: Object, path: string): any {
 export function resolveDescription(metadata: Object, elementPath: string, cacheType: string): any {
   var path: string = "children.configurations.model-description.CONFIGURATIONS.children." + cacheType + "-configuration.model-description.*";
   var realPath: string = resourceDescriptionMap[elementPath];
-  var resourceDescription: any = this.deepGet(metadata, path);
-  return this.deepGet(resourceDescription, realPath);
+  var resourceDescription: any = deepGet(metadata, path);
+  return deepGet(resourceDescription, realPath);
 }
 
 export function convertCacheAttributeIntoFieldName(attribute: string): string {
@@ -129,16 +136,16 @@ export function convertCacheAttributeIntoFieldName(attribute: string): string {
 }
 
 export function resolveFieldType(metadata: Object, field: string): string {
-  if (this.isNotNullOrUndefined(metadata) && this.isNotNullOrUndefined(field)) {
+  if (isNotNullOrUndefined(metadata) && isNotNullOrUndefined(field)) {
     var resolvedField: any = metadata[field];
-    return this.getTypeModelType(resolvedField);
+    return getTypeModelType(resolvedField);
   } else {
     throw new ISPNException("Invalid metadata " + metadata + " or field " + field);
   }
 }
 
 export function getTypeModelType(field: any): string {
-  if (this.isNotNullOrUndefined(field)) {
+  if (isNotNullOrUndefined(field)) {
     var fieldType: string;
     switch (field.type.TYPE_MODEL_VALUE) {
       case "DOUBLE":
@@ -174,7 +181,7 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
     var value: any = obj[key];
 
     if (Object.getPrototypeOf(value) === Object.prototype) {
-      this.traverse(value, callback, trail.concat(key));
+      traverse(value, callback, trail.concat(key));
     } else {
       callback.call(obj, key, value, trail);
     }

@@ -1,5 +1,3 @@
-import {UtilsService} from "../../services/utils/UtilsService";
-import {IMap} from "../../services/utils/IMap";
 import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {IServerAddress} from "../../services/server/IServerAddress";
@@ -12,10 +10,12 @@ import {IRootScopeService} from "../../common/IRootScopeService";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {DmrService} from "../../services/dmr/DmrService";
+import {IMap} from "../../common/utils/IMap";
+import {isEmptyObject, isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$rootScope", "$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "utils", "serverGroup"];
+    "jGroupsService", "serverGroup"];
 
   available: boolean = false;
   status: string = "DEGRADED";
@@ -31,7 +31,6 @@ export class ServerGroupCtrl {
               private serverGroupService: ServerGroupService,
               private serverService: ServerService,
               private jGroupsService: JGroupsService,
-              private utils: UtilsService,
               public serverGroup: IServerGroup) {
     this.fetchSGStatus();
     this.fetchSGCoordinator();
@@ -53,14 +52,14 @@ export class ServerGroupCtrl {
   }
 
   getServerStatus(server: IServerAddress): string {
-    if (this.utils.isEmptyObject(this.serverStatusMap)) {
+    if (isEmptyObject(this.serverStatusMap)) {
       return "";
     }
     return this.serverStatusMap[server.toString()];
   }
 
   getServerInetAddress(server: IServerAddress): string {
-    if (this.utils.isEmptyObject(this.serverInetMap) || this.utils.isNullOrUndefined(server)) {
+    if (isEmptyObject(this.serverInetMap) || isNullOrUndefined(server)) {
       return "";
     }
     return this.serverInetMap[server.toString()];
@@ -95,7 +94,7 @@ export class ServerGroupCtrl {
           });
       })
       .finally(() => {
-        if (this.utils.isNotNullOrUndefined(bootModal)) {
+        if (isNotNullOrUndefined(bootModal)) {
           bootModal.close();
         }
         this.refresh();

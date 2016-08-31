@@ -3,22 +3,24 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IDomain} from "../../services/domain/IDomain";
 import {DomainService} from "../../services/domain/DomainService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
-import {IMap} from "../../services/utils/IMap";
-import {UtilsService} from "../../services/utils/UtilsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
+import {IMap} from "../../common/utils/IMap";
+import {isNonEmptyArray, isNotNullOrUndefined} from "../../common/utils/Utils";
 
 export class CacheContainersCtrl {
 
-  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "utils", "containers"];
+  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "containers"];
 
   domain: IDomain;
   stacks: IMap<string>;
   gridEvents: IClusterEvent[] = [];
 
-  constructor(private containerService: ContainerService, private domainService: DomainService,
-              private jGroupsService: JGroupsService, private clusterEventsService: ClusterEventsService,
-              private utils: UtilsService, public containers: ICacheContainer[]) {
+  constructor(private containerService: ContainerService,
+              private domainService: DomainService,
+              private jGroupsService: JGroupsService,
+              private clusterEventsService: ClusterEventsService,
+              public containers: ICacheContainer[]) {
 
     this.domainService.getHostsAndServers()
       .then((domain) => {
@@ -31,7 +33,7 @@ export class CacheContainersCtrl {
   }
 
   getDefaultStack(container: ICacheContainer): string {
-    if (this.utils.isNotNullOrUndefined(this.stacks)) {
+    if (isNotNullOrUndefined(this.stacks)) {
       let serverGroup: string = container.serverGroup.name;
       return this.stacks[serverGroup];
     }
@@ -52,7 +54,7 @@ export class CacheContainersCtrl {
   }
 
   getArraySize(array: string[]): number {
-    if (this.utils.isNonEmptyArray(array)) {
+    if (isNonEmptyArray(array)) {
       return array.length;
     }
     return 0;

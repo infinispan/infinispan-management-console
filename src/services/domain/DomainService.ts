@@ -3,16 +3,15 @@ import {DmrService} from "../dmr/DmrService";
 import IQService = angular.IQService;
 import {IDomain} from "./IDomain";
 import {IDmrRequest} from "../dmr/IDmrRequest";
-import {UtilsService} from "../utils/UtilsService";
-import {IServerAddress} from "../server/IServerAddress";
 
 const module: ng.IModule = App.module("managementConsole.services.domain", []);
 
 export class DomainService {
 
-  static $inject: string[] = ["$q", "dmrService", "utils"];
+  static $inject: string[] = ["$q", "dmrService"];
 
-  constructor(private $q: IQService, private dmrService: DmrService, private utils: UtilsService) {
+  constructor(private $q: IQService,
+              private dmrService: DmrService) {
   }
 
   getHostsAndServers(): ng.IPromise<IDomain> {

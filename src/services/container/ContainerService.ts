@@ -6,25 +6,29 @@ import {ProfileService} from "../profile/ProfileService";
 import {ServerGroupService} from "../server-group/ServerGroupService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {JGroupsService} from "../jgroups/JGroupsService";
-import {UtilsService} from "../utils/UtilsService";
 import {DomainService} from "../domain/DomainService";
 import {IServerAddress} from "../server/IServerAddress";
 import {IServerGroup} from "../server-group/IServerGroup";
 import IQService = angular.IQService;
 import {ServerService} from "../server/ServerService";
-import {CACHE_TYPES, CacheService} from "../cache/CacheService";
+import {CacheService} from "../cache/CacheService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "domainService", "serverService", "cacheService", "utils"];
+    "jGroupsService", "domainService", "serverService", "cacheService"];
 
-  constructor(private $q: IQService, private dmrService: DmrService, private endpointService: EndpointService,
-              private profileService: ProfileService, private serverGroupService: ServerGroupService,
-              private jGroupsService: JGroupsService, private domainService: DomainService,
-              private serverService: ServerService, private cacheService: CacheService, private utils: UtilsService) {
+  constructor(private $q: IQService,
+              private dmrService: DmrService,
+              private endpointService: EndpointService,
+              private profileService: ProfileService,
+              private serverGroupService: ServerGroupService,
+              private jGroupsService: JGroupsService,
+              private domainService: DomainService,
+              private serverService: ServerService,
+              private cacheService: CacheService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {

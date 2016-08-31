@@ -1,5 +1,4 @@
 import {ContainerService} from "../../services/container/ContainerService";
-import {UtilsService} from "../../services/utils/UtilsService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
@@ -10,7 +9,7 @@ import {TypeCheckboxes} from "./filters/CacheTypeFilter";
 
 export class CachesCtrl {
 
-  static $inject: string[] = ["$state", "containerService", "dmrService", "utils", "container", "caches"];
+  static $inject: string[] = ["$state", "containerService", "dmrService", "container", "caches"];
 
   name: string;
   serverGroup: string;
@@ -24,7 +23,6 @@ export class CachesCtrl {
   constructor(private $state: IStateService,
               private containerService: ContainerService,
               private dmrService: DmrService,
-              private utils: UtilsService,
               public container: ICacheContainer,
               public caches: ICache[]) {
     this.name = container.name;

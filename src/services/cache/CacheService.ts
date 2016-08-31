@@ -3,21 +3,20 @@ import {DmrService} from "../dmr/DmrService";
 import {ICache} from "./ICache";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
-import {UtilsService} from "../utils/UtilsService";
 import {Cache} from "./Cache";
 import {ICacheConfiguration} from "./ICacheConfiguration";
+import {isNullOrUndefined, convertCacheAttributeIntoFieldName} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.cache", []);
 
 export const CACHE_TYPES: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
 
 export class CacheService {
-  static $inject: string[] = ["$q", "dmrService", "launchType", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "launchType"];
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
-              private launchType: LaunchTypeService,
-              private utils: UtilsService) {
+              private launchType: LaunchTypeService) {
   }
 
   getAllCachesInContainer(container: string, profile?: string): ng.IPromise<ICache[]> {
@@ -32,7 +31,7 @@ export class CacheService {
     this.dmrService.readResource(request)
       .then(response => {
         for (let cacheType of CACHE_TYPES) {
-          if (this.utils.isNullOrUndefined(response[cacheType])) {
+          if (isNullOrUndefined(response[cacheType])) {
             continue; // Do nothing as no caches of this type exist
           }
 
@@ -62,7 +61,7 @@ export class CacheService {
   }
 
   getCache(name: string, type: string, container: string, profile?: string): ng.IPromise<ICache> {
-    let typeKey: string = this.utils.convertCacheAttributeIntoFieldName(type);
+    let typeKey: string = convertCacheAttributeIntoFieldName(type);
     let deferred: ng.IDeferred<ICache> = this.$q.defer<ICache>();
     let request: IDmrRequest = {
       address: this.generateAddress(container, profile).concat(typeKey, type)

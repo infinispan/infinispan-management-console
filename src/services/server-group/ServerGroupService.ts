@@ -2,20 +2,19 @@ import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "./IServerGroup";
-import {IMap} from "../utils/IMap";
-import {UtilsService} from "../utils/UtilsService";
 import {ServerAddress} from "../server/ServerAddress";
 import {DomainService} from "../domain/DomainService";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {IServerAddress} from "../server/IServerAddress";
 import {ServerService} from "../server/ServerService";
 import IQService = angular.IQService;
+import {IMap} from "../../common/utils/IMap";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
 export class ServerGroupService {
 
-  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "serverService", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "serverService"];
 
   static parseServerGroup(name: string, object: any, members?: IServerAddress[]): IServerGroup {
     return <IServerGroup> {
@@ -27,9 +26,11 @@ export class ServerGroupService {
     };
   }
 
-  constructor(private $q: IQService, private dmrService: DmrService, private domainService: DomainService,
-              private jGroupsService: JGroupsService, private serverService: ServerService,
-              private utils: UtilsService) {
+  constructor(private $q: IQService,
+              private dmrService: DmrService,
+              private domainService: DomainService,
+              private jGroupsService: JGroupsService,
+              private serverService: ServerService) {
   }
 
   getAllServerGroupsMap(): ng.IPromise<IMap<IServerGroup>> {

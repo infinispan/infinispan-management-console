@@ -12,7 +12,6 @@ import "./services/profile/ProfileService";
 import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
-import "./services/utils/UtilsService";
 import "./module/auth/Auth";
 import "./module/cache-containers/CacheContainers";
 import "./module/caches/Caches";
@@ -43,7 +42,6 @@ App.element(document).ready(() => {
     "managementConsole.services.profile",
     "managementConsole.services.server",
     "managementConsole.services.server-group",
-    "managementConsole.services.socket-binding",
-    "managementConsole.services.utils"
+    "managementConsole.services.socket-binding"
   ]);
 });

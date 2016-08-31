@@ -1,20 +1,20 @@
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
-import {UtilsService} from "../../services/utils/UtilsService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
-import {IMap} from "../../services/utils/IMap";
 import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {IServerAddress} from "../../services/server/IServerAddress";
+import {IMap} from "../../common/utils/IMap";
 
 export class ServerGroupsCtrl {
-  static $inject: string[] = ["clusterEventsService", "serverGroupService", "utils", "containers", "serverGroups"];
+  static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups"];
 
   gridEvents: IClusterEvent[] = [];
   status: IMap<string> = {};
 
-  constructor(private clusterEventsService: ClusterEventsService, private serverGroupService: ServerGroupService,
-              private utils: UtilsService, public containers: ICacheContainer[],
+  constructor(private clusterEventsService: ClusterEventsService,
+              private serverGroupService: ServerGroupService,
+              public containers: ICacheContainer[],
               public serverGroups: IMap<IServerGroup>) {
     this.getAllClusterEvents();
     this.getAllSGStatuses();

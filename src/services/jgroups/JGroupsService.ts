@@ -1,22 +1,23 @@
 import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
-import {IMap} from "../utils/IMap";
-import {UtilsService} from "../utils/UtilsService";
 import {IServerGroup} from "../server-group/IServerGroup";
 import {IServerAddress} from "../server/IServerAddress";
 import {ServerAddress} from "../server/ServerAddress";
 import IQService = angular.IQService;
 import {ServerService} from "../server/ServerService";
+import {IMap} from "../../common/utils/IMap";
+import {isNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
 export class JGroupsService {
 
-  static $inject: string[] = ["$q", "dmrService", "serverService", "utils"];
+  static $inject: string[] = ["$q", "dmrService", "serverService"];
 
-  constructor(private $q: IQService, private dmrService: DmrService, private serverService: ServerService,
-              private utils: UtilsService) {
+  constructor(private $q: IQService,
+              private dmrService: DmrService,
+              private serverService: ServerService) {
   }
 
   getDefaultStack(server: IServerAddress): ng.IPromise<string> {
@@ -53,7 +54,7 @@ export class JGroupsService {
         for (let serverName in response) {
           let serverGroup: string = response[serverName]["server-group"];
           // We only need to receive the stack once per server-group
-          if (this.utils.isNullOrUndefined(stackPromises[serverGroup])) {
+          if (isNullOrUndefined(stackPromises[serverGroup])) {
             stackPromises[serverGroup] = this.getDefaultStack(new ServerAddress(host, serverName));
           }
         }

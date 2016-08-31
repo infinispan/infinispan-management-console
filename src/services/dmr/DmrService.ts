@@ -2,13 +2,12 @@ import {App} from "../../ManagementConsole";
 import {IDmrRequest} from "./IDmrRequest";
 import {AuthenticationService} from "../authentication/AuthenticationService";
 import {ICredentials} from "../authentication/ICredentials";
-import {UtilsService} from "../utils/UtilsService";
 
 const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
 export class DmrService {
 
-  static $inject: string[] = ["$http", "$cacheFactory", "$q", "authService", "$location", "utils"];
+  static $inject: string[] = ["$http", "$cacheFactory", "$q", "authService", "$location"];
 
   url: string;
 
@@ -16,8 +15,7 @@ export class DmrService {
               private $cacheFactory: ng.ICacheFactoryService,
               private $q: ng.IQService,
               private authService: AuthenticationService,
-              private $location: ng.ILocationService,
-              private utils: UtilsService) {
+              private $location: ng.ILocationService) {
   }
 
   add(request: IDmrRequest): angular.IPromise<any> {

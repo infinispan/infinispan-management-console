@@ -4,13 +4,13 @@ import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {AvailabilityCheck} from "./AvailabilityCheck";
-import {UtilsService} from "../utils/UtilsService";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$http", "$cacheFactory", "$q", "$location", "$interval", "localStorageService", "launchType", "utils"];
+  static $inject: string[] = ["$http", "$cacheFactory", "$q", "$location", "$interval", "localStorageService", "launchType"];
 
   private credentials: ICredentials = <ICredentials>{};
   private availability: AvailabilityCheck;
@@ -22,18 +22,17 @@ export class AuthenticationService {
               private $location: ng.ILocationService,
               private $interval: ng.IIntervalService,
               private localStorageService: ILocalStorageService,
-              private launchType: LaunchTypeService,
-              private utils: UtilsService) {
+              private launchType: LaunchTypeService) {
     this.getCredentials();
 
     // we need to create the DmrService manually to avoid a circular dependency with inject
-    this.dmrService = new DmrService(this.$http, this.$cacheFactory, this.$q, this, this.$location, this.utils);
+    this.dmrService = new DmrService(this.$http, this.$cacheFactory, this.$q, this, this.$location);
     this.availability = new AvailabilityCheck(this.$interval, this.dmrService);
   }
 
   isLoggedIn(): boolean {
     var credentials: ICredentials = this.getCredentials();
-    return this.utils.isNotNullOrUndefined(credentials.username) && this.utils.isNotNullOrUndefined(credentials.password);
+    return isNotNullOrUndefined(credentials.username) && isNotNullOrUndefined(credentials.password);
   }
 
   login(credentials: ICredentials): ng.IPromise<string> {

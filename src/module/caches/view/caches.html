@@ -21,14 +21,14 @@
           <span class="caret"></span> <span translate>ACTIONS</span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-class="ctrl.container.available ? 'disabled' : 'enabled'">
+          <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'disabled' : 'enabled'">
             <a id="dropdownMenuEnableRebalance" role="menuitem"
-               ng-click="confirmAndSetCacheContainerRebalance(true, 'ENABLE rebalancing for cache container?');"
+               ng-click="ctrl.enableContainerRebalance()"
                translate>ENABLE_REBALANCING</a>
           </li>
-          <li role="presentation" ng-class="ctrl.container.available ? 'enabled'  : 'disabled'">
+          <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'enabled'  : 'disabled'">
             <a id="dropdownMenuDisableRebalance" role="menuitem"
-               ng-click="confirmAndSetCacheContainerRebalance(false, 'DISABLE rebalancing for cache container?');"
+               ng-click="ctrl.disableContainerRebalance()"
                translate>DISABLE_REBALANCING</a>
           </li>
           <li role="presentation" class="divider"></li>
@@ -48,9 +48,9 @@
   </div>
 
   <!-- User feedback reporting -->
-  <div class="row" ng-if="errorExecuting || successExecuteOperation ">
+  <div class="row" ng-if="ctrl.errorExecuting || ctrl.successfulOperation">
     <div class="col-sm-12 col-md-12">
-      <div class="alert alert-success alert-dismissable" ng-if="successExecuteOperation">
+      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successfulOperation">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
@@ -58,12 +58,12 @@
         <strong>Success!</strong> The operation has been successfully executed.
       </div>
 
-      <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
+      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon  pficon-error-circle-o"></span>
-        <strong>Error</strong> There has been an error executing the operation: {{errorDescription}}
+        <strong>Error</strong> There has been an error executing the operation: {{ctrl.errorDescription}}
       </div>
     </div>
   </div>

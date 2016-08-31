@@ -24,7 +24,7 @@ export class JGroupsService {
     let deferred: ng.IDeferred<string> = this.$q.defer<string>();
     this.serverService.getServerStatus(server).then(status => {
       if (status === "STOPPED") {
-        deferred.reject();
+        deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
         deferred.resolve(this.dmrService.readAttributeAndResolveExpression({
           address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-jgroups"),
@@ -79,7 +79,7 @@ export class JGroupsService {
 
     this.serverService.getServerStatus(server).then(status => {
       if (status === "STOPPED") {
-        deferred.reject();
+        deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
 
         this.getChannelNamesByProfile(profile)

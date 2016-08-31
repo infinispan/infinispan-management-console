@@ -158,31 +158,57 @@ export class ContainerService {
 
   getSiteArrays(container: ICacheContainer): ng.IPromise<{[id: string]: string[]}> {
     let deferred: ng.IDeferred<{[id: string]: string[]}> = this.$q.defer<{[id: string]: string[]}>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coordinator) => {
-      deferred.resolve(this.$q.all({
-        "sites-online": this.getSite("sites-online", coordinator, container.name),
-        "sites-offline": this.getSite("sites-offline", coordinator, container.name),
-        "sites-mixed": this.getSite("sites-mixed", coordinator, container.name)
-      }));
-    });
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+      .then(coordinator => {
+        deferred.resolve(this.$q.all({
+          "sites-online": this.getSite("sites-online", coordinator, container.name),
+          "sites-offline": this.getSite("sites-offline", coordinator, container.name),
+          "sites-mixed": this.getSite("sites-mixed", coordinator, container.name)
+        }));
+      }, error => deferred.reject(error));
     return deferred.promise;
   }
 
   isRebalancingEnabled(container: ICacheContainer): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
-      let request: IDmrRequest = {
-        address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-          "cache-container", container.name),
-        name: "cluster-rebalance"
-      };
-      this.dmrService.readAttribute(request).then(response => deferred.resolve(response));
-    }, () => deferred.resolve(false));
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+      .then(coordinator => {
+        let request: IDmrRequest = {
+          address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
+            "cache-container", container.name),
+          name: "cluster-rebalance"
+        };
+        this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
+      }, () => deferred.resolve(false));
     return deferred.promise;
+  }
+
+  disableRebalance(container: ICacheContainer): ng.IPromise<void> {
+    return this.setRebalanceAllowed(false, container);
+  }
+
+  enableRebalance(container: ICacheContainer): ng.IPromise<void> {
+    return this.setRebalanceAllowed(true, container);
   }
 
   rebalanceContainer(name: string): void {
     // TODO implement
+  }
+
+  private setRebalanceAllowed(enabled: boolean, container: ICacheContainer): ng.IPromise<void> {
+    let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+      .then(coordinator => {
+          let request: IDmrRequest = {
+            operation: "cluster-rebalance",
+            address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
+              "cache-container", container.name),
+            value: String(enabled)
+          };
+          this.dmrService.executePost(request).then(() => deferred.resolve());
+        },
+        error => deferred.reject(error));
+    return deferred.promise;
   }
 
   private getSite(type: string, server: IServerAddress, container: string): ng.IPromise<string[]> {

@@ -43,7 +43,7 @@ export class ServerService {
     let deferred: ng.IDeferred<string> = this.$q.defer<string>();
     this.getServerStatus(server).then(status => {
       if (status === "STOPPED") {
-        deferred.reject();
+        deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
         deferred.resolve(this.dmrService.readAttributeAndResolveExpression({
           address: this.generateAddress(server).concat("interface", "public"),

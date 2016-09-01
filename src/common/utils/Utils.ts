@@ -1,4 +1,6 @@
 import {ISPNException} from "./ISPNException";
+import {IServerAddress} from "../../services/server/IServerAddress";
+import {ServerAddress} from "../../services/server/ServerAddress";
 
 export const resourceDescriptionMap: Object = {
   "general": ".attributes",
@@ -186,6 +188,14 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
       callback.call(obj, key, value, trail);
     }
   });
+}
+
+export function parseServerAddress(server: string): IServerAddress {
+  let address: string[] = server.split(":");
+  if (address.length !== 2) {
+    throw new ISPNException("Expected server string to be of format '<host>:<string>', not: " + server);
+  }
+  return new ServerAddress(address[0], address[1]);
 }
 
 // TODO implement other methods as required

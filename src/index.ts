@@ -3,6 +3,7 @@ import "./services/authentication/AuthenticationService";
 import "./services/cache/CacheService";
 import "./services/cluster-events/ClusterEventsService";
 import "./services/container/ContainerService";
+import "./services/container-tasks/ContainerTasksService";
 import "./services/dmr/DmrService";
 import "./services/domain/DomainService";
 import "./services/endpoint/EndpointService";
@@ -36,6 +37,7 @@ App.element(document).ready(() => {
     "managementConsole.services.cache",
     "managementConsole.services.cluster-events",
     "managementConsole.services.container",
+    "managementConsole.services.container-tasks",
     "managementConsole.services.dmr",
     "managementConsole.services.domain",
     "managementConsole.services.endpoint",

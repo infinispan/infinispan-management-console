@@ -161,9 +161,9 @@ export class ContainerService {
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
       .then(coordinator => {
         deferred.resolve(this.$q.all({
-          "sites-online": this.getSite("sites-online", coordinator, container.name),
-          "sites-offline": this.getSite("sites-offline", coordinator, container.name),
-          "sites-mixed": this.getSite("sites-mixed", coordinator, container.name)
+          "sites-online": this.getSite("sites-online", coordinator, container),
+          "sites-offline": this.getSite("sites-offline", coordinator, container),
+          "sites-mixed": this.getSite("sites-mixed", coordinator, container)
         }));
       }, error => deferred.reject(error));
     return deferred.promise;
@@ -175,8 +175,7 @@ export class ContainerService {
       .then(coordinator => {
         deferred.resolve(this.dmrService.executePost({
           operation: operation,
-          address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-            "cache-container", container.name),
+          address: this.getContainerAddress(container, coordinator),
           "site-name": siteName
         }));
       }, error => deferred.reject(error));
@@ -188,8 +187,7 @@ export class ContainerService {
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
       .then(coordinator => {
         let request: IDmrRequest = {
-          address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-            "cache-container", container.name),
+          address: this.getContainerAddress(container, coordinator),
           name: "cluster-rebalance"
         };
         this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
@@ -215,8 +213,7 @@ export class ContainerService {
       .then(coordinator => {
           let request: IDmrRequest = {
             operation: "cluster-rebalance",
-            address: [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-              "cache-container", container.name),
+            address: this.getContainerAddress(container, coordinator),
             value: String(enabled)
           };
           this.dmrService.executePost(request).then(() => deferred.resolve());
@@ -225,12 +222,17 @@ export class ContainerService {
     return deferred.promise;
   }
 
-  private getSite(type: string, server: IServerAddress, container: string): ng.IPromise<string[]> {
+  private getSite(type: string, server: IServerAddress, container: ICacheContainer): ng.IPromise<string[]> {
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container),
+      address: this.getContainerAddress(container, server),
       name: type
     };
     return this.dmrService.readAttribute(request);
+  }
+
+  private getContainerAddress(container: ICacheContainer, coordinator: IServerAddress): string[] {
+    return [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
+      "cache-container", container.name);
   }
 }
 

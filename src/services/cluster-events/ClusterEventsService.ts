@@ -6,7 +6,7 @@ import {IClusterEvent} from "./IClusterEvent";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerAddress} from "../server/IServerAddress";
 import {ServerAddress} from "../server/ServerAddress";
-import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, parseServerAddress} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.cluster-events", []);
 
@@ -16,14 +16,14 @@ export class ClusterEventsService {
 
   static parseEvent(object: any): IClusterEvent {
     let scopeExists: boolean = object.scope !== undefined;
-    let address: string[] = scopeExists ? object.scope.split(":") : [];
+    let serverAddress: IServerAddress = scopeExists ? parseServerAddress(object.scope) : undefined;
     return <IClusterEvent> {
       category: object.category,
       context: object.context,
       detail: object.detail,
       level: object.level,
       message: object.message,
-      server: !scopeExists ? undefined : new ServerAddress(address[0], address[1]),
+      server: serverAddress,
       when: object.when,
       who: object.who
     };

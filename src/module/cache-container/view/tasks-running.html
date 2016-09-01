@@ -1,12 +1,12 @@
 <div class="row">
   <div class="col-sm-12 col-md-12" style="padding-top: 15px;padding-bottom: 15px">
     <div class="btn-group" role="group">
-      <a role="button" class="btn btn-default" ng-click="openTaskDialog()"><span
+      <a role="button" class="btn btn-default" ng-click="tasksCtrl.createTaskModal()"><span
         class="pficon pficon-add-circle-o"></span> <span translate>LAUNCH_NEW_TASK</span></a>
     </div>
   </div>
   <div class="col-sm-12 col-md-12">
-    <table class="table ispn-table" ng-if="runningTasks.length > 0">
+    <table class="table ispn-table" ng-if="tasksCtrl.runningTasks.length > 0">
       <tbody>
       <tr>
         <th style="width: 50px">Status</th>
@@ -15,22 +15,21 @@
         <th>Executing at</th>
         <th>Start time</th>
         <th>Who</th>
-        <!--th style="width: 220px">Actions</th-->
       </tr>
-      <tr ng-repeat="task in runningTasks">
+      <tr ng-repeat="task in tasksCtrl.runningTasks">
         <td style="padding: 10px">
           <span class="label label-warning">RUNNING</span>
         </td>
         <td style="padding: 10px">{{task.name}}</td>
-        <td style="padding: 10px">{{task.context}}</td>
-        <td style="padding: 10px">{{task.where}}</td>
+        <td style="padding: 10px">{{task.context ? task.context : '-'}}</td>
+        <td style="padding: 10px">{{task.where.toString()}}</td>
         <td style="padding: 10px">{{task.start | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
         <td style="padding: 10px">{{task.who ? task.who : '-'}}</td>
       </tr>
       </tbody>
     </table>
     <!--------------------------------------------------------------------------------------------------------------->
-    <div class="text-center" ng-if="runningTasks.length==0">
+    <div class="text-center" ng-if="tasksCtrl.runningTasks.length < 1">
       <br>
       <br>
       <span class="pficon pficon-info"></span>

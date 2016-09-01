@@ -68,7 +68,7 @@ export function getArraySize(array: string[]): number {
   return 0;
 }
 
-export function isArray(value: any) {
+export function isArray(value: any): boolean {
   return Object.prototype.toString.call(value) === "[object Array]";
 }
 

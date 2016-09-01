@@ -55,6 +55,6 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 
   $stateProvider.state("container.tasks.history", {
     url: "/history",
-    templateUrl: "module/cache-container/view/tasks-history.html",
+    templateUrl: "module/cache-container/view/tasks-history.html"
   });
 });

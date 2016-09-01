@@ -2,6 +2,7 @@ export interface IDmrRequest {
   "auto-start"?: boolean;
   address: string[];
   blocking?: boolean;
+  category?: string;
   "child-type"?: string;
   group?: string;
   "include-runtime"?: boolean;

@@ -95,6 +95,7 @@
   "TASK_EXECUTION":"Tasks execution",
   "RUNNING_TASKS":"Running tasks",
   "TASK_HISTORY":"Task history",
+  "NO_TASK_HISTORY": "No previous tasks have been found",
   "CACHE":"Cache",
   "ORIGINATOR_NODE":"Originator node",
   "ASYNCHRONOUS_TASK":"Asynchronous task",

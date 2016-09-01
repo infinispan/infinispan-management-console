@@ -12,6 +12,7 @@ import "./services/profile/ProfileService";
 import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
+import "./components/modals/information/InformationModal";
 import "./module/auth/Auth";
 import "./module/cache-container/CacheContainer";
 import "./module/cache-containers/CacheContainers";
@@ -30,6 +31,7 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.server-group",
     "managementConsole.server-groups",
+    "managementConsole.components.modals.information",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
     "managementConsole.services.cluster-events",

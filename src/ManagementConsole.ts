@@ -29,7 +29,6 @@ import {IPage} from "./common/IPage";
 import {IRootScopeService} from "./common/IRootScopeService";
 import {ErrorModalCtrl} from "./common/dialogs/ErrorModalCtrl";
 import {RestartModalCtrl} from "./common/dialogs/RestartModalCtrl";
-import {InfoModalCtrl} from "./common/dialogs/InfoModalCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
 import IModalService = angular.ui.bootstrap.IModalService;
 import ITemplateCacheService = angular.ITemplateCacheService;
@@ -92,40 +91,6 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibMod
   $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;
   $rootScope.safeApply = (f: Function) => $timeout(() => this.$apply(f));
-
-  $rootScope.openInfoModal = (error: string) => {
-    $uibModal.open({
-      templateUrl: "common/dialogs/views/generic-error.html",
-      controller: ErrorModalCtrl,
-      controllerAs: "ctrl",
-      scope: $rootScope,
-      resolve: {
-        errorMsg: error
-      }
-    });
-  };
-
-  $rootScope.openRestartModal = () => {
-    $uibModal.open({
-      templateUrl: "common/dialogs/views/requires-restart.html",
-      controller: RestartModalCtrl,
-      controllerAs: "ctrl",
-      scope: $rootScope
-    });
-  };
-
-  $rootScope.openErrorModal = (infoText: string, infoTextDetail: string) => {
-    $uibModal.open({
-      templateUrl: "common/dialogs/views/generic-info.html",
-      controller: InfoModalCtrl,
-      controllerAs: "ctrl",
-      scope: $rootScope,
-      resolve: {
-        infoText: infoText,
-        infoTextDetail: infoTextDetail
-      }
-    });
-  };
 });
 
 // @ngInject

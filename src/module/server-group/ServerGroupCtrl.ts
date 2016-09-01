@@ -12,9 +12,10 @@ import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {DmrService} from "../../services/dmr/DmrService";
 import {IMap} from "../../common/utils/IMap";
 import {isEmptyObject, isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
+import {openErrorModal} from "../../common/dialogs/Modals";
 
 export class ServerGroupCtrl {
-  static $inject: string[] = ["$rootScope", "$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
+  static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
     "jGroupsService", "serverGroup"];
 
   available: boolean = false;
@@ -24,8 +25,7 @@ export class ServerGroupCtrl {
   coordinator: IServerAddress;
   hosts: string[];
 
-  constructor(private $rootScope: IRootScopeService,
-              private $state: IStateService,
+  constructor(private $state: IStateService,
               private $uibModal: IModalService,
               private dmrService: DmrService,
               private serverGroupService: ServerGroupService,
@@ -141,7 +141,7 @@ export class ServerGroupCtrl {
         bootModal.close();
         this.refresh();
       })
-      .catch((error) => this.$rootScope.openErrorModal(error));
+      .catch(error => openErrorModal(this.$uibModal, error));
   }
 
   private filterUniqueHosts(): string[] {

@@ -6,6 +6,7 @@ import {cacheStatusFilter} from "./caches/filters/CacheStatusFilter";
 import {cacheTypeFilter} from "./caches/filters/CacheTypeFilter";
 import {CachesCtrl} from "./caches/CachesCtrl";
 import {TasksCtrl} from "./tasks/TasksCtrl";
+import {IRedirectState} from "../../common/IRedirectState";
 
 const module: ng.IModule = App.module("managementConsole.cache-container", []);
 
@@ -16,12 +17,13 @@ module.filter("cacheStatusFilter", cacheStatusFilter);
 
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
-  $stateProvider.state("container", {
+  $stateProvider.state("container", <IRedirectState>{
     parent: "root",
     url: "containers/:profileName/:containerName",
     templateUrl: "module/cache-container/view/cache-container.html",
     controller: CacheContainerCtrl,
     controllerAs: "ctrl",
+    redirectTo: "container.caches",
     resolve: {
       container: ["$stateParams", "containerService", ($stateParams, containerService) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
@@ -41,11 +43,12 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     }
   });
 
-  $stateProvider.state("container.tasks", {
+  $stateProvider.state("container.tasks", <IRedirectState>{
     url: "/tasks",
     templateUrl: "module/cache-container/tasks/view/tasks.html",
     controller: TasksCtrl,
-    controllerAs: "tasksCtrl"
+    controllerAs: "tasksCtrl",
+    redirectTo: "container.tasks.running"
   });
 
   $stateProvider.state("container.tasks.running", {

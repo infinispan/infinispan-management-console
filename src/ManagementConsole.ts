@@ -27,13 +27,11 @@ import {AuthenticationService} from "./services/authentication/AuthenticationSer
 import {IUrlRouterService, IStateService} from "angular-ui-router";
 import {IPage} from "./common/IPage";
 import {IRootScopeService} from "./common/IRootScopeService";
-import {ErrorModalCtrl} from "./common/dialogs/ErrorModalCtrl";
-import {RestartModalCtrl} from "./common/dialogs/RestartModalCtrl";
+import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
 import IModalService = angular.ui.bootstrap.IModalService;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
-import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 
 const App: ng.IAngularStatic = angular;
 const module: ng.IModule = angular.module("managementConsole", [
@@ -56,7 +54,6 @@ module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
   $urlRouterProvider
     .when("/", "/login")
     .when("", "/login")
-    .when("/containers/{profile}/{container}/tasks", "/containers/{profile}/{container}/tasks/running")
     .otherwise("/404");
 });
 
@@ -95,7 +92,7 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibMod
 
 // @ngInject
 module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService, authService: AuthenticationService) => {
-  $rootScope.$on("$stateChangeStart", (event: IAngularEvent, toState: any) => {
+  $rootScope.$on("$stateChangeStart", (event: IAngularEvent, toState: any, params: any) => {
     if (toState.name === "logout") {
       event.preventDefault();
       if (authService.isLoggedIn()) {
@@ -107,6 +104,9 @@ module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state
       $state.go("login");
     } else if (toState.name === "login" && authService.isLoggedIn()) {
       $state.go("containers");
+    } else if (toState.redirectTo) {
+      event.preventDefault();
+      $state.go(toState.redirectTo, params, {location: "replace"});
     }
   });
 });

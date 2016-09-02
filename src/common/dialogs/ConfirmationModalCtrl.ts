@@ -1,6 +1,7 @@
 export class ConfirmationModalCtrl {
-  static $inject: string[] = ["confirmationMessage"];
+  static $inject: string[] = ["confirmationMessage", "buttonClass"];
 
-  constructor(public confirmationMessage: string) {
+  constructor(public confirmationMessage: string,
+              public buttonClass: string) {
   }
 }

@@ -1,0 +1,58 @@
+<div class="modal-content ">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel"><span ng-if="!modalCtrl.editing">Create new schema</span><span
+      ng-if="modalCtrl.editing">Edit schema</span></h4>
+  </div>
+  <div class="modal-body">
+    <!-- User feedback reporting -->
+    <div class="row" ng-if="modalCtrl.errorExecuting || modalCtrl.successfulOperation ">
+      <div class="col-sm-12 col-md-12">
+        <div class="alert alert-success alert-dismissable" ng-if="modalCtrl.successfulOperation">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+          </button>
+          <span class="pficon pficon-ok"></span>
+          <strong>Success!</strong> The operation has been successfully executed.
+        </div>
+        <div class="alert alert-danger alert-dismissable" ng-if="modalCtrl.errorExecuting">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+          </button>
+          <span class="pficon  pficon-error-circle-o"></span>
+          <strong>Error</strong> There has been an error executing the operation: {{modalCtrl.errorDescription}}
+        </div>
+      </div>
+    </div>
+    <!-- End of user feedback -->
+
+    <form name="schemaForm">
+      <!--------------------------------------------------------------------------------------------------------------->
+      <div class="form-group">
+        <label class="control-label">* Schema name:</label>
+        <input type="text" class="form-control" name="schemaName" ng-model="modalCtrl.schema.fileName" ng-required="true"
+               ng-disabled="modalCtrl.editing">
+      </div>
+      <!--------------------------------------------------------------------------------------------------------------->
+      <div class="form-group">
+        <label class="control-label">* Schema:</label>
+        <textarea class="form-control" rows="15" ng-model="modalCtrl.schema.fileContents" name="schemaBody" ng-required="true"></textarea>
+      </div>
+      <!--------------------------------------------------------------------------------------------------------------->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button id="cancelButton" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+    <button id="createScriptButton" ng-show="!modalCtrl.editing" ng-disabled="!schemaForm.$valid"
+            ng-click="modalCtrl.createSchema()"
+            class="btn btn-primary">
+      Create schema
+    </button>
+    <button id="editScriptButton" ng-show="modalCtrl.editing"
+            ng-disabled="!schemaForm.schemaName.$valid || !schemaForm.schemaBody.$valid " class="btn btn-primary"
+            ng-click="modalCtrl.createSchema()">Update schema
+    </button>
+  </div>
+</div>

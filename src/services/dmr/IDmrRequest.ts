@@ -6,6 +6,9 @@ export interface IDmrRequest {
   "cache-name"?: string;
   category?: string;
   "child-type"?: string;
+  "file-contents"?: string[];
+  "file-name"?: string;
+  "file-names"?: string[];
   group?: string;
   "include-runtime"?: boolean;
   name?: string;

@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="containers" translate>CACHE_CONTAINERS</a>
+        </li>
+        <li>{{ctrl.container.profile}}</li>
+        <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
+        </li>
+        <li class="active"><strong translate>CONFIGURATION</strong></li>
+      </ol>
+      <h1 translate>CACHE_CONTAINER_CONFIGURATION</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li><a ui-sref-active="active" ui-sref=".schemas" translate>SCHEMAS</a></li>
+        <li><a ui-sref-active="active" ui-sref=".transport" translate>TRANSPORT</a></li>
+        <li><a ui-sref-active="active" ui-sref=".thread-locals" translate>THREAD_POOLS</a></li>
+        <li><a ui-sref-active="active" ui-sref=".security" translate>SECURITY</a></li>
+        <li><a ui-sref-active="active" ui-sref=".templates" translate>TEMPLATES</a></li>
+        <li><a ui-sref-active="active" ui-sref=".tasks" translate>TASKS</a></li>
+        <li><a ui-sref-active="active" ui-sref=".deployments" translate>DEPLOYMENTS</a></li>
+      </ul>
+    </div>
+  </div>
+  <br/>
+  <div ui-view=""/>
+</div>

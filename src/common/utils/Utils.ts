@@ -33,6 +33,10 @@ export function isString(object: any): boolean {
   return (typeof object === "string");
 }
 
+export function stringEndsWith(str: string, suffix: string): boolean {
+  return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
 export function isNonEmptyString(str: string): boolean {
   return isString(str) && str.length > 0;
 }

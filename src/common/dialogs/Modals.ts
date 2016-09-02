@@ -36,13 +36,14 @@ export function openRestartModal($uibModal: IModalService): IModalServiceInstanc
   });
 }
 
-export function openConfirmationModal($uibModal: IModalService, message: string): IModalServiceInstance {
+export function openConfirmationModal($uibModal: IModalService, message: string, buttonClass?: string): IModalServiceInstance {
   return $uibModal.open({
     templateUrl: "common/dialogs/views/confirmation.html",
     controller: ConfirmationModalCtrl,
     controllerAs: "ctrl",
     resolve: {
-      confirmationMessage: (): string => message
+      confirmationMessage: (): string => message,
+      buttonClass: (): string => buttonClass
     }
   });
 }

@@ -1,4 +1,6 @@
-{ "CACHES": "Caches",
+{
+  "ACCEPT": "Confirm",
+  "CACHES": "Caches",
   "CLUSTERS": "Clusters",
   "STATUS_EVENTS": "Status Events",
   "CACHE_CONTAINERS": "Cache Containers",

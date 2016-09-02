@@ -1,15 +1,15 @@
-import {ICacheContainer} from "../../services/container/ICacheContainer";
-import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
-import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
-import {IRootScopeService} from "../../common/IRootScopeService";
-import {ContainerTasksService} from "../../services/container-tasks/ContainerTasksService";
-import {ITaskStatus} from "../../services/container-tasks/ITaskStatus";
+import {ICacheContainer} from "../../../services/container/ICacheContainer";
+import {IClusterEvent} from "../../../services/cluster-events/IClusterEvent";
+import {ClusterEventsService} from "../../../services/cluster-events/ClusterEventsService";
+import {IRootScopeService} from "../../../common/IRootScopeService";
+import {ContainerTasksService} from "../../../services/container-tasks/ContainerTasksService";
+import {ITaskStatus} from "../../../services/container-tasks/ITaskStatus";
 import {TaskCreateModalCtrl} from "./TaskCreateModalCtrl";
 import IModalService = angular.ui.bootstrap.IModalService;
-import {ITaskDefinition} from "../../services/container-tasks/ITaskDefinition";
-import {CacheService} from "../../services/cache/CacheService";
-import {ICache} from "../../services/cache/ICache";
-import {IServerAddress} from "../../services/server/IServerAddress";
+import {ITaskDefinition} from "../../../services/container-tasks/ITaskDefinition";
+import {CacheService} from "../../../services/cache/CacheService";
+import {ICache} from "../../../services/cache/ICache";
+import {IServerAddress} from "../../../services/server/IServerAddress";
 
 export class TasksCtrl {
   static $inject: string[] = ["$rootScope", "$uibModal", "cacheService", "clusterEventsService", "containerTasksService", "container"];

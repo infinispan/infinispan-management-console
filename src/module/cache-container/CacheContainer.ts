@@ -1,11 +1,11 @@
 import {App} from "../../ManagementConsole";
 import "../../services/dmr/DmrService";
 import {CacheContainerCtrl} from "./CacheContainerCtrl";
-import {cacheTraitFilter} from "./filters/CacheTraitFilter";
-import {cacheStatusFilter} from "./filters/CacheStatusFilter";
-import {cacheTypeFilter} from "./filters/CacheTypeFilter";
-import {CachesCtrl} from "./CachesCtrl";
-import {TasksCtrl} from "./TasksCtrl";
+import {cacheTraitFilter} from "./caches/filters/CacheTraitFilter";
+import {cacheStatusFilter} from "./caches/filters/CacheStatusFilter";
+import {cacheTypeFilter} from "./caches/filters/CacheTypeFilter";
+import {CachesCtrl} from "./caches/CachesCtrl";
+import {TasksCtrl} from "./tasks/TasksCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-container", []);
 
@@ -31,7 +31,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 
   $stateProvider.state("container.caches", {
     url: "/caches",
-    templateUrl: "module/cache-container/view/caches.html",
+    templateUrl: "module/cache-container/caches/view/caches.html",
     controller: CachesCtrl,
     controllerAs: "cachesCtrl",
     resolve: {
@@ -43,18 +43,18 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 
   $stateProvider.state("container.tasks", {
     url: "/tasks",
-    templateUrl: "module/cache-container/view/tasks.html",
+    templateUrl: "module/cache-container/tasks/view/tasks.html",
     controller: TasksCtrl,
     controllerAs: "tasksCtrl"
   });
 
   $stateProvider.state("container.tasks.running", {
     url: "/running",
-    templateUrl: "module/cache-container/view/tasks-running.html",
+    templateUrl: "module/cache-container/tasks/view/tasks-running.html",
   });
 
   $stateProvider.state("container.tasks.history", {
     url: "/history",
-    templateUrl: "module/cache-container/view/tasks-history.html"
+    templateUrl: "module/cache-container/tasks/view/tasks-history.html"
   });
 });

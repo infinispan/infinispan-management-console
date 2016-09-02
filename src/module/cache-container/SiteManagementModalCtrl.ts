@@ -1,8 +1,8 @@
 import {getArraySize} from "../../common/utils/Utils";
 import {ContainerService} from "../../services/container/ContainerService";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
+import {openConfirmationModal} from "../../common/dialogs/Modals";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
-import {ConfirmationModalCtrl} from "../../common/dialogs/ConfirmationModalCtrl";
 import IModalService = angular.ui.bootstrap.IModalService;
 
 export class SiteManagementModalCtrl {
@@ -46,7 +46,7 @@ export class SiteManagementModalCtrl {
   }
 
   executeSiteOperation(operation: string, siteName: string, message: string): void {
-    let modal: IModalServiceInstance = this.createConfirmationModal(message);
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, message);
 
     modal.result.then(() => {
       this.containerService.executeSiteOperation(operation, siteName, this.container)
@@ -59,19 +59,6 @@ export class SiteManagementModalCtrl {
           this.errorDescription = error;
           this.refresh();
         });
-    });
-  }
-
-  private createConfirmationModal(message: string): IModalServiceInstance {
-    return this.$uibModal.open({
-      templateUrl: "common/dialogs/views/confirmation.html",
-      controller: ConfirmationModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        confirmationMessage: (): string => {
-          return message;
-        }
-      }
     });
   }
 }

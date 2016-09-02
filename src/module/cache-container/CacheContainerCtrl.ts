@@ -3,7 +3,7 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
 import {SiteManagementModalCtrl} from "./SiteManagementModalCtrl";
-import {ConfirmationModalCtrl} from "../../common/dialogs/ConfirmationModalCtrl";
+import {openConfirmationModal} from "../../common/dialogs/Modals";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 
@@ -63,17 +63,7 @@ export class CacheContainerCtrl {
   }
 
   private createRebalanceModal(enableRebalance: boolean, message: string): void {
-    let modal: IModalServiceInstance = this.$uibModal.open({
-      templateUrl: "common/dialogs/views/confirmation.html",
-      controller: ConfirmationModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        confirmationMessage: (): string => {
-          return message;
-        }
-      }
-    });
-
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, message);
     modal.result.then(() => {
       let promise: ng.IPromise<void> = enableRebalance ? this.containerService.enableRebalance(this.container) :
         this.containerService.disableRebalance(this.container);

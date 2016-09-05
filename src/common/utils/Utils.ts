@@ -202,4 +202,12 @@ export function parseServerAddress(server: string): IServerAddress {
   return new ServerAddress(address[0], address[1]);
 }
 
+export function getInstanceFromDmr<T>(dmr: any): T {
+  let retObject: any = {};
+  for (let key in Object.keys(dmr)) {
+    retObject[key] = dmr[key];
+  }
+  return retObject;
+}
+
 // TODO implement other methods as required

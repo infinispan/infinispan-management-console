@@ -1,4 +1,3 @@
-import IScope = angular.IScope;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 
 export class RestartModalCtrl {

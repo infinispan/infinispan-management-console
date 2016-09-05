@@ -6,7 +6,7 @@ import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsService";
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 import {IMap} from "../../common/utils/IMap";
-import {isNonEmptyArray, isNotNullOrUndefined, getArraySize} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, getArraySize} from "../../common/utils/Utils";
 
 export class CacheContainersCtrl {
 

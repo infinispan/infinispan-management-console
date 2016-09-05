@@ -4,7 +4,6 @@ import {CacheContainersCtrl} from "./CacheContainersCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-containers", []);
 
-
 module.controller("CacheContainersCtrl", CacheContainersCtrl);
 
 // @ngInject

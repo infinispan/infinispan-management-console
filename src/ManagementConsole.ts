@@ -129,8 +129,7 @@ module.run(($templateCache: ITemplateCacheService) => {
 // TODO remove if only used for debugging
 // @ngInject
 module.run(($rootScope: IRootScopeService) => {
-  $rootScope.$on("$stateChangeError",
-    function (event: IAngularEvent, toState, toParams, fromState, fromParams, error) {
+  $rootScope.$on("$stateChangeError", (event: IAngularEvent, toState: any, toParams: any, fromState: any, fromParams: any, error: any) => {
       alert("error: " + error);
     });
 });

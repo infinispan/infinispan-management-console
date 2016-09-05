@@ -6,13 +6,12 @@ import {IStateService} from "angular-ui-router";
 import {AddNodeModalCtrl} from "./AddNodeModalCtrl";
 import {ServerService} from "../../services/server/ServerService";
 import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
-import {IRootScopeService} from "../../common/IRootScopeService";
-import IModalService = angular.ui.bootstrap.IModalService;
-import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {DmrService} from "../../services/dmr/DmrService";
 import {IMap} from "../../common/utils/IMap";
 import {isEmptyObject, isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 import {openErrorModal} from "../../common/dialogs/Modals";
+import IModalService = angular.ui.bootstrap.IModalService;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",

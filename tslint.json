@@ -4,7 +4,6 @@
     "comment-format": [
       true,
       "check-space"
-//      "check-lowercase"
     ],
     "curly": true,
     "eofline": true,

@@ -2,6 +2,7 @@ import {App} from "../../../ManagementConsole";
 import {ContainerConfigCtrl} from "./ContainerConfigCtrl";
 import {IRedirectState} from "../../../common/IRedirectState";
 import {SchemaConfigCtrl} from "./schemas/SchemaConfigCtrl";
+import {TransportConfigCtrl} from "./transport/TransportConfigCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 
@@ -29,6 +30,21 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     resolve: {
       availableSchemas: ["$stateParams", "container", "schemaService", ($stateParams, container, schemaService) => {
         return schemaService.getProtoSchemaNames(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container-config.transport", {
+    url: "/transport",
+    templateUrl: "module/cache-container/config/transport/view/transport.html",
+    controller: TransportConfigCtrl,
+    controllerAs: "transCtrl",
+    resolve: {
+      transport: ["$stateParams", "container", "containerConfigService", ($stateParams, container, containerConfigService) => {
+        return containerConfigService.getTransportConfig(container);
+      }],
+      meta: ["container", "containerConfigService", (container, containerConfigService) => {
+        return containerConfigService.getTransportMeta(container);
       }]
     }
   });

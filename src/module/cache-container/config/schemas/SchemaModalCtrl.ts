@@ -35,7 +35,6 @@ export class SchemaModalCtrl {
           }
         },
         error => {
-          alert(error);
           this.errorExecuting = true;
           this.errorDescription = error;
         });

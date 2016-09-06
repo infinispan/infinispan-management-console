@@ -3,6 +3,7 @@ import "./services/authentication/AuthenticationService";
 import "./services/cache/CacheService";
 import "./services/cluster-events/ClusterEventsService";
 import "./services/container/ContainerService";
+import "./services/container-config/ContainerConfigService";
 import "./services/container-tasks/ContainerTasksService";
 import "./services/dmr/DmrService";
 import "./services/domain/DomainService";
@@ -14,6 +15,9 @@ import "./services/schemas/SchemasService";
 import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
+import "./components/configuration-section/ConfigurationSection";
+import "./components/forms/field-info/FieldInfo";
+import "./components/forms/form-group/FormGroup";
 import "./components/modals/information/InformationModal";
 import "./module/auth/Auth";
 import "./module/cache-container/CacheContainer";
@@ -35,11 +39,15 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.server-group",
     "managementConsole.server-groups",
+    "managementConsole.components.configuration",
+    "managementConsole.components.forms.field-info",
+    "managementConsole.components.forms.form-group",
     "managementConsole.components.modals.information",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
     "managementConsole.services.cluster-events",
     "managementConsole.services.container",
+    "managementConsole.services.container-config",
     "managementConsole.services.container-tasks",
     "managementConsole.services.dmr",
     "managementConsole.services.domain",

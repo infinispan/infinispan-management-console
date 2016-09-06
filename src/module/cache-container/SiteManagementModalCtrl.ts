@@ -54,7 +54,6 @@ export class SiteManagementModalCtrl {
           this.successfulOperation = true;
           this.refresh();
         }, error => {
-          alert(error);
           this.errorExecuting = true;
           this.errorDescription = error;
           this.refresh();

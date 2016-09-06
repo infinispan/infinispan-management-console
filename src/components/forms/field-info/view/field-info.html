@@ -1,0 +1,8 @@
+<div class="col-md-4 pull-left">
+  <i class="fa fa-info-circle" tooltip="{{$ctrl.meta.description}}"
+     tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+  <span ng-if="!$ctrl.readOnly && $ctrl.isFieldValueModified()">
+      <a ng-click="$ctrl.undoFieldChange()">(Undo)</a>
+      <span ng-if="$ctrl.fieldChangeRequiresRestart()">Restart needed</span>
+    </span>
+</div>

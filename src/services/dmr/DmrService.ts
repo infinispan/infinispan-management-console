@@ -29,6 +29,11 @@ export class DmrService {
     return this.executeGet(request);
   }
 
+  readResourceDescription(request: IDmrRequest): ng.IPromise<any> {
+    request.operation = "resource-description";
+    return this.executeGet(request);
+  }
+
   readAttribute(request: IDmrRequest): angular.IPromise<any> {
     request.operation = "attribute";
     return this.executeGet(request);
@@ -132,7 +137,7 @@ export class DmrService {
     return baseUrl + "/" + path + operation;
   }
 
-  private processDmrFailure(response: any): string {
+  private processDmrFailure(response: any): any {
     let status: number = response.status;
     let msg: string = "An unspecified error has been received from the server";
     if (status === 401) {

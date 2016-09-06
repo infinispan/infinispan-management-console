@@ -2,7 +2,6 @@ import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {InformationModalCtrl} from "./InformationModalCtrl";
 import {ErrorModalCtrl} from "./ErrorModalCtrl";
-import {RestartModalCtrl} from "./RestartModalCtrl";
 import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
 
 export function openInfoModal($uibModal: IModalService, header: string, information: string): IModalServiceInstance {
@@ -31,8 +30,6 @@ export function openErrorModal($uibModal: IModalService, error: string): IModalS
 export function openRestartModal($uibModal: IModalService): IModalServiceInstance {
   return $uibModal.open({
     templateUrl: "common/dialogs/views/requires-restart.html",
-    controller: RestartModalCtrl,
-    controllerAs: "ctrl",
   });
 }
 

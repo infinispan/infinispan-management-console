@@ -104,7 +104,7 @@ export class DmrService {
         "Accept": "application/json",
         "Content-type": "application/json"
       },
-      cache: true
+      // cache: true // TODO come back to caching get requests. 1. is it worthwhile? 2. If so make it selective
     };
 
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();

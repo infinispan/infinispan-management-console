@@ -2,6 +2,7 @@ import {App} from "../../ManagementConsole";
 import {IDmrRequest} from "./IDmrRequest";
 import {AuthenticationService} from "../authentication/AuthenticationService";
 import {ICredentials} from "../authentication/ICredentials";
+import {IDmrCompositeReq} from "./IDmrCompositeReq";
 
 const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
@@ -59,7 +60,7 @@ export class DmrService {
     return this.executePost(request);
   }
 
-  executePost(request: IDmrRequest, noTimeout?: boolean): ng.IPromise<any> {
+  executePost(request: IDmrRequest | IDmrCompositeReq, noTimeout?: boolean): ng.IPromise<any> {
     let config: ng.IRequestShortcutConfig = {
       withCredentials: true,
       headers: {

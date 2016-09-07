@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <table class="datatable table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th colspan="6" class="text-right">
+          <div class="btn-group" role="group">
+            <a role="button" class="btn btn-default" data-toggle="modal" ng-click="tmpCtrl.createTemplate()"><span
+              class="pficon pficon-add-circle-o"></span> Create new template</a>
+          </div>
+
+        </th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mode</th>
+        <th>Traits</th>
+        <th width="170" class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="template in tmpCtrl.templates">
+        <td>{{template.name}}</td>
+        <td>{{template.type}}</td>
+        <td>{{template.mode}}</td>
+        <td>{{template.traits.join(", ")}}</td>
+        <td class="text-center">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-click="tmpCtrl.editTemplate(template)"><i class="pficon pficon-edit"></i> Edit</button>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" ng-click="tmpCtrl.removeTemplate(template, $index)"><i class="pficon pficon-delete"></i> Remove</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -80,7 +80,7 @@ export function deepGet(object: Object, path: string): any {
   var a: string[] = path.split(".");
   while (a.length) {
     var n: string = a.shift();
-    if (n in o) {
+    if (isNotNullOrUndefined(o) && isNotNullOrUndefined(o[n])) {
       o = o[n];
     } else {
       return;

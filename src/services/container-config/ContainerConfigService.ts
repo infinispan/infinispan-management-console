@@ -13,9 +13,41 @@ const module: ng.IModule = App.module("managementConsole.services.container-conf
 export class ContainerConfigService {
   static $inject: string[] = ["$q", "dmrService", "launchType"];
 
+  private genericThreadPools: string[] = ["async-operations", "listener", "persistence", "remote-command",
+    "state-transfer", "transport"];
+  private genericThreadPoolFields: string[] = ["keepalive-time", "max-threads", "min-threads", "queue-length"];
+
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
               private launchType: LaunchTypeService) {
+  }
+
+  getContainerMeta(container: ICacheContainer): ng.IPromise<any> {
+    return this.dmrService.readResourceDescription({
+      address: this.getContainerAddress(container),
+      recursive: true
+    });
+  }
+
+  getThreadPoolsConfig(container: ICacheContainer): ng.IPromise<any> {
+    return this.dmrService.readChildResources({
+      address: this.getContainerAddress(container),
+      "child-type": "thread-pool",
+      recursive: true
+    });
+  }
+
+  saveThreadPools(container: ICacheContainer, threadPools: any): ng.IPromise<any> {
+    let builder: CompositeOpBuilder = new CompositeOpBuilder();
+    let address: string[] = this.getContainerAddress(container).concat("thread-pool");
+
+    // Add generic thread pools to composite operation
+    this.genericThreadPools.forEach(poolName => {
+      this.addThreadPoolToBuilder(address.concat(poolName), this.genericThreadPoolFields, threadPools[poolName], builder);
+    });
+    this.addThreadPoolToBuilder(address.concat("expiration"), ["keepalive-time", "max-threads"], threadPools.expiration, builder);
+    this.addThreadPoolToBuilder(address.concat("replication-queue"), ["keepalive-time", "max-threads"], threadPools["replication-queue"], builder);
+    return this.dmrService.executePost(builder.build());
   }
 
   getTransportMeta(container: ICacheContainer): ng.IPromise<any> {
@@ -49,6 +81,11 @@ export class ContainerConfigService {
       return ["profile", container.profile].concat(containerPath);
     }
     return containerPath;
+  }
+
+  private addThreadPoolToBuilder(address: string[], fields: string[], valueMap: any, builder: CompositeOpBuilder): CompositeOpBuilder {
+    fields.forEach(field => builder.add(createWriteAttrReq(address, field, valueMap[field])));
+    return builder;
   }
 }
 

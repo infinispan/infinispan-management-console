@@ -3,6 +3,7 @@ import {ContainerConfigCtrl} from "./ContainerConfigCtrl";
 import {IRedirectState} from "../../../common/IRedirectState";
 import {SchemaConfigCtrl} from "./schemas/SchemaConfigCtrl";
 import {TransportConfigCtrl} from "./transport/TransportConfigCtrl";
+import {ThreadPoolsCtrl} from "./thread-pools/ThreadPoolsCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 
@@ -45,6 +46,21 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       }],
       meta: ["container", "containerConfigService", (container, containerConfigService) => {
         return containerConfigService.getTransportMeta(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container-config.thread-pools", {
+    url: "/thread-pools",
+    templateUrl: "module/cache-container/config/thread-pools/view/thread-pools.html",
+    controller: ThreadPoolsCtrl,
+    controllerAs: "poolCtrl",
+    resolve: {
+      threadPools: ["$stateParams", "container", "containerConfigService", ($stateParams, container, containerConfigService) => {
+        return containerConfigService.getThreadPoolsConfig(container);
+      }],
+      meta: ["container", "containerConfigService", (container, containerConfigService) => {
+        return containerConfigService.getContainerMeta(container);
       }]
     }
   });

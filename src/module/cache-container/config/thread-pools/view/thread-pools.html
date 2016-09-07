@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <uib-tabset vertical="true" type="pills">
+      <uib-tab heading="Async Operations" active="true" class="col-md10">
+        <configuration-section
+          fields="[{name: 'Async Operations', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools['async-operations']" meta="poolCtrl.meta['async-operations'].attributes"
+          init-defaults="false" read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Expiration">
+        <configuration-section fields="[{name: 'Expiration', fields: ['max-threads', 'keepalive-time']}]"
+                               data="poolCtrl.threadPools.expiration" meta="poolCtrl.meta.expiration.attributes"
+                               init-defaults="false" read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Listener">
+        <configuration-section
+          fields="[{name: 'Listener', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools.listener" meta="poolCtrl.meta.listener.attributes"
+          init-defaults="false" read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Persistence">
+        <configuration-section
+          fields="[{name: 'Persistence', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools.persistence" meta="poolCtrl.meta.persistence.attributes" init-defaults="false"
+          read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Remote commands">
+        <configuration-section
+          fields="[{name: 'Remote commands', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools['remote-command']" meta="poolCtrl.meta['remote-command'].attributes"
+          init-defaults="false" read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Replication queue">
+        <configuration-section fields="[{name: 'Replication queue', fields: ['max-threads', 'keepalive-time']}]"
+                               data="poolCtrl.threadPools['replication-queue']"
+                               meta="poolCtrl.meta['replication-queue'].attributes" init-defaults="false"
+                               read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="State transfer">
+        <configuration-section
+          fields="[{name: 'State transfer', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools['state-transfer']" meta="poolCtrl.meta['state-transfer'].attributes"
+          init-defaults="false" read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+      <uib-tab heading="Transport">
+        <configuration-section
+          fields="[{name: 'Transport', fields: ['min-threads', 'max-threads', 'queue-length', 'keepalive-time']}]"
+          data="poolCtrl.threadPools.transport" meta="poolCtrl.meta.transport.attributes" init-defaults="false"
+          read-only="false" config-callbacks="poolCtrl.callbackArray"/>
+      </uib-tab>
+
+    </uib-tabset>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-6 col-md-offset-6">
+      <button id="createCacheButton" type="button" class="btn btn-primary" ng-disabled="!poolCtrl.isAnyFieldModified()"
+              ng-click="poolCtrl.save()" translate>SAVE
+      </button>
+      <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="poolCtrl.cancel()"
+              translate>CANCEL
+      </button>
+    </div>
+  </div>
+</div>

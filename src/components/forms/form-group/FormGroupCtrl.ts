@@ -41,7 +41,8 @@ export class FormGroupCtrl {
     let original: any = this.previousValue;
     let latest: any = this.data[this.field];
 
-    if (latest === original || (isBoolean(latest) && !latest && isNullOrUndefined(original)) ||
+    /* tslint:disable:triple-equals Necessary as values can be numbers, so == is valid */
+    if (latest === original || latest == original || (isBoolean(latest) && !latest && isNullOrUndefined(original)) ||
       (!latest && isNullOrUndefined(original))) {
       makeFieldClean(this.meta);
     } else {

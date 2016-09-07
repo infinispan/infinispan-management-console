@@ -29,7 +29,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controller: SchemaConfigCtrl,
     controllerAs: "schemaCtrl",
     resolve: {
-      availableSchemas: ["$stateParams", "container", "schemaService", ($stateParams, container, schemaService) => {
+      availableSchemas: ["container", "schemaService", (container, schemaService) => {
         return schemaService.getProtoSchemaNames(container);
       }]
     }
@@ -41,7 +41,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controller: TransportConfigCtrl,
     controllerAs: "transCtrl",
     resolve: {
-      transport: ["$stateParams", "container", "containerConfigService", ($stateParams, container, containerConfigService) => {
+      transport: ["container", "containerConfigService", (container, containerConfigService) => {
         return containerConfigService.getTransportConfig(container);
       }],
       meta: ["container", "containerConfigService", (container, containerConfigService) => {
@@ -56,7 +56,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controller: ThreadPoolsCtrl,
     controllerAs: "poolCtrl",
     resolve: {
-      threadPools: ["$stateParams", "container", "containerConfigService", ($stateParams, container, containerConfigService) => {
+      threadPools: ["container", "containerConfigService", (container, containerConfigService) => {
         return containerConfigService.getThreadPoolsConfig(container);
       }],
       meta: ["container", "containerConfigService", (container, containerConfigService) => {

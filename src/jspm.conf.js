@@ -36,7 +36,7 @@ System.config({
     "angular-local-storage": "npm:angular-local-storage@0.2.7",
     "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1",
     "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
-    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.0",
+    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
     "angular-ui-router": "github:angular-ui/angular-ui-router-bower@0.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
@@ -434,9 +434,8 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:c3@0.4.11": {
-      "d3": "npm:d3@3.5.17",
-      "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "path": "github:jspm/nodelibs-path@0.1.0"
+      "css": "github:systemjs/plugin-css@0.1.26",
+      "d3": "npm:d3@3.5.17"
     },
     "npm:chalk@1.1.3": {
       "ansi-styles": "npm:ansi-styles@2.2.1",

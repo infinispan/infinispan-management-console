@@ -84,6 +84,15 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 });
 
 // @ngInject
+module.config(($provide) => {
+  // This is necessary to ensure pill navigation tabs are set to the left, with the content to the right
+  $provide.decorator("uibTabsetDirective", ($delegate) => {
+    $delegate[0].templateUrl = "common/views/configuration-tabset.tpl.html";
+    return $delegate;
+  });
+});
+
+// @ngInject
 module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibModal: IModalService) => {
   $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;

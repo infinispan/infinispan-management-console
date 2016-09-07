@@ -70,7 +70,7 @@
       "angular-local-storage": "npm:angular-local-storage@^0.2.7",
       "angular-translate": "github:angular-translate/bower-angular-translate@^2.11.1",
       "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@^2.11.1",
-      "angular-ui-bootstrap": "npm:angular-ui-bootstrap@^2.1.0",
+      "angular-ui-bootstrap": "npm:angular-ui-bootstrap@^2.1.3",
       "angular-ui-router": "github:angular-ui/angular-ui-router-bower@^0.3.1",
       "bootstrap": "github:twbs/bootstrap@^3.3.7",
       "bootstrap-css": "npm:bootstrap-css@^3.0.0",

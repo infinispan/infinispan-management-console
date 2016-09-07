@@ -1,0 +1,11 @@
+<div>
+  <ul class="nav nav-{{tabset.type || 'tabs'}} {{tabset.type === 'pills' ? 'col-md-2' : ''}}"
+      ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude></ul>
+  <div class="tab-content">
+    <div class="tab-pane {{tabset.type === 'pills' ? 'col-md-10' : ''}}"
+         ng-repeat="tab in tabset.tabs"
+         ng-class="{active: tabset.active === tab.index}"
+         uib-tab-content-transclude="tab">
+    </div>
+  </div>
+</div>

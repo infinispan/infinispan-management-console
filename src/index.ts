@@ -27,6 +27,7 @@ import "./module/events/Events";
 import "./module/navbar/Navbar";
 import "./module/server-group/ServerGroup";
 import "./module/server-groups/ServerGroups";
+import "./module/server-instance/ServerInstance";
 
 App.element(document).ready(() => {
   App.bootstrap(document, [
@@ -37,6 +38,7 @@ App.element(document).ready(() => {
     "managementConsole.cache-containers",
     "managementConsole.events",
     "managementConsole.navbar",
+    "managementConsole.server-instance",
     "managementConsole.server-group",
     "managementConsole.server-groups",
     "managementConsole.components.configuration",

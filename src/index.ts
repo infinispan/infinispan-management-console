@@ -23,6 +23,7 @@ import "./module/auth/Auth";
 import "./module/cache-container/CacheContainer";
 import "./module/cache-container/config/ContainerConfig";
 import "./module/cache-containers/CacheContainers";
+import "./module/cache/Cache";
 import "./module/events/Events";
 import "./module/navbar/Navbar";
 import "./module/server-group/ServerGroup";
@@ -36,6 +37,7 @@ App.element(document).ready(() => {
     "managementConsole.cache-container",
     "managementConsole.cache-container.config",
     "managementConsole.cache-containers",
+    "managementConsole.cache",
     "managementConsole.events",
     "managementConsole.navbar",
     "managementConsole.server-instance",

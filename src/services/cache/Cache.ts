@@ -28,17 +28,17 @@ export class Cache implements ICache {
   }
 
   isBounded(): boolean {
-    return isNotNullOrUndefined(this.configModel.eviction);
+    return isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel.eviction);
   }
 
   isIndexed(): boolean {
-    return isNotNullOrUndefined(this.configModel.indexing);
+    return isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel.indexing);
   }
 
   isPersistent(): boolean {
     let persistentFields: string[] = ["file-store", "leveldb-store", "rest-store", "store", "binary-keyed-jdbc-store",
       "string-keyed-jdbc-store", "mixed-keyed-jdbc-store"];
-    return persistentFields.some(field => isNotNullOrUndefined(this.configModel[field]));
+    return persistentFields.some(field => isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel[field]));
   }
 
   isSecured(): boolean {
@@ -52,10 +52,10 @@ export class Cache implements ICache {
   }
 
   hasCompatibility(): boolean {
-    return isNotNullOrUndefined(this.configModel.compatibility);
+    return isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel.compatibility);
   }
 
   hasRemoteBackup(): boolean {
-    return isNotNullOrUndefined(this.configModel.backup);
+    return isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel.backup);
   }
 }

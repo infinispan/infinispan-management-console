@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="containers">Cache containers</a>
+        </li>
+        <li>
+          <a ui-sref="container({profileName:ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
+        </li>
+        <li class="active"><strong>{{ctrl.cache.name}}</strong>
+      </ol>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
+          <span class="pficon pficon-refresh"></span> Refresh
+        </button>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
+                data-toggle="dropdown" uib-dropdown-toggle>
+          Actions
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" class="enabled">
+            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
+          </li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" ui-sref="">View configuration</a>
+          </li>
+        </ul>
+      </div>
+      <h1><span id="currentCacheAvailability" class="label"
+                ng-class="ctrl.currentCacheAvailability() ? 'label-success' : 'label-danger'">
+        {{ctrl.currentClusterAvailabilityAsString()}}
+      </span>&nbsp;{{ctrl.cache.name}}</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <!--ul class="nav nav-tabs nav-tabs-pf"-->
+      <ul class="nav nav-tabs nav-tabs">
+        <li ><a ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: ctrl.cache.name, cacheType: ctrl.cache.type})">General status</a></li>
+        <li class="active"><a href="#">Nodes</a></li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div class="col-md-12">
+
+    <br>
+    <table class="datatable table table-striped table-bordered display" id="cachesTable">
+      <thead>
+      <tr><th>Name</th>
+        <th>Average reads</th>
+        <th>Average writes</th>
+        <th>Total entries</th>
+        <th>Total reads</th>
+        <th>Total failed reads</th>
+        <th>Total writes</th>
+        <th>Total failed writes</th>
+      </tr></thead>
+      <tbody>
+        <tr ng-repeat="stats in ctrl.allCacheStats">
+          <td class="NodeName">{{ctrl.container.serverGroup.members[$index].toString()}}</td>
+          <td class="AverageReadTime">{{stats['average-read-time'] | number}}</td>
+          <td class="AverageWriteTime">{{stats['average-write-time'] | number}}</td>
+          <td class="TotalEntries">{{stats['number-of-entries'] | number}}</td>
+          <td class="TotalReads">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalFailedReads">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalWrites">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalFailedWrites">{{stats['average-read-time'] | number}}</td>
+        </tr>
+      </tbody></table>
+  </div>
+</div>

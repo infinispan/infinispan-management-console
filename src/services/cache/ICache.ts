@@ -1,4 +1,4 @@
-import {ICacheConfiguration} from "./ICacheConfiguration";
+import {ICacheConfiguration} from "../cache-config/ICacheConfiguration";
 
 export interface ICache {
   name: string;

@@ -22,18 +22,18 @@ export class FormGroupCtrl {
   changeCallback: Function;
   undoCallback: Function;
 
-  private type: string;
-  private multiValue: boolean;
-  private option: string;
+  type: string;
+  multiValue: boolean;
+  option: string;
 
   constructor() {
     if (isNullOrUndefined(this.optionString)) {
       this.type = getTypeModelType(this.meta);
       this.multiValue = this.meta.hasOwnProperty("allowed") ? this.meta.allowed : false;
-      this.option = "item as item for item in meta.allowed";
+      this.option = "item as item for item in $ctrl.meta.allowed";
     } else {
       this.multiValue = true;
-      this.option = this.optionString.concat(" in ctrl.optionValues");
+      this.option = this.optionString.concat(" in $ctrl.optionValues");
     }
   }
 
@@ -48,10 +48,16 @@ export class FormGroupCtrl {
     } else {
       makeFieldDirty(this.meta);
     }
+
+    if (isNotNullOrUndefined(this.changeCallback)) {
+      this.changeCallback(this.field, original, latest);
+    }
   }
 
   getStyle(): string {
-    return this.meta.hasOwnProperty("style")  ? this.meta.style : "";
+    if (isNotNullOrUndefined(this.meta)) {
+      return this.meta.hasOwnProperty("style") ? this.meta.style : "";
+    }
   }
 
   resolveFieldName(): string {
@@ -61,14 +67,14 @@ export class FormGroupCtrl {
     return convertCacheAttributeIntoFieldName(this.field);
   }
 
-  createOrUpdateProperty(field: string, key: string, value: any): void {
-    this.data[field] = this.data[field] || {};
-    this.data[field][key] = value;
+  createOrUpdateProperty(key: string, value: any): void {
+    this.data[this.field] = this.data[this.field] || {};
+    this.data[this.field][key] = value;
     this.fieldValueModified();
   }
 
-  removeProperty(field: string, key: string): void {
-    delete this.data[field][key];
+  removeProperty(key: string): void {
+    delete this.data[this.field][key];
     this.fieldValueModified();
   }
 }

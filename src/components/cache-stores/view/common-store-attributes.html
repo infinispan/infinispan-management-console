@@ -1,0 +1,21 @@
+<div class="form-horizontal" ng-repeat="field in $ctrl.checkboxes">
+    <form-group data="$ctrl.store" field="{{field}}" meta="$ctrl.getFieldMetaObject(field)"
+                previous-value="$ctrl.prevData[field]" read-only="$ctrl.readOnly"/>
+</div>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-4 control-label">Write Behind</label>
+
+        <div class="col-md-4">
+            <cache-store-modal data="$ctrl.store" field="write-behind.WRITE_BEHIND"
+                               field-meta="$ctrl.getFieldMetaObject('write-behind')"
+                               parent-meta="$ctrl.getFieldMetaObject('write-behind')"
+                               previous-values="$ctrl.prevData['write-behind']['WRITE_BEHIND']" title="Write Behind"
+                               modal-fields="[{name: 'modification-queue-size'}, {name: 'thread-pool-size'}]"/>
+        </div>
+
+        <field-info data="$ctrl.store" meta="$ctrl.getFieldMetaObject('write-behind')" field="write-behind"
+                    previous-value="$ctrl.prevData['write-behind']"/>
+    </div>
+</div>

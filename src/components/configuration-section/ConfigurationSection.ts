@@ -5,7 +5,7 @@ export class ConfigurationSection {
 
   bindings: any;
   controller: any;
-  templateUrl: any;
+  templateUrl: string;
 
   constructor() {
     this.bindings = {
@@ -14,7 +14,8 @@ export class ConfigurationSection {
       fields: "=",
       initDefaults: "=",
       readOnly: "=",
-      configCallbacks: "=",
+      readOnlyFields: "=",
+      configCallbacks: "="
     };
     this.controller = ConfigurationSectionCtrl;
     this.templateUrl = "components/configuration-section/view/configuration-section.html";

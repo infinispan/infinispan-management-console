@@ -1,6 +1,6 @@
 export interface ITemplate {
   name: string;
-  mode: string;
+  mode?: string;
   type: string;
-  traits: string[];
+  traits?: string[];
 }

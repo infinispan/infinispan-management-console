@@ -6,7 +6,7 @@ export class InformationModal implements ng.IComponentOptions {
   bindings: any;
   controller: any;
   controllerAs: string;
-  templateUrl: any;
+  templateUrl: string;
 
   constructor() {
     this.bindings = {

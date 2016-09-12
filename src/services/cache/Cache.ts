@@ -1,5 +1,5 @@
 import {ICache} from "./ICache";
-import {ICacheConfiguration} from "./ICacheConfiguration";
+import {ICacheConfiguration} from "../cache-config/ICacheConfiguration";
 import {isNotNullOrUndefined, deepValue} from "../../common/utils/Utils";
 
 export class Cache implements ICache {

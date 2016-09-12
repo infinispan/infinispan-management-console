@@ -1,15 +1,17 @@
 import {ITemplate} from "../../../../services/container-config/ITemplate";
 import {openConfirmationModal} from "../../../../common/dialogs/Modals";
-import IModalService = angular.ui.bootstrap.IModalService;
-import {ContainerConfigService} from "../../../../services/container-config/ContainerConfigService";
 import {ICacheContainer} from "../../../../services/container/ICacheContainer";
 import {AddTemplateModalCtrl} from "./AddTemplateModalCtrl";
+import {IStateService} from "angular-ui-router";
+import {CacheConfigService} from "../../../../services/cache-config/CacheConfigService";
+import IModalService = angular.ui.bootstrap.IModalService;
 
 export class TemplatesCtrl {
-  static $inject: string[] = ["$uibModal", "containerConfigService", "container", "templates"];
+  static $inject: string[] = ["$state", "$uibModal", "cacheConfigService", "container", "templates"];
 
-  constructor(private $uibModal: IModalService,
-              private containerConfigService: ContainerConfigService,
+  constructor(private $state: IStateService,
+              private $uibModal: IModalService,
+              private cacheConfigService: CacheConfigService,
               private container: ICacheContainer,
               public templates: ITemplate[]) {
   }
@@ -20,15 +22,19 @@ export class TemplatesCtrl {
       controller: AddTemplateModalCtrl,
       controllerAs: "ctrl",
       resolve: {
-        templates: (): string[] => this.templates.map(template => template.name)
+        container: (): ICacheContainer => this.container,
+        templates: (): ITemplate[] => this.templates
       }
     });
-
-    // TODO on response transition to new template screen
   }
 
   editTemplate(template: ITemplate): void {
-    // Go to edit template page
+    this.$state.go("edit-cache-template", {
+      profileName: this.container.profile,
+      containerName: this.container.name,
+      templateType: template.type,
+      templateName: template.name
+    });
   }
 
   removeTemplate(template: ITemplate, templateIndex: number): void {
@@ -36,7 +42,7 @@ export class TemplatesCtrl {
     let message: string = "Remove template '" + template.name + "'?";
     openConfirmationModal(this.$uibModal, message, "pficon pficon-delete")
       .result
-      .then(() => this.containerConfigService.removeContainerTemplate(this.container, template))
+      .then(() => this.cacheConfigService.removeContainerTemplate(this.container, template))
       .then(() => this.templates.splice(templateIndex, 1));
   }
 }

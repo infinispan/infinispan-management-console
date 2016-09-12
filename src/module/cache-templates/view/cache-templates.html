@@ -1,0 +1,55 @@
+<!-- MAIN START -->
+
+<div class="container-fluid">
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="containers" translate>CACHE_CONTAINERS</a>
+        </li>
+        <li>{{ctrl.profile}}</li>
+        <li>
+          <a
+            ui-sref="container({profileName:ctrl.profile, containerName: ctrl.containerName})">{{ctrl.containerName}}</a>
+        </li>
+        <li>
+          <a ui-sref="container-config({profileName:ctrl.profile, containerName: ctrl.containerName})" translate>CONFIGURATION</a>
+        </li>
+        <li>
+          <a ui-sref="container-config.templates({profileName:ctrl.profile, containerName: ctrl.containerName})"
+             translate>TEMPLATES</a>
+        </li>
+        <li>{{ctrl.templateName}}</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2 ng-if="ctrl.isEditMode()" translate>VIEW_EDIT_CACHE_TEMPLATE</h2>
+  <h2 ng-if="!ctrl.isEditMode()" translate>CREATE_CACHE_TEMPLATE</h2>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <div id="templateConfiguration">
+        <cache-configuration cache-type="{{ctrl.template.type}}" data="ctrl.template"
+                             meta="ctrl.meta" init-defaults="!ctrl.isEditMode()" read-only="false"
+                             config-callbacks="ctrl.callbackArray" edit-mode="ctrl.isEditMode()"/>
+      </div>
+
+      <br>
+      <div class="form-group">
+        <div class="col-md-6 col-md-offset-6">
+          <button id="saveCacheTemplateButton" type="button" class="btn btn-primary" ng-if="!ctrl.isEditMode()"
+                  ng-disabled="ctrl.isTemplateNameEmpty()" ng-click="ctrl.createTemplate()" translate>CREATE
+          </button>
+          <button id="editCacheTemplateButton" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
+                  ng-disabled="!ctrl.isAnyFieldModified()" ng-click="ctrl.updateTemplate()" translate>APPLY_CHANGES
+          </button>
+          <button id="cancelCacheTemplateButton" type="button" class="btn btn-default"
+                  ng-click="ctrl.goToTemplateView()"
+                  translate>CANCEL
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

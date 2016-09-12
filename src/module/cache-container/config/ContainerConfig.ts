@@ -67,13 +67,13 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
   });
 
   $stateProvider.state("container-config.templates", {
-    url: "templates",
+    url: "/templates",
     templateUrl: "module/cache-container/config/templates/view/templates.html",
     controller: TemplatesCtrl,
     controllerAs: "tmpCtrl",
     resolve: {
-      templates: ["container", "containerConfigService", (container, containerConfigService) => {
-        return containerConfigService.getAllContainerTemplates(container);
+      templates: ["container", "cacheConfigService", (container, cacheConfigService) => {
+        return cacheConfigService.getAllContainerTemplates(container);
       }]
     }
   });

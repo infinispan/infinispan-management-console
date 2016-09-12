@@ -27,7 +27,7 @@
 
         <div class="col-md-6">
           <select ng-model="ctrl.baseTemplate" class="form-control"
-                  ng-options="template for template in ctrl.templates"/>
+                  ng-options="template as template.name for template in ctrl.templates"/>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" uib-tooltip="Base configuration template" tooltip-trigger=""
@@ -39,7 +39,7 @@
   </div>
   <div class="modal-footer">
     <button id="cancelButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-    <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="ctrl.createTemplate()"
+    <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="ctrl.createTemplate();$close()"
             ng-disabled="!templateForm.$valid" translate>NEXT
     </button>
   </div>

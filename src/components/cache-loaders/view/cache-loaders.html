@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Loaders {{$ctrl.test}}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <form-group data="$ctrl.type" field="type" meta="$ctrl.meta['class']"
+                                previous-value="$ctrl.prevData['class']" read-only="$ctrl.readOnly"
+                                option-string="item.class as item.label for item" option-values="$ctrl.cacheLoaders"
+                                change-callback="$ctrl.changeLoaderClass" undo-callback="$ctrl.undoClassChange"/>
+                </div>
+
+                <div class="form-horizontal" ng-if="$ctrl.type.type !== 'None'">
+                    <form-group data="$ctrl.data" field="class" meta="$ctrl.meta['class']"
+                                previous-value="$ctrl.prevData['class']" read-only="$ctrl.readOnly || !$ctrl.isCustomLoader()"/>
+                </div>
+
+
+                <div class="form-horizontal" ng-repeat="field in $ctrl.fields" ng-if="$ctrl.type.type !== 'None'">
+                    <form-group data="$ctrl.data" field="{{field}}" meta="$ctrl.meta[field]"
+                                previous-value="$ctrl.prevData[field]" read-only="$ctrl.readOnly"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

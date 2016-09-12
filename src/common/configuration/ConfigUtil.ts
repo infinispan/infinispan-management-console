@@ -1,7 +1,7 @@
 import {isNotNullOrUndefined, deepGet} from "../utils/Utils";
 import {ISPNException} from "../utils/ISPNException";
 
-export const resourceDescriptionMap: Object = {
+export const RESOURCE_DESCRIPTION_MAP: Object = {
   "general": ".attributes",
   "locking": "children.locking.model-description.LOCKING.attributes",
   "eviction": "children.eviction.model-description.EVICTION.attributes",
@@ -53,18 +53,18 @@ export function makeFieldClean(field: any): void {
 }
 
 export function makeAllFieldsClean(meta: any): void {
-  if (this.isNotNullOrUndefined(meta.uiModified)) {
-    this.makeFieldClean(meta);
+  if (isNotNullOrUndefined(meta.uiModified)) {
+    makeFieldClean(meta);
   }
 
   if (meta.hasOwnProperty("value-type")) {
-    angular.forEach(meta["value-type"], value => this.makeAllFieldsClean(value));
+    angular.forEach(meta["value-type"], value => makeAllFieldsClean(value));
   }
 }
 
 export function resolveDescription(metadata: Object, elementPath: string, cacheType: string): any {
   var path: string = "children.configurations.model-description.CONFIGURATIONS.children." + cacheType + "-configuration.model-description.*";
-  var realPath: string = resourceDescriptionMap[elementPath];
+  var realPath: string = RESOURCE_DESCRIPTION_MAP[elementPath];
   var resourceDescription: any = deepGet(metadata, path);
   return deepGet(resourceDescription, realPath);
 }
@@ -102,4 +102,9 @@ export function getTypeModelType(field: any): string {
   } else {
     throw new ISPNException("Unresolved field for" + field);
   }
+}
+
+export function getMetaForResource(meta: any, resource: string): any {
+  let resourcePath: string = RESOURCE_DESCRIPTION_MAP[resource];
+  return deepGet(meta, resourcePath);
 }

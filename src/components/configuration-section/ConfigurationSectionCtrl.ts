@@ -1,8 +1,10 @@
-import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 import {IConfigurationCallback} from "../../common/configuration/IConfigurationCallback";
 import {
-  isFieldValueModified, fieldChangeRequiresRestart,
-  convertListToJson, makeFieldClean
+  isFieldValueModified,
+  fieldChangeRequiresRestart,
+  convertListToJson,
+  makeFieldClean
 } from "../../common/configuration/ConfigUtil";
 
 export class ConfigurationSectionCtrl implements IConfigurationCallback {
@@ -13,16 +15,21 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   fields: {name: string, fields: string[]}[];
   initDefaults: boolean;
   readOnly: boolean;
+  readOnlyFields: string[];
   configCallbacks: IConfigurationCallback[];
-  onFieldChange: Function;
+  placeholders: any;
 
   constructor() {
+    if (isNullOrUndefined(this.data)) {
+      this.data = {};
+    }
     if (isNotNullOrUndefined(this.configCallbacks)) {
       this.configCallbacks.push(this);
     }
     this.prevData = {};
-    this.cleanMetadata();
     this.data["is-new-node"] = !this.hasAnyFieldPreviousData();
+    this.cleanMetadata();
+    this.createPlaceholders();
   }
 
   hasAnyFieldPreviousData(): boolean {
@@ -57,9 +64,30 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     });
   }
 
+  isReadOnly(field: string): boolean {
+    if (isNotNullOrUndefined(this.readOnlyFields)) {
+      return this.readOnlyFields.some(readOnlyField => readOnlyField === field);
+    }
+    return false;
+  }
+
+  private createPlaceholders(): void {
+    if (!this.initDefaults) {
+      return;
+    }
+    this.placeholders = {};
+    this.fields.forEach((group) => {
+      group.fields.forEach((attrName) => {
+        if (this.meta[attrName].hasOwnProperty("default")) {
+          this.placeholders[attrName] = this.meta[attrName].default;
+        }
+      });
+    });
+  }
+
   private cleanFieldMeta(field: string): void {
     if (isNotNullOrUndefined(this.meta[field])) {
-      makeFieldClean(this.  meta[field]);
+      makeFieldClean(this.meta[field]);
     }
   }
 }

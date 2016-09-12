@@ -8,7 +8,7 @@
         <div class="form-horizontal" ng-repeat="field in group.fields">
 
           <form-group data="$ctrl.data" field="{{field}}" meta="$ctrl.meta[field]"
-                      placeholder="{{$ctrl.placeholder[field]}}" previous-value="$ctrl.prevData[field]"
+                      placeholder="{{$ctrl.placeholders[field]}}" previous-value="$ctrl.prevData[field]"
                       read-only="$ctrl.isReadOnly(field)"/>
 
         </div>

@@ -1,0 +1,20 @@
+<!--Connection Pool-->
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-4 control-label">Connection Pool</label>
+
+        <div class="col-md-4">
+            <cache-store-modal data="$ctrl.store" field="connection-pool"
+                               field-meta="$ctrl.getFieldMetaValues('connection-pool')"
+                               parent-meta="$ctrl.getFieldMetaObject('connection-pool')"
+                               previous-values="$ctrl.prevData['connection-pool']" title="Connection Pool"
+                               modal-fields="[{name: 'buffer-size'}, {name: 'connection-timeout'}, {name: 'max-connections-per-host'},
+                  {name: 'max-total-connections'}, {name: 'socket-timeout'}, {name: 'tcp-no-delay'}]"/>
+        </div>
+
+        <field-info data="$ctrl.store" meta="$ctrl.getFieldMetaObject('connection-pool')" field="connection-pool"
+                    previous-value="$ctrl.prevData['connection-pool']"/>
+    </div>
+</div>
+
+<div ng-include="'components/cache-stores/view/generic-fields.html'"></div>

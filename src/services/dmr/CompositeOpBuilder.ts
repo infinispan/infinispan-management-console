@@ -10,6 +10,13 @@ export function createWriteAttrReq(address: string[], name: string, value: any):
   };
 }
 
+export function createRemoveReq(address: string[]): IDmrRequest {
+  return {
+    address: address,
+    operation: "remove"
+  };
+}
+
 export class CompositeOpBuilder {
 
   private address: string[] = [];

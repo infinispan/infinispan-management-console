@@ -60,6 +60,7 @@
   "TOTAL_FAILED_WRITES":"Total failed writes",
   "VIEW_EDIT_CONFIGURATION":"View / Edit cache configuration:",
   "VIEW_EDIT_CACHE_TEMPLATE":"View/Edit cache template:",
+  "CREATE_CACHE_TEMPLATE": "Create Cache Template",
   "CANCEL":"Cancel",
   "UPDATE":"Update",
   "CREATE":"Create",

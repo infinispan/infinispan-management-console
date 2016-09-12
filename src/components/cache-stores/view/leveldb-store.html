@@ -1,0 +1,36 @@
+<!--Expiration-->
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-4 control-label">Expiration</label>
+
+        <div class="col-md-4">
+            <cache-store-modal data="$ctrl.store" field="expiration.EXPIRATION"
+                               field-meta="$ctrl.getFieldMetaObject('expiration')"
+                               parent-meta="$ctrl.getFieldMetaObject('expiration')"
+                               previous-values="$ctrl.prevData['expiration']['EXPIRATION']" title="Expiration"
+                               modal-fields="[{name: 'path'}, {name: 'queue-size'}]"/>
+        </div>
+
+        <field-info data="$ctrl.store" meta="$ctrl.getFieldMetaObject('expiration')" field="expiration"
+                    previous-value="$ctrl.prevData['expiration']"/>
+    </div>
+</div>
+
+<!--Implementation-->
+<div class="form-horizontal">
+    <form-group data="$ctrl.levelDb.impl" field="implementation"
+                meta="$ctrl.getFieldMetaObject('implementation', 'implementation')"
+                read-only="$ctrl.readOnly" previous-value="$ctrl.getLevelDbPrevVal('implementation', 'implementation')"
+                undo-callback="$ctrl.undoLdbImplementationChange"/>
+</div>
+
+<!--Compression-->
+<div class="form-horizontal">
+    <form-group data="$ctrl.levelDb.comp" field="type" label="Compression"
+                meta="$ctrl.getFieldMetaObject('type', 'compression')"
+                read-only="$ctrl.readOnly" previous-value="$ctrl.getLevelDbPrevVal('type', 'compression')"
+                undo-callback="$ctrl.undoLdbCompressionChange"/>
+</div>
+
+<!--Normal Input-->
+<div ng-include="'components/cache-stores/view/generic-fields.html'"></div>

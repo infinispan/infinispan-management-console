@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Store</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+
+                    <form-group data="$ctrl.data" field="store-type" meta="$ctrl.meta['store-type']"
+                                previous-value="$ctrl.prevData['store-type']" read-only="$ctrl.readOnly"
+                                option-string="item.id as item.label for item" option-values="$ctrl.storeTypes"
+                                change-callback="$ctrl.updateStoreType" undo-callback="$ctrl.undoStoreTypeChange"/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default" ng-if="$ctrl.data['store-type'] !== 'None'">
+            <div class="panel-heading">
+                <h3 class="panel-title">Store Properties</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div ng-if="!$ctrl.isNoStoreSelected()">
+                        <div ng-include="'components/cache-stores/view/common-store-attributes.html'"></div>
+                        <hr>
+                        <!--Load specific Store fields here-->
+                        <div ng-include="$ctrl.storeView"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

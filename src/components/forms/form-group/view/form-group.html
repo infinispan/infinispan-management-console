@@ -29,19 +29,19 @@
             <td></td>
           </tr>
           </thead>
-          <tr ng-repeat="(key, value) in $ctrl.data[field] track by key">
+          <tr ng-repeat="(key, value) in $ctrl.data[$ctrl.field] track by key">
             <td>
               <input class="form-control" type="text" ng-model="key" ng-disabled="true"
                      ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                     ng-change="$ctrl.createOrUpdateProperty($ctrl.field, key, value)"/>
+                     ng-change="$ctrl.createOrUpdateProperty(key, value)"/>
             </td>
             <td>
               <input class="form-control" type="text" ng-model="value"
                      ng-model-options="{updateOn: 'default blur', debounce: {default: 500, blur: 0} }"
-                     ng-change="$ctrl.createOrUpdateProperty($ctrl.field, key, value)"/>
+                     ng-change="$ctrl.createOrUpdateProperty(key, value)"/>
             </td>
             <td>
-              <button type="button" class="btn btn-link" ng-click="$ctrl.removeProperty($ctrl.field, key)">
+              <button type="button" class="btn btn-link" ng-click="$ctrl.removeProperty(key)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
             </td>
@@ -59,7 +59,7 @@
             </td>
             <td>
               <button type="button" class="btn btn-link"
-                      ng-click="$ctrl.createOrUpdateProperty($ctrl.field, newKey, newValue);newKey=null;newValue=null"
+                      ng-click="$ctrl.createOrUpdateProperty(newKey, newValue);newKey=null;newValue=null"
                       ng-disabled="propertyForm.$invalid">
                 <span class="glyphicon glyphicon-plus-sign"></span>
               </button>

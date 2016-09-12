@@ -4,23 +4,24 @@ import {ICache} from "./ICache";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {Cache} from "./Cache";
-import {ICacheConfiguration} from "./ICacheConfiguration";
-import {isNullOrUndefined} from "../../common/utils/Utils";
+import {CacheConfigService, CACHE_TYPES} from "../cache-config/CacheConfigService";
+import {ITemplate} from "../container-config/ITemplate";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {JGroupsService} from "../jgroups/JGroupsService";
+import {isNullOrUndefined} from "../../common/utils/Utils";
+import {ICacheConfiguration} from "../cache-config/ICacheConfiguration";
 
 const module: ng.IModule = App.module("managementConsole.services.cache", []);
 
-export const CACHE_TYPES: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
-
 export class CacheService {
-  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType", "cacheConfigService"];
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
               private jgroupsService: JGroupsService,
-              private launchType: LaunchTypeService) {
+              private launchType: LaunchTypeService,
+              private cacheConfigService: CacheConfigService) {
   }
 
   getAllCachesInContainer(container: string, profile?: string): ng.IPromise<ICache[]> {
@@ -48,7 +49,9 @@ export class CacheService {
       })
       .then(caches => {
         // Get config object for all caches
-        return this.$q.all(caches.map(cache => this.getCacheConfiguration(cache.name, cache.type, container, profile)));
+        return this.$q.all(caches.map(cache => {
+          return this.cacheConfigService.getCacheConfiguration(cache.name, cache.type, container, profile);
+        }));
       })
       .then(configurations => {
         // Add config object to all caches
@@ -73,13 +76,14 @@ export class CacheService {
     return deferred.promise;
   }
 
-  getCacheConfiguration(name: string, type: string, container: string, profile?: string): ng.IPromise<ICacheConfiguration> {
-    let request: IDmrRequest = {
-      address: this.generateAddress(container, profile).concat("configurations", "CONFIGURATIONS",
-        type + "-configuration", name),
-      recursive: true
-    };
-    return this.dmrService.readResource(request);
+  createCacheFromTemplate(container: string, name: string, template: ITemplate): ng.IPromise<void> {
+    // TODO
+    return null;
+  }
+
+  createCache(container: string, name: string): ng.IPromise<void> {
+    // TODO
+    return null;
   }
 
   getCacheStats(container: ICacheContainer, cache: ICache): ng.IPromise<any> {

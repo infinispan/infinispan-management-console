@@ -4,6 +4,7 @@ export interface IDmrRequest {
   address: string[];
   blocking?: boolean;
   "cache-name"?: string;
+  "cache-names"?: string[];
   category?: string;
   "child-type"?: string;
   "file-contents"?: string[];

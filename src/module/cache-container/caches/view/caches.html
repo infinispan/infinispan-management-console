@@ -28,7 +28,7 @@
            cacheTraitFilter: cachesCtrl.traitCheckboxes | cacheTypeFilter: cachesCtrl.typeCheckboxes | cacheStatusFilter: cachesCtrl.statusCheckboxes)"
          on-finish-render>
       <a
-        ui-sref="cacheStatus({groupName:currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: cache.name})"
+        ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: cache.name, cacheType:cache.type})"
         title="View Cache Details">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">

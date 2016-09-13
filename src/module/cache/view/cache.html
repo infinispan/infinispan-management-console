@@ -5,7 +5,7 @@
 
       <ol class="breadcrumb">
         <li>
-          <a ui-sref="clustersView">Cache containers</a>
+          <a ui-sref="containers">Cache containers</a>
         </li>
         <li>
           <a ui-sref="container({profileName:ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
@@ -16,7 +16,7 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="configureCacheButton" ui-sref="editCache({groupName: currentCluster.getServerGroupName(), clusterName: currentCluster.name, cacheName: currentCache.name})">
+        <button class="btn btn-default" type="button" id="configureCacheButton" ui-sref="view-cache-config">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"

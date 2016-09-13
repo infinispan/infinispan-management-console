@@ -5,7 +5,7 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {Cache} from "./Cache";
 import {ICacheConfiguration} from "./ICacheConfiguration";
-import {isNullOrUndefined, convertCacheAttributeIntoFieldName} from "../../common/utils/Utils";
+import {isNullOrUndefined} from "../../common/utils/Utils";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {JGroupsService} from "../jgroups/JGroupsService";
@@ -65,16 +65,6 @@ export class CacheService {
   }
 
   getCache(name: string, type: string, container: string, profile?: string): ng.IPromise<ICache> {
-    let typeKey: string = convertCacheAttributeIntoFieldName(type);
-    let deferred: ng.IDeferred<ICache> = this.$q.defer<ICache>();
-    let request: IDmrRequest = {
-      address: this.generateAddress(container, profile).concat(typeKey, type)
-    };
-    this.dmrService.readResource(request).then((response) => deferred.resolve(new Cache(name, type, response.configuration)));
-    return deferred.promise;
-  }
-
-  getCacheUsingType(name: string, type: string, container: string, profile?: string): ng.IPromise<ICache> {
     let deferred: ng.IDeferred<ICache> = this.$q.defer<ICache>();
     let request: IDmrRequest = {
       address: this.generateAddress(container, profile).concat(type, name)
@@ -94,8 +84,7 @@ export class CacheService {
 
   getCacheStats(container: ICacheContainer, cache: ICache): ng.IPromise<any> {
     let firstServer: IServerAddress = container.serverGroup.members[0];
-    let address: string [] = [].concat("host", firstServer.host, "server", firstServer.name, "subsystem",
-      "datagrid-infinispan", "cache-container", container.name, cache.type, cache.name);
+    let address: string [] = this.generateHostServerAddress(firstServer, container, cache);
     let request: IDmrRequest = {
       address: address,
       "include-runtime": true,
@@ -179,29 +168,6 @@ export class CacheService {
     });
   }
 
-  private getAllCachesInContainerShallow(container: string, profile?: string): ng.IPromise<ICache[]> {
-    let request: IDmrRequest = {
-      address: this.generateAddress(container, profile),
-      recursive: true,
-      "recursive-depth": 1
-    };
-
-    let caches: ICache[] = [];
-    return this.dmrService.readResource(request).then(response => {
-      for (let cacheType of CACHE_TYPES) {
-        if (isNullOrUndefined(response[cacheType])) {
-          continue; // Do nothing as no caches of this type exist
-        }
-
-        for (let cacheName of Object.keys(response[cacheType])) {
-          let cache: any = response[cacheType][cacheName];
-          caches.push(new Cache(cacheName, cacheType, cache.configuration));
-        }
-      }
-      return caches;
-    });
-  }
-
   private executeCacheOp(container: string, profile: string, cache: ICache, cacheOp: string): ng.IPromise<any> {
     return this.dmrService.executePost({
       operation: cacheOp,
@@ -212,6 +178,12 @@ export class CacheService {
   private generateAddress(container: string, profile?: string): string[] {
     let address: string[] = this.launchType.isStandaloneMode() ? [] : [].concat("profile", profile);
     return address.concat("subsystem", "datagrid-infinispan", "cache-container", container);
+  }
+
+  private generateHostServerAddress(server: IServerAddress, container: ICacheContainer, cache: ICache): string[] {
+    let address: string [] = [].concat("host", server.host, "server", server.name,
+      "subsystem", "datagrid-infinispan", "cache-container", container.name, cache.type, cache.name);
+    return address;
   }
 }
 

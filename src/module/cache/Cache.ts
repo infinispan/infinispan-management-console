@@ -26,7 +26,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }],
       cache: ["$stateParams", "cacheService",
         ($stateParams, cacheService: CacheService) => {
-          return cacheService.getCacheUsingType($stateParams.cacheName, $stateParams.cacheType, $stateParams.containerName, $stateParams.profileName);
+          return cacheService.getCache($stateParams.cacheName, $stateParams.cacheType, $stateParams.containerName, $stateParams.profileName);
         }],
       stats: ["$stateParams", "container", "cache", "cacheService",
         ($stateParams, container: ICacheContainer, cache: ICache, cacheService: CacheService) => {
@@ -52,7 +52,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }],
       cache: ["$stateParams", "cacheService",
         ($stateParams, cacheService: CacheService) => {
-          return cacheService.getCacheUsingType("default", "distributed-cache", $stateParams.containerName, $stateParams.profileName);
+          return cacheService.getCache("default", "distributed-cache", $stateParams.containerName, $stateParams.profileName);
         }],
       allCacheStats: ["cacheService", "container", "cache",
         (cacheService: CacheService, container: ICacheContainer, cache:ICache) => {

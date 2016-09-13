@@ -68,9 +68,9 @@
   </div>
 
   <!-- User feedback reporting -->
-  <div class="row" ng-if="errorExecuting || successExecuteOperation ">
+  <div class="row" ng-if="ctrl.errorExecuting || ctrl.successExecuteOperation">
     <div class="col-sm-12 col-md-12">
-      <div class="alert alert-success alert-dismissable" ng-if="successExecuteOperation">
+      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successExecuteOperation">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
@@ -78,12 +78,12 @@
         <strong>Success!</strong> The operation has been successfully executed.
       </div>
 
-      <div class="alert alert-danger alert-dismissable" ng-if="errorExecuting">
+      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
         <span class="pficon  pficon-error-circle-o"></span>
-        <strong>Error</strong> There has been an error executing the operation: {{errorDescription}}
+        <strong>Error</strong> There has been an error executing the operation: {{ctrl.errorDescription}}
       </div>
     </div>
   </div>

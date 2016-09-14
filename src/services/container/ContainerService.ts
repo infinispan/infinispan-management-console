@@ -9,9 +9,9 @@ import {JGroupsService} from "../jgroups/JGroupsService";
 import {DomainService} from "../domain/DomainService";
 import {IServerAddress} from "../server/IServerAddress";
 import {IServerGroup} from "../server-group/IServerGroup";
-import IQService = angular.IQService;
 import {ServerService} from "../server/ServerService";
 import {CacheService} from "../cache/CacheService";
+import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -63,7 +63,7 @@ export class ContainerService {
       })
       .then((endpoints) => {
         container.endpoints = endpoints;
-        return this.cacheService.getAllCachesInContainer(container.name, container.profile);
+        return this.cacheService.getAllCachesInContainer(container);
       })
       .then((caches) => {
         container.numberOfCaches = caches.length;

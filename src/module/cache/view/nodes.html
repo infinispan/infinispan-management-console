@@ -24,7 +24,9 @@
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a role="menuitem" tabindex="-1" ui-sref="view-cache-config">View configuration</a>
+            <a role="menuitem" tabindex="-1"
+            ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})"
+            >View configuration</a>
           </li>
         </ul>
       </div>

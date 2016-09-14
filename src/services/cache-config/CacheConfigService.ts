@@ -2,14 +2,18 @@ import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
-import {ICacheConfiguration} from "./ICacheConfiguration";
 import {ITemplate} from "../container-config/ITemplate";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {
-  isNotNullOrUndefined, deepGet, isNullOrUndefined, isObject, isString,
-  isJsonString, deepValue
+  isNotNullOrUndefined,
+  deepGet,
+  isNullOrUndefined,
+  isObject,
+  isJsonString,
+  deepValue
 } from "../../common/utils/Utils";
 import {CompositeOpBuilder, createWriteAttrReq, createRemoveReq} from "../dmr/CompositeOpBuilder";
+import {deepMergeTemplates} from "../../common/configuration/ConfigUtil";
 
 const module: ng.IModule = App.module("managementConsole.services.cache-config", []);
 
@@ -23,38 +27,53 @@ export class CacheConfigService {
               private launchType: LaunchTypeService) {
   }
 
-  createTemplate(container: ICacheContainer, templateType: string, templateName: string, config: any): ng.IPromise<void> {
-    let address: string[] = this.getConfigAddress(container.name, container.profile)
-      .concat(templateType + "-configuration", templateName);
-    return this.createConfiguration(address, config, true);
+  createCacheConfiguration(container: ICacheContainer, type: string, name: string, config: any): ng.IPromise<any> {
+    return this.createConfiguration(container, type, name, config, false);
   }
 
-  updateTemplate(container: ICacheContainer, templateType: string, templateName: string, config: any): ng.IPromise<void> {
+  createTemplate(container: ICacheContainer, type: string, name: string, config: any): ng.IPromise<void> {
+    return this.createConfiguration(container, type, name, config, true);
+  }
+
+  updateCacheConfiguration(container: ICacheContainer, type: string, name: string, config: any): ng.IPromise<void> {
     let address: string[] = this.getConfigAddress(container.name, container.profile)
-      .concat(templateType + "-configuration", templateName);
+      .concat(type + "-configuration", name);
 
     return this.updateConfiguration(address, config);
   }
 
-  getTemplate(container: ICacheContainer, templateType: string, templateName: string): ng.IPromise<any> {
+  getTemplateShallow(container: ICacheContainer, type: string, name: string): ng.IPromise<any> {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.dmrService.readResource({
-      address: this.getConfigAddress(container.name, container.profile).concat(templateType + "-configuration", templateName),
+      address: this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name),
       recursive: true
     }).then(response => {
-      response.type = templateType;
-      response["template-name"] = templateName;
+      response.type = type;
+      response["template-name"] = name;
       deferred.resolve(response);
     }, error => deferred.reject(error));
 
     return deferred.promise;
   }
 
-  getTemplateMeta(container: ICacheContainer, templateType: string): ng.IPromise<any> {
-    templateType = templateType + "-configuration";
+  getTemplate(container: ICacheContainer, type: string, name: string): ng.IPromise<any> {
+    let deferred: ng.IDeferred<any> = this.$q.defer();
+    this.getAllTemplatesInHierarchy(container, type, name)
+      .then((templates: any[]) => {
+        let template: any = templates.reduce((prevTemp, currentTemp) => deepMergeTemplates(prevTemp, currentTemp));
+        template.type = type;
+        template["template-name"] = name;
+        deferred.resolve(template);
+      });
+
+    return deferred.promise;
+  }
+
+  getConfigurationMeta(container: ICacheContainer, type: string): ng.IPromise<any> {
+    type = type + "-configuration";
     let deferred: ng.IDeferred<any> = this.$q.defer();
     let address: string[] = this.getConfigAddress(container.name, container.profile)
-      .concat(templateType, this.getChildKey(templateType));
+      .concat(type, this.getChildKey(type));
 
     this.dmrService.readResourceDescription({
       address: address,
@@ -69,6 +88,18 @@ export class CacheConfigService {
     return deferred.promise;
   }
 
+  getAllContainerTemplatesShallow(container: ICacheContainer): ng.IPromise<ITemplate[]> {
+    let deferred: ng.IDeferred<ITemplate[]> = this.$q.defer<ITemplate[]>();
+    let request: IDmrRequest = <IDmrRequest>{
+      address: this.getConfigAddress(container.name, container.profile),
+      "recursive-depth": 1
+    };
+    this.dmrService.readResource(request).then(
+      response => deferred.resolve(this.extractITemplatesFromConfigurations(response)),
+      error => deferred.reject(error));
+    return deferred.promise;
+  }
+
   getAllContainerTemplates(container: ICacheContainer): ng.IPromise<ITemplate[]> {
     let deferred: ng.IDeferred<ITemplate[]> = this.$q.defer<ITemplate[]>();
     let request: IDmrRequest = <IDmrRequest>{
@@ -76,26 +107,52 @@ export class CacheConfigService {
       "recursive-depth": 1
     };
 
-    this.dmrService.readResource(request).then(
-      response => deferred.resolve(this.extractTemplatesFromConfigurations(response)),
-      error => deferred.reject(error));
+    this.dmrService.readResource(request).then(response => {
+      let templatePromises: ng.IPromise<ITemplate>[] = [];
+      angular.forEach(response, (templates, templateType) => {
+        angular.forEach(templates, (template, templateName) => {
+          // Ignore none template configurations
+          if (isNotNullOrUndefined(template.template) && !template.template) {
+            return;
+          }
+          // If this is a parent template, then just return the basic information
+          if (isNullOrUndefined(template.configuration)) {
+            templatePromises.push(this.$q.when(this.createITemplate(templateName, templateType, template)));
+          } else {
+            // Otherwise we need to follow the template hierarchy to retrieve parent templates
+            templatePromises.push(this.getITemplate(container, templateType.replace("-configuration", ""), templateName));
+          }
+        });
+      });
+      this.$q.all(templatePromises).then((allTemplates: ITemplate[]) => deferred.resolve(allTemplates));
+
+    }, error => deferred.reject(error));
     return deferred.promise;
   }
 
-  removeContainerTemplate(container: ICacheContainer, template: ITemplate): ng.IPromise<void> {
-    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(template.type, template.name);
+  removeConfiguration(container: ICacheContainer, type: string, name: string): ng.IPromise<void> {
+    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type, name);
     return this.dmrService.executePost({
       address: address,
       operation: "remove"
     });
   }
 
-  getCacheConfiguration(name: string, type: string, container: string, profile?: string): ng.IPromise<ICacheConfiguration> {
-    let request: IDmrRequest = {
-      address: this.getConfigAddress(container, profile).concat(type + "-configuration", name),
-      recursive: true
+  private createITemplate(name: string, type: string, template: any): ITemplate {
+    return <ITemplate>{
+      name: name,
+      mode: template.mode,
+      type: type.replace("-configuration", ""),
+      traits: this.extractTraitsFromTemplate(template)
     };
-    return this.dmrService.readResource(request);
+  }
+
+  private getITemplate(container: ICacheContainer, templateType: string, templateName: string): ng.IPromise<ITemplate> {
+    let deferred: ng.IDeferred<ITemplate> = this.$q.defer<ITemplate>();
+    this.getTemplate(container, templateType, templateName)
+      .then(template => deferred.resolve(this.createITemplate(templateName, templateType, template)),
+        error => deferred.reject(error));
+    return deferred.promise;
   }
 
   private getContainerAddress(container: string, profile?: string): string[] {
@@ -135,6 +192,34 @@ export class CacheConfigService {
     };
   }
 
+  private getAllTemplatesInHierarchy(container: ICacheContainer, templateType: string, templateName: string,
+                                     allTemplates: any[] = [], deferred: ng.IDeferred<any[]> = this.$q.defer()): ng.IPromise<any[]> {
+    this.getTemplateWithoutParent(container, templateType, templateName)
+      .then(response => {
+        allTemplates.unshift(response);
+        if (isNullOrUndefined(response.configuration)) {
+          deferred.resolve(allTemplates);
+        } else {
+          return this.getAllTemplatesInHierarchy(container, templateType, response.configuration, allTemplates, deferred);
+        }
+      }, error => deferred.reject(error));
+    return deferred.promise;
+  }
+
+  private getTemplateWithoutParent(container: ICacheContainer, templateType: string, templateName: string): ng.IPromise<any> {
+    let deferred: ng.IDeferred<any> = this.$q.defer();
+    this.dmrService.readResource({
+      address: this.getConfigAddress(container.name, container.profile).concat(templateType + "-configuration", templateName),
+      recursive: true
+    }).then(response => {
+      response.type = templateType;
+      response["template-name"] = templateName;
+      deferred.resolve(response);
+    }, error => deferred.reject(error));
+
+    return deferred.promise;
+  }
+
   private modifyAuthorizationDmr(meta: any): void {
     let authorization: any = deepGet(meta, "children.security.model-description.*.children.authorization.model-description.*.attributes");
     authorization.enabled = {
@@ -154,16 +239,15 @@ export class CacheConfigService {
     };
   }
 
-  private extractTemplatesFromConfigurations(config: any): ITemplate[] {
+  private extractITemplatesFromConfigurations(config: any): ITemplate[] {
     let templateArray: ITemplate[] = [];
     angular.forEach(config, (templates, templateType) => {
       angular.forEach(templates, (template, templateName) => {
-        templateArray.push({
-          name: templateName,
-          mode: template.mode,
-          type: templateType.replace("-configuration", ""),
-          traits: this.extractTraitsFromTemplate(template)
-        });
+        // Ignore none template configurations
+        if (isNotNullOrUndefined(template.template) && !template.template) {
+          return;
+        }
+        templateArray.push(this.createITemplate(templateName, templateType, template));
       });
     });
     return templateArray;
@@ -194,12 +278,14 @@ export class CacheConfigService {
     return traits;
   }
 
-  private createConfiguration(address: string[], config: any, template: boolean): ng.IPromise<void> {
-    config.template = template;
+  private createConfiguration(container: ICacheContainer, type: string, name: string, config: any, template: boolean): ng.IPromise<void> {
+    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name);
     let builder: CompositeOpBuilder = new CompositeOpBuilder();
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    config.template = template;
 
-    let createNodeRequest: IDmrRequest = this.createAddOperation(address, config, ["name", "type", "template-name"]);
+    let createNodeRequest: IDmrRequest = this.createAddOperation(address, config, ["name", "type", "template-name", "is-new-node"]);
+
     this.dmrService.executePost(createNodeRequest)
       .then(() => {
         this.createHelper(builder, address.concat("locking", "LOCKING"), config.locking);
@@ -320,8 +406,10 @@ export class CacheConfigService {
   }
 
   private updateCacheLoader(builder: CompositeOpBuilder, address: string[], config: any): void {
-    if (isNullOrUndefined(config.loader)) {
-      return;
+    let loader: any = deepGet(config, "loader.LOADER");
+    let loaderIsNewAndEmpty: boolean = isNullOrUndefined(loader) || (loader["is-new-node"] && Object.keys(loader).length < 2);
+    if (loaderIsNewAndEmpty) {
+      return; // Do nothing, as there is no loader values
     }
 
     let loaderAddress: string[] = address.concat("loader", "LOADER");
@@ -422,18 +510,10 @@ export class CacheConfigService {
           return;
         }
 
-        if (isString(value)) { // handle JSON described objects
-          if ((value.indexOf("{") > -1 && value.indexOf("}") > -1) ||
-            (value.indexOf("[") > -1 && value.indexOf("]") > -1)) {
-            try {
-              op[key] = JSON.parse(value);
-            } catch (e) {
-              console.log("Invalid JSON value " + value + " for field " + key);
-            }
-          } else {
-            op[key] = value;
-          }
+        if (isJsonString(value)) { // handle JSON described objects
+          value = this.parseJson(value, key);
         }
+        op[key] = value;
       });
     }
     // Remove excluded attributes

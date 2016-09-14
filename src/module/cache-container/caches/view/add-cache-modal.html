@@ -1,0 +1,61 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel" translate>CREATE_CACHE</h4>
+    </div>
+    <div class="modal-body">
+
+        <h4><b>Step 1:</b> <span translate>PLEASE_ADD_REQUIRED_CACHE_PROPS</span></h4>
+        <br>
+
+        <form class="form-horizontal" name="templateForm">
+            <div class="form-group">
+                <label class="col-md-4 control-label">* <span translate>CACHE_NAME</span></label>
+
+                <div class="col-md-6">
+                    <input type="text" class="form-control" ng-model="ctrl.newCacheName" required>
+                </div>
+                <div class="col-md-2 pull-left" style="padding-left: 0">
+                    <i class="fa fa-info-circle ng-scope" uib-tooltip="The name of the cache to be created" tooltip-trigger=""
+                       tooltip-animation="true" tooltip-placement="top"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">* <span translate>BASE_CONFIGURATION</span></label>
+
+                <div class="col-md-6">
+                    <select ng-model="ctrl.baseTemplate" class="form-control"
+                            ng-options="template as template.name for template in ctrl.templates"/>
+                </div>
+                <div class="col-md-2 pull-left" style="padding-left: 0">
+                    <i class="fa fa-info-circle ng-scope" uib-tooltip="Base configuration template" tooltip-trigger=""
+                       tooltip-animation="true"
+                       tooltip-placement="top"></i>
+                </div>
+            </div>
+
+            <div class="form-group" ng-if="ctrl.isBaseTemplateSelected()">
+                <label class="col-md-4 control-label"><span translate>Edit Base Configuration</span></label>
+
+                <div class="col-md-6">
+                    <input type="checkbox" ng-model="ctrl.editConfig"/>
+                </div>
+                <div class="col-md-2 pull-left" style="padding-left: 0">
+                    <i class="fa fa-info-circle ng-scope" uib-tooltip="If selected, you will be forwarded to a separate
+                    page that allows this cache's configuration to be modified before this cache is created" tooltip-trigger=""
+                       tooltip-animation="true" tooltip-placement="top"></i>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="cancelButton" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+        <button id="configureTemplateButton" type="button" class="btn btn-primary" ng-click="ctrl.createCache();$close()"
+                ng-disabled="!templateForm.$valid">
+                <span ng-if="ctrl.displayNextButton()" translate>NEXT</span>
+                <span ng-if="!ctrl.displayNextButton()" translate>CREATE_CACHE</span>
+        </button>
+    </div>
+</div>

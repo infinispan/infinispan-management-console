@@ -42,7 +42,7 @@ export class TemplatesCtrl {
     let message: string = "Remove template '" + template.name + "'?";
     openConfirmationModal(this.$uibModal, message, "pficon pficon-delete")
       .result
-      .then(() => this.cacheConfigService.removeContainerTemplate(this.container, template))
+      .then(() => this.cacheConfigService.removeConfiguration(this.container, template.type, template.name))
       .then(() => this.templates.splice(templateIndex, 1));
   }
 }

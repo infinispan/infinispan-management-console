@@ -13,6 +13,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
 
   profile: string;
   containerName: string;
+  readOnlyFields: string[];
 
   private typeChangeCancelled: boolean = false;
 
@@ -27,6 +28,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
     super();
     this.profile = container.profile;
     this.containerName = container.name;
+    this.readOnlyFields = this.isEditMode() ? ["type", "template-name"] : ["template-name"];
     this.$scope.$watch("ctrl.template.type", (newType: string, oldType: string) => {
       if (newType !== oldType) {
         if (this.typeChangeCancelled) {
@@ -60,7 +62,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
   }
 
   updateTemplate(): void {
-    this.cacheConfigService.updateTemplate(this.container, this.template.type, this.template["template-name"], this.template)
+    this.cacheConfigService.updateCacheConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
       .then(() => {
           if (this.isRestartRequired()) {
             openRestartModal(this.$uibModal).result.then(() => this.domainService.restartAllServers());

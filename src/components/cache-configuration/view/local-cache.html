@@ -4,7 +4,7 @@
             <configuration-section fields="[{name: 'Main', fields: ['type', 'template-name']},
                                       {name: 'Monitoring', fields: ['statistics', 'jndi-name']}]" data="$ctrl.data"
                                    meta="$ctrl.getMetaForResource('general')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   read-only-fields="$ctrl.readOnlyFields" config-callbacks="$ctrl.configCallbacks"/>
         </uib-tab>
 
         <uib-tab heading="Locking">

@@ -14,6 +14,7 @@ export class CacheConfiguration {
       meta: "=",
       initDefaults: "=",
       readOnly: "=",
+      readOnlyFields: "=",
       configCallbacks: "=",
       editMode: "="
     };

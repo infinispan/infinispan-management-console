@@ -18,7 +18,8 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="configureCacheButton" ui-sref="view-cache-config">
+        <button class="btn btn-default" type="button" id="configureCacheButton"
+        ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"

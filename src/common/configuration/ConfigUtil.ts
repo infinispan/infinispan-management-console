@@ -1,4 +1,4 @@
-import {isNotNullOrUndefined, deepGet} from "../utils/Utils";
+import {isNotNullOrUndefined, deepGet, isNullOrUndefined, isObject} from "../utils/Utils";
 import {ISPNException} from "../utils/ISPNException";
 
 export const RESOURCE_DESCRIPTION_MAP: Object = {
@@ -107,4 +107,26 @@ export function getTypeModelType(field: any): string {
 export function getMetaForResource(meta: any, resource: string): any {
   let resourcePath: string = RESOURCE_DESCRIPTION_MAP[resource];
   return deepGet(meta, resourcePath);
+}
+
+// Create an object that has the combined properties/objects of the
+export function deepMergeTemplates(parent: any, child: any): any {
+  let newObject: any = {};
+  Object.keys(parent).forEach(key => newObject[key] = parent[key]);
+  Object.keys(child).forEach(key => {
+    let parentVal: any = parent[key];
+    let childVal: any = child[key];
+    if (isNullOrUndefined(childVal)) {
+      // if (isNotNullOrUndefined(parentVal) )
+
+      return;
+    }
+
+    if (!isObject(childVal) || isNullOrUndefined(parentVal)) {
+      newObject[key] = childVal;
+    } else {
+      newObject[key] = deepMergeTemplates(parentVal, childVal);
+    }
+  });
+  return newObject;
 }

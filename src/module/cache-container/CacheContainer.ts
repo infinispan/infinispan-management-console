@@ -38,7 +38,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controllerAs: "cachesCtrl",
     resolve: {
       caches: ["container", "cacheService", (container, cacheService) => {
-        return cacheService.getAllCachesInContainer(container.name, container.profile);
+        return cacheService.getAllCachesInContainer(container);
+      }],
+      templates: ["container", "cacheConfigService", (container, cacheConfigService) => {
+        return cacheConfigService.getAllContainerTemplatesShallow(container);
       }]
     }
   });

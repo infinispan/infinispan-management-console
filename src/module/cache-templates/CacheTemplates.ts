@@ -28,10 +28,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
       }],
       template: ["$stateParams", "container", "cacheConfigService", ($stateParams, container, cacheConfigService) => {
-        return cacheConfigService.getTemplate(container, $stateParams.templateType, $stateParams.templateName);
+        return cacheConfigService.getTemplateShallow(container, $stateParams.templateType, $stateParams.templateName);
       }],
       meta: ["$stateParams", "container", "cacheConfigService", ($stateParams, container, cacheConfigService) => {
-        return cacheConfigService.getTemplateMeta(container, $stateParams.templateType);
+        return cacheConfigService.getConfigurationMeta(container, $stateParams.templateType);
       }]
     }
   });
@@ -68,7 +68,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
           return deferred.promise;
         }],
       meta: ["container", "template", "cacheConfigService", (container, template, cacheConfigService) => {
-        return cacheConfigService.getTemplateMeta(container, template.type);
+        return cacheConfigService.getConfigurationMeta(container, template.type);
       }]
     }
   });

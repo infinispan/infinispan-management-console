@@ -8,16 +8,8 @@ export class CacheConfigurationCtrl {
   meta: any;
   initDefaults: boolean;
   readOnly: boolean;
-  configCallbacks: IConfigurationCallback[];
-  editMode: boolean;
-
   readOnlyFields: string[];
-
-  constructor() {
-    if (this.editMode) {
-      this.readOnlyFields = ["type", "template-name"];
-    }
-  }
+  configCallbacks: IConfigurationCallback[];
 
   getTemplateUrl(): string {
     return "components/cache-configuration/view/" + this.cacheType + ".html";

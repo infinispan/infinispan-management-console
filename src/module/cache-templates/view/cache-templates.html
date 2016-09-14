@@ -32,7 +32,8 @@
       <div id="templateConfiguration">
         <cache-configuration cache-type="{{ctrl.template.type}}" data="ctrl.template"
                              meta="ctrl.meta" init-defaults="!ctrl.isEditMode()" read-only="false"
-                             config-callbacks="ctrl.callbackArray" edit-mode="ctrl.isEditMode()"/>
+                             read-only-fields="ctrl.readOnlyFields" config-callbacks="ctrl.callbackArray"
+                             edit-mode="ctrl.isEditMode()"/>
       </div>
 
       <br>

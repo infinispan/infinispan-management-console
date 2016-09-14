@@ -5,7 +5,6 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {Cache} from "./Cache";
 import {CacheConfigService, CACHE_TYPES} from "../cache-config/CacheConfigService";
-import {ITemplate} from "../container-config/ITemplate";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {JGroupsService} from "../jgroups/JGroupsService";
@@ -24,10 +23,10 @@ export class CacheService {
               private cacheConfigService: CacheConfigService) {
   }
 
-  getAllCachesInContainer(container: string, profile?: string): ng.IPromise<ICache[]> {
+  getAllCachesInContainer(container: ICacheContainer): ng.IPromise<ICache[]> {
     let deferred: ng.IDeferred<ICache[]> = this.$q.defer<ICache[]>();
     let request: IDmrRequest = {
-      address: this.generateAddress(container, profile),
+      address: this.generateAddress(container.name, container.profile),
       recursive: true,
       "recursive-depth": 1
     };
@@ -50,7 +49,7 @@ export class CacheService {
       .then(caches => {
         // Get config object for all caches
         return this.$q.all(caches.map(cache => {
-          return this.cacheConfigService.getCacheConfiguration(cache.name, cache.type, container, profile);
+          return this.cacheConfigService.getTemplate(container, cache.type, cache.configName);
         }));
       })
       .then(configurations => {
@@ -76,14 +75,26 @@ export class CacheService {
     return deferred.promise;
   }
 
-  createCacheFromTemplate(container: string, name: string, template: ITemplate): ng.IPromise<void> {
-    // TODO
-    return null;
+  getCacheTemplate(container: ICacheContainer, type: string, name: string): ng.IPromise<any> {
+    let deferred: ng.IDeferred<any> = this.$q.defer();
+    this.getCache(name, type, container.name, container.profile)
+      .then(cache => this.cacheConfigService.getTemplate(container, type, cache.configName))
+      .then(template => deferred.resolve(template));
+    return deferred.promise;
   }
 
-  createCache(container: string, name: string): ng.IPromise<void> {
-    // TODO
-    return null;
+  createCacheFromConfiguration(container: ICacheContainer, type: string, name: string, configuration: string): ng.IPromise<void> {
+    return this.dmrService.add({
+      address: this.generateAddress(container.name, container.profile).concat(type, name),
+      configuration: configuration
+    });
+  }
+
+  createCacheAndConfiguration(container: ICacheContainer, type: string, name: string, config: any): ng.IPromise<void> {
+    let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    this.cacheConfigService.createCacheConfiguration(container, type, name, config)
+      .then(() => deferred.resolve(this.createCacheFromConfiguration(container, type, name, name)));
+    return deferred.promise;
   }
 
   getCacheStats(container: ICacheContainer, cache: ICache): ng.IPromise<any> {

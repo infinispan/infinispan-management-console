@@ -35,7 +35,7 @@ export class TasksCtrl {
       resolve: {
         container: (): ICacheContainer => this.container,
         availableTasks: (): ng.IPromise<ITaskDefinition[]> => this.containerTasksSevice.getTaskDefinitions(this.container),
-        caches: (): ng.IPromise<ICache[]> => this.cacheService.getAllCachesInContainer(this.container.name, this.container.profile),
+        caches: (): ng.IPromise<ICache[]> => this.cacheService.getAllCachesInContainer(this.container),
         servers: (): IServerAddress[] => this.container.serverGroup.members
       }
     });

@@ -3,6 +3,7 @@ import {IDmrRequest} from "./IDmrRequest";
 import {AuthenticationService} from "../authentication/AuthenticationService";
 import {ICredentials} from "../authentication/ICredentials";
 import {IDmrCompositeReq} from "./IDmrCompositeReq";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
@@ -11,6 +12,7 @@ export class DmrService {
   static $inject: string[] = ["$http", "$cacheFactory", "$q", "authService", "$location"];
 
   url: string;
+  urlUpload: string;
 
   constructor(private $http: ng.IHttpService,
               private $cacheFactory: ng.ICacheFactoryService,
@@ -66,22 +68,55 @@ export class DmrService {
   }
 
   executePost(request: IDmrRequest | IDmrCompositeReq, noTimeout?: boolean): ng.IPromise<any> {
+    return this.executePostHelper(JSON.stringify(request), false, noTimeout);
+  }
+
+  executeFileUpload(request: IDmrRequest | IDmrCompositeReq, file: File, noTimeout?: boolean): ng.IPromise<any> {
+
+    let fd: FormData = new FormData();
+
+    // First we append the file if we have it
+    if (isNotNullOrUndefined(file)) {
+      fd.append("file", file);
+    }
+
+    // Second, we append the DMR request
+    let blob: Blob = new Blob([JSON.stringify(request)], {type: "application/json"});
+    fd.append("operation", blob);
+
+    return this.executePostHelper(fd, true, noTimeout);
+  }
+
+  clearGetCache(): void {
+    this.$cacheFactory.get("$http").removeAll();
+  }
+
+  private executePostHelper(data: any, upload: boolean, noTimeout?: boolean): ng.IPromise<any> {
+    if (upload) {
+      return this.executePostUpload(data, noTimeout);
+    } else {
+      return this.executeRegularPost(data, noTimeout);
+    }
+  }
+
+  private executePostUpload(data: any, upload: boolean, noTimeout?: boolean): ng.IPromise<any> {
+    // see https://uncorkedstudios.com/blog/multipartformdata-file-upload-with-angularjs
     let config: ng.IRequestShortcutConfig = {
       withCredentials: true,
+      transformRequest: angular.identity,
       headers: {
-        "Accept": "application/json",
-        "Content-type": "application/json"
+        "Content-Type": undefined,
+        "X-Management-Client-Name": "HAL",
       }
     };
 
     if (!noTimeout) {
       config.timeout = 2000;
     }
-
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-
-    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials()) : this.url;
-    this.$http.post(this.url, JSON.stringify(request), config)
+    this.urlUpload = this.urlUpload === undefined ? this.generateBaseUrl(this.authService.getCredentials(), true) : this.urlUpload;
+    // And we finally post it
+    this.$http.post(this.urlUpload, data, config)
       .then(
         (success: any) => deferred.resolve(success.data.result),
         (failure: any) => {
@@ -92,8 +127,31 @@ export class DmrService {
     return deferred.promise;
   }
 
-  clearGetCache(): void {
-    this.$cacheFactory.get("$http").removeAll();
+  private executeRegularPost(data: any, noTimeout?: boolean): ng.IPromise<any> {
+    let config: ng.IRequestShortcutConfig = {
+      withCredentials: true,
+      headers: {
+        "Accept": "application/json",
+        "Content-type": "application/json",
+        "X-Management-Client-Name": "HAL"
+      }
+    };
+
+    if (!noTimeout) {
+      config.timeout = 2000;
+    }
+    let deferred: ng.IDeferred<any> = this.$q.defer<any>();
+    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials(), false) : this.url;
+    // And we finally post it
+    this.$http.post(this.url, data, config)
+      .then(
+        (success: any) => deferred.resolve(success.data.result),
+        (failure: any) => {
+          let msg: string = this.processDmrFailure(failure);
+          console.log(msg);
+          deferred.reject(msg);
+        });
+    return deferred.promise;
   }
 
   private executeGet(request: IDmrRequest): ng.IPromise<any> {
@@ -121,9 +179,14 @@ export class DmrService {
     return deferred.promise;
   }
 
-  private generateBaseUrl(c: ICredentials): string {
+  private generateBaseUrl(c: ICredentials, upload?: boolean): string {
     let l: ng.ILocationService = this.$location;
-    return `${l.protocol()}://${c.username}:${c.password}@${l.host()}:${l.port()}/management`;
+    let base: string = `${l.protocol()}://${c.username}:${c.password}@${l.host()}:${l.port()}/`;
+    if (upload) {
+      return base + "management-upload";
+    } else {
+      return base + "management";
+    }
   }
 
   private generateGetUrl(baseUrl: string, request: IDmrRequest): string {

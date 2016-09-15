@@ -31,8 +31,10 @@ import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
+import {FileModelDirective} from "./components/directives/FileModelDirective";
 
 const App: ng.IAngularStatic = angular;
+
 const module: ng.IModule = angular.module("managementConsole", [
   "ui.router",
   "ui.bootstrap",
@@ -47,6 +49,8 @@ module.config(($translateProvider: ITranslateProvider) => {
   });
   $translateProvider.preferredLanguage("enUS");
 });
+
+module.directive("fileModel", FileModelDirective.factory());
 
 // @ngInject
 module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {

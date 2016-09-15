@@ -5,6 +5,9 @@ import {SchemaConfigCtrl} from "./schemas/SchemaConfigCtrl";
 import {TransportConfigCtrl} from "./transport/TransportConfigCtrl";
 import {ThreadPoolsCtrl} from "./thread-pools/ThreadPoolsCtrl";
 import {TemplatesCtrl} from "./templates/TemplatesCtrl";
+import {ICacheContainer} from "../../../services/container/ICacheContainer";
+import {DeploymentsCtrl} from "./deployments/DeploymentsCtrl";
+import {ContainerConfigService} from "../../../services/container-config/ContainerConfigService";
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 
@@ -74,6 +77,21 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     resolve: {
       templates: ["container", "cacheConfigService", (container, cacheConfigService) => {
         return cacheConfigService.getAllContainerTemplates(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container-config.deployments", {
+    url: "/deployments",
+    templateUrl: "module/cache-container/config/deployments/view/deploy.html",
+    controller: DeploymentsCtrl,
+    controllerAs: "deploymentsCtrl",
+    resolve: {
+      deployments: ["containerConfigService", (containerConfigService:ContainerConfigService) => {
+        return containerConfigService.getArtifacts();
+      }],
+      deployed: ["container", "containerConfigService", (container:ICacheContainer, containerConfigService:ContainerConfigService) => {
+        return containerConfigService.getDeployedArtifact(container);
       }]
     }
   });

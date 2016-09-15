@@ -56,6 +56,54 @@ export class ContainerConfigService {
     });
   }
 
+  uploadAndDeployArtifact(deployment: File): ng.IPromise<any> {
+    let request: IDmrRequest = <IDmrRequest>{
+      operation: "add",
+      address: ["deployment", deployment.name],
+      "runtime-name": deployment.name,
+      enabled: false,
+      content: [{"input-stream-index": 0}]
+    };
+    return this.dmrService.executeFileUpload(request, deployment);
+  }
+
+  deployArtifact(container: ICacheContainer, deployment: string): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "add",
+      enabled: true,
+      address: ["server-group", container.serverGroup.name, "deployment", deployment]
+    });
+  }
+
+  undeployArtifact(container: ICacheContainer, deployment: string): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "remove",
+      address: ["server-group", container.serverGroup.name, "deployment", deployment]
+    });
+  }
+
+  removeArtifact(container: ICacheContainer, deployment: string): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "remove",
+      address: ["deployment", deployment]
+    });
+  }
+
+  getDeployedArtifact(container: ICacheContainer): ng.IPromise<any> {
+    return this.dmrService.readResource({
+      address: ["server-group", container.serverGroup.name, "deployment", "*"],
+      recursive: true
+    });
+  }
+
+  getArtifacts(): ng.IPromise<any> {
+    return this.dmrService.readChildResources({
+      address: [],
+      "child-type": "deployment",
+      recursive: false
+    });
+  }
+
   getTransportConfig(container: ICacheContainer): ng.IPromise<ITransport> {
     let deferred: ng.IDeferred<ITransport> = this.$q.defer<ITransport>();
     let request: IDmrRequest = <IDmrRequest>{address: this.getContainerAddress(container).concat("transport", "TRANSPORT")};

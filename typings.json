@@ -13,10 +13,14 @@
     "toastr": "github:DefinitelyTyped/DefinitelyTyped/toastr/toastr.d.ts#a36e6ad2f472741b1c22c2af955bf13b7c62e146"
   },
   "globalDependencies": {
+    "angular": "registry:dt/angular#1.5.0+20160909133806",
     "angular-local-storage": "registry:dt/angular-local-storage#0.1.5+20160602154142",
     "angular-translate": "registry:dt/angular-translate#2.4.0+20160729132354",
     "angular-ui-bootstrap": "registry:dt/angular-ui-bootstrap#0.13.3+20160705221453",
+    "angular-ui-router": "registry:dt/angular-ui-router#1.1.5+20160810191828",
     "c3": "registry:dt/c3#0.0.0+20160811144020",
-    "d3": "registry:dt/d3#0.0.0+20160727131401"
+    "d3": "registry:dt/d3#0.0.0+20160727131401",
+    "jquery": "registry:dt/jquery#1.10.0+20160908203239",
+    "toastr": "registry:dt/toastr#2.1.1+20160510010435"
   }
 }

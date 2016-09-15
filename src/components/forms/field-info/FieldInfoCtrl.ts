@@ -3,8 +3,8 @@ import {
   fieldChangeRequiresRestart,
   makeFieldClean,
   makeAllFieldsClean
-} from "common/configuration/ConfigUtil";
-import {deepGet, isNotNullOrUndefined} from "common/utils/Utils";
+} from "../../../common/configuration/ConfigUtil";
+import {deepGet, isNotNullOrUndefined} from "../../../common/utils/Utils";
 
 export class FieldInfoCtrl {
   data: any;

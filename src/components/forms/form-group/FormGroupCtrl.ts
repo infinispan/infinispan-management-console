@@ -1,12 +1,12 @@
 import {
   isNullOrUndefined, isBoolean, isNotNullOrUndefined,
   convertCacheAttributeIntoFieldName
-} from "common/utils/Utils";
+} from "../../../common/utils/Utils";
 import {
   makeFieldClean,
   makeFieldDirty,
   getTypeModelType
-} from "common/configuration/ConfigUtil";
+} from "../../../common/configuration/ConfigUtil";
 
 export class FormGroupCtrl {
 

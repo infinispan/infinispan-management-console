@@ -1,1 +1,1 @@
-module.exports = () => () => require('run-sequence')('build:dist', 'build:docs');
+module.exports = () => () => require('run-sequence')('build:dist');

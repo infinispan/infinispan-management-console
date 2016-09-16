@@ -29,7 +29,6 @@ import {IPage} from "./common/IPage";
 import {IRootScopeService} from "./common/IRootScopeService";
 import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
-import IModalService = angular.ui.bootstrap.IModalService;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
 

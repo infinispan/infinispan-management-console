@@ -1,6 +1,5 @@
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {IStateService} from "angular-ui-router";
-import IModalService = angular.ui.bootstrap.IModalService;
 
 export class NavbarCtrl {
   static $inject: string[] = ["$scope", "$state", "authService"];

@@ -93,26 +93,25 @@ module.config(($provide) => {
 });
 
 // @ngInject
-module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService, $uibModal: IModalService) => {
+module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService) => {
   $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;
   $rootScope.safeApply = (f: Function) => $timeout(() => this.$apply(f));
 });
 
 // @ngInject
-module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService, authService: AuthenticationService) => {
+module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService,
+            authService: AuthenticationService) => {
   $rootScope.$on("$stateChangeStart", (event: IAngularEvent, toState: any, params: any) => {
     if (toState.name === "logout") {
       event.preventDefault();
       if (authService.isLoggedIn()) {
         authService.logout();
       }
-      $state.go("login");
+      $state.go("login", null, {reload: true});
     } else if (toState.name !== "login" && !authService.isLoggedIn()) {
       event.preventDefault();
-      $state.go("login");
-    } else if (toState.name === "login" && authService.isLoggedIn()) {
-      $state.go("containers");
+      $state.go("login", null, {reload: true});
     } else if (toState.redirectTo) {
       event.preventDefault();
       $state.go(toState.redirectTo, params, {location: "replace"});

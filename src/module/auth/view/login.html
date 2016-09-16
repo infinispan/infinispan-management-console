@@ -1,13 +1,5 @@
 <div class="container">
   <form class="form-horizontal" name="loginForm" role="form" ng-submit="ctrl.login()" novalidate>
-    <div class="container-fluid" ng-show="ctrl.authenticated && ctrl.showLoginSpinner">
-      <div class="row-fluid">
-        <div class="centering text-center">
-          <span class="spinner spinner-lg spinner-inline"></span>
-          <p>Loading...</p>
-        </div>
-      </div>
-    </div>
     <div class="row" ng-show="!ctrl.authenticated">
       <div class="col-sm-12">
         <div id="brand">

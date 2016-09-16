@@ -31,30 +31,23 @@ export class AuthenticationService {
   }
 
   isLoggedIn(): boolean {
-    var credentials: ICredentials = this.getCredentials();
+    let credentials: ICredentials = this.getCredentials();
     return isNotNullOrUndefined(credentials.username) && isNotNullOrUndefined(credentials.password);
   }
 
   login(credentials: ICredentials): ng.IPromise<string> {
     this.setCredentials(credentials);
-    var deferred: ng.IDeferred<string> = this.$q.defer();
-
-    var onSuccess: (response: string) => void = (response) => {
-      this.setCredentials(credentials);
-      try {
+    let deferred: ng.IDeferred<string> = this.$q.defer();
+    this.dmrService.readAttribute({address: [], name: "launch-type"})
+      .then(response => {
+        this.setCredentials(credentials);
         this.launchType.set(response);
         this.availability.startApiAccessibleCheck();
         deferred.resolve();
-      } catch (msg) {
-        deferred.reject(msg);
-      }
-    };
-
-    var onFailure: (errorMsg: string) => void = (errorMsg) => {
-      this.logout();
-      deferred.reject(errorMsg);
-    };
-    this.dmrService.readAttribute({address: [], name: "launch-type"}).then(onSuccess, onFailure);
+      }, error => {
+        this.logout();
+        deferred.reject(error);
+      });
     return deferred.promise;
   }
 
@@ -79,10 +72,10 @@ export class AuthenticationService {
   }
 
   private getLocalCredentials(): ICredentials {
-    var credentials: ICredentials = <ICredentials>{};
-    credentials.username = this.localStorageService.get<string>("username");
-    credentials.username = this.localStorageService.get<string>("password");
-    return credentials;
+    return {
+      username: this.localStorageService.get<string>("username"),
+      password: this.localStorageService.get<string>("password")
+    };
   }
 
   private setCredentials(credentials: ICredentials): void {

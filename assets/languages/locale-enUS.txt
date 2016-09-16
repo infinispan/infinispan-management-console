@@ -158,5 +158,6 @@
   "REMOVE_SCRIPT_CONFIRM":"Remove script",
   "YES":"Yes",
   "NEXT":"Next",
-  "CLOSE":"Close"}
-
+  "CLOSE":"Close",
+  "LOADING": "Loading"
+  }

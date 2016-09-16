@@ -25,7 +25,7 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
       },
       open: openBrowser,
       host: 'localhost',
-      browser: 'gDev',
+      browser: 'default',
       notify: false
     });
 

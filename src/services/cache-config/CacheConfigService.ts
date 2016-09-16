@@ -298,6 +298,7 @@ export class CacheConfigService {
         this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
         this.createHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
+        this.updateSecurityAuthorization(config);
         this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
         if (isNotNullOrUndefined(config.security)) {
           this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
@@ -399,9 +400,10 @@ export class CacheConfigService {
   }
 
   private updateSecurityAuthorization(config: any): void {
-    let auth: any = deepValue(config.security, "SECURITY.authorization.AUTHORIZATION");
+    let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
     if (isNotNullOrUndefined(auth) && auth["is-new-node"] && auth.enabled) {
-      config.secuirty.SECURITY["is-new-node"] = true;
+      config.security.SECURITY["is-new-node"] = true;
+      config.security.SECURITY["required-node"] = true;
     }
   }
 

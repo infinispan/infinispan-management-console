@@ -1,5 +1,6 @@
 import {IEndpoint} from "../endpoint/IEndpoint";
 import {IServerGroup} from "../server-group/IServerGroup";
+import {IAuthorization} from "../security/IAuthorization";
 
 export interface ICacheContainer {
   name: string;
@@ -8,6 +9,7 @@ export interface ICacheContainer {
   available: boolean;
   numberOfCaches: number;
   endpoints: IEndpoint[];
+  authorization: IAuthorization;
   "online-sites": string[];
   "offline-sites": string[];
   "mixed-sites": string[];

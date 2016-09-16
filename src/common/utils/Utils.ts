@@ -24,7 +24,7 @@ export function isNumber(object: any): boolean {
 }
 
 export function isObject(object: any): boolean {
-  return object === Object(object);
+  return object === Object(object) && !isArray(object);
 }
 
 export function isJsonString(object: any): boolean {

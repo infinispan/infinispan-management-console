@@ -44,11 +44,12 @@
                                    config-callbacks="$ctrl.configCallbacks"/>
         </uib-tab>
 
-        <!--<uib-tab heading="Security">-->
-            <!--<security  data="$ctrl.data.security.SECURITY.authorization.AUTHORIZATION" cluster="cluster" meta="$ctrl.getMetaForResource('authorization')"-->
-                       <!--init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"-->
-                       <!--config-callbacks="$ctrl.configCallbacks"/>-->
-        <!--</uib-tab>-->
+        <uib-tab heading="Security">
+            <cache-security container="$ctrl.container" data="$ctrl.data.security.SECURITY.authorization.AUTHORIZATION"
+                            meta="$ctrl.getMetaForResource('authorization')"
+                            init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
+                            config-callbacks="$ctrl.configCallbacks"/>
+        </uib-tab>
 
         <uib-tab heading="Partition handling">
             <configuration-section fields="[{name: 'Partition handling', fields: ['enabled']}]" data="$ctrl.data['partition-handling'].PARTITION_HANDLING"

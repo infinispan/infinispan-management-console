@@ -12,13 +12,14 @@ import {IServerGroup} from "../server-group/IServerGroup";
 import {ServerService} from "../server/ServerService";
 import {CacheService} from "../cache/CacheService";
 import IQService = angular.IQService;
+import {SecurityService} from "../security/SecurityService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "domainService", "serverService", "cacheService"];
+    "jGroupsService", "domainService", "serverService", "cacheService", "securityService"];
 
   constructor(private $q: IQService,
               private dmrService: DmrService,
@@ -28,7 +29,8 @@ export class ContainerService {
               private jGroupsService: JGroupsService,
               private domainService: DomainService,
               private serverService: ServerService,
-              private cacheService: CacheService) {
+              private cacheService: CacheService,
+              private securityService: SecurityService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {
@@ -57,19 +59,23 @@ export class ContainerService {
     };
 
     this.serverGroupService.getServerGroupByProfile(profile)
-      .then((serverGroup) => {
+      .then(serverGroup => {
         container.serverGroup = serverGroup;
         return this.endpointService.getAllEndpoints(profile, serverGroup["socket-binding-group"]);
       })
-      .then((endpoints) => {
+      .then(endpoints => {
         container.endpoints = endpoints;
+        return this.securityService.getContainerAuthorization(container);
+      })
+      .then(authorization => {
+        container.authorization = authorization;
         return this.cacheService.getAllCachesInContainer(container);
       })
-      .then((caches) => {
+      .then(caches => {
         container.numberOfCaches = caches.length;
         return this.isContainerAvailable(container.name, container.serverGroup);
       })
-      .then((available) => {
+      .then(available => {
         container.available = available;
         if (!available) {
           deferred.resolve(container);
@@ -77,7 +83,7 @@ export class ContainerService {
         }
         return this.getSiteArrays(container);
       })
-      .then((sites) => {
+      .then(sites => {
         for (let siteType in sites) {
           container[siteType] = sites[siteType];
         }

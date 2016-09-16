@@ -43,11 +43,12 @@
                                    config-callbacks="$ctrl.configCallbacks"/>
         </uib-tab>
 
-        <!--<uib-tab heading="Security">-->
-            <!--<security  data="$ctrl.data.security.SECURITY.authorization.AUTHORIZATION" cluster="cluster" meta="$ctrl.getMetaForResource('authorization')"-->
-                       <!--init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"-->
-                       <!--config-callbacks="$ctrl.configCallbacks"/>-->
-        <!--</uib-tab>-->
+        <uib-tab heading="Security">
+            <cache-security container="$ctrl.container" data="$ctrl.data.security.SECURITY.authorization.AUTHORIZATION"
+                            meta="$ctrl.getMetaForResource('authorization')"
+                            init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
+                            config-callbacks="$ctrl.configCallbacks"/>
+        </uib-tab>
 
         <uib-tab heading="Loader">
         <cache-loaders data="$ctrl.data['loader'].LOADER" meta="$ctrl.getMetaForResource('loader')" init-defaults="$ctrl.initDefaults"

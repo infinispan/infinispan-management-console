@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Security</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-horizontal" ng-if="!$ctrl.isSecurityDefinedForContainer()">
+
+                    <div class="form-group">
+                        <label class="col-md-8 control-label">Security has not been defined globally. You must first define it for this
+                            <a
+                                    ui-sref="container-config.security({profileName: $ctrl.container.profile, containerName: $ctrl.container.name })">cache
+                                container</a> and then here.</label>
+                    </div>
+
+                </div>
+                <div class="form-horizontal" ng-if="$ctrl.isSecurityDefinedForContainer()">
+                    <form-group data="$ctrl.data" field="enabled" meta="$ctrl.meta['enabled']"
+                                previous-value="$ctrl.prevData['enabled']" read-only="$ctrl.readOnly"/>
+                </div>
+                <div class="form-horizontal" ng-if="$ctrl.data.enabled">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Roles</label>
+                        <div class="col-md-4">
+                            <div class="col-md-12" ng-repeat="role in $ctrl.getRoleNames()">
+                                <label>
+                                    <input ng-model="data.roles[role]" ng-click="$ctrl.toggleSelection(role);"
+                                           type="checkbox" value="{{role}}" ng-checked="$ctrl.isRoleSelected(role)"/>
+                                    {{role}}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 pull-left">
+                            <i class="fa fa-info-circle" tooltip="Roles allowed to access"
+                               tooltip-trigger tooltip-animation="true" tooltip-placement="top"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

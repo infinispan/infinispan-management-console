@@ -1,9 +1,11 @@
 import {IConfigurationCallback} from "../../common/configuration/IConfigurationCallback";
 import {getMetaForResource} from "../../common/configuration/ConfigUtil";
+import {ICacheContainer} from "../../services/container/ICacheContainer";
 
 export class CacheConfigurationCtrl {
 
   cacheType: string;
+  container: ICacheContainer;
   data: any;
   meta: any;
   initDefaults: boolean;

@@ -10,13 +10,13 @@ export class CacheConfiguration {
   constructor() {
     this.bindings = {
       cacheType: "@",
+      container: "=",
       data: "=",
       meta: "=",
       initDefaults: "=",
       readOnly: "=",
       readOnlyFields: "=",
-      configCallbacks: "=",
-      editMode: "="
+      configCallbacks: "="
     };
     this.controller = CacheConfigurationCtrl;
     this.template = "<div ng-include='$ctrl.getTemplateUrl()'></div>";

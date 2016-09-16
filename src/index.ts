@@ -13,10 +13,12 @@ import "./services/jgroups/JGroupsService";
 import "./services/launchtype/LaunchTypeService";
 import "./services/profile/ProfileService";
 import "./services/schemas/SchemasService";
+import "./services/security/SecurityService";
 import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
 import "./components/cache-loaders/CacheLoaders";
+import "./components/cache-security/CacheSecurity";
 import "./components/cache-stores/CacheStores";
 import "./components/cache-stores/CacheStoreModal";
 import "./components/cache-configuration/CacheConfiguration";
@@ -51,6 +53,7 @@ App.element(document).ready(() => {
     "managementConsole.server-group",
     "managementConsole.server-groups",
     "managementConsole.components.cache-loaders",
+    "managementConsole.components.cache-security",
     "managementConsole.components.cache-stores",
     "managementConsole.components.cache-stores.modal",
     "managementConsole.components.configuration",
@@ -72,6 +75,7 @@ App.element(document).ready(() => {
     "managementConsole.services.launchtype",
     "managementConsole.services.profile",
     "managementConsole.services.schemas",
+    "managementConsole.services.security",
     "managementConsole.services.server",
     "managementConsole.services.server-group",
     "managementConsole.services.socket-binding"

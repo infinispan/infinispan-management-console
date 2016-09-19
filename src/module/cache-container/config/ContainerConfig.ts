@@ -8,6 +8,7 @@ import {TemplatesCtrl} from "./templates/TemplatesCtrl";
 import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {DeploymentsCtrl} from "./deployments/DeploymentsCtrl";
 import {ContainerConfigService} from "../../../services/container-config/ContainerConfigService";
+import {TasksCtrl} from "./tasks/TasksCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 
@@ -92,6 +93,18 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       }],
       deployed: ["container", "containerConfigService", (container:ICacheContainer, containerConfigService:ContainerConfigService) => {
         return containerConfigService.getDeployedArtifact(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container-config.tasks", {
+    url: "/tasks",
+    templateUrl: "module/cache-container/config/tasks/view/tasks.html",
+    controller: TasksCtrl,
+    controllerAs: "tasksCtrl",
+    resolve: {
+      availableTasks: ["container", "containerConfigService", (container: ICacheContainer, containerConfigService:ContainerConfigService) => {
+        return containerConfigService.loadScriptTasks(container);
       }]
     }
   });

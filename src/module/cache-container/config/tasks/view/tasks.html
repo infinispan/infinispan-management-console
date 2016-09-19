@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+    <br>
+    <table class="datatable table table-striped table-bordered">
+      <thead>
+      <tr>
+        <th colspan="6" class="text-right">
+          <div class="btn-group" role="group">
+            <a role="button" class="btn btn-default" ng-click="tasksCtrl.openCreateScriptModal()"><span
+              class="pficon pficon-add-circle-o"></span> Create new script</a>
+          </div>
+        </th>
+      </tr>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Mode</th>
+        <th width="230" class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Print all tasks -->
+      <tr ng-repeat="task in tasksCtrl.availableTasks">
+        <td>{{task.name}}</td>
+        <td>{{task.type}}</td>
+        <td>{{task.mode==='ONE_NODE' ? "Local" : "Distributed"}}</td>
+        <td class="text-center">
+          <div class="btn-group" ng-if="task.type==='Script'">
+            <button class="btn btn-default" ng-click="tasksCtrl.openEditScriptModal(task)"><i
+              class="pficon pficon-edit"></i>
+              Edit
+            </button>
+          </div>
+          <div class="btn-group" ng-if="task.type==='Script'">
+            <button class="btn btn-default" ng-click="tasksCtrl.openRemoveModal(task)"><i
+              class="pficon pficon-delete"></i> Remove
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+

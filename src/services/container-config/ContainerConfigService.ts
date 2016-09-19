@@ -7,11 +7,14 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {getInstanceFromDmr} from "../../common/utils/Utils";
 import {IDmrRequest} from "../dmr/IDmrRequest";
+import {JGroupsService} from "../jgroups/JGroupsService";
+import {IServerAddress} from "../server/IServerAddress";
+import {ITask} from "../task/ITask";
 
 const module: ng.IModule = App.module("managementConsole.services.container-config", []);
 
 export class ContainerConfigService {
-  static $inject: string[] = ["$q", "dmrService", "launchType"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType"];
 
   private genericThreadPools: string[] = ["async-operations", "listener", "persistence", "remote-command",
     "state-transfer", "transport"];
@@ -19,6 +22,7 @@ export class ContainerConfigService {
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
+              private jGroupsService: JGroupsService,
               private launchType: LaunchTypeService) {
   }
 
@@ -104,6 +108,44 @@ export class ContainerConfigService {
     });
   }
 
+  deployScript(container: ICacheContainer, task: ITask, body: string): ng.IPromise<any> {
+    return this.getCacheContainerDMRAddressForCoordinator(container).then((address: string[]) => {
+      return this.dmrService.executePost({
+        operation: "script-add",
+        address: address,
+        name: task.name,
+        code: body
+      });
+    });
+  }
+
+  removeScript(container: ICacheContainer, script: ITask): ng.IPromise<any> {
+    return this.executeScriptOp(container, "script-remove", script);
+  }
+
+  loadScriptBody(container: ICacheContainer, script: ITask): ng.IPromise<string> {
+    return this.executeScriptOp(container, "script-cat", script);
+  }
+
+  loadScriptTasks(container: ICacheContainer): ng.IPromise<ITask[]> {
+    let deferred: ng.IDeferred<ITask[]> = this.$q.defer<ITask[]>();
+    let tasks:ITask [] = [];
+    this.getCacheContainerDMRAddressForCoordinator(container).then((address: string[]) => {
+      let request: IDmrRequest = {
+        operation: "task-list",
+        address: address
+      };
+      this.dmrService.executePost(request).then((response: any[]) => {
+        for (let r of response) {
+          tasks.push(<ITask>r);
+        }
+      }).finally(() => {
+        deferred.resolve(tasks);
+      });
+    });
+    return deferred.promise;
+  }
+
   getTransportConfig(container: ICacheContainer): ng.IPromise<ITransport> {
     let deferred: ng.IDeferred<ITransport> = this.$q.defer<ITransport>();
     let request: IDmrRequest = <IDmrRequest>{address: this.getContainerAddress(container).concat("transport", "TRANSPORT")};
@@ -134,6 +176,23 @@ export class ContainerConfigService {
   private addThreadPoolToBuilder(address: string[], fields: string[], valueMap: any, builder: CompositeOpBuilder): CompositeOpBuilder {
     fields.forEach(field => builder.add(createWriteAttrReq(address, field, valueMap[field])));
     return builder;
+  }
+
+  private executeScriptOp(container: ICacheContainer, op: string, script: ITask): ng.IPromise<any> {
+    return this.getCacheContainerDMRAddressForCoordinator(container).then((address: string[]) => {
+      let request: IDmrRequest = {
+        operation: op,
+        address: address,
+        name:script.name
+      };
+      return this.dmrService.executePost(request);
+    });
+  }
+
+  private getCacheContainerDMRAddressForCoordinator(container: ICacheContainer): ng.IPromise<string[]> {
+    return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((server: IServerAddress) => {
+      return [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container.name);
+    });
   }
 }
 

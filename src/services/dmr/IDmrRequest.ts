@@ -24,4 +24,5 @@ export interface IDmrRequest {
   "socket-binding-port-offset"?: number;
   value?: string;
   enabled?: boolean;
+  code?: string;
 }

@@ -29,7 +29,7 @@ export class TasksCtrl {
 
   createTaskModal(): void {
     this.$uibModal.open({
-      templateUrl: "module/cache-container/view/tasks-create.html",
+      templateUrl: "module/cache-container/tasks/view/tasks-create.html",
       controller: TaskCreateModalCtrl,
       controllerAs: "modalCtrl",
       resolve: {

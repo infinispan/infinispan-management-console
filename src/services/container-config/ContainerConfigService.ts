@@ -10,6 +10,7 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import {JGroupsService} from "../jgroups/JGroupsService";
 import {IServerAddress} from "../server/IServerAddress";
 import {ITask} from "../task/ITask";
+import {IRole} from "../security/IRole";
 
 const module: ng.IModule = App.module("managementConsole.services.container-config", []);
 
@@ -129,7 +130,7 @@ export class ContainerConfigService {
 
   loadScriptTasks(container: ICacheContainer): ng.IPromise<ITask[]> {
     let deferred: ng.IDeferred<ITask[]> = this.$q.defer<ITask[]>();
-    let tasks:ITask [] = [];
+    let tasks: ITask [] = [];
     this.getCacheContainerDMRAddressForCoordinator(container).then((address: string[]) => {
       let request: IDmrRequest = {
         operation: "task-list",
@@ -144,6 +145,68 @@ export class ContainerConfigService {
       });
     });
     return deferred.promise;
+  }
+
+  getSecurityConfig(container: ICacheContainer): ng.IPromise<any> {
+    let deferred: ng.IDeferred<any> = this.$q.defer<any>();
+    let request: IDmrRequest = <IDmrRequest>{
+      address: this.getContainerAddress(container).concat("security", "SECURITY"),
+      recursive: true
+    };
+    this.dmrService.readResource(request)
+      .then(response => deferred.resolve(response),
+        error => deferred.reject(error));
+    return deferred.promise;
+  }
+
+  addSecurity(container: ICacheContainer): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "add",
+      address: this.getContainerAddress(container).concat("security", "SECURITY")
+    });
+  }
+
+  addAuthorization(container: ICacheContainer): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "add",
+      address: this.getContainerAddress(container).concat("security", "SECURITY", "authorization", "AUTHORIZATION"),
+      "audit-logger": undefined,
+      mapper: "org.infinispan.security.impl.IdentityRoleMapper"
+    });
+  }
+
+  loadRole(container: ICacheContainer, role: IRole): ng.IPromise<IRole> {
+    let deferred: ng.IDeferred<IRole> = this.$q.defer<IRole>();
+    let request: IDmrRequest = {
+      address: this.getSecurityRoleAddress(container, role)
+    };
+    this.dmrService.readResource(request).then((response) => deferred.resolve(<IRole>response));
+    return deferred.promise;
+  }
+
+  addRole(container: ICacheContainer, role: IRole): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "add",
+      name: role.name,
+      permissions: role.permissions,
+      address: this.getSecurityRoleAddress(container, role)
+    });
+  }
+
+  editRole(container: ICacheContainer, role: IRole): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "write-attribute",
+      name: "permissions",
+      value: role.permissions,
+      address: this.getSecurityRoleAddress(container, role)
+    });
+  }
+
+  removeRole(container: ICacheContainer, role: IRole): ng.IPromise<any> {
+    return this.dmrService.executePost({
+      operation: "remove",
+      address: this.getSecurityRoleAddress(container, role)
+    });
   }
 
   getTransportConfig(container: ICacheContainer): ng.IPromise<ITransport> {
@@ -173,6 +236,10 @@ export class ContainerConfigService {
     return containerPath;
   }
 
+  private getSecurityRoleAddress(container: ICacheContainer, role: IRole): string[] {
+    return this.getContainerAddress(container).concat("security", "SECURITY", "authorization", "AUTHORIZATION", "role", role.name);
+  }
+
   private addThreadPoolToBuilder(address: string[], fields: string[], valueMap: any, builder: CompositeOpBuilder): CompositeOpBuilder {
     fields.forEach(field => builder.add(createWriteAttrReq(address, field, valueMap[field])));
     return builder;
@@ -183,7 +250,7 @@ export class ContainerConfigService {
       let request: IDmrRequest = {
         operation: op,
         address: address,
-        name:script.name
+        name: script.name
       };
       return this.dmrService.executePost(request);
     });

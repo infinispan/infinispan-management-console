@@ -9,6 +9,8 @@ import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {DeploymentsCtrl} from "./deployments/DeploymentsCtrl";
 import {ContainerConfigService} from "../../../services/container-config/ContainerConfigService";
 import {TasksCtrl} from "./tasks/TasksCtrl";
+import {SecurityCtrl} from "./security/SecurityCtrl";
+import IQService = angular.IQService;
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 
@@ -105,6 +107,24 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     resolve: {
       availableTasks: ["container", "containerConfigService", (container: ICacheContainer, containerConfigService:ContainerConfigService) => {
         return containerConfigService.loadScriptTasks(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container-config.security", {
+    url: "/security",
+    templateUrl: "module/cache-container/config/security/view/security.html",
+    controller: SecurityCtrl,
+    controllerAs: "securityCtrl",
+    resolve: {
+      securityConfig: ["$q", "container", "containerConfigService", ($q: IQService, container: ICacheContainer, containerConfigService:ContainerConfigService) => {
+        let deferred: ng.IDeferred<any> = $q.defer<any>();
+        containerConfigService.getSecurityConfig(container).then((response:any) => {
+          deferred.resolve(response);
+        }).catch((e) => {
+          deferred.resolve(undefined);
+        });
+        return deferred.promise;
       }]
     }
   });

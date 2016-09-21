@@ -22,7 +22,10 @@ export interface IDmrRequest {
   "site-name"?: string;
   "socket-binding-group"?: string;
   "socket-binding-port-offset"?: number;
-  value?: string;
+  value?: any; // string or array of strings
   enabled?: boolean;
   code?: string;
+  "audit-logger"?: string;
+  permissions?: string[];
+  mapper?: string;
 }

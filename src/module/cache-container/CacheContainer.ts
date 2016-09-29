@@ -7,6 +7,9 @@ import {cacheTypeFilter} from "./caches/filters/CacheTypeFilter";
 import {CachesCtrl} from "./caches/CachesCtrl";
 import {TasksCtrl} from "./tasks/TasksCtrl";
 import {IRedirectState} from "../../common/IRedirectState";
+import {ICacheContainer} from "../../services/container/ICacheContainer";
+import {ContainerService} from "../../services/container/ContainerService";
+import {IStateParamsService} from "angular-ui-router";
 
 const module: ng.IModule = App.module("managementConsole.cache-container", []);
 
@@ -27,7 +30,12 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     resolve: {
       container: ["$stateParams", "containerService", ($stateParams, containerService) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
-      }]
+      }],
+      isRebalancingEnabled: ["$stateParams", "containerService", "container",
+        ($stateParams: IStateParamsService, containerService: ContainerService, container: ICacheContainer) => {
+          return containerService.isRebalancingEnabled(container);
+        }
+      ]
     }
   });
 

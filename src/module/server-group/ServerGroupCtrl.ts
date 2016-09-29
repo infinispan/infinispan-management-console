@@ -15,9 +15,8 @@ import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "serverGroup"];
+    "jGroupsService", "serverGroup", "available"];
 
-  available: boolean = false;
   status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
   serverInetMap: IMap<string> = {};
@@ -30,12 +29,13 @@ export class ServerGroupCtrl {
               private serverGroupService: ServerGroupService,
               private serverService: ServerService,
               private jGroupsService: JGroupsService,
-              public serverGroup: IServerGroup) {
-    this.fetchSGStatus();
+              public serverGroup: IServerGroup,
+              public available: boolean) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
+    this.status = available ? "STARTED" : "DEGRADED";
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -151,13 +151,6 @@ export class ServerGroupCtrl {
 
   private fetchServerStatuses(): void {
     this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => this.serverStatusMap = statusMap);
-  }
-
-  private fetchSGStatus(): void {
-    this.serverGroupService.isGroupAvailable(this.serverGroup).then((result) => {
-      this.available = result;
-      this.status = result ? "STARTED" : "DEGRADED";
-    });
   }
 
   private fetchSGCoordinator(): void {

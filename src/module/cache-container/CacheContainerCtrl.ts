@@ -9,11 +9,10 @@ import IModalService = angular.ui.bootstrap.IModalService;
 
 export class CacheContainerCtrl {
 
-  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "container"];
+  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "container", "isRebalancingEnabled"];
 
   name: string;
   serverGroup: string;
-  isRebalancingEnabled: boolean = false;
   errorExecuting: boolean = false;
   errorDescription: string = "";
   successfulOperation: boolean = false;
@@ -22,10 +21,10 @@ export class CacheContainerCtrl {
               private $uibModal: IModalService,
               private containerService: ContainerService,
               private dmrService: DmrService,
-              public container: ICacheContainer) {
+              public container: ICacheContainer,
+              public isRebalancingEnabled: boolean) {
     this.name = container.name;
     this.serverGroup = container.serverGroup.name;
-    this.getRebalancingEnabled();
   }
 
   refresh(): void {
@@ -77,9 +76,5 @@ export class CacheContainerCtrl {
         this.errorDescription = error;
       });
     });
-  }
-
-  private getRebalancingEnabled(): void {
-    this.containerService.isRebalancingEnabled(this.container).then(enabled => this.isRebalancingEnabled = enabled);
   }
 }

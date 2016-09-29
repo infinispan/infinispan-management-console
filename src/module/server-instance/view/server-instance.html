@@ -8,13 +8,12 @@
         <li><a ui-sref="server-group({serverGroup: ctrl.serverInstance.serverGroup})" ui-sref-opts="{reload:true}">{{ctrl.serverInstance.serverGroup}}</a></li>
         <li class="active"><strong>{{ctrl.serverInstance.address.name}}</strong></li>
       </ol>
-  
+
       <div class="dropdown pull-right" uib-dropdown>
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refreshStats()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu"
-                data-toggle="dropdown" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>

@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" vertilize-container>
   <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
     <br/>
 
@@ -9,7 +9,7 @@
     <div class="col-xs-6 col-sm-4 col-md-2">
       <a data-original-title="Add Cache" data-toggle="modal" ng-click="cachesCtrl.createCache()"
          class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
           <h2 class="card-pf-title">Add Cache
           </h2>
           <div style="height: 50px;" class="card-pf-body">
@@ -25,12 +25,11 @@
     <div ng-show="cachesCtrl.caches.length === 0" translate>THERE_ARE_NO_CACHES_TO_SHOW</div>
     <div class="col-xs-6 col-sm-4 col-md-2"
          ng-repeat="cache in filtered = (cachesCtrl.caches | filter: {name: searchNameQuery} |
-           cacheTraitFilter: cachesCtrl.traitCheckboxes | cacheTypeFilter: cachesCtrl.typeCheckboxes | cacheStatusFilter: cachesCtrl.statusCheckboxes)"
-         on-finish-render>
+           cacheTraitFilter: cachesCtrl.traitCheckboxes | cacheTypeFilter: cachesCtrl.typeCheckboxes | cacheStatusFilter: cachesCtrl.statusCheckboxes)">
       <a
         ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: cache.name, cacheType:cache.type})"
         title="View Cache Details">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
           <h2 class="card-pf-title">
             <span class="pficon pficon-ok"></span>{{cache.name}}
           </h2>

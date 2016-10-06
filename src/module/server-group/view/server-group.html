@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" vertilize-container>
     <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
       <br/>
 
@@ -55,7 +55,7 @@
         <a id="addNode" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
            data-toggle="modal"
            class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
-          <div class="card-pf card-pf-accented card-pf-aggregate-status">
+          <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
             <h2 class="card-pf-title">Add Node
             </h2>
 
@@ -71,12 +71,12 @@
       </div>
       <div class="col-xs-6 col-sm-4 col-md-2"
            ng-repeat="server in filtered = (ctrl.serverGroup.members | serverFilter:ctrl.serverInetMap:searchNameQuery)"
-           ng-show="true" on-finish-render>
+           ng-show="true">
         <a ui-sref="server-instance({
             serverGroupName:ctrl.serverGroup.name,
             host:server.host,
             server:server.name})" title="View Node Details">
-          <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
+          <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
             <h2 class="card-pf-title">
               <span class="pficon" ng-class="ctrl.isServerStopped(server)?'fa fa-power-off':'pficon-ok'"></span>{{server.name}}
             </h2>

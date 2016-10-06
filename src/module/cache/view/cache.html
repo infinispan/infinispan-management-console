@@ -155,13 +155,13 @@
       </div>
     </div>
 
-    <div class="row row-cards-pf" ng-init="preappend = ctrl.cache.isLocal()?'':'clusterwide-'">
+    <div class="row row-cards-pf" ng-init="preappend = ctrl.cache.isLocal()?'':'clusterwide-'" vertilize-container>
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card"
+      <div class="col-xs-6 col-sm-4 col-md-3"
            ng-if="ctrl.stats['sites-offline'].length > 0
                || ctrl.stats['sites-online'].length > 0
                || ctrl.stats['sites-mixed'].length > 0 ">
-        <div class="card-pf card-pf-accented ispn-card">
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Backup sites</h2>
           </div>
@@ -183,8 +183,8 @@
 
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3" >
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Cache content</h2>
           </div>
@@ -229,8 +229,8 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3" >
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Operations performance</h2>
           </div>
@@ -259,8 +259,8 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3" >
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Caching activity</h2>
           </div>
@@ -298,11 +298,11 @@
 
     </div>
 
-    <div class="row row-cards-pf">
+    <div class="row row-cards-pf" vertilize-container>
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3">
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Entries lifecycle</h2>
           </div>
@@ -335,8 +335,8 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3">
+        <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Cache loader</h2>
           </div>
@@ -365,8 +365,8 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" match-height="ispn-card">
-        <div class="card-pf card-pf-accented ispn-card ispn-card">
+      <div class="col-xs-6 col-sm-4 col-md-3">
+        <div class="card-pf card-pf-accented ispn-card ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Locking</h2>
           </div>

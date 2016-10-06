@@ -14,7 +14,6 @@ import "angular-local-storage";
 import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
-import "jquery-match-height";
 import "patternfly";
 import "angular-translate";
 import "angular-translate-loader-static-files";
@@ -32,6 +31,8 @@ import ITranslateProvider = angular.translate.ITranslateProvider;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
 import {FileModelDirective} from "./components/directives/FileModelDirective";
+import {VertilizeContainerDirective} from "./components/directives/VertilizeContainerDirective";
+import {VertilizeDirective} from "./components/directives/VertilizeDirective";
 
 const App: ng.IAngularStatic = angular;
 
@@ -51,6 +52,8 @@ module.config(($translateProvider: ITranslateProvider) => {
 });
 
 module.directive("fileModel", FileModelDirective.factory());
+module.directive("vertilizeContainer", VertilizeContainerDirective.factory());
+module.directive("vertilize", VertilizeDirective.factory());
 
 // @ngInject
 module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {

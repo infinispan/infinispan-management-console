@@ -32,15 +32,15 @@ System.config({
   },
 
   map: {
-    "angular": "github:angular/bower-angular@1.5.8",
-    "angular-local-storage": "npm:angular-local-storage@0.2.7",
+    "angular": "npm:angular@1.5.8",
+    "angular-local-storage": "npm:angular-local-storage@0.5.0",
     "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1",
     "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
-    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.1.3",
-    "angular-ui-router": "github:angular-ui/angular-ui-router-bower@0.3.1",
+    "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
+    "angular-ui-router": "npm:angular-ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
-    "bootstrap": "github:twbs/bootstrap@3.3.7",
+    "bootstrap": "npm:bootstrap@3.3.7",
     "bootstrap-css": "npm:bootstrap-css@3.0.0",
     "browser-sync": "npm:browser-sync@2.14.3",
     "c3": "npm:c3@0.4.10",
@@ -56,9 +56,6 @@ System.config({
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },
     "github:angular-translate/bower-angular-translate@2.11.1": {
-      "angular": "github:angular/bower-angular@1.5.8"
-    },
-    "github:angular-ui/angular-ui-router-bower@0.3.1": {
       "angular": "github:angular/bower-angular@1.5.8"
     },
     "github:frankwallis/plugin-typescript@4.0.5": {
@@ -139,9 +136,6 @@ System.config({
     "github:jspm/nodelibs-zlib@0.1.0": {
       "browserify-zlib": "npm:browserify-zlib@0.1.4"
     },
-    "github:twbs/bootstrap@3.3.7": {
-      "jquery": "npm:jquery@2.1.4"
-    },
     "npm:accepts@1.3.1": {
       "mime-types": "npm:mime-types@2.1.11",
       "negotiator": "npm:negotiator@0.6.0"
@@ -149,6 +143,10 @@ System.config({
     "npm:accepts@1.3.3": {
       "mime-types": "npm:mime-types@2.1.11",
       "negotiator": "npm:negotiator@0.6.1"
+    },
+    "npm:angular-ui-router@0.3.1": {
+      "angular": "npm:angular@1.5.8",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:anymatch@1.3.0": {
       "arrify": "npm:arrify@1.0.1",
@@ -415,7 +413,7 @@ System.config({
       "base64-js": "npm:base64-js@0.0.8",
       "child_process": "github:jspm/nodelibs-child_process@0.1.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "ieee754": "npm:ieee754@1.1.6",
+      "ieee754": "npm:ieee754@1.1.8",
       "isarray": "npm:isarray@1.0.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },

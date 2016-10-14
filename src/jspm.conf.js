@@ -40,7 +40,7 @@ System.config({
     "angular-ui-router": "npm:angular-ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
-    "bootstrap": "npm:bootstrap@3.3.7",
+    "bootstrap": "github:twbs/bootstrap@3.3.7",
     "bootstrap-css": "npm:bootstrap-css@3.0.0",
     "browser-sync": "npm:browser-sync@2.14.3",
     "c3": "npm:c3@0.4.10",
@@ -48,7 +48,7 @@ System.config({
     "css": "github:systemjs/plugin-css@0.1.26",
     "d3": "npm:d3@3.5.0",
     "http-proxy": "npm:http-proxy@1.14.0",
-    "jquery": "npm:jquery@3.1.0",
+    "jquery": "npm:jquery@3.1.1",
     "patternfly": "npm:patternfly@3.9.0",
     "ts": "github:frankwallis/plugin-typescript@4.0.5",
     "typescript": "npm:typescript@1.8.9",
@@ -135,6 +135,9 @@ System.config({
     },
     "github:jspm/nodelibs-zlib@0.1.0": {
       "browserify-zlib": "npm:browserify-zlib@0.1.4"
+    },
+    "github:twbs/bootstrap@3.3.7": {
+      "jquery": "npm:jquery@3.1.1"
     },
     "npm:accepts@1.3.1": {
       "mime-types": "npm:mime-types@2.1.11",
@@ -255,14 +258,14 @@ System.config({
     },
     "npm:bootstrap-datepicker@1.6.4": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "jquery": "npm:jquery@3.1.0",
+      "jquery": "npm:jquery@3.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:bootstrap-select@1.10.0": {
-      "jquery": "npm:jquery@3.1.0"
+      "jquery": "npm:jquery@3.1.1"
     },
     "npm:bootstrap-switch@3.3.2": {
-      "jquery": "npm:jquery@3.1.0",
+      "jquery": "npm:jquery@3.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:bootstrap@3.3.7": {
@@ -575,16 +578,16 @@ System.config({
     },
     "npm:datatables.net-colreorder@1.3.2": {
       "datatables.net": "npm:datatables.net@1.10.12",
-      "jquery": "npm:jquery@3.1.0",
+      "jquery": "npm:jquery@3.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:datatables.net@1.10.12": {
-      "jquery": "npm:jquery@3.1.0",
+      "jquery": "npm:jquery@3.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:datatables@1.10.12": {
       "css": "github:systemjs/plugin-css@0.1.26",
-      "jquery": "npm:jquery@3.1.0"
+      "jquery": "npm:jquery@3.1.1"
     },
     "npm:debug@0.7.4": {
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -635,7 +638,7 @@ System.config({
       "domelementtype": "npm:domelementtype@1.3.0"
     },
     "npm:drmonty-datatables-colvis@1.1.2": {
-      "jquery": "npm:jquery@3.1.0",
+      "jquery": "npm:jquery@3.1.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:easy-extender@2.3.2": {
@@ -1046,9 +1049,6 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2",
       "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
-    },
-    "npm:jquery@3.1.0": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:jsdom@1.0.0": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",

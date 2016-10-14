@@ -1042,6 +1042,13 @@ System.config({
       "stream": "github:jspm/nodelibs-stream@0.1.0",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
+    "npm:jquery-match-height@0.7.0": {
+      "child_process": "github:jspm/nodelibs-child_process@0.1.0",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "util": "github:jspm/nodelibs-util@0.1.0"
+    },
     "npm:jquery@3.1.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
@@ -1335,6 +1342,7 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "google-code-prettify": "npm:google-code-prettify@1.0.5",
       "jquery": "npm:jquery@2.1.4",
+      "jquery-match-height": "npm:jquery-match-height@0.7.0",
       "moment": "npm:moment@2.14.1",
       "patternfly-bootstrap-combobox": "npm:patternfly-bootstrap-combobox@1.1.7",
       "patternfly-bootstrap-treeview": "npm:patternfly-bootstrap-treeview@1.0.1",

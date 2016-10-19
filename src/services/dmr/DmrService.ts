@@ -3,7 +3,7 @@ import {IDmrRequest} from "./IDmrRequest";
 import {AuthenticationService} from "../authentication/AuthenticationService";
 import {ICredentials} from "../authentication/ICredentials";
 import {IDmrCompositeReq} from "./IDmrCompositeReq";
-import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
@@ -91,6 +91,19 @@ export class DmrService {
     this.$cacheFactory.get("$http").removeAll();
   }
 
+  hasJGroupsSubsystem(): ng.IPromise<boolean> {
+    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
+    let request: IDmrRequest = <IDmrRequest>{
+      address: [].concat("subsystem", "datagrid-jgroups")
+    };
+    this.readResource(request).then((response) => {
+      deferred.resolve(true);
+    }).catch((reason) => {
+      deferred.resolve(false);
+    });
+    return deferred.promise;
+  }
+
   private executePostHelper(data: any, upload: boolean, noTimeout?: boolean): ng.IPromise<any> {
     if (upload) {
       return this.executePostUpload(data, noTimeout);
@@ -114,7 +127,7 @@ export class DmrService {
       config.timeout = 2000;
     }
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-    this.urlUpload = this.urlUpload === undefined ? this.generateBaseUrl(this.authService.getCredentials(), true) : this.urlUpload;
+    this.urlUpload = isNullOrUndefined(this.urlUpload) ? this.generateBaseUrl(this.authService.getCredentials(), true) : this.urlUpload;
     // And we finally post it
     this.$http.post(this.urlUpload, data, config)
       .then(
@@ -123,6 +136,7 @@ export class DmrService {
           let msg: string = this.processDmrFailure(failure);
           console.log(msg);
           deferred.reject(msg);
+          this.urlUpload = null;
         });
     return deferred.promise;
   }
@@ -141,7 +155,7 @@ export class DmrService {
       config.timeout = 2000;
     }
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials(), false) : this.url;
+    this.url = isNullOrUndefined(this.url) ? this.generateBaseUrl(this.authService.getCredentials(), false) : this.url;
     // And we finally post it
     this.$http.post(this.url, data, config)
       .then(
@@ -150,6 +164,7 @@ export class DmrService {
           let msg: string = this.processDmrFailure(failure);
           console.log(msg);
           deferred.reject(msg);
+          this.url = null;
         });
     return deferred.promise;
   }
@@ -166,7 +181,7 @@ export class DmrService {
     };
 
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-    this.url = this.url === undefined ? this.generateBaseUrl(this.authService.getCredentials()) : this.url;
+    this.url = isNullOrUndefined(this.url) ? this.generateBaseUrl(this.authService.getCredentials()) : this.url;
     let getUrl: string = this.generateGetUrl(this.url, request);
 
     this.$http.get(getUrl, config).then((success: any) => {
@@ -175,6 +190,7 @@ export class DmrService {
       let msg: string = this.processDmrFailure(failure);
       console.log(msg);
       deferred.reject();
+      this.url = null;
     });
     return deferred.promise;
   }

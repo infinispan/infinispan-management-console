@@ -6,10 +6,11 @@ import {SiteManagementModalCtrl} from "./SiteManagementModalCtrl";
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class CacheContainerCtrl {
 
-  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "container", "isRebalancingEnabled"];
+  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "launchType", "container", "isRebalancingEnabled"];
 
   name: string;
   serverGroup: string;
@@ -21,6 +22,7 @@ export class CacheContainerCtrl {
               private $uibModal: IModalService,
               private containerService: ContainerService,
               private dmrService: DmrService,
+              private launchType: LaunchTypeService,
               public container: ICacheContainer,
               public isRebalancingEnabled: boolean) {
     this.name = container.name;
@@ -42,6 +44,10 @@ export class CacheContainerCtrl {
 
   disableContainerRebalance(): void {
     this.createRebalanceModal(false, "DISABLE rebalancing for cache container?");
+  }
+
+  isLocalMode(): boolean {
+    return this.launchType.isStandaloneLocalMode();
   }
 
   createSiteModal(): void {

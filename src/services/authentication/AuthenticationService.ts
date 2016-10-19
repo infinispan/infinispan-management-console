@@ -4,7 +4,7 @@ import {DmrService} from "../dmr/DmrService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {AvailabilityCheck} from "./AvailabilityCheck";
-import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
 
@@ -39,9 +39,15 @@ export class AuthenticationService {
     this.setCredentials(credentials);
     let deferred: ng.IDeferred<string> = this.$q.defer();
     this.dmrService.readAttribute({address: [], name: "launch-type"})
-      .then(response => {
+      .then((response:string) => {
+        if (LaunchTypeService.STANDALONE_MODE === response) {
+          this.dmrService.hasJGroupsSubsystem().then((hasJGroupsStack) => {
+            this.launchType.set(response, hasJGroupsStack);
+          });
+        } else {
+          this.launchType.set(response, true);
+        }
         this.setCredentials(credentials);
-        this.launchType.set(response);
         this.availability.startApiAccessibleCheck();
         deferred.resolve();
       }, error => {
@@ -57,7 +63,7 @@ export class AuthenticationService {
   }
 
   getCredentials(): ICredentials {
-    if (this.credentials.username === undefined || this.credentials.password === undefined) {
+    if (isNullOrUndefined(this.credentials.username) || isNullOrUndefined(this.credentials.password)) {
       this.credentials = this.getLocalCredentials();
     }
     return this.credentials;

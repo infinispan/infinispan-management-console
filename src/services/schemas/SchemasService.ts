@@ -4,16 +4,18 @@ import {JGroupsService} from "../jgroups/JGroupsService";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {ISchemaDefinition} from "./ISchemaDefinition";
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.services.schemas", []);
 
 export class SchemaService {
 
-  static $inject: string[] = ["$q", "dmrService", "jGroupsService"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType"];
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
-              private jGroupsService: JGroupsService) {
+              private jGroupsService: JGroupsService,
+              private launchType: LaunchTypeService) {
 
   }
 
@@ -33,16 +35,20 @@ export class SchemaService {
   }
 
   getProtoSchemaNames(container: ICacheContainer): ng.IPromise<string[]> {
-    let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-        return this.dmrService.executePost({
-          address: this.getContainerAddress(container.name, coordinator),
-          operation: "get-proto-schema-names"
-        });
-      })
-      .then(names => deferred.resolve(names));
-    return deferred.promise;
+    if (this.launchType.isStandaloneLocalMode()) {
+      return this.$q.when([]);
+    } else {
+      let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
+      this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+        .then(coordinator => {
+          return this.dmrService.executePost({
+            address: this.getContainerAddress(container.name, coordinator),
+            operation: "get-proto-schema-names"
+          });
+        })
+        .then(names => deferred.resolve(names));
+      return deferred.promise;
+    }
   }
 
   registerProtoSchema(container: ICacheContainer, schema: ISchemaDefinition): ng.IPromise<void> {
@@ -76,8 +82,8 @@ export class SchemaService {
   }
 
   private getContainerAddress(container: string, coordinator: IServerAddress): string[] {
-    return [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-      "cache-container", container);
+    let path: string [] = ["subsystem", "datagrid-infinispan", "cache-container", container];
+    return this.launchType.getRuntimePath(coordinator).concat(path);
   }
 
 }

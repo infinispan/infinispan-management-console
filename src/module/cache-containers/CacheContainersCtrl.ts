@@ -21,15 +21,16 @@ export class CacheContainersCtrl {
               private jGroupsService: JGroupsService,
               private clusterEventsService: ClusterEventsService,
               public containers: ICacheContainer[]) {
+    if (this.jGroupsService.hasJGroupsStack()) {
+      this.domainService.getHostsAndServers()
+        .then((domain) => {
+          this.domain = domain;
+          return this.jGroupsService.getDefaultStackServerGroupMap(domain.controller);
+        })
+        .then((stacks) => this.stacks = stacks);
 
-    this.domainService.getHostsAndServers()
-      .then((domain) => {
-        this.domain = domain;
-        return this.jGroupsService.getDefaultStackServerGroupMap(domain.controller);
-      })
-      .then((stacks) => this.stacks = stacks);
-
-    this.getAllClusterEvents();
+      this.getAllClusterEvents();
+    }
   }
 
   getDefaultStack(container: ICacheContainer): string {
@@ -58,5 +59,9 @@ export class CacheContainersCtrl {
       this.clusterEventsService.fetchClusterEvents(container, 10)
         .then((events) => this.gridEvents = this.gridEvents.concat(events));
     }
+  }
+
+  isStandaloneLocalMode(): boolean {
+    return !this.jGroupsService.hasJGroupsStack();
   }
 }

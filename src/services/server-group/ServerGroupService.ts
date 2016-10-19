@@ -9,12 +9,14 @@ import {IServerAddress} from "../server/IServerAddress";
 import {ServerService} from "../server/ServerService";
 import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
+import {StandaloneService} from "../standalone/StandaloneService";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
 export class ServerGroupService {
 
-  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "serverService"];
+  static $inject: string[] = ["$q", "dmrService", "domainService", "jGroupsService", "serverService", "launchType"];
 
   static parseServerGroup(name: string, object: any, members?: IServerAddress[]): IServerGroup {
     return <IServerGroup> {
@@ -30,10 +32,19 @@ export class ServerGroupService {
               private dmrService: DmrService,
               private domainService: DomainService,
               private jGroupsService: JGroupsService,
-              private serverService: ServerService) {
+              private serverService: ServerService,
+              private launchType: LaunchTypeService) {
   }
 
   getAllServerGroupsMap(): ng.IPromise<IMap<IServerGroup>> {
+    if (this.launchType.isDomainMode()) {
+      return this.getAllServerGroupsMapDomain();
+    } else if (this.launchType.isStandaloneMode()) {
+      return this.getAllServerGroupsMapStandalone();
+    }
+  }
+
+  getAllServerGroupsMapDomain(): ng.IPromise<IMap<IServerGroup>> {
     let request: IDmrRequest = <IDmrRequest> {
       address: [],
       "child-type": "server-group"
@@ -51,7 +62,29 @@ export class ServerGroupService {
     return deferred.promise;
   }
 
+  getAllServerGroupsMapStandalone(): ng.IPromise<IMap<IServerGroup>> {
+    let deferred: ng.IDeferred<IMap<IServerGroup>> = this.$q.defer<IMap<IServerGroup>>();
+    let map: IMap<IServerGroup> = <IMap<IServerGroup>>{};
+    map[StandaloneService.SERVER_GROUP] = <IServerGroup> {
+      name: StandaloneService.SERVER_GROUP,
+      profile: StandaloneService.PROFILE_NAME,
+      "socket-binding-group": "standard-sockets",
+      "socket-binding-port-offset": 0,
+      members: []
+    };
+    deferred.resolve(map);
+    return deferred.promise;
+  }
+
   getAllServerGroupsMapWithMembers(): ng.IPromise<IMap<IServerGroup>> {
+    if (this.launchType.isDomainMode()) {
+      return this.getAllServerGroupsMapWithMembersDomain();
+    } else if (this.launchType.isStandaloneMode()) {
+      return this.getAllServerGroupsMapWithMembersStandalone();
+    }
+  }
+
+  getAllServerGroupsMapWithMembersDomain(): ng.IPromise<IMap<IServerGroup>> {
     let request: IDmrRequest = <IDmrRequest>{
       address: [],
       "child-type": "host",
@@ -77,6 +110,40 @@ export class ServerGroupService {
     return deferred.promise;
   }
 
+  getAllServerGroupsMapWithMembersStandalone(): ng.IPromise<IMap<IServerGroup>> {
+    let deferred: ng.IDeferred<IMap<IServerGroup>> = this.$q.defer<IMap<IServerGroup>>();
+    this.getStandaloneCacheContainerNames().then((containers: string[]) => {
+      this.serverService.getServerView(null, containers[0]).then((view: string []) => {
+        this.getAllServerGroupsMap()
+          .then((map) => {
+            let serverGroup: IServerGroup = map[StandaloneService.SERVER_GROUP];
+            for (let member of view) {
+              serverGroup.members.push(new ServerAddress(member, member));
+            }
+            deferred.resolve(map);
+          });
+      });
+    });
+    return deferred.promise;
+  }
+
+  getStandaloneCacheContainerNames(): ng.IPromise<string[]> {
+    let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
+    let request: IDmrRequest = <IDmrRequest>{
+      address: ["subsystem", "datagrid-infinispan"],
+      "child-type": "cache-container"
+    };
+    this.dmrService.readChildResources(request)
+      .then((containers) => {
+        let containerNames: string[] = [];
+        for (let container in containers) {
+          containerNames.push(container);
+        }
+        deferred.resolve(containerNames);
+      });
+    return deferred.promise;
+  }
+
   // Here we just wrap the getAll.. methods as it still requires the same number of http requests
   getServerGroupMapWithMembers(serverGroup: string): ng.IPromise<IServerGroup> {
     let deferred: ng.IDeferred<IServerGroup> = this.$q.defer<IServerGroup>();
@@ -90,17 +157,24 @@ export class ServerGroupService {
       "child-type": "server-group"
     };
     let deferred: ng.IDeferred<IServerGroup> = this.$q.defer<IServerGroup>();
-    this.getAllServerGroupsMapWithMembers().then((sgMap) => {
-      this.dmrService.readChildResources(request).then((serverGroups: any) => {
-        for (let serverGroupName in serverGroups) {
-          let serverGroup: any = sgMap[serverGroupName];
-          if (serverGroup.profile === profile) {
-            deferred.resolve(serverGroup);
-            return;
+    if (this.launchType.isDomainMode()) {
+      this.getAllServerGroupsMapWithMembers().then((sgMap) => {
+        this.dmrService.readChildResources(request).then((serverGroups: any) => {
+          for (let serverGroupName in serverGroups) {
+            let serverGroup: any = sgMap[serverGroupName];
+            if (serverGroup.profile === profile) {
+              deferred.resolve(serverGroup);
+              return;
+            }
           }
-        }
+        });
       });
-    });
+    } else if (this.launchType.isStandaloneMode()) {
+      this.getAllServerGroupsMapWithMembers().then((sgMap) => {
+        let serverGroup: any = sgMap[StandaloneService.SERVER_GROUP];
+        deferred.resolve(serverGroup);
+      });
+    }
     return deferred.promise;
   }
 
@@ -129,6 +203,13 @@ export class ServerGroupService {
       });
     });
     return deferred.promise;
+  }
+
+  getHostName(): ng.IPromise<string> {
+    return this.dmrService.readAttribute(<IDmrRequest>{
+      address: [],
+      name: "name"
+    });
   }
 
   getRunningServerInstances(serverGroup: IServerGroup): ng.IPromise<IServerAddress[]> {

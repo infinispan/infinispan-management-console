@@ -132,9 +132,12 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
 export function parseServerAddress(server: string): IServerAddress {
   let address: string[] = server.split(":");
   if (address.length !== 2) {
-    throw new ISPNException("Expected server string to be of format '<host>:<string>', not: " + server);
+    // throw new ISPNException("Expected server string to be of format '<host>:<string>', not: " + server);
+    // standalone mode
+    return new ServerAddress(server, server);
+  } else {
+    return new ServerAddress(address[0], address[1]);
   }
-  return new ServerAddress(address[0], address[1]);
 }
 
 export function getInstanceFromDmr<T>(dmr: any): T {

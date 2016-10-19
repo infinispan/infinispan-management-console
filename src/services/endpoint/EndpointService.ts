@@ -5,11 +5,12 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import {SocketBindingService} from "../socket-binding/SocketBindingService";
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 import IQService = angular.IQService;
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.services.endpoint", []);
 
 export class EndpointService {
-  static $inject: string[] = ["$q", "dmrService", "socketBindingService"];
+  static $inject: string[] = ["$q", "dmrService", "socketBindingService", "launchType"];
 
   static parseEndpoint(name: string, object: any, socketBinding?: ISocketBinding): IEndpoint {
     return <IEndpoint> {
@@ -22,12 +23,12 @@ export class EndpointService {
   }
 
   constructor(private $q: IQService, private dmrService: DmrService,
-              private socketBindingService: SocketBindingService) {
+              private socketBindingService: SocketBindingService, private launchType: LaunchTypeService) {
   }
 
   getAllEndpoints(profileName: string, socketBindingGroup: string): ng.IPromise<IEndpoint[]> {
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("profile", profileName, "subsystem", "datagrid-infinispan-endpoint"),
+      address: this.getEndpointAddress(profileName),
       recursive: true
     };
     let deferred: ng.IDeferred<IEndpoint[]> = this.$q.defer<IEndpoint[]>();
@@ -59,6 +60,11 @@ export class EndpointService {
         }
       }
     }
+  }
+
+  private getEndpointAddress(profile: string): string[] {
+    let endpointPath: string[] = ["subsystem", "datagrid-infinispan-endpoint"];
+    return this.launchType.getProfilePath(profile).concat(endpointPath);
   }
 }
 

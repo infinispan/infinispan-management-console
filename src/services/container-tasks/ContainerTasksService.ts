@@ -8,12 +8,13 @@ import {ITaskDefinition} from "./ITaskDefinition";
 import {parseServerAddress, isNullOrUndefined, isEmptyObject} from "../../common/utils/Utils";
 import {ITaskExecutor} from "./ITaskExecutor";
 import IQService = angular.IQService;
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.services.container-tasks", []);
 
 export class ContainerTasksService {
 
-  static $inject: string[] = ["$q", "dmrService", "jGroupsService"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType"];
 
   static parseTaskDefinition(object: any): ITaskDefinition {
     return {
@@ -34,7 +35,8 @@ export class ContainerTasksService {
 
   constructor(private $q: IQService,
               private dmrService: DmrService,
-              private jGroupsService: JGroupsService) {
+              private jGroupsService: JGroupsService,
+              private launchType: LaunchTypeService) {
   }
 
   getRunningTasks(container: ICacheContainer): ng.IPromise<ITaskStatus[]> {
@@ -101,8 +103,8 @@ export class ContainerTasksService {
   }
 
   private getContainerAddress(container: string, coordinator: IServerAddress): string[] {
-    return [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-      "cache-container", container);
+    let path: string [] = ["subsystem", "datagrid-infinispan", "cache-container", container];
+    return this.launchType.getRuntimePath(coordinator).concat(path);
   }
 }
 

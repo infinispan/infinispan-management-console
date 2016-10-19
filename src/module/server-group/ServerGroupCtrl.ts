@@ -12,10 +12,11 @@ import {isEmptyObject, isNotNullOrUndefined, isNullOrUndefined} from "../../comm
 import {openErrorModal} from "../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "serverGroup", "available"];
+    "jGroupsService", "launchType", "serverGroup", "available"];
 
   status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
@@ -29,6 +30,7 @@ export class ServerGroupCtrl {
               private serverGroupService: ServerGroupService,
               private serverService: ServerService,
               private jGroupsService: JGroupsService,
+              private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
               public available: boolean) {
     this.fetchSGCoordinator();
@@ -39,7 +41,7 @@ export class ServerGroupCtrl {
   }
 
   isCoordinator(server: IServerAddress): boolean {
-    return this.coordinator.equals(server);
+    return (this.coordinator) ? this.coordinator.equals(server) : false;
   }
 
   isServerStopped(server: IServerAddress): boolean {
@@ -143,6 +145,10 @@ export class ServerGroupCtrl {
       .catch(error => openErrorModal(this.$uibModal, error));
   }
 
+  isDomainMode(): boolean {
+    return this.launchType.isDomainMode();
+  }
+
   private filterUniqueHosts(): string[] {
     return this.serverGroup.members
       .map((server) => server.host)
@@ -150,14 +156,20 @@ export class ServerGroupCtrl {
   }
 
   private fetchServerStatuses(): void {
-    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => this.serverStatusMap = statusMap);
+    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => {
+      this.serverStatusMap = statusMap;
+    });
   }
 
   private fetchSGCoordinator(): void {
-    this.jGroupsService.getServerGroupCoordinator(this.serverGroup).then((coordinator) => this.coordinator = coordinator);
+    this.jGroupsService.getServerGroupCoordinator(this.serverGroup).then((coordinator) => {
+      this.coordinator = coordinator;
+    });
   }
 
   private fetchInetAddresses(): void {
-    this.serverGroupService.getServerInetAddresses(this.serverGroup).then((inetMap) => this.serverInetMap = inetMap);
+    this.serverGroupService.getServerInetAddresses(this.serverGroup).then((inetMap) => {
+      this.serverInetMap = inetMap;
+    });
   }
 }

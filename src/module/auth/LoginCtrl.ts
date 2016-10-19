@@ -6,7 +6,7 @@ import {IScope} from "../../common/IScopeService";
 
 export class LoginCtrl {
 
-  static $inject: string[] = ["$scope", "$state", "authService", "dmrService"];
+  static $inject: string[] = ["$scope", "$state", "authService", "dmrService", "constants"];
 
   public credentials: ICredentials = <ICredentials>{};
   public authenticated: boolean = false;
@@ -15,7 +15,8 @@ export class LoginCtrl {
   constructor(private $scope: IScope,
               private $state: IStateService,
               private authService: AuthenticationService,
-              private dmrService: DmrService) {
+              private dmrService: DmrService,
+              private constants: any) {
     if (authService.isLoggedIn()) {
       this.$scope.page.htmlClass = "";
       this.$state.go("containers");

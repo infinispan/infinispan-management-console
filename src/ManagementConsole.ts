@@ -33,6 +33,7 @@ import IAngularEvent = angular.IAngularEvent;
 import {FileModelDirective} from "./components/directives/FileModelDirective";
 import {VertilizeContainerDirective} from "./components/directives/VertilizeContainerDirective";
 import {VertilizeDirective} from "./components/directives/VertilizeDirective";
+import {Constants} from "./common/Constants";
 
 const App: ng.IAngularStatic = angular;
 
@@ -41,6 +42,9 @@ const module: ng.IModule = angular.module("managementConsole", [
   "ui.bootstrap",
   "pascalprecht.translate"
 ]);
+
+// @ngInject
+module.constant("constants", Constants.Infinispan);
 
 // @ngInject
 module.config(($translateProvider: ITranslateProvider) => {

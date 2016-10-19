@@ -18,12 +18,12 @@
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs nav-tabs-pf">
         <li><a ui-sref-active="active" ui-sref=".schemas" translate>SCHEMAS</a></li>
-        <li><a ui-sref-active="active" ui-sref=".transport" translate>TRANSPORT</a></li>
-        <li><a ui-sref-active="active" ui-sref=".thread-pools" translate>THREAD_POOLS</a></li>
+        <li ng-if="!ctrl.isStandaloneLocalMode()"><a ui-sref-active="active" ui-sref=".transport" translate>TRANSPORT</a></li>
         <li><a ui-sref-active="active" ui-sref=".security" translate>SECURITY</a></li>
+        <li><a ui-sref-active="active" ui-sref=".thread-pools" translate>THREAD_POOLS</a></li>
         <li><a ui-sref-active="active" ui-sref=".templates" translate>TEMPLATES</a></li>
-        <li><a ui-sref-active="active" ui-sref=".tasks" translate>TASKS</a></li>
-        <li><a ui-sref-active="active" ui-sref=".deployments" translate>DEPLOYMENTS</a></li>
+        <li ng-if="!ctrl.isStandaloneLocalMode()"><a ui-sref-active="active" ui-sref=".tasks" translate>TASKS</a></li>
+        <li ng-if="ctrl.isDomainMode()"><a ui-sref-active="active" ui-sref=".deployments" translate>DEPLOYMENTS</a></li>
       </ul>
     </div>
   </div>

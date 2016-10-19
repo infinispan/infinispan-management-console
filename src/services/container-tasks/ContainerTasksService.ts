@@ -8,12 +8,13 @@ import {ITaskDefinition} from "./ITaskDefinition";
 import {parseServerAddress, isNullOrUndefined, isEmptyObject} from "../../common/utils/Utils";
 import {ITaskExecutor} from "./ITaskExecutor";
 import IQService = angular.IQService;
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.services.container-tasks", []);
 
 export class ContainerTasksService {
 
-  static $inject: string[] = ["$q", "dmrService", "jGroupsService"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType"];
 
   static parseTaskDefinition(object: any): ITaskDefinition {
     return {
@@ -34,40 +35,37 @@ export class ContainerTasksService {
 
   constructor(private $q: IQService,
               private dmrService: DmrService,
-              private jGroupsService: JGroupsService) {
+              private jGroupsService: JGroupsService,
+              private launchType: LaunchTypeService) {
   }
 
   getRunningTasks(container: ICacheContainer): ng.IPromise<ITaskStatus[]> {
     let deferred: ng.IDeferred<ITaskStatus[]> = this.$q.defer<ITaskStatus[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-          return this.dmrService.executePost({
-            operation: "task-status",
-            address: this.getContainerAddress(container.name, coordinator)
-          });
-        },
-        error => deferred.reject(error))
-      .then(response => {
-        let tasks: ITaskStatus[] = response.map(status => ContainerTasksService.parseTaskStatus(status));
-        deferred.resolve(tasks);
-      });
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+        return this.dmrService.executePost({
+          operation: "task-status",
+          address: this.getContainerAddress(container.name, coordinator)
+        }).then(response => {
+          let tasks: ITaskStatus[] = response.map(status => ContainerTasksService.parseTaskStatus(status));
+          deferred.resolve(tasks);
+        });
+      },
+      error => deferred.reject(error));
     return deferred.promise;
   }
 
   getTaskDefinitions(container: ICacheContainer): ng.IPromise<ITaskDefinition[]> {
     let deferred: ng.IDeferred<ITaskDefinition[]> = this.$q.defer<ITaskDefinition[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-          return this.dmrService.executePost({
-            operation: "task-list",
-            address: this.getContainerAddress(container.name, coordinator)
-          });
-        },
-        error => deferred.reject(error))
-      .then(response => {
-        let tasks: ITaskDefinition[] = response.map(task => ContainerTasksService.parseTaskDefinition(task));
-        deferred.resolve(tasks);
-      });
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+        return this.dmrService.executePost({
+          operation: "task-list",
+          address: this.getContainerAddress(container.name, coordinator)
+        }).then(response => {
+          let tasks: ITaskDefinition[] = response.map(task => ContainerTasksService.parseTaskDefinition(task));
+          deferred.resolve(tasks);
+        });
+      },
+      error => deferred.reject(error));
     return deferred.promise;
   }
 
@@ -101,8 +99,8 @@ export class ContainerTasksService {
   }
 
   private getContainerAddress(container: string, coordinator: IServerAddress): string[] {
-    return [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-      "cache-container", container);
+    let path: string [] = ["subsystem", "datagrid-infinispan", "cache-container", container];
+    return this.launchType.getRuntimePath(coordinator).concat(path);
   }
 }
 

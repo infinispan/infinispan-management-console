@@ -13,13 +13,14 @@ import {ServerService} from "../server/ServerService";
 import {CacheService} from "../cache/CacheService";
 import IQService = angular.IQService;
 import {SecurityService} from "../security/SecurityService";
+import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
 export class ContainerService {
 
   static $inject: string[] = ["$q", "dmrService", "endpointService", "profileService", "serverGroupService",
-    "jGroupsService", "domainService", "serverService", "cacheService", "securityService"];
+    "jGroupsService", "domainService", "serverService", "cacheService", "securityService", "launchType"];
 
   constructor(private $q: IQService,
               private dmrService: DmrService,
@@ -30,7 +31,8 @@ export class ContainerService {
               private domainService: DomainService,
               private serverService: ServerService,
               private cacheService: CacheService,
-              private securityService: SecurityService) {
+              private securityService: SecurityService,
+              private launchType: LaunchTypeService) {
   }
 
   getAllContainers(): ng.IPromise<ICacheContainer[]> {
@@ -81,7 +83,12 @@ export class ContainerService {
           deferred.resolve(container);
           return;
         }
-        return this.getSiteArrays(container);
+        if (this.jGroupsService.hasJGroupsStack()) {
+          return this.getSiteArrays(container);
+        } else {
+          deferred.resolve(container);
+          return;
+        }
       })
       .then(sites => {
         for (let siteType in sites) {
@@ -96,7 +103,7 @@ export class ContainerService {
   getCacheContainerNames(profile: string): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("profile", profile, "subsystem", "datagrid-infinispan"),
+      address: this.getContainerSubsystemAddress(profile),
       "child-type": "cache-container"
     };
 
@@ -147,12 +154,13 @@ export class ContainerService {
 
           this.$q.all(viewPromisies)
             .then((views: [string[]]) => {
-              if (views.length === 1) {
+              if (views.length === 0 || views.length === 1) {
                 deferred.resolve(true);
                 return;
               }
               let firstView: string[] = views[0];
-              deferred.resolve(views.every((view) => view === firstView));
+              let allViewsEqual: boolean = views.every((view) => JSON.stringify(view) === JSON.stringify(firstView));
+              deferred.resolve(allViewsEqual);
             });
 
         } else {
@@ -190,14 +198,13 @@ export class ContainerService {
 
   isRebalancingEnabled(container: ICacheContainer): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-        let request: IDmrRequest = {
-          address: this.getContainerAddress(container, coordinator),
-          name: "cluster-rebalance"
-        };
-        this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
-      }, () => deferred.resolve(false));
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+      let request: IDmrRequest = {
+        address: this.getContainerAddress(container, coordinator),
+        name: "cluster-rebalance"
+      };
+      this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
+    }, (error) => deferred.resolve(true)); // LOCAL mode, switch it to true as we don't care
     return deferred.promise;
   }
 
@@ -237,8 +244,13 @@ export class ContainerService {
   }
 
   private getContainerAddress(container: ICacheContainer, coordinator: IServerAddress): string[] {
-    return [].concat("host", coordinator.host, "server", coordinator.name, "subsystem", "datagrid-infinispan",
-      "cache-container", container.name);
+    let containerPath: string[] = ["subsystem", "datagrid-infinispan", "cache-container", container.name];
+    return this.launchType.getRuntimePath(coordinator).concat(containerPath);
+  }
+
+  private getContainerSubsystemAddress(profile: string): string[] {
+    let containerPath: string[] = ["subsystem", "datagrid-infinispan"];
+    return this.launchType.getProfilePath(profile).concat(containerPath);
   }
 }
 

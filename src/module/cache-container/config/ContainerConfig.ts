@@ -36,7 +36,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controller: SchemaConfigCtrl,
     controllerAs: "schemaCtrl",
     resolve: {
-      availableSchemas: ["container", "schemaService", (container, schemaService) => {
+      availableSchemas: ["$q", "container", "schemaService", ($q:IQService, container, schemaService) => {
         return schemaService.getProtoSchemaNames(container);
       }]
     }

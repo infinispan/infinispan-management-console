@@ -16,10 +16,10 @@
                 ui-sref="container-config({profileName: ctrl.container.profile, containerName: ctrl.name})">
           <span class="pficon pficon-settings"></span> <span translate>CONFIGURATION</span>
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle>
+        <button ng-if="!ctrl.isLocalMode()" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle>
           <span class="caret"></span> <span translate>ACTIONS</span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <ul ng-if="!ctrl.isLocalMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'disabled' : 'enabled'">
             <a id="dropdownMenuEnableRebalance" role="menuitem"
                ng-click="ctrl.enableContainerRebalance()"

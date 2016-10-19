@@ -258,8 +258,13 @@ export class ContainerConfigService {
 
   private getCacheContainerDMRAddressForCoordinator(container: ICacheContainer): ng.IPromise<string[]> {
     return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((server: IServerAddress) => {
-      return [].concat("host", server.host, "server", server.name, "subsystem", "datagrid-infinispan", "cache-container", container.name);
+      return this.getCacheContainerAddress(server, container);
     });
+  }
+
+  private getCacheContainerAddress(server: IServerAddress, container: ICacheContainer): string[] {
+    let path: string[] = ["subsystem", "datagrid-infinispan", "cache-container", container.name];
+    return this.launchType.getRuntimePath(server).concat(path);
   }
 }
 

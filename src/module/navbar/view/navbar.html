@@ -32,10 +32,10 @@
     <li>
       <a href="#/containers" translate>CACHES</a>
     </li>
-    <li>
+    <li ng-if="ctrl.hasClusterView()">
       <a href="#/server-groups" translate>CLUSTERS</a>
     </li>
-    <li>
+    <li ng-if="ctrl.hasClusterView()">
       <a href="#/events" translate>STATUS_EVENTS</a>
     </li>
     <div ng-if="!ctrl.isApiAvailable()" class="toast-pf toast-pf-max-width toast-pf-top-right alert alert-warning alert-dismissable" >

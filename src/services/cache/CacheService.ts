@@ -26,7 +26,7 @@ export class CacheService {
   getAllCachesInContainer(container: ICacheContainer): ng.IPromise<ICache[]> {
     let deferred: ng.IDeferred<ICache[]> = this.$q.defer<ICache[]>();
     let request: IDmrRequest = {
-      address: this.generateAddress(container.name, container.profile),
+      address: this.generateContainerAddress(container.name, container.profile),
       recursive: true,
       "recursive-depth": 1
     };
@@ -69,7 +69,7 @@ export class CacheService {
   getCache(name: string, type: string, container: string, profile?: string): ng.IPromise<ICache> {
     let deferred: ng.IDeferred<ICache> = this.$q.defer<ICache>();
     let request: IDmrRequest = {
-      address: this.generateAddress(container, profile).concat(type, name)
+      address: this.generateContainerAddress(container, profile).concat(type, name)
     };
     this.dmrService.readResource(request).then((response) => deferred.resolve(new Cache(name, type, response.configuration)));
     return deferred.promise;
@@ -85,7 +85,7 @@ export class CacheService {
 
   createCacheFromConfiguration(container: ICacheContainer, type: string, name: string, configuration: string): ng.IPromise<void> {
     return this.dmrService.add({
-      address: this.generateAddress(container.name, container.profile).concat(type, name),
+      address: this.generateContainerAddress(container.name, container.profile).concat(type, name),
       configuration: configuration
     });
   }
@@ -150,7 +150,7 @@ export class CacheService {
   isEnabled(profile: string, cache: ICache): ng.IPromise<any> {
     return this.dmrService.executePost({
       operation: "is-ignored-all-endpoints",
-      address: [].concat("profile", profile, "subsystem", "datagrid-infinispan-endpoint"),
+      address: this.generateEndpointAddress(profile),
       "cache-names": [cache.name],
     });
   }
@@ -158,7 +158,7 @@ export class CacheService {
   enable(profile: string, cache: ICache): ng.IPromise<any> {
     return this.dmrService.executePost({
       operation: "unignore-cache-all-endpoints",
-      address: [].concat("profile", profile, "subsystem", "datagrid-infinispan-endpoint"),
+      address: this.generateEndpointAddress(profile),
       "cache-names": [cache.name],
     });
   }
@@ -166,7 +166,7 @@ export class CacheService {
   disable(profile: string, cache: ICache): ng.IPromise<any> {
     return this.dmrService.executePost({
       operation: "ignore-cache-all-endpoints",
-      address: [].concat("profile", profile, "subsystem", "datagrid-infinispan-endpoint"),
+      address: this.generateEndpointAddress(profile),
       "cache-names": [cache.name],
     });
   }
@@ -184,19 +184,23 @@ export class CacheService {
   private executeCacheOp(container: string, profile: string, cache: ICache, cacheOp: string): ng.IPromise<any> {
     return this.dmrService.executePost({
       operation: cacheOp,
-      address: this.generateAddress(container, profile).concat(cache.type, cache.name)
+      address: this.generateContainerAddress(container, profile).concat(cache.type, cache.name)
     });
   }
 
-  private generateAddress(container: string, profile?: string): string[] {
-    let address: string[] = this.launchType.isStandaloneMode() ? [] : [].concat("profile", profile);
-    return address.concat("subsystem", "datagrid-infinispan", "cache-container", container);
+  private generateContainerAddress(container: string, profile?: string): string[] {
+    let path: string[] = ["subsystem", "datagrid-infinispan", "cache-container", container];
+    return this.launchType.getProfilePath(profile).concat(path);
+  }
+
+  private generateEndpointAddress(profile?: string): string[] {
+    let path: string[] = ["subsystem", "datagrid-infinispan-endpoint"];
+    return this.launchType.getProfilePath(profile).concat(path);
   }
 
   private generateHostServerAddress(server: IServerAddress, container: ICacheContainer, cache: ICache): string[] {
-    let address: string [] = [].concat("host", server.host, "server", server.name,
-      "subsystem", "datagrid-infinispan", "cache-container", container.name, cache.type, cache.name);
-    return address;
+    let path: string[] = ["subsystem", "datagrid-infinispan", "cache-container", container.name, cache.type, cache.name];
+    return this.launchType.getRuntimePath(server).concat(path);
   }
 }
 

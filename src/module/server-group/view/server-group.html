@@ -11,11 +11,11 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button"
+        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button"
                 id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span
           class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.available ? 'disabled' : 'enabled'"
               ng-click="ctrl.createConfirmationModal('start')">
             <a id="dropdownMenuStart" role="menuitem" translate>START</a>
@@ -51,7 +51,7 @@
         total.
       </div>
 
-      <div class="col-xs-6 col-sm-4 col-md-2">
+      <div ng-if="ctrl.isDomainMode()" class="col-xs-6 col-sm-4 col-md-2">
         <a id="addNode" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
            data-toggle="modal"
            class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
@@ -82,9 +82,9 @@
             </h2>
 
             <div class="card-pf-body">
-              <h4>{{server.host}}</h4>
-              <p ng-show="isCoordinator(server)" translate>COORDINATOR</p>
-              <p ng-show="!isCoordinator(server)">&nbsp;</p>
+              <h4 ng-show="ctrl.isDomainMode()">{{server.host}}</h4>
+              <p ng-show="ctrl.isCoordinator(server)" translate>COORDINATOR</p>
+              <p ng-show="!ctrl.isCoordinator(server)">&nbsp;</p>
               <p class="card-pf-aggregate-status-notifications">
                 <span class="card-pf-aggregate-status-notification">{{ctrl.getServerInetAddress(server)}}</span>
               </p>

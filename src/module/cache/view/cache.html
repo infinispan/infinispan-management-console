@@ -37,11 +37,11 @@
           <li role="presentation" class="enabled"><a id="dropdownMenuClearCache" role="menuitem" ng-click="ctrl.createClearModal()">Clear</a>
           <li role="presentation" class="divider"></li>
           <!-- Rebalancing options -->
-          <li role="presentation"
+          <li ng-if="!ctrl.isLocalMode()" role="presentation"
               ng-class="ctrl.stats['cache-rebalancing-status']=='SUSPENDED' ? 'enabled':'disabled'">
             <a id="dropdownMenuStartRebalance" role="menuitem" ng-click="ctrl.createEnableRebalancingModal()">Enable rebalance</a>
           </li>
-          <li role="presentation"
+          <li ng-if="!ctrl.isLocalMode()" role="presentation"
               ng-class="ctrl.stats['cache-rebalancing-status']=='SUSPENDED' ? 'disabled':'enabled'">
             <a id="dropdownMenuStopRebalance" role="menuitem" ng-click="ctrl.createDisableRebalancingModal()">Disable rebalance</a>
           </li>
@@ -96,7 +96,7 @@
       <!--ul class="nav nav-tabs nav-tabs-pf"-->
       <ul class="nav nav-tabs nav-tabs">
         <li class="active"><a href="#">General status</a></li>
-        <li><a ui-sref="caches-node-stats({profileName: ctrl.container.profile, containerName: ctrl.container.name})">Nodes</a></li>
+        <li ng-if="!ctrl.isLocalMode()"><a ui-sref="caches-node-stats({profileName: ctrl.container.profile, containerName: ctrl.container.name})">Nodes</a></li>
       </ul>
     </div>
   </div>

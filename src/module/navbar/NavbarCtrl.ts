@@ -1,9 +1,12 @@
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {IStateService} from "angular-ui-router";
+import {BRAND_NAME, BRAND_IMAGE} from "../../common/Constants";
 
 export class NavbarCtrl {
   static $inject: string[] = ["$scope", "$state", "authService"];
 
+  brandName: string = BRAND_NAME;
+  brandImage: string = BRAND_IMAGE;
   stateChanging: boolean;
 
   constructor(private $scope: ng.IScope,

@@ -3,11 +3,14 @@ import {AuthenticationService} from "../../services/authentication/Authenticatio
 import {DmrService} from "../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
 import {IScope} from "../../common/IScopeService";
+import {BRAND_NAME, BRAND_IMAGE} from "../../common/Constants";
 
 export class LoginCtrl {
 
   static $inject: string[] = ["$scope", "$state", "authService", "dmrService"];
 
+  public brandName: string = BRAND_NAME;
+  public brandImage: string = BRAND_IMAGE;
   public credentials: ICredentials = <ICredentials>{};
   public authenticated: boolean = false;
   public loginError: string;

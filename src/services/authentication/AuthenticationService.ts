@@ -38,22 +38,25 @@ export class AuthenticationService {
   login(credentials: ICredentials): ng.IPromise<string> {
     this.setCredentials(credentials);
     let deferred: ng.IDeferred<string> = this.$q.defer();
-    this.dmrService.readAttribute({address: [], name: "launch-type"})
-      .then((response:string) => {
-        if (LaunchTypeService.STANDALONE_MODE === response) {
-          this.dmrService.hasJGroupsSubsystem().then((hasJGroupsStack) => {
-            this.launchType.set(response, hasJGroupsStack);
-          });
-        } else {
-          this.launchType.set(response, true);
-        }
-        this.setCredentials(credentials);
-        this.availability.startApiAccessibleCheck();
-        deferred.resolve();
-      }, error => {
-        this.logout();
-        deferred.reject(error);
-      });
+    this.dmrService.readResource({
+      address: [],
+      recursive: true,
+      "include-runtime": true,
+      "recursive-depth": 2
+    }).then((response: any) => {
+      let hasJGroupsStack: boolean = true;
+      let launchType: string = response["launch-type"];
+      if (LaunchTypeService.STANDALONE_MODE === launchType) {
+        hasJGroupsStack = isNotNullOrUndefined(response["subsystem"]["datagrid-jgroups"]);
+      }
+      this.launchType.set(launchType, hasJGroupsStack);
+      this.setCredentials(credentials);
+      this.availability.startApiAccessibleCheck();
+      deferred.resolve();
+    }, error => {
+      this.logout();
+      deferred.reject(error);
+    });
     return deferred.promise;
   }
 

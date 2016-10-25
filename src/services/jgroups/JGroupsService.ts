@@ -15,6 +15,7 @@ const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
 export class JGroupsService {
 
+  private static NO_JGROUPS_STACK:string = "No datagrid-jgroups subsystem installed";
   static $inject: string[] = ["$q", "dmrService", "serverService", "launchType", "standaloneService"];
 
   constructor(private $q: IQService,
@@ -25,8 +26,8 @@ export class JGroupsService {
   }
 
   getDefaultStack(server: IServerAddress): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
     if (this.hasJGroupsStack()) {
-      let deferred: ng.IDeferred<string> = this.$q.defer<string>();
       this.serverService.getServerStatus(server).then(status => {
         if (status === "STOPPED") {
           deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
@@ -37,10 +38,10 @@ export class JGroupsService {
           }));
         }
       });
-      return deferred.promise;
     } else {
-      return this.$q.when("N/A");
+      deferred.reject(JGroupsService.NO_JGROUPS_STACK);
     }
+    return deferred.promise;
   }
 
   /**
@@ -49,8 +50,8 @@ export class JGroupsService {
    * was not deprecated and supported resolving expressions.
    */
   getDefaultStackServerGroupMap(host: string): ng.IPromise<IMap<string>> {
+    let deferred: ng.IDeferred<IMap<string>> = this.$q.defer<IMap<string>>();
     if (this.hasJGroupsStack()) {
-      let deferred: ng.IDeferred<IMap<string>> = this.$q.defer<IMap<string>>();
       let request: IDmrRequest = <IDmrRequest>{
         address: [].concat("host", host),
         "child-type": "server"
@@ -76,8 +77,10 @@ export class JGroupsService {
           }
           deferred.resolve(stackMap);
         });
-      return deferred.promise;
+    } else {
+      deferred.reject(JGroupsService.NO_JGROUPS_STACK);
     }
+    return deferred.promise;
   }
 
   getServerGroupCoordinator(serverGroup: IServerGroup): ng.IPromise<IServerAddress> {
@@ -85,8 +88,8 @@ export class JGroupsService {
   }
 
   getCoordinatorByServer(server: IServerAddress, profile: string): ng.IPromise<IServerAddress> {
+    let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
     if (this.hasJGroupsStack()) {
-      let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
       this.serverService.getServerStatus(server).then(status => {
         if (status === "STOPPED") {
           deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
@@ -100,10 +103,10 @@ export class JGroupsService {
           });
         }
       });
-      return deferred.promise;
     } else {
-      this.$q.when(new ServerAddress("N/A", "N/A"));
+      deferred.reject(JGroupsService.NO_JGROUPS_STACK);
     }
+    return deferred.promise;
   }
 
   getChannelNamesByProfile(profile: string): ng.IPromise<string[]> {
@@ -114,7 +117,7 @@ export class JGroupsService {
       };
       return this.dmrService.readChildName(request);
     } else {
-      this.$q.when(["N/A"]);
+      return this.$q.reject(JGroupsService.NO_JGROUPS_STACK);
     }
   }
 
@@ -126,7 +129,7 @@ export class JGroupsService {
       };
       return this.dmrService.readAttribute(request);
     } else {
-      this.$q.when("N/A");
+      return this.$q.reject(JGroupsService.NO_JGROUPS_STACK);
     }
   }
 

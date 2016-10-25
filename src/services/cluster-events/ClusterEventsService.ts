@@ -37,22 +37,16 @@ export class ClusterEventsService {
   }
 
   fetchClusterEvents(container: ICacheContainer, maxLines: number, category?: string): ng.IPromise<IClusterEvent[]> {
-    if (this.jGroupsService.hasJGroupsStack()) {
-      let deferred: ng.IDeferred<IClusterEvent[]> = this.$q.defer<IClusterEvent[]>();
-      this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-        .then((coordinator) => {
-            let server: IServerAddress = new ServerAddress(coordinator.host, coordinator.name);
-            return this.getEventLog(server, container.name, maxLines, category);
-          },
-          error => deferred.reject(error))
-        .then((eventLog) => {
+    let deferred: ng.IDeferred<IClusterEvent[]> = this.$q.defer<IClusterEvent[]>();
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coordinator) => {
+        let server: IServerAddress = new ServerAddress(coordinator.host, coordinator.name);
+        return this.getEventLog(server, container.name, maxLines, category).then((eventLog) => {
           let events: IClusterEvent[] = eventLog.map((event) => ClusterEventsService.parseEvent(event));
           deferred.resolve(events);
         });
-      return deferred.promise;
-    } else {
-      return this.$q.when([]);
-    }
+      },
+      error => deferred.reject(error));
+    return deferred.promise;
   }
 
   private getEventLog(server: IServerAddress, container: string, maxLines: number, category: string): ng.IPromise<any> {
@@ -68,7 +62,7 @@ export class ClusterEventsService {
     return this.dmrService.readEventLog(request);
   }
 
-  private getAddressPath(server: IServerAddress, container:string): string[] {
+  private getAddressPath(server: IServerAddress, container: string): string[] {
     let path: string[] = ["subsystem", "datagrid-infinispan", "cache-container", container];
     return this.launchType.getRuntimePath(server).concat(path);
   }

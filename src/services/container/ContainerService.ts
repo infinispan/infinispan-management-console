@@ -197,18 +197,13 @@ export class ContainerService {
 
   isRebalancingEnabled(container: ICacheContainer): ng.IPromise<boolean> {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
-    if (this.jGroupsService.hasJGroupsStack()) {
-      this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-        .then(coordinator => {
-          let request: IDmrRequest = {
-            address: this.getContainerAddress(container, coordinator),
-            name: "cluster-rebalance"
-          };
-          this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
-        }, () => deferred.resolve(false));
-    } else {
-      deferred.resolve(true); // in fact there is no rebalancing in LOCAL mode
-    }
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+      let request: IDmrRequest = {
+        address: this.getContainerAddress(container, coordinator),
+        name: "cluster-rebalance"
+      };
+      this.dmrService.readAttribute(request).then(response => deferred.resolve(Boolean(response)));
+    }, (error) => deferred.resolve(true)); // LOCAL mode, switch it to true as we don't care
     return deferred.promise;
   }
 

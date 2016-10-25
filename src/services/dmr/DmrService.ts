@@ -91,19 +91,6 @@ export class DmrService {
     this.$cacheFactory.get("$http").removeAll();
   }
 
-  hasJGroupsSubsystem(): ng.IPromise<boolean> {
-    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
-    let request: IDmrRequest = <IDmrRequest>{
-      address: [].concat("subsystem", "datagrid-jgroups")
-    };
-    this.readResource(request).then((response) => {
-      deferred.resolve(true);
-    }).catch((reason) => {
-      deferred.resolve(false);
-    });
-    return deferred.promise;
-  }
-
   private executePostHelper(data: any, upload: boolean, noTimeout?: boolean): ng.IPromise<any> {
     if (upload) {
       return this.executePostUpload(data, noTimeout);

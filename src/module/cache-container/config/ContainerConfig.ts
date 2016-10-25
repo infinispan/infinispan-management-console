@@ -22,7 +22,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     templateUrl: "module/cache-container/config/view/config.html",
     controller: ContainerConfigCtrl,
     controllerAs: "ctrl",
-    redirectTo: "container-config.schemas",
+    redirectTo: "container-config.thread-pools", // how to redirect to schemas as default if not standalone local?
     resolve: {
       container: ["$stateParams", "containerService", ($stateParams, containerService) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
@@ -36,8 +36,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controller: SchemaConfigCtrl,
     controllerAs: "schemaCtrl",
     resolve: {
-      availableSchemas: ["container", "schemaService", (container, schemaService) => {
-        return schemaService.getProtoSchemaNames(container);
+      availableSchemas: ["$q", "container", "schemaService", ($q:IQService, container, schemaService) => {
+        return schemaService.getProtoSchemaNames(container).catch((reason) => {
+          $q.resolve([]); // most likely standalone local mode present, simply return empty array
+        });
       }]
     }
   });

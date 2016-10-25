@@ -41,35 +41,31 @@ export class ContainerTasksService {
 
   getRunningTasks(container: ICacheContainer): ng.IPromise<ITaskStatus[]> {
     let deferred: ng.IDeferred<ITaskStatus[]> = this.$q.defer<ITaskStatus[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-          return this.dmrService.executePost({
-            operation: "task-status",
-            address: this.getContainerAddress(container.name, coordinator)
-          });
-        },
-        error => deferred.reject(error))
-      .then(response => {
-        let tasks: ITaskStatus[] = response.map(status => ContainerTasksService.parseTaskStatus(status));
-        deferred.resolve(tasks);
-      });
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+        return this.dmrService.executePost({
+          operation: "task-status",
+          address: this.getContainerAddress(container.name, coordinator)
+        }).then(response => {
+          let tasks: ITaskStatus[] = response.map(status => ContainerTasksService.parseTaskStatus(status));
+          deferred.resolve(tasks);
+        });
+      },
+      error => deferred.reject(error));
     return deferred.promise;
   }
 
   getTaskDefinitions(container: ICacheContainer): ng.IPromise<ITaskDefinition[]> {
     let deferred: ng.IDeferred<ITaskDefinition[]> = this.$q.defer<ITaskDefinition[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
-          return this.dmrService.executePost({
-            operation: "task-list",
-            address: this.getContainerAddress(container.name, coordinator)
-          });
-        },
-        error => deferred.reject(error))
-      .then(response => {
-        let tasks: ITaskDefinition[] = response.map(task => ContainerTasksService.parseTaskDefinition(task));
-        deferred.resolve(tasks);
-      });
+    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+        return this.dmrService.executePost({
+          operation: "task-list",
+          address: this.getContainerAddress(container.name, coordinator)
+        }).then(response => {
+          let tasks: ITaskDefinition[] = response.map(task => ContainerTasksService.parseTaskDefinition(task));
+          deferred.resolve(tasks);
+        });
+      },
+      error => deferred.reject(error));
     return deferred.promise;
   }
 

@@ -1,7 +1,6 @@
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {IStateService} from "angular-ui-router";
 import {BRAND_NAME, BRAND_IMAGE} from "../../common/Constants";
-import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class NavbarCtrl {

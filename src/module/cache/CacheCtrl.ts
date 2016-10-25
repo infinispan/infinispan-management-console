@@ -6,7 +6,6 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {ICache} from "../../services/cache/ICache";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
-import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class CacheCtrl {

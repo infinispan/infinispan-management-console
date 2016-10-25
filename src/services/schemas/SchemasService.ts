@@ -5,6 +5,8 @@ import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {ISchemaDefinition} from "./ISchemaDefinition";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
+import {IDmrRequest} from "../dmr/IDmrRequest";
+import {IServerGroup} from "../server-group/IServerGroup";
 
 const module: ng.IModule = App.module("managementConsole.services.schemas", []);
 
@@ -21,7 +23,7 @@ export class SchemaService {
 
   getProtoSchema(container: ICacheContainer, schemaName: string): ng.IPromise<ISchemaDefinition> {
     let deferred: ng.IDeferred<ISchemaDefinition> = this.$q.defer<ISchemaDefinition>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+    this.findTarget(container.serverGroup)
       .then(coordinator => {
           return this.dmrService.executePost({
             address: this.getContainerAddress(container.name, coordinator),
@@ -36,7 +38,7 @@ export class SchemaService {
 
   getProtoSchemaNames(container: ICacheContainer): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then(coordinator => {
+    this.findTarget(container.serverGroup).then(coordinator => {
         return this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "get-proto-schema-names"
@@ -48,7 +50,7 @@ export class SchemaService {
 
   registerProtoSchema(container: ICacheContainer, schema: ISchemaDefinition): ng.IPromise<void> {
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+    this.findTarget(container.serverGroup)
       .then(coordinator => {
           return this.dmrService.executePost({
             address: this.getContainerAddress(container.name, coordinator),
@@ -64,7 +66,7 @@ export class SchemaService {
 
   unregisterProtoSchema(container: ICacheContainer, fileName: string): ng.IPromise<void> {
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
-    this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
+    this.findTarget(container.serverGroup)
       .then(coordinator => {
         return this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
@@ -74,6 +76,14 @@ export class SchemaService {
       })
       .then(() => deferred.resolve());
     return deferred.promise;
+  }
+
+  private findTarget(serverGroup: IServerGroup): ng.IPromise<IServerAddress> {
+    if (this.launchType.isStandaloneLocalMode()) {
+      return this.$q.when(null);
+    } else {
+      return this.jGroupsService.getServerGroupCoordinator(serverGroup);
+    }
   }
 
   private getContainerAddress(container: string, coordinator: IServerAddress): string[] {

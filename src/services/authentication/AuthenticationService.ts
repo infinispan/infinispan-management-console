@@ -47,7 +47,7 @@ export class AuthenticationService {
       let hasJGroupsStack: boolean = true;
       let launchType: string = response["launch-type"];
       if (LaunchTypeService.STANDALONE_MODE === launchType) {
-        hasJGroupsStack = isNotNullOrUndefined(response["subsystem"]["datagrid-jgroups"]);
+        hasJGroupsStack = isNotNullOrUndefined(response.subsystem["datagrid-jgroups"]);
       }
       this.launchType.set(launchType, hasJGroupsStack);
       this.setCredentials(credentials);

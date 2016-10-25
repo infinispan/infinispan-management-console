@@ -7,9 +7,10 @@ import {openErrorModal, openRestartModal, openConfirmationModal} from "../../../
 import {AbstractConfigurationCtrl} from "../../../common/configuration/AbstractConfigurationCtrl";
 import {CacheService} from "../../../services/cache/CacheService";
 import IModalService = angular.ui.bootstrap.IModalService;
+import {LaunchTypeService} from "../../../services/launchtype/LaunchTypeService";
 
 export class CacheConfigCtrl extends AbstractConfigurationCtrl {
-  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "cacheService", "cacheConfigService",
+  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "launchType", "cacheService", "cacheConfigService",
     "container", "template", "meta", "cacheName"];
 
   profile: string;
@@ -22,6 +23,7 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
               private $scope: ng.IScope,
               private $uibModal: IModalService,
               private domainService: DomainService,
+              private launchType: LaunchTypeService,
               private cacheService: CacheService,
               private cacheConfigService: CacheConfigService,
               private container: ICacheContainer,
@@ -67,7 +69,9 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
   updateTemplate(): void {
     this.cacheConfigService.updateCacheConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
       .then(() => {
-          if (this.isRestartRequired()) {
+          if (this.launchType.isStandaloneLocalMode()) {
+            openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
+          } else {
             openRestartModal(this.$uibModal).result.then(() => this.domainService.restartAllServers());
           }
           this.cleanMetaData();

@@ -86,7 +86,8 @@ export class ContainerService {
         if (this.jGroupsService.hasJGroupsStack()) {
           return this.getSiteArrays(container);
         } else {
-          return deferred.resolve(container);
+          deferred.resolve(container);
+          return;
         }
       })
       .then(sites => {

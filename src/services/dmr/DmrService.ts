@@ -212,7 +212,11 @@ export class DmrService {
       console.log(response.data);
       let result: any = response.data;
       if (result && result["failure-description"] != null) {
-        msg = result["failure-description"];
+        if (isNotNullOrUndefined(result["failure-description"]["domain-failure-description"])) {
+          msg = result["failure-description"]["domain-failure-description"];
+        } else {
+          msg = result["failure-description"];
+        }
       }
     }
     return msg;

@@ -1,0 +1,34 @@
+<div class="card-pf card-pf-accented ispn-card" vertilize>
+  <div class="card-pf-heading">
+    <h2 class="card-pf-title">{{title}}</h2>
+  </div>
+  <div class="card-pf-body">
+    <div class="row">
+      <div>
+        <div id="{{chartId}}"></div>
+      </div>
+      <div ng-if="!data">
+        <h4>No data available</h4>
+      </div>
+    </div>
+    <div class="row" style="padding: 5px">
+      <table class="col-sm-12 col-xs-12 col-md-12 table">
+        <tr>
+          <th>&nbsp;</th>
+          <th class="small" style="text-align: center"><strong>JVM</strong></th>
+          <th class="small" style="text-align: center"><strong>OFF HEAP</strong></th>
+        </tr>
+        <tr>
+          <th style="text-align: center"><strong>MAX</strong></th>
+          <td class="small" style="text-align: center">{{data.getMaxJVM()}} GB</td>
+          <td class="small" style="text-align: center">{{data.getMaxOffHeap()}} GB</td>
+        </tr>
+        <tr>
+          <th style="text-align: center"><strong>USED</strong></th>
+          <td class="small" style="text-align: center">{{data.getUsedJVM()}} GB</td>
+          <td class="small" style="text-align: center">{{data.getUsedOffHeap()}} GB</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

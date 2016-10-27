@@ -33,6 +33,7 @@ import IAngularEvent = angular.IAngularEvent;
 import {FileModelDirective} from "./components/directives/FileModelDirective";
 import {VertilizeContainerDirective} from "./components/directives/VertilizeContainerDirective";
 import {VertilizeDirective} from "./components/directives/VertilizeDirective";
+import {MemoryDirective} from "./components/directives/memory/MemoryDirective";
 
 const App: ng.IAngularStatic = angular;
 
@@ -54,6 +55,7 @@ module.config(($translateProvider: ITranslateProvider) => {
 module.directive("fileModel", FileModelDirective.factory());
 module.directive("vertilizeContainer", VertilizeContainerDirective.factory());
 module.directive("vertilize", VertilizeDirective.factory());
+module.directive("memoryChart", MemoryDirective.factory());
 
 // @ngInject
 module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {

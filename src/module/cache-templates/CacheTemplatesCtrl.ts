@@ -9,7 +9,7 @@ import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
-  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "cacheConfigService", "container",
+  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "launchType", "cacheConfigService", "container",
     "template", "meta"];
 
   profile: string;

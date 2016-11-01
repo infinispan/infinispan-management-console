@@ -93,7 +93,8 @@ export class CacheService {
   createCacheAndConfiguration(container: ICacheContainer, type: string, name: string, config: any): ng.IPromise<void> {
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
     this.cacheConfigService.createCacheConfiguration(container, type, name, config)
-      .then(() => deferred.resolve(this.createCacheFromConfiguration(container, type, name, name)));
+      .then(() => deferred.resolve(this.createCacheFromConfiguration(container, type, name, name)),
+        error => deferred.reject(error));
     return deferred.promise;
   }
 

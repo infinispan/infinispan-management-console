@@ -131,7 +131,7 @@ export class CacheConfigService {
   }
 
   removeConfiguration(container: ICacheContainer, type: string, name: string): ng.IPromise<void> {
-    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type, name);
+    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name);
     return this.dmrService.executePost({
       address: address,
       operation: "remove"
@@ -298,9 +298,9 @@ export class CacheConfigService {
         this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
         this.createHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
-        this.updateSecurityAuthorization(config);
-        this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
-        if (isNotNullOrUndefined(config.security)) {
+        if (this.isSecurityAuthorizationEnabled(config)) {
+          this.updateSecurityAuthorization(config);
+          this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
           this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
         }
 
@@ -376,9 +376,9 @@ export class CacheConfigService {
     this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
     this.updateHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
-    this.updateSecurityAuthorization(config);
-    this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
-    if (isNotNullOrUndefined(config.security)) {
+    if (this.isSecurityAuthorizationDefined(config)) {
+      this.updateSecurityAuthorization(config);
+      this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
       this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
     }
 
@@ -401,10 +401,22 @@ export class CacheConfigService {
 
   private updateSecurityAuthorization(config: any): void {
     let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
-    if (isNotNullOrUndefined(auth) && auth["is-new-node"] && auth.enabled) {
+    let newlyCreatedNode: boolean = isNotNullOrUndefined(auth) && isNotNullOrUndefined(auth["is-new-node"]);
+    if (newlyCreatedNode) {
+      // special case handling to update the parent of AUTHORIZATION, that is SECURITY node
       config.security.SECURITY["is-new-node"] = true;
       config.security.SECURITY["required-node"] = true;
     }
+  }
+
+  private isSecurityAuthorizationEnabled(config: any): boolean {
+    let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
+    return isNotNullOrUndefined(auth) && auth.enabled;
+  }
+
+  private isSecurityAuthorizationDefined(config: any): boolean {
+    let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
+    return isNotNullOrUndefined(auth);
   }
 
   private updateCacheLoader(builder: CompositeOpBuilder, address: string[], config: any): void {

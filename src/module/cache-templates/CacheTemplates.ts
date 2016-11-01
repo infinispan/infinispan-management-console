@@ -50,13 +50,11 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         ($q: ng.IQService, $stateParams, container, cacheConfigService) => {
           let deferred: ng.IDeferred<any> = $q.defer<any>();
           if (isNotNullOrUndefined($stateParams.baseType) && isNotNullOrUndefined($stateParams.baseName)) {
-            cacheConfigService.getTemplate(container, $stateParams.baseType, $stateParams.baseName)
-              .then(template => {
-                template.name = $stateParams.templateName;
-                template["template-name"] = $stateParams.templateName;
-                deferred.resolve(template);
-              });
-            return deferred.promise;
+            cacheConfigService.getTemplate(container, $stateParams.baseType, $stateParams.baseName).then(template => {
+              template.name = $stateParams.templateName;
+              template["template-name"] = $stateParams.templateName;
+              deferred.resolve(template);
+            });
           } else {
             deferred.resolve({
               name: $stateParams.name,

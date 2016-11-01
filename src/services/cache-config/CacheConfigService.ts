@@ -131,7 +131,7 @@ export class CacheConfigService {
   }
 
   removeConfiguration(container: ICacheContainer, type: string, name: string): ng.IPromise<void> {
-    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type, name);
+    let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name);
     return this.dmrService.executePost({
       address: address,
       operation: "remove"

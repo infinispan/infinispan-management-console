@@ -298,9 +298,9 @@ export class CacheConfigService {
         this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
         this.createHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
-        this.updateSecurityAuthorization(config);
-        this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
-        if (isNotNullOrUndefined(config.security)) {
+        if (this.isSecurityAuthorizationEnabled(config)) {
+          this.updateSecurityAuthorization(config);
+          this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
           this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
         }
 
@@ -376,9 +376,8 @@ export class CacheConfigService {
     this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
     this.updateHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
-    this.updateSecurityAuthorization(config);
-    this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
-    if (isNotNullOrUndefined(config.security)) {
+    if (this.isSecurityAuthorizationDefined(config)) {
+      this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
       this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
     }
 
@@ -405,6 +404,16 @@ export class CacheConfigService {
       config.security.SECURITY["is-new-node"] = true;
       config.security.SECURITY["required-node"] = true;
     }
+  }
+
+  private isSecurityAuthorizationEnabled(config: any): boolean {
+    let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
+    return isNotNullOrUndefined(auth) && auth.enabled;
+  }
+
+  private isSecurityAuthorizationDefined(config: any): boolean {
+    let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
+    return isNotNullOrUndefined(auth);
   }
 
   private updateCacheLoader(builder: CompositeOpBuilder, address: string[], config: any): void {

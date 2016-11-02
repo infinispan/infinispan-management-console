@@ -377,6 +377,7 @@ export class CacheConfigService {
     this.updateHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
     if (this.isSecurityAuthorizationDefined(config)) {
+      this.updateSecurityAuthorization(config);
       this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
       this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
     }
@@ -400,7 +401,9 @@ export class CacheConfigService {
 
   private updateSecurityAuthorization(config: any): void {
     let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
-    if (isNotNullOrUndefined(auth) && auth["is-new-node"] && auth.enabled) {
+    let newlyCreatedNode: boolean = isNotNullOrUndefined(auth) && isNotNullOrUndefined(auth["is-new-node"]);
+    if (newlyCreatedNode) {
+      // special case handling to update the parent of AUTHORIZATION, that is SECURITY node
       config.security.SECURITY["is-new-node"] = true;
       config.security.SECURITY["required-node"] = true;
     }

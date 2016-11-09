@@ -74,8 +74,6 @@ export class CacheLoadersCtrl implements IConfigurationCallback {
   configCallbacks: IConfigurationCallback[];
   cacheLoaders: {class: string, label: string}[];
 
-  test: string = "YO!";
-
   fields: string[];
   allFields: string[];
   prevData: any;

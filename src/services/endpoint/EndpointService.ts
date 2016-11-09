@@ -6,6 +6,7 @@ import {SocketBindingService} from "../socket-binding/SocketBindingService";
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 import IQService = angular.IQService;
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.endpoint", []);
 
@@ -37,8 +38,10 @@ export class EndpointService {
     .then((endpointResponse: any): IEndpoint[] => {
       let endpoints: IEndpoint[] = [];
       for (let name in endpointResponse) {
-        let endpointObject: any = endpointResponse[name][name];
-        endpoints.push(EndpointService.parseEndpoint(name, endpointObject));
+        if (isNotNullOrUndefined(endpointResponse[name])) {
+          let endpointObject: any = endpointResponse[name][name];
+          endpoints.push(EndpointService.parseEndpoint(name, endpointObject));
+        }
       }
       return endpoints;
     })

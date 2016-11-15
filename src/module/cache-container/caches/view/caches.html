@@ -53,11 +53,11 @@
                   </span>
             </p>
             <p ng-if="cache.hasRemoteBackup()" style="height:20px" ng-init="container = ctrl.container">
-                <span ng-repeat="site in container['offline-sites'][cache.name]"><span
+                <span ng-repeat="site in container['sites-offline'][cache.name]"><span
                   class="pficon pficon-error-circle-o"></span> {{site}} &nbsp;</span>
-              <span ng-repeat="site in container['mixed-sites'][cache.name]"><span
+              <span ng-repeat="site in container['sites-mixed'][cache.name]"><span
                 class="pficon pficon-warning-triangle-o"></span> {{site}} &nbsp;</span>
-              <span ng-repeat="site in container['online-sites'][cache.name]"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
+              <span ng-repeat="site in container['sites-online'][cache.name]"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
             </p>
           </div>
         </div>

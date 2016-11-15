@@ -50,8 +50,8 @@ export class CacheContainersCtrl {
   }
 
   isSitesEmpty(container: ICacheContainer): boolean {
-    return getArraySize(container["online-sites"]) + getArraySize(container["offline-sites"]) +
-      getArraySize(container["mixed-sites"]) === 0;
+    return getArraySize(container["sites-online"]) + getArraySize(container["sites-offline"]) +
+      getArraySize(container["sites-mixed"]) === 0;
   }
 
   getAllClusterEvents(): void {

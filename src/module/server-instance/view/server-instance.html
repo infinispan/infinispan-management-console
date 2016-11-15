@@ -5,7 +5,7 @@
         <li>
           <a href="#/server-groups" translate>CLUSTERS</a>
         </li>
-        <li><a ui-sref="server-group({serverGroup: ctrl.serverInstance.serverGroup})" ui-sref-opts="{reload:true}">{{ctrl.serverInstance.serverGroup}}</a></li>
+        <li ng-if="ctrl.serverInstance.serverGroup"><a ui-sref="server-group({serverGroup: ctrl.serverInstance.serverGroup})" ui-sref-opts="{reload:true}">{{ctrl.serverInstance.serverGroup}}</a></li>
         <li class="active"><strong>{{ctrl.serverInstance.address.name}}</strong></li>
       </ol>
 

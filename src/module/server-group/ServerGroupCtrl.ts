@@ -45,7 +45,7 @@ export class ServerGroupCtrl {
   }
 
   isServerStopped(server: IServerAddress): boolean {
-    return false;
+    return this.getServerStatus(server) === "STOPPED";
   }
 
   getSGStatus(): string {

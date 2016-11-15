@@ -10,7 +10,7 @@ export interface ICacheContainer {
   numberOfCaches: number;
   endpoints: IEndpoint[];
   authorization: IAuthorization;
-  "online-sites": string[];
-  "offline-sites": string[];
-  "mixed-sites": string[];
+  "sites-online": string[];
+  "sites-offline": string[];
+  "sites-mixed": string[];
 }

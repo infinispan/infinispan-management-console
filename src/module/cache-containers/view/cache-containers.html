@@ -29,9 +29,9 @@
             </span>
           </td>
           <td>
-            <div ng-repeat="site in container['online-sites']"><span class="pficon pficon-ok"></span>{{site}}</div>
-            <div ng-repeat="site in container['mixed-sites']"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
-            <div ng-repeat="site in container['offline-sites']"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
+            <div ng-repeat="site in container['sites-online']"><span class="pficon pficon-ok"></span>{{site}}</div>
+            <div ng-repeat="site in container['sites-mixed']"><span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span></div>
+            <div ng-repeat="site in container['sites-offline']"><span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span></div>
             <div ng-if="ctrl.isSitesEmpty(container)">N/A</div>
           </td>
         </tr>

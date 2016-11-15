@@ -24,9 +24,9 @@ export class SiteManagementModalCtrl {
   }
 
   initSites(siteArrays: {[id: string]: string[]}): void {
-    this.onlineSites = siteArrays["online-sites"];
-    this.offlineSites = siteArrays["offline-sites"];
-    this.mixedSites = siteArrays["mixed-sites"];
+    this.onlineSites = siteArrays["sites-online"];
+    this.offlineSites = siteArrays["sites-offline"];
+    this.mixedSites = siteArrays["sites-mixed"];
   }
 
   isSitesEmpty(): boolean {

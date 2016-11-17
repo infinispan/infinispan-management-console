@@ -1,5 +1,20 @@
 <div class="row">
   <div class="col-sm-12 col-md-12">
+    <form class="form-inline">
+      <div class="form-group">
+        <label class="control-label" for="taskCount">Retrieve &nbsp;</label>
+        <select
+          class="form-control"
+          id="taskCount"
+          name="taskCount"
+          ng-model="tasksCtrl.taskCount"
+          ng-options="option as option for option in tasksCtrl.taskCountOptions"
+          ng-change="tasksCtrl.getTaskHistory()">
+        </select>
+        <label> &nbsp; tasks. Showing {{tasksCtrl.getShowingTasks()}} tasks.</label>
+      </div>
+    </form>
+    <br>
     <table class="table ispn-table" ng-if="tasksCtrl.history.length > 0">
       <tbody>
       <tr>

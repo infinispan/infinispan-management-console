@@ -16,6 +16,8 @@ export class TasksCtrl {
 
   history: IClusterEvent[] = [];
   runningTasks: ITaskStatus[] = [];
+  taskCount: number = 10;
+  taskCountOptions: number [] = [10, 50, 100];
 
   constructor(private $rootScope: IRootScopeService,
               private $uibModal: IModalService,
@@ -41,13 +43,17 @@ export class TasksCtrl {
     });
   }
 
+  public getShowingTasks(): number {
+    return (this.taskCount < this.history.length) ? this.taskCount : this.history.length;
+  }
+
   private getRunningTasks(): void {
     this.containerTasksSevice.getRunningTasks(this.container)
       .then(tasks => this.runningTasks = tasks);
   }
 
   private getTaskHistory(): void {
-    this.clusterEventsService.fetchClusterEvents(this.container, 10, "TASKS")
-      .then(events => this.history = this.history.concat(events));
+    this.clusterEventsService.fetchClusterEvents(this.container, this.taskCount, "TASKS")
+      .then(events => this.history = events);
   }
 }

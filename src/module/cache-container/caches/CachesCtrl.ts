@@ -6,9 +6,12 @@ import {AddCacheModalCtrl} from "./AddCacheModalCtrl";
 import IModalService = angular.ui.bootstrap.IModalService;
 import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {ITemplate} from "../../../services/container-config/ITemplate";
+import {CacheService} from "../../../services/cache/CacheService";
+import {IMap} from "../../../common/utils/IMap";
+import {isNullOrUndefined} from "../../../common/utils/Utils";
 
 export class CachesCtrl {
-  static $inject: string[] = ["$uibModal", "container", "caches", "templates"];
+  static $inject: string[] = ["$uibModal", "container", "caches", "templates", "cacheService"];
 
   traitCheckboxes: TraitCheckboxes = new TraitCheckboxes();
   typeCheckboxes: TypeCheckboxes = new TypeCheckboxes();
@@ -17,11 +20,21 @@ export class CachesCtrl {
   isCollapsedTrait: boolean = false;
   isCollapsedType: boolean = false;
   isCollapsedStatus: boolean = false;
+  cacheAvailability: IMap<boolean> = {};
+  cacheEnablement: IMap<boolean> = {};
 
   constructor(private $uibModal: IModalService,
               public container: ICacheContainer,
               public caches: ICache[],
-              public templates: ITemplate[]) {
+              public templates: ITemplate[],
+              public cacheService: CacheService) {
+    for (let c of caches) {
+      this.cacheService.isAvailable(this.container, c)
+        .then(result => this.cacheAvailability[c.name] = result);
+
+      this.cacheService.isEnabled(this.container.profile, c)
+        .then(result => this.cacheEnablement[c.name] = !result[c.name]);
+    }
   }
 
   createCache(): void {
@@ -34,5 +47,23 @@ export class CachesCtrl {
         templates: (): ITemplate[] => this.templates
       }
     });
+  }
+
+  isAvailable(cache: ICache): boolean {
+    let result: boolean = this.cacheAvailability[cache.name];
+    if (isNullOrUndefined(result)) {
+      return false;
+    } else {
+      return result;
+    }
+  }
+
+  isEnabled(cache: ICache): boolean {
+    let result: boolean = this.cacheEnablement[cache.name];
+    if (isNullOrUndefined(result)) {
+      return false;
+    } else {
+      return result;
+    }
   }
 }

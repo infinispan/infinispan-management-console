@@ -34,6 +34,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         ($stateParams, container: ICacheContainer, cache: ICache, cacheService: CacheService) => {
           return cacheService.getCacheStats(container, cache);
         }],
+      availability: ["container", "cache", "cacheService",
+        (container: ICacheContainer, cache: ICache, cacheService: CacheService) => {
+          return cacheService.availability(container, cache);
+        }],
       cacheEnabledRSP: ["$stateParams", "container", "cache", "cacheService",
         ($stateParams, container: ICacheContainer, cache: ICache, cacheService: CacheService) => {
           return cacheService.isEnabled(container.profile, cache);

@@ -240,6 +240,10 @@ export class ServerGroupService {
     return this.executeOp(serverGroup, "start-servers");
   }
 
+  restartServers(serverGroup: IServerGroup): ng.IPromise<void> {
+    return this.executeOp(serverGroup, "restart-servers");
+  }
+
   stopServers(serverGroup: IServerGroup): ng.IPromise<void> {
     return this.executeOp(serverGroup, "stop-servers");
   }

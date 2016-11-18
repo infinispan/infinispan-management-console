@@ -4,12 +4,12 @@ import {AbstractConfigurationCtrl} from "../../common/configuration/AbstractConf
 import {CacheConfigService} from "../../services/cache-config/CacheConfigService";
 import {isNotNullOrUndefined, isNonEmptyString} from "../../common/utils/Utils";
 import {openErrorModal, openRestartModal, openConfirmationModal} from "../../common/dialogs/Modals";
-import {DomainService} from "../../services/domain/DomainService";
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 
 export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
-  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "launchType", "cacheConfigService", "container",
+  static $inject: string[] = ["$state", "$scope", "$uibModal", "serverGroupService", "launchType", "cacheConfigService", "container",
     "template", "meta"];
 
   profile: string;
@@ -21,7 +21,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
   constructor(private $state: IStateService,
               private $scope: ng.IScope,
               private $uibModal: IModalService,
-              private domainService: DomainService,
+              private serverGroupService: ServerGroupService,
               private launchType: LaunchTypeService,
               private cacheConfigService: CacheConfigService,
               private container: ICacheContainer,
@@ -69,7 +69,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
           if (this.launchType.isStandaloneLocalMode()) {
             openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
           } else {
-            openRestartModal(this.$uibModal).result.then(() => this.domainService.restartAllServers());
+            openRestartModal(this.$uibModal).result.then(() => this.serverGroupService.restartServers(this.container.serverGroup));
           }
           this.cleanMetaData();
         },

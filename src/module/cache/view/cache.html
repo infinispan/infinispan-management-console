@@ -55,7 +55,7 @@
       </div>
 
       <h1><span class="label" id="currentCacheAvailability"
-                ng-class="ctrl.currentCacheAvailability() ? 'label-success' : 'label-danger'">{{ctrl.currentClusterAvailabilityAsString()}}
+                ng-class="ctrl.isCurrentCacheAvailable() ? 'label-success' : 'label-danger'">{{ctrl.availability}}
       </span>&nbsp;{{ctrl.cache.name}}
         <span ng-if="ctrl.stats['cache-rebalancing-status']=='SUSPENDED'"   class="small"><strong class="label label-danger"> - Rebalancing: SUSPENDED</strong></span>
         <span ng-if="ctrl.stats['cache-rebalancing-status']=='PENDING'"     class="text-warning small"><span class="spinner spinner-xs spinner-inline" title="Rebalancing pending"></span> - Rebalancing: PENDING</span>

@@ -38,14 +38,6 @@ export class DomainService {
     return deferred.promise;
   }
 
-  restartAllServers(): ng.IPromise<void> {
-    return this.dmrService.executePost({
-      address: [],
-      blocking: true,
-      operation: "restart-servers"
-    }, true);
-  }
-
 }
 
 module.service("domainService", DomainService);

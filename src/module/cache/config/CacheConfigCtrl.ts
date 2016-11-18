@@ -1,6 +1,5 @@
 import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {CacheConfigService} from "../../../services/cache-config/CacheConfigService";
-import {DomainService} from "../../../services/domain/DomainService";
 import {IStateService} from "angular-ui-router";
 import {isNotNullOrUndefined, isNonEmptyString} from "../../../common/utils/Utils";
 import {openErrorModal, openRestartModal, openConfirmationModal} from "../../../common/dialogs/Modals";
@@ -8,9 +7,10 @@ import {AbstractConfigurationCtrl} from "../../../common/configuration/AbstractC
 import {CacheService} from "../../../services/cache/CacheService";
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../../services/launchtype/LaunchTypeService";
+import {ServerGroupService} from "../../../services/server-group/ServerGroupService";
 
 export class CacheConfigCtrl extends AbstractConfigurationCtrl {
-  static $inject: string[] = ["$state", "$scope", "$uibModal", "domainService", "launchType", "cacheService", "cacheConfigService",
+  static $inject: string[] = ["$state", "$scope", "$uibModal", "serverGroupService", "launchType", "cacheService", "cacheConfigService",
     "container", "template", "meta", "cacheName"];
 
   profile: string;
@@ -22,7 +22,7 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
   constructor(private $state: IStateService,
               private $scope: ng.IScope,
               private $uibModal: IModalService,
-              private domainService: DomainService,
+              private serverGroupService: ServerGroupService,
               private launchType: LaunchTypeService,
               private cacheService: CacheService,
               private cacheConfigService: CacheConfigService,
@@ -72,7 +72,7 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
           if (this.launchType.isStandaloneLocalMode()) {
             openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
           } else {
-            openRestartModal(this.$uibModal).result.then(() => this.domainService.restartAllServers());
+            openRestartModal(this.$uibModal).result.then(() => this.serverGroupService.restartServers(this.container.serverGroup));
           }
           this.cleanMetaData();
         },

@@ -47,7 +47,7 @@ export class Cache implements ICache {
   }
 
   isTransactional(): boolean {
-    let transaction: any = deepValue(this.configModel, "transcation.TRANSCTION.mode");
+    let transaction: any = deepValue(this.configModel, "transaction.TRANSACTION.mode");
     return isNotNullOrUndefined(transaction) && transaction !== "NONE";
   }
 

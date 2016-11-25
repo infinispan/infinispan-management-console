@@ -182,6 +182,16 @@ export class CacheService {
     return this.dmrService.readAttribute(request);
   }
 
+  isAvailable(container: ICacheContainer, cache: ICache): ng.IPromise<boolean> {
+    let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
+    this.availability(container, cache).then((response: string) => {
+      deferred.resolve(response === "AVAILABLE");
+    }, (error) => {
+      deferred.resolve(false);
+    });
+    return deferred.promise;
+  }
+
   setRebalance(container: ICacheContainer, cache: ICache, rebalance: boolean): ng.IPromise<any> {
     return this.jgroupsService.getServerGroupCoordinator(container.serverGroup).then((coord: IServerAddress) => {
       return this.dmrService.executePost({

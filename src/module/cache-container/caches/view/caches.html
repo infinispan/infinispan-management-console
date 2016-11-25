@@ -31,7 +31,7 @@
         title="View Cache Details">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
           <h2 class="card-pf-title">
-            <span class="pficon pficon-ok"></span>{{cache.name}}
+            <span class="pficon" ng-class="cachesCtrl.isAvailable(cache) && cachesCtrl.isEnabled(cache)? 'pficon-ok' : 'pficon-warning-triangle-o'"></span>{{cache.name}}
           </h2>
 
           <div class="card-pf-body">

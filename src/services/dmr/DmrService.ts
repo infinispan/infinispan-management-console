@@ -176,7 +176,7 @@ export class DmrService {
     }, (failure) => {
       let msg: string = this.processDmrFailure(failure);
       console.log(msg);
-      deferred.reject();
+      deferred.reject(msg);
       this.url = null;
     });
     return deferred.promise;

@@ -9,7 +9,8 @@ import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class CacheCtrl {
-  static $inject: string[] = ["$state", "$interval", "$uibModal", "cacheService", "launchType", "container", "cache", "stats", "cacheEnabledRSP"];
+  static $inject: string[] = ["$state", "$interval", "$uibModal", "cacheService", "launchType",
+    "container", "cache", "stats", "availability", "cacheEnabledRSP"];
 
   private cacheEnabled: boolean;
   private errorExecuting: boolean;
@@ -19,7 +20,8 @@ export class CacheCtrl {
   constructor(private $state: IStateService, private $interval: IIntervalService,
               private $uibModal: IModalService, private cacheService: CacheService,
               private launchType: LaunchTypeService, private container: ICacheContainer,
-              private cache: ICache, private stats: any, private cacheEnabledRSP: any) {
+              private cache: ICache, private stats: any, private availability: string,
+              private cacheEnabledRSP: any) {
     this.cacheEnabled = !cacheEnabledRSP[cache.name];
   }
 
@@ -148,12 +150,8 @@ export class CacheCtrl {
     });
   }
 
-  currentCacheAvailability(): boolean {
-    return this.container.available;
-  }
-
-  currentClusterAvailabilityAsString(): string {
-    return this.container.available ? "AVAILABLE" : "N/A";
+  isCurrentCacheAvailable(): boolean {
+    return this.availability === "AVAILABLE";
   }
 
   isLocalMode(): boolean {

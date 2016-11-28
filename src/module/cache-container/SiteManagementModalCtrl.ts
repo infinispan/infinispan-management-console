@@ -45,7 +45,7 @@ export class SiteManagementModalCtrl {
       );
   }
 
-  executeSiteOperation(operation: string, siteName: string, message: string): void {
+  executeSiteOperation(siteName: string, operation: string, message: string): void {
     let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, message);
 
     modal.result.then(() => {

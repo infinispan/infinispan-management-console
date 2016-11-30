@@ -173,6 +173,9 @@ export class CacheService {
   }
 
   availability(container: ICacheContainer, cache: ICache): ng.IPromise<string> {
+    if (cache.isLocal()) {
+      return this.$q.resolve("AVAILABLE");
+    }
     let firstServer: IServerAddress = container.serverGroup.members[0];
     let address: string [] = this.generateHostServerAddress(firstServer, container, cache);
     let request: IDmrRequest = {

@@ -5,7 +5,6 @@ import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {ISchemaDefinition} from "./ISchemaDefinition";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
-import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "../server-group/IServerGroup";
 
 const module: ng.IModule = App.module("managementConsole.services.schemas", []);
@@ -25,7 +24,7 @@ export class SchemaService {
     let deferred: ng.IDeferred<ISchemaDefinition> = this.$q.defer<ISchemaDefinition>();
     this.findTarget(container.serverGroup)
       .then(coordinator => {
-          this.dmrService.executePost({
+          return this.dmrService.executePost({
             address: this.getContainerAddress(container.name, coordinator),
             operation: "get-proto-schema",
             "file-name": schemaName
@@ -39,7 +38,7 @@ export class SchemaService {
   getProtoSchemaNames(container: ICacheContainer): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     this.findTarget(container.serverGroup).then(coordinator => {
-        this.dmrService.executePost({
+        return this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "get-proto-schema-names"
         }).then(
@@ -71,7 +70,7 @@ export class SchemaService {
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
     this.findTarget(container.serverGroup)
       .then(coordinator => {
-        this.dmrService.executePost({
+        return this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "unregister-proto-schemas",
           "file-names": [fileName]

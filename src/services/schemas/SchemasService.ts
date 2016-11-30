@@ -5,7 +5,6 @@ import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {ISchemaDefinition} from "./ISchemaDefinition";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
-import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServerGroup} from "../server-group/IServerGroup";
 
 const module: ng.IModule = App.module("managementConsole.services.schemas", []);
@@ -42,9 +41,12 @@ export class SchemaService {
         return this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "get-proto-schema-names"
-        }).then(names => deferred.resolve(names));
+        }).then(
+          (names) => deferred.resolve(names),
+          (error) => deferred.reject(error));
       },
-      error => deferred.reject(error));
+      (error) => deferred.reject(error)
+    );
     return deferred.promise;
   }
 

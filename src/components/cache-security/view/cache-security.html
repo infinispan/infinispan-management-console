@@ -16,10 +16,10 @@
 
                 </div>
                 <div class="form-horizontal" ng-if="$ctrl.isSecurityDefinedForContainer()">
-                    <form-group data="$ctrl.data" field="enabled" meta="$ctrl.meta['enabled']"
+                    <form-group data="$ctrl.auth" field="enabled" meta="$ctrl.meta['enabled']"
                                 previous-value="$ctrl.prevData['enabled']" read-only="$ctrl.readOnly"/>
                 </div>
-                <div class="form-horizontal" ng-if="$ctrl.data.enabled">
+                <div class="form-horizontal" ng-if="$ctrl.auth.enabled">
                     <div class="form-group">
                         <label class="col-md-4 control-label">Roles</label>
                         <div class="col-md-4">

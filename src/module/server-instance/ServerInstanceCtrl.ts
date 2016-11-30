@@ -8,9 +8,10 @@ import {InstanceMemoryChart} from "./MemoryChart";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {IStateService} from "angular-ui-router";
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class ServerInstanceCtrl {
-  static $inject: string[] = ["$state", "$interval", "$uibModal", "serverService", "coord", "serverInstance"];
+  static $inject: string[] = ["$state", "$interval", "$uibModal", "serverService", "coord", "serverInstance", "launchType"];
 
   private threadCount: number;
   private threadPeakCount: number;
@@ -26,7 +27,8 @@ export class ServerInstanceCtrl {
   private chart: InstanceMemoryChart;
 
   constructor(private $state: IStateService, private $interval: IIntervalService, private $uibModal: IModalService,
-              private serverService: ServerService, private coord: IServerAddress, private serverInstance: IServer) {
+              private serverService: ServerService, private coord: IServerAddress, private serverInstance: IServer,
+              private launchType: LaunchTypeService) {
     this.$interval(() => (this.refreshStats()), 500, 1);
   }
 
@@ -105,6 +107,10 @@ export class ServerInstanceCtrl {
       let promise: ng.IPromise<string> = this.serverService.removeServer(this.serverInstance.address);
       promise.then(() => this.refresh());
     });
+  }
+
+  isDomainMode(): boolean {
+    return this.launchType.isDomainMode();
   }
 
   private refresh(): void {

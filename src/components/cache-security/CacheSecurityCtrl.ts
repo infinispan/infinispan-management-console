@@ -24,7 +24,7 @@ export class CacheSecurityCtrl implements IConfigurationCallback {
       this.configCallbacks.push(this);
     }
 
-    if (isNullOrUndefined(this.data)) {
+    if (this.isSecurityDefinedForContainer() && isNullOrUndefined(this.data)) {
       this.data = {
         "is-new-node": true,
         roles: []

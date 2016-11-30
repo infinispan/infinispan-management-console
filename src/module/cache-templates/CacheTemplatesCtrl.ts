@@ -67,7 +67,7 @@ export class CacheTemplatesCtrl extends AbstractConfigurationCtrl {
     openConfirmationModal(this.$uibModal, "Update configuration template " + this.template["template-name"] + "?").result.then(() => {
       this.cacheConfigService.updateCacheConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
         .then(() => {
-            if (this.launchType.isStandaloneLocalMode()) {
+            if (this.launchType.isStandaloneMode()) {
               openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
             } else {
               openRestartModal(this.$uibModal).result.then(() => this.serverGroupService.restartServers(this.container.serverGroup));

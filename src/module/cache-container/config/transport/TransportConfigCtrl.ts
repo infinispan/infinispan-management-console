@@ -27,7 +27,7 @@ export class TransportConfigCtrl extends AbstractConfigurationCtrl {
   save(): void {
     this.containerConfigService.saveTransport(this.container, this.transport)
       .then(() => {
-        if (this.launchType.isStandaloneLocalMode()) {
+        if (this.launchType.isStandaloneMode()) {
           openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
         } else {
           openRestartModal(this.$uibModal).result.then(() => this.serverGroupService.restartServers(this.container.serverGroup));

@@ -29,7 +29,7 @@ export class ThreadPoolsCtrl extends AbstractConfigurationCtrl {
     this.containerConfigService.saveThreadPools(this.container, this.threadPools)
       .then(() => {
         if (this.isRestartRequired()) {
-          if (this.launchType.isStandaloneLocalMode()) {
+          if (this.launchType.isStandaloneMode()) {
             openConfirmationModal(this.$uibModal, "Config changes will only be made available after you manually restart the server!");
           } else {
             openRestartModal(this.$uibModal).result.then(() => this.serverGroupService.restartServers(this.container.serverGroup));

@@ -33,6 +33,8 @@ import IAngularEvent = angular.IAngularEvent;
 import {FileModelDirective} from "./components/directives/FileModelDirective";
 import {VertilizeContainerDirective} from "./components/directives/VertilizeContainerDirective";
 import {VertilizeDirective} from "./components/directives/VertilizeDirective";
+import {openErrorModal} from "./common/dialogs/Modals";
+import IModalService = angular.ui.bootstrap.IModalService;
 
 const App: ng.IAngularStatic = angular;
 
@@ -142,10 +144,12 @@ module.run(($templateCache: ITemplateCacheService) => {
 
 // TODO remove if only used for debugging
 // @ngInject
-module.run(($rootScope: IRootScopeService) => {
+module.run(($rootScope: IRootScopeService, $uibModal: IModalService, $state: IStateService) => {
   $rootScope.$on("$stateChangeError", (event: IAngularEvent, toState: any, toParams: any, fromState: any, fromParams: any, error: any) => {
-      alert("error: " + error);
+    openErrorModal($uibModal, error).result.then(() => {
+      $state.go("containers", null, {reload: true});
     });
+  });
 });
 
 export {App};

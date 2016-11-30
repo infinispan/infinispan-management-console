@@ -11,6 +11,7 @@ import {ContainerConfigService} from "../../../services/container-config/Contain
 import {TasksCtrl} from "./tasks/TasksCtrl";
 import {SecurityCtrl} from "./security/SecurityCtrl";
 import IQService = angular.IQService;
+import {ContainerService} from "../../../services/container/ContainerService";
 
 const module: ng.IModule = App.module("managementConsole.cache-container.config", []);
 

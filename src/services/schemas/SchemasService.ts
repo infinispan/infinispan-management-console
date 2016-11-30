@@ -25,7 +25,7 @@ export class SchemaService {
     let deferred: ng.IDeferred<ISchemaDefinition> = this.$q.defer<ISchemaDefinition>();
     this.findTarget(container.serverGroup)
       .then(coordinator => {
-          return this.dmrService.executePost({
+          this.dmrService.executePost({
             address: this.getContainerAddress(container.name, coordinator),
             operation: "get-proto-schema",
             "file-name": schemaName
@@ -39,12 +39,15 @@ export class SchemaService {
   getProtoSchemaNames(container: ICacheContainer): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     this.findTarget(container.serverGroup).then(coordinator => {
-        return this.dmrService.executePost({
+        this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "get-proto-schema-names"
-        }).then(names => deferred.resolve(names));
+        }).then(
+          (names) => deferred.resolve(names),
+          (error) => deferred.reject(error));
       },
-      error => deferred.reject(error));
+      (error) => deferred.reject(error)
+    );
     return deferred.promise;
   }
 
@@ -68,7 +71,7 @@ export class SchemaService {
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
     this.findTarget(container.serverGroup)
       .then(coordinator => {
-        return this.dmrService.executePost({
+        this.dmrService.executePost({
           address: this.getContainerAddress(container.name, coordinator),
           operation: "unregister-proto-schemas",
           "file-names": [fileName]

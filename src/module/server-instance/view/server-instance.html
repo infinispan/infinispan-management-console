@@ -13,9 +13,9 @@
         <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refreshStats()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
+        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>
           <li role="presentation" ng-class="!ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
           <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>

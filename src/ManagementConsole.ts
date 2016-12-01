@@ -29,11 +29,11 @@ import {NavbarCtrl} from "./module/navbar/NavbarCtrl";
 import ITranslateProvider = angular.translate.ITranslateProvider;
 import ITemplateCacheService = angular.ITemplateCacheService;
 import IAngularEvent = angular.IAngularEvent;
-import {FileModelDirective} from "./components/directives/FileModelDirective";
 import {VertilizeContainerDirective} from "./components/directives/VertilizeContainerDirective";
 import {VertilizeDirective} from "./components/directives/VertilizeDirective";
 import {openErrorModal} from "./common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
+import IAugmentedJQuery = angular.IAugmentedJQuery;
 
 const App: ng.IAngularStatic = angular;
 
@@ -52,7 +52,22 @@ module.config(($translateProvider: ITranslateProvider) => {
   $translateProvider.preferredLanguage("enUS");
 });
 
-module.directive("fileModel", FileModelDirective.factory());
+// @ngInject
+module.directive("fileModel", () => {
+  return {
+    scope: {
+      fileModel: "="
+    },
+    link: (scope: any, element: IAugmentedJQuery): void => {
+      element.bind("change", (changeEvent: any) => {
+        scope.$apply(() => {
+          scope.fileModel = changeEvent.target.files[0];
+        });
+      });
+    }
+  };
+});
+
 module.directive("vertilizeContainer", VertilizeContainerDirective.factory());
 module.directive("vertilize", VertilizeDirective.factory());
 

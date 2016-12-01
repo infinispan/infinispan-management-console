@@ -28,10 +28,7 @@ export class DeploymentsCtrl {
     this.$uibModal.open({
       templateUrl: "module/cache-container/config/deployments/view/upload-artifact-modal.html",
       controller: AddDeploymentModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        container: (): ICacheContainer => this.container
-      }
+      controllerAs: "ctrl"
     });
   }
 

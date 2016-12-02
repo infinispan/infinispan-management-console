@@ -15,8 +15,8 @@ const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
 export class JGroupsService {
 
-  private static NO_JGROUPS_STACK:string = "No datagrid-jgroups subsystem installed";
   static $inject: string[] = ["$q", "dmrService", "serverService", "launchType", "standaloneService"];
+  private static NO_JGROUPS_STACK:string = "No datagrid-jgroups subsystem installed";
 
   constructor(private $q: IQService,
               private dmrService: DmrService,

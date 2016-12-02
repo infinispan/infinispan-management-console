@@ -1,4 +1,3 @@
-import {ISPNException} from "./ISPNException";
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {ServerAddress} from "../../services/server/ServerAddress";
 

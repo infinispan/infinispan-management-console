@@ -7,6 +7,7 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServer} from "../server/IServer";
 import {Server} from "../server/Server";
 import {StandaloneService} from "../standalone/StandaloneService";
+import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.server", []);
 
@@ -113,12 +114,11 @@ export class ServerService {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     if (this.launchType.isStandaloneMode()) {
       let request: IDmrRequest = <IDmrRequest>{
-        address: [].concat("subsystem", "datagrid-jgroups"),
+        address: [],
+        "child-type": "subsystem"
       };
-      this.dmrService.readChildResources(request).then((response) => {
-        console.log("Response is " + response);
-        deferred.resolve(true);
-      });
+      this.dmrService.readChildResources(request)
+        .then(response => deferred.resolve(isNotNullOrUndefined(response["datagrid-jgroups"])));
     } else {
       deferred.resolve(false);
     }
@@ -129,12 +129,11 @@ export class ServerService {
     let deferred: ng.IDeferred<boolean> = this.$q.defer<boolean>();
     if (this.launchType.isStandaloneMode()) {
       let request: IDmrRequest = <IDmrRequest>{
-        address: [].concat("subsystem", "datagrid-jgroups"),
+        address: [],
+        "child-type": "subsystem"
       };
-      this.dmrService.readChildResources(request).then((response) => {
-        console.log("Response is " + response);
-        deferred.resolve(true);
-      });
+      this.dmrService.readChildResources(request)
+        .then(response => deferred.resolve(isNullOrUndefined(response["datagrid-jgroups"])));
     } else {
       deferred.resolve(false);
     }

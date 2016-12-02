@@ -30,6 +30,7 @@ export class LaunchTypeService {
         throw `Unknown launch type '${launchType}'. We only support Domain mode`;
     }
     this.localStorageService.set("launchType", launchType);
+    this.localStorageService.set("hasJgroupsSubsystem", hasJgroupsSubsystem);
   }
 
   isDomainMode(): boolean {
@@ -69,6 +70,7 @@ export class LaunchTypeService {
   private checkThatLaunchTypeExists(): void {
     if (isNullOrUndefined(this.type)) {
       this.type = this.localStorageService.get<string>("launchType");
+      this.hasJGroupsSubsystem = this.localStorageService.get<boolean>("hasJgroupsSubsystem");
     }
   }
 

@@ -173,7 +173,7 @@ export class CacheService {
   }
 
   availability(container: ICacheContainer, cache: ICache): ng.IPromise<string> {
-    if (cache.isLocal()) {
+    if (cache.isLocal() || cache.isInvalidation()) {
       return this.$q.resolve("AVAILABLE");
     }
     let firstServer: IServerAddress = container.serverGroup.members[0];

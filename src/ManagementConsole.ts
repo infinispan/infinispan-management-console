@@ -8,6 +8,7 @@
 
 /* tslint:disable:variable-name */
 
+import "babel-polyfill";
 import * as angular from "angular";
 import "jquery";
 import "angular-local-storage";

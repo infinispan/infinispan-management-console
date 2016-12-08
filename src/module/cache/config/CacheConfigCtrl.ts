@@ -62,8 +62,11 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
   }
 
   createCache(): void {
-    this.cacheService.createCacheAndConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
-      .then(() => this.goToContainerCachesView(), error => openErrorModal(this.$uibModal, error));
+    openConfirmationModal(this.$uibModal, "Create " + this.cacheName + " cache using " + this.template.baseTemplate + " configuration template?")
+      .result.then(() => {
+      this.cacheService.createCacheAndConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
+        .then(() => this.goToContainerCachesView(), error => openErrorModal(this.$uibModal, error));
+    });
   }
 
   updateTemplate(): void {

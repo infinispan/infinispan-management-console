@@ -83,6 +83,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
               .then(template => {
                 template.name = $stateParams.cacheName;
                 template["template-name"] = $stateParams.cacheName;
+                template.baseTemplate = $stateParams.baseTemplate;
                 deferred.resolve(template);
               });
             return deferred.promise;

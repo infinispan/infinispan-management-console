@@ -2,7 +2,7 @@ import {IStateService} from "angular-ui-router";
 import {ITemplate} from "../../../services/container-config/ITemplate";
 import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {CacheService} from "../../../services/cache/CacheService";
-import {openErrorModal} from "../../../common/dialogs/Modals";
+import {openErrorModal, openConfirmationModal} from "../../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 
 export class AddCacheModalCtrl {
@@ -56,14 +56,17 @@ export class AddCacheModalCtrl {
   }
 
   private createCacheFromTemplate(): void {
-    this.cacheService.createCacheFromConfiguration(this.container, this.baseTemplate.type, this.newCacheName,
-      this.baseTemplate.name)
-      .then(() => this.$state.go("container.caches", {
-          profileName: this.container.profile,
-          containerName: this.container.name
-        }, {
-          reload: true
-        }),
+    openConfirmationModal(this.$uibModal, "Create " + this.newCacheName + " cache using " + this.baseTemplate.name + " configuration template?")
+      .result.then(() => {
+      this.cacheService.createCacheFromConfiguration(this.container, this.baseTemplate.type, this.newCacheName,
+        this.baseTemplate.name).then(() =>
+          this.$state.go("container.caches", {
+            profileName: this.container.profile,
+            containerName: this.container.name
+          }, {
+            reload: true
+          }),
         error => openErrorModal(this.$uibModal, error));
+    });
   }
 }

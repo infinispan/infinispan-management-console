@@ -22,7 +22,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     templateUrl: "module/cache-container/config/view/config.html",
     controller: ContainerConfigCtrl,
     controllerAs: "ctrl",
-    redirectTo: "container-config.transport",
+    redirectTo: "container-config.thread-pools",
     resolve: {
       container: ["$stateParams", "containerService", ($stateParams, containerService) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);

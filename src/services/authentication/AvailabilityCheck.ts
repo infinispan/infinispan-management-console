@@ -23,11 +23,6 @@ export class AvailabilityCheck {
 
   private checkServerIsAlive(): void {
     this.dmrService.readAttribute({address: [], name: "launch-type"})
-      .then(() => {
-        this.alive = true;
-      })
-      .catch(() => {
-        this.alive = false;
-      });
+      .then(() => this.alive = true, () => this.alive = false);
   }
 }

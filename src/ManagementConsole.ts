@@ -21,7 +21,6 @@ import "bootstrap";
 import "patternfly/dist/css/patternfly.css!";
 import "patternfly/dist/css/patternfly-additions.css!";
 import "./ManagementConsole.css!";
-import {AuthenticationService} from "./services/authentication/AuthenticationService";
 import {IUrlRouterService, IStateService} from "angular-ui-router";
 import {IPage} from "./common/IPage";
 import {IRootScopeService} from "./common/IRootScopeService";
@@ -74,8 +73,8 @@ module.directive("vertilize", VertilizeDirective.factory());
 // @ngInject
 module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {
   $urlRouterProvider
-    .when("/", "/login")
-    .when("", "/login")
+    .when("/", "/containers")
+    .when("", "/")
     .otherwise("/404");
 });
 
@@ -93,7 +92,13 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       main: {
         templateUrl: "module/navbar/view/navbar.html",
         controller: NavbarCtrl,
-        controllerAs: "ctrl"
+        controllerAs: "ctrl",
+        resolve: {
+          serverType: ["launchType", (launchType) => launchType.get()],
+          user: ["authService", "serverType", (authService, serverType) => authService.login()]
+          // Must be called serverType, as launchType is used elsewhere
+          // Also we have to rely on "serverType" as this ensures that the launchType is always initialised (except when / is called)
+        }
       }
     }
   });
@@ -122,19 +127,9 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService) => {
 });
 
 // @ngInject
-module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService,
-            authService: AuthenticationService) => {
+module.run(($rootScope: IRootScopeService, $urlRouter: IUrlRouterService, $state: IStateService) => {
   $rootScope.$on("$stateChangeStart", (event: IAngularEvent, toState: any, params: any) => {
-    if (toState.name === "logout") {
-      event.preventDefault();
-      if (authService.isLoggedIn()) {
-        authService.logout();
-      }
-      $state.go("login", null, {reload: true});
-    } else if (toState.name !== "login" && !authService.isLoggedIn()) {
-      event.preventDefault();
-      $state.go("login", null, {reload: true});
-    } else if (toState.redirectTo) {
+    if (toState.redirectTo) {
       event.preventDefault();
       $state.go(toState.redirectTo, params, {location: "replace"});
     }

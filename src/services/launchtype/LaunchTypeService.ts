@@ -1,45 +1,56 @@
 import {App} from "../../ManagementConsole";
-import {isNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {IServerAddress} from "../server/IServerAddress";
+import {DmrService} from "../dmr/DmrService";
 
-const module: ng.IModule = App.module("managementConsole.services.launchtype", []);
+const module: ng.IModule = App.module("managementConsole.services.launchtype", ["LocalStorageModule"]);
 
 export class LaunchTypeService {
 
-  static $inject: string[] = ["localStorageService"];
+  static $inject: string[] = ["$q", "localStorageService", "dmrService"];
   static DOMAIN_MODE: string = "DOMAIN";
   static STANDALONE_MODE: string = "STANDALONE";
 
   private hasJGroupsSubsystem: boolean = true;
 
-  constructor(private localStorageService: ILocalStorageService,
+  constructor(private $q: ng.IQService,
+              private localStorageService: ILocalStorageService,
+              private dmrService: DmrService,
               private type: string) {
   }
 
-  set(launchType: string, hasJgroupsSubsystem: boolean): void {
-    switch (launchType) {
-      case LaunchTypeService.DOMAIN_MODE:
-        this.type = launchType;
-        break;
-      case LaunchTypeService.STANDALONE_MODE:
-        this.type = launchType;
-        this.hasJGroupsSubsystem = hasJgroupsSubsystem;
-        break;
-      default:
-        throw `Unknown launch type '${launchType}'. We only support Domain mode`;
-    }
-    this.localStorageService.set("launchType", launchType);
-    this.localStorageService.set("hasJgroupsSubsystem", hasJgroupsSubsystem);
+  get(): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer();
+    this.dmrService.executePost({
+      address: [],
+      recursive: true,
+      "include-runtime": true,
+      "operation": "read-resource",
+      "recursive-depth": 2
+    }, true).then((response: any) => {
+      let hasJGroupsStack: boolean = true;
+      let launchType: string = response["launch-type"];
+      if (LaunchTypeService.STANDALONE_MODE === launchType) {
+        hasJGroupsStack = isNotNullOrUndefined(response.subsystem["datagrid-jgroups"]);
+      }
+      this.set(launchType, hasJGroupsStack);
+      deferred.resolve(this.type);
+    }, error => {
+      deferred.reject(error);
+    });
+    return deferred.promise;
+  }
+
+  isLaunchTypeInitialised(): boolean {
+    return isNotNullOrUndefined(this.type);
   }
 
   isDomainMode(): boolean {
-    this.checkThatLaunchTypeExists();
     return LaunchTypeService.DOMAIN_MODE === this.type;
   }
 
   isStandaloneMode(): boolean {
-    this.checkThatLaunchTypeExists();
     return LaunchTypeService.STANDALONE_MODE === this.type;
   }
 
@@ -67,13 +78,21 @@ export class LaunchTypeService {
     }
   }
 
-  private checkThatLaunchTypeExists(): void {
-    if (isNullOrUndefined(this.type)) {
-      this.type = this.localStorageService.get<string>("launchType");
-      this.hasJGroupsSubsystem = this.localStorageService.get<boolean>("hasJgroupsSubsystem");
+  private set(launchType: string, hasJgroupsSubsystem: boolean): void {
+    switch (launchType) {
+      case LaunchTypeService.DOMAIN_MODE:
+        this.type = launchType;
+        break;
+      case LaunchTypeService.STANDALONE_MODE:
+        this.type = launchType;
+        this.hasJGroupsSubsystem = hasJgroupsSubsystem;
+        break;
+      default:
+        throw `Unknown launch type '${launchType}'. We only support Domain mode`;
     }
+    this.localStorageService.set("launchType", launchType);
+    this.localStorageService.set("hasJgroupsSubsystem", hasJgroupsSubsystem);
   }
-
 }
 
 module.service("launchType", LaunchTypeService);

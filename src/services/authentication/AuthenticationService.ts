@@ -1,97 +1,57 @@
 import {App} from "../../ManagementConsole";
-import {ICredentials} from "services/authentication/ICredentials";
 import {DmrService} from "../dmr/DmrService";
-import {LaunchTypeService} from "../launchtype/LaunchTypeService";
-import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {AvailabilityCheck} from "./AvailabilityCheck";
-import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
-const module: ng.IModule = App.module("managementConsole.services.authentication", ["LocalStorageModule"]);
+const module: ng.IModule = App.module("managementConsole.services.authentication", []);
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$http", "$cacheFactory", "$q", "$location", "$interval", "localStorageService", "launchType"];
+  static $inject: string[] = ["$q", "$http", "$interval", "$location", "$window", "$timeout", "dmrService"];
 
-  private credentials: ICredentials = <ICredentials>{};
   private availability: AvailabilityCheck;
-  private dmrService: DmrService;
 
-  constructor(private $http: ng.IHttpService,
-              private $cacheFactory: ng.ICacheFactoryService,
-              private $q: ng.IQService,
-              private $location: ng.ILocationService,
+  constructor(private $q: ng.IQService,
+              private $http: ng.IHttpService,
               private $interval: ng.IIntervalService,
-              private localStorageService: ILocalStorageService,
-              private launchType: LaunchTypeService) {
-    this.getCredentials();
-
-    // we need to create the DmrService manually to avoid a circular dependency with inject
-    this.dmrService = new DmrService(this.$http, this.$cacheFactory, this.$q, this, this.$location);
-    this.availability = new AvailabilityCheck(this.$interval, this.dmrService);
+              private $location: ng.ILocationService,
+              private $window: ng.IWindowService,
+              private $timeout: ng.ITimeoutService,
+              private dmrService: DmrService) {
   }
 
-  isLoggedIn(): boolean {
-    let credentials: ICredentials = this.getCredentials();
-    return isNotNullOrUndefined(credentials.username) && isNotNullOrUndefined(credentials.password);
-  }
-
-  login(credentials: ICredentials): ng.IPromise<string> {
-    this.setCredentials(credentials);
-    let deferred: ng.IDeferred<string> = this.$q.defer();
-    this.dmrService.readResource({
-      address: [],
-      recursive: true,
-      "include-runtime": true,
-      "recursive-depth": 2
-    }).then((response: any) => {
-      let hasJGroupsStack: boolean = true;
-      let launchType: string = response["launch-type"];
-      if (LaunchTypeService.STANDALONE_MODE === launchType) {
-        hasJGroupsStack = isNotNullOrUndefined(response.subsystem["datagrid-jgroups"]);
+  login(): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
+    this.getUser(true).then(user => {
+      if (isNotNullOrUndefined(this.availability)) {
+        this.availability.stopApiAccessibleCheck();
       }
-      this.launchType.set(launchType, hasJGroupsStack);
-      this.setCredentials(credentials);
-      this.availability.startApiAccessibleCheck();
-      deferred.resolve();
-    }, error => {
-      this.logout();
-      deferred.reject(error);
-    });
+      this.availability = new AvailabilityCheck (this.$interval, this.dmrService);
+      deferred.resolve(user);
+    }, deferred.reject);
     return deferred.promise;
   }
 
   logout(): void {
-    this.setCredentials(<ICredentials>{});
+    let l: ng.ILocationService = this.$location;
+    let logoutUrl: string = `${l.protocol()}://enter-login-here:blah@${l.host()}:${l.port()}/logout?org.jboss.as.console.logout.exit&mechanism=DIGEST`;
     this.availability.stopApiAccessibleCheck();
-  }
-
-  getCredentials(): ICredentials {
-    if (isNullOrUndefined(this.credentials.username) || isNullOrUndefined(this.credentials.password)) {
-      this.credentials = this.getLocalCredentials();
-    }
-    return this.credentials;
-  }
-
-  getUser(): string {
-    return this.credentials.username;
+    this.$http.get(logoutUrl).then(() => this.$window.location.href = "/");
   }
 
   isApiAvailable(): boolean {
     return this.availability.isApiAccesible();
   }
 
-  private getLocalCredentials(): ICredentials {
-    return {
-      username: this.localStorageService.get<string>("username"),
-      password: this.localStorageService.get<string>("password")
-    };
+  getUser(noTimeout?: boolean): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
+    this.dmrService.executePost({
+      address: [],
+      operation: "whoami"
+    }, noTimeout).then(response => deferred.resolve(response.identity.username));
+    return deferred.promise;
   }
 
-  private setCredentials(credentials: ICredentials): void {
-    this.credentials = credentials;
-    this.localStorageService.set("username", credentials.username);
-    this.localStorageService.set("password", credentials.password);
-  }
 }
 
 module.service("authService", AuthenticationService);

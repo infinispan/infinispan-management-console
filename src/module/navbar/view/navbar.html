@@ -16,7 +16,7 @@
       <li class="dropdown" uib-dropdown>
         <a class="dropdown-toggle" type="button" id="logoutDropdown" uib-dropdown-toggle>
           <span class="pficon pficon-user"></span>
-          {{ ctrl.getUser() }}<b class="caret"></b>
+          {{ ctrl.user }}<b class="caret"></b>
         </a>
         <ul class="dropdown-menu" role="menu" aria-labelledby="logoutDropdown">
           <li role="presentation" ng-class="currentCluster.rebalancingStatus ? 'disabled' : 'enabled'">

@@ -16,11 +16,18 @@ export class ProfileService {
   }
 
   getAllProfileNames(): IPromise<string[]> {
-    if (this.launchType.isDomainMode()) {
-      return this.getAllProfileNamesDomain();
-    } else if (this.launchType.isStandaloneMode()) {
-      return this.getAllProfileNamesStandalone();
+    let deferred: ng.IDeferred<string[]> = this.$q.defer();
+    if (this.launchType.isLaunchTypeInitialised()) {
+      deferred.resolve(this.getProfileNames());
+    } else {
+      // This should only happen if the user goes to / before authenticating and a redirect occurs
+      this.launchType.get().then(
+        () => this.getProfileNames().then(
+          names => deferred.resolve(names),
+          error => deferred.reject(error)),
+        error => deferred.reject(error));
     }
+    return deferred.promise;
   }
 
   getAllProfileNamesDomain(): IPromise<string[]> {
@@ -43,6 +50,14 @@ export class ProfileService {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     deferred.resolve([StandaloneService.PROFILE_NAME]);
     return deferred.promise;
+  }
+
+  private getProfileNames(): IPromise<string[]> {
+    if (this.launchType.isDomainMode()) {
+      return this.getAllProfileNamesDomain();
+    } else if (this.launchType.isStandaloneMode()) {
+      return this.getAllProfileNamesStandalone();
+    }
   }
 }
 

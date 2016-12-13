@@ -1,5 +1,5 @@
 import {App} from "../../ManagementConsole";
-import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {isNullOrUndefined, isNotNullOrUndefined} from "../../common/utils/Utils";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {IServerAddress} from "../server/IServerAddress";
 import {DmrService} from "../dmr/DmrService";
@@ -36,9 +36,7 @@ export class LaunchTypeService {
       }
       this.set(launchType, hasJGroupsStack);
       deferred.resolve(this.type);
-    }, error => {
-      deferred.reject(error);
-    });
+    }, error => deferred.reject(error));
     return deferred.promise;
   }
 
@@ -47,10 +45,12 @@ export class LaunchTypeService {
   }
 
   isDomainMode(): boolean {
+    this.checkThatLaunchTypeExists();
     return LaunchTypeService.DOMAIN_MODE === this.type;
   }
 
   isStandaloneMode(): boolean {
+    this.checkThatLaunchTypeExists();
     return LaunchTypeService.STANDALONE_MODE === this.type;
   }
 
@@ -92,6 +92,13 @@ export class LaunchTypeService {
     }
     this.localStorageService.set("launchType", launchType);
     this.localStorageService.set("hasJgroupsSubsystem", hasJgroupsSubsystem);
+  }
+
+  private checkThatLaunchTypeExists(): void {
+    if (isNullOrUndefined(this.type)) {
+      this.type = this.localStorageService.get<string>("launchType");
+      this.hasJGroupsSubsystem = this.localStorageService.get<boolean>("hasJgroupsSubsystem");
+    }
   }
 }
 

@@ -159,7 +159,6 @@ export class DmrService {
   private processDmrFailure(promise: ng.IDeferred<any>, response: any): void {
     let msg: string = "An unspecified error has been received from the server";
     if (response.status !== 401) {
-      console.log(response.data);
       let result: any = response.data;
       if (result && result["failure-description"] != null) {
         if (isNotNullOrUndefined(result["failure-description"]["domain-failure-description"])) {
@@ -168,6 +167,7 @@ export class DmrService {
           msg = result["failure-description"];
         }
       }
+      console.log(msg);
       promise.reject(msg);
     }
   }

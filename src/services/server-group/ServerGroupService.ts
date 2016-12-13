@@ -105,8 +105,8 @@ export class ServerGroupService {
             }
           }
           deferred.resolve(map);
-        });
-      });
+        }, error => deferred.reject(error));
+      }, error => deferred.reject(error));
     return deferred.promise;
   }
 

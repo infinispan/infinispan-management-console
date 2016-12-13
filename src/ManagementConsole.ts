@@ -33,6 +33,7 @@ import {VertilizeDirective} from "./components/directives/VertilizeDirective";
 import {openErrorModal} from "./common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IAugmentedJQuery = angular.IAugmentedJQuery;
+import {LaunchTypeService} from "./services/launchtype/LaunchTypeService";
 
 const App: ng.IAngularStatic = angular;
 
@@ -88,18 +89,19 @@ module.config(($urlMatcherFactoryProvider: ng.ui.IUrlMatcherFactory) => {
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("root", {
     url: "/",
+    abstract: true,
     views: {
       main: {
         templateUrl: "module/navbar/view/navbar.html",
         controller: NavbarCtrl,
         controllerAs: "ctrl",
-        resolve: {
-          serverType: ["launchType", (launchType) => launchType.get()],
-          user: ["authService", "serverType", (authService, serverType) => authService.login()]
-          // Must be called serverType, as launchType is used elsewhere
-          // Also we have to rely on "serverType" as this ensures that the launchType is always initialised (except when / is called)
-        }
       }
+    },
+    resolve: {
+      serverType: ["launchType", (launchType: LaunchTypeService) => launchType.get()],
+      user: ["authService", "serverType", (authService, serverType) => authService.login()]
+      // Must be called serverType, as launchType is used elsewhere
+      // Also we have to rely on "serverType" as this ensures that the launchType is always initialised (except when / is called)
     }
   });
 

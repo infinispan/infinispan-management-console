@@ -18,7 +18,8 @@ export class ProfileService {
   getAllProfileNames(): IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer();
     if (this.launchType.isLaunchTypeInitialised()) {
-      deferred.resolve(this.getProfileNames());
+      this.getProfileNames()
+        .then(names => deferred.resolve(names), error => deferred.reject(error));
     } else {
       // This should only happen if the user goes to / before authenticating and a redirect occurs
       this.launchType.get().then(

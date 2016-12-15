@@ -316,7 +316,7 @@ export class CacheConfigService {
 
   private createHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -376,7 +376,7 @@ export class CacheConfigService {
     this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
     this.updateHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
-    if (this.isSecurityAuthorizationDefined(config)) {
+    if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
       this.updateSecurityAuthorization(config);
       this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
       this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
@@ -391,7 +391,7 @@ export class CacheConfigService {
     if (isNotNullOrUndefined(config)) {
       // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
       // Same for LevelDB->Compression. TODO need a better way to make exceptions
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -414,9 +414,9 @@ export class CacheConfigService {
     return isNotNullOrUndefined(auth) && auth.enabled;
   }
 
-  private isSecurityAuthorizationDefined(config: any): boolean {
+  private isSecurityAuthorizationDefinedAndDirty(config: any): boolean {
     let auth: any = deepValue(config, "security.SECURITY.authorization.AUTHORIZATION");
-    return isNotNullOrUndefined(auth);
+    return isNotNullOrUndefined(auth) && auth["is-dirty"];
   }
 
   private updateCacheLoader(builder: CompositeOpBuilder, address: string[], config: any): void {

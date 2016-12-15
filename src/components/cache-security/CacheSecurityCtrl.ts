@@ -9,7 +9,7 @@ export class CacheSecurityCtrl implements IConfigurationCallback {
   static $inject: string[] = ["containerService"];
 
   data: any;
-  auth: any;
+  auth: any = {"is-dirty": false};
   container: ICacheContainer;
   meta: any;
   initDefaults: boolean;
@@ -45,7 +45,9 @@ export class CacheSecurityCtrl implements IConfigurationCallback {
   }
 
   isAnyFieldModified(): boolean {
-    return this.fields.some(field => isFieldValueModified(this.meta[field])) || this.hasRolesChanged();
+    let dirty: boolean = this.fields.some(field => isFieldValueModified(this.meta[field])) || this.hasRolesChanged();
+    this.auth["is-dirty"] = dirty;
+    return dirty;
   }
 
   isRestartRequired(): boolean {

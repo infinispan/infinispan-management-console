@@ -41,7 +41,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   isAnyFieldModified(): boolean {
     return this.fields.some(group => {
       return group.fields.some(attrName => {
-        return isFieldValueModified(this.meta[attrName]);
+        return isNotNullOrUndefined(this.meta) && isFieldValueModified(this.meta[attrName]);
       }, this);
     });
   }

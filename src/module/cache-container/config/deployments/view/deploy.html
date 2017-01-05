@@ -33,8 +33,8 @@
               </button>
             </div>
             <div class="btn-group">
-              <button class="btn btn-default" ng-click="deploymentsCtrl.openConfirmationModal(artifact.name, 'remove')"><i
-                class="pficon pficon-delete"></i> <span translate>REMOVE</span></button>
+              <button class="btn btn-default" ng-disabled='deploymentsCtrl.canDeploy(artifact.name)' ng-click="deploymentsCtrl.openConfirmationModal(artifact.name, 'remove')">
+                <i class="pficon pficon-delete"></i> <span translate>REMOVE</span></button>
             </div>
           </form>
         </td>

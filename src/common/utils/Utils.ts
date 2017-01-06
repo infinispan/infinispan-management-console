@@ -172,3 +172,15 @@ export function removeEmptyFieldsFromObject(object: any, recursive: boolean = fa
   });
   return object;
 }
+
+export function setIsNewNodeRecursively(obj: Object, val: boolean = true): void {
+  if (isNotNullOrUndefined(obj) && isObject(obj)) {
+    obj["is-new-node"] = val;
+    Object.keys(obj).forEach((key) => {
+      let value: any = obj[key];
+      if (isObject(value)) {
+        setIsNewNodeRecursively(value);
+      }
+    });
+  }
+}

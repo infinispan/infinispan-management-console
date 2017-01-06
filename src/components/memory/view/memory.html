@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Memory</h3>
+      </div>
+      <div class="panel-body">
+        <div class="form-horizontal">
+          <form-group data="$ctrl.memoryTypeData" field="type" meta="$ctrl.memoryTypeMeta.type" read-only="$ctrl.readOnly"
+                      option-string="item as item for item" option-values="$ctrl.memoryTypes"
+                      change-callback="$ctrl.changeMemoryType" undo-callback="$ctrl.undoMemoryTypeChange"/>
+        </div>
+        <div class="form-horizontal" ng-repeat="field in $ctrl.fields">
+          <form-group data="$ctrl.memoryTypeData" field="{{field}}" meta="$ctrl.memoryTypeMeta[field]"
+                      previous-value="$ctrl.prevData[field]" read-only="$ctrl.readOnly"/>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

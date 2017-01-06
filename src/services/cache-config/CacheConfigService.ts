@@ -4,6 +4,7 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {ITemplate} from "../container-config/ITemplate";
 import {ICacheContainer} from "../container/ICacheContainer";
+import {MEMORY_TYPES} from "../../components/memory/MemoryCtrl";
 import {
   isNotNullOrUndefined,
   deepGet,
@@ -309,7 +310,7 @@ export class CacheConfigService {
     this.dmrService.executePost(createNodeRequest)
       .then(() => {
         this.createHelper(builder, address.concat("locking", "LOCKING"), config.locking);
-        this.createHelper(builder, address.concat("eviction", "EVICTION"), config.eviction);
+        this.createHelper(builder, address.concat("memory", this.getMemoryType(config.memory)), config.memory);
         this.createHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
         this.createHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
         this.createHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
@@ -399,7 +400,7 @@ export class CacheConfigService {
 
     // Update child nodes
     this.updateHelper(builder, address.concat("locking", "LOCKING"), config.locking);
-    this.updateHelper(builder, address.concat("eviction", "EVICTION"), config.eviction);
+    this.updateMemoryHelper(config, builder, address);
     this.updateHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
     this.updateHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
     this.updateHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
@@ -418,12 +419,56 @@ export class CacheConfigService {
     return this.dmrService.executePost(builder.build());
   }
 
+  private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]): void {
+    let memoryType: string = this.getMemoryType(config.memory);
+    let oldMemoryType: string = isNotNullOrUndefined(config.memory) ? config.memory.initialType : null;
+    let switchingMemoryType: boolean = memoryType !== "NONE" && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
+    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== "NONE" && memoryType === "NONE";
+    let addingMemory: boolean = this.isAddingMemoryType(config, oldMemoryType);
+    if (removingMemory) {
+      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
+    } else if (switchingMemoryType) {
+      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
+      this.createHelper(builder, address.concat("memory", memoryType), config.memory);
+    } else if (addingMemory) {
+      this.createHelper(builder, address.concat("memory", memoryType), config.memory);
+    } else if (memoryType !== "NONE") {
+      // normal update of memory tree fields
+      this.updateHelper(builder, address.concat("memory", memoryType), config.memory);
+    }
+  }
+
+  private isAddingMemoryType(config: any, oldMemoryType: string): boolean {
+    return config.memory["is-new-node"] || isNullOrUndefined(oldMemoryType);
+  }
+
+  private getMemoryType(memory: any): string {
+
+    // there could be more that one fields in memory object - find the type of memory management object
+    let fields: string [] = Object.keys(memory);
+    for (let field of fields) {
+      if (this.isValidMemoryType(field, false)) {
+        return field;
+      }
+    }
+    return null;
+  }
+
+  private isValidMemoryType (type: string, excludeNONE: boolean): boolean {
+    let types: string [] = MEMORY_TYPES;
+    if (excludeNONE) {
+      types = angular.copy(MEMORY_TYPES);
+      let index: number = types.indexOf("NONE");
+      types.splice(index);
+    }
+    return types.indexOf(type) >= 0;
+  }
+
   private updateHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      // ISPN-6587: Exclude type from the exclusion list for EVICTION objects, as EVICTION.type exists.
       // Same for LevelDB->Compression. TODO need a better way to make exceptions
       let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
-      if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
+      if (isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
       this.addOperationsToBuilder(builder, address, config, exclusionList, false);
@@ -564,6 +609,13 @@ export class CacheConfigService {
     // Remove excluded attributes
     angular.forEach(excludedAttributes, attribute => delete op[attribute]);
     return op;
+  }
+
+  private createRemoveOperation(address: string[]): IDmrRequest {
+    return <IDmrRequest> {
+      address: address,
+      operation: "remove"
+    };
   }
 
   private createWriteAttributeOperations(builder: CompositeOpBuilder, address: string[], config: any,

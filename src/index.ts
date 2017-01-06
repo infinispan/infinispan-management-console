@@ -26,6 +26,7 @@ import "./components/cache-configuration/CacheConfiguration";
 import "./components/configuration-section/ConfigurationSection";
 import "./components/forms/field-info/FieldInfo";
 import "./components/forms/form-group/FormGroup";
+import "./components/memory/Memory";
 import "./components/modals/information/InformationModal";
 import "./module/auth/Auth";
 import "./module/cache-container/CacheContainer";
@@ -54,6 +55,7 @@ App.element(document).ready(() => {
     "managementConsole.server-group",
     "managementConsole.server-groups",
     "managementConsole.components.cache-loaders",
+    "managementConsole.components.memory",
     "managementConsole.components.cache-security",
     "managementConsole.components.cache-stores",
     "managementConsole.components.cache-stores.modal",

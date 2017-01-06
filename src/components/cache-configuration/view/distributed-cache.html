@@ -14,9 +14,9 @@
                              init-defaults="initDefaults" read-only="$ctrl.readOnly"
                              config-callbacks="$ctrl.configCallbacks"/>
     </uib-tab>
-    <uib-tab heading="Eviction">
-      <configuration-section fields="[{name: 'Eviction', fields:['type', 'strategy', 'size']}]" data="$ctrl.data.eviction.EVICTION"
-                             meta="$ctrl.getMetaForResource('eviction')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
+    <uib-tab heading="Memory">
+      <memory data="$ctrl.data.memory"
+                             meta="$ctrl.meta" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
                              config-callbacks="$ctrl.configCallbacks"/>
     </uib-tab>
     <uib-tab heading="Expiration">

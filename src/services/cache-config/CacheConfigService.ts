@@ -296,7 +296,7 @@ export class CacheConfigService {
         this.createHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
         this.createHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
         this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
-        this.createHelper(builder, address.concat("backup", "BACKUP"), config.backup);
+        this.createBackupNodes(builder, address.concat("backup"), config.backup);
 
         if (this.isSecurityAuthorizationEnabled(config)) {
           this.updateSecurityAuthorization(config);
@@ -321,6 +321,18 @@ export class CacheConfigService {
         exclusionList.push("type");
       }
       this.addOperationsToBuilder(builder, address, config, exclusionList, true);
+    }
+  }
+
+  private createBackupNodes(builder: CompositeOpBuilder, address: string[], config: any): void {
+    if (isNotNullOrUndefined(config)) {
+      angular.forEach(config, (val, key) => {
+        let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+        this.addCompositeOperationsToBuilder(builder, address.concat(key), val, exclusionList, true);
+        if (isNotNullOrUndefined(val["state-transfer"])) {
+          this.createHelper(builder, address.concat(key, "state-transfer", "STATE_TRANSFER"), val["state-transfer"]);
+        }
+      }, this);
     }
   }
 
@@ -374,7 +386,6 @@ export class CacheConfigService {
     this.updateHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
     this.updateHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
     this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
-    this.updateHelper(builder, address.concat("backup", "BACKUP"), config.backup);
 
     if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
       this.updateSecurityAuthorization(config);

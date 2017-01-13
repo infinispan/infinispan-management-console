@@ -1,7 +1,7 @@
 import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {CacheConfigService} from "../../../services/cache-config/CacheConfigService";
 import {IStateService} from "angular-ui-router";
-import {isNotNullOrUndefined, isNonEmptyString} from "../../../common/utils/Utils";
+import {isNotNullOrUndefined, isNonEmptyString, setIsNewNodeRecursively} from "../../../common/utils/Utils";
 import {openErrorModal, openRestartModal, openConfirmationModal} from "../../../common/dialogs/Modals";
 import {AbstractConfigurationCtrl} from "../../../common/configuration/AbstractConfigurationCtrl";
 import {CacheService} from "../../../services/cache/CacheService";
@@ -43,6 +43,10 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
         }
       }
     });
+
+    if (!this.isEditMode()) {
+      setIsNewNodeRecursively(this.template);
+    }
   }
 
   goToContainerCachesView(): void {

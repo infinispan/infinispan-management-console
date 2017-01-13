@@ -5,9 +5,10 @@ import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {IMap} from "../../common/utils/IMap";
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class ServerGroupsCtrl {
-  static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups"];
+  static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups", "launchType"];
 
   gridEvents: IClusterEvent[] = [];
   status: IMap<string> = {};
@@ -15,7 +16,8 @@ export class ServerGroupsCtrl {
   constructor(private clusterEventsService: ClusterEventsService,
               private serverGroupService: ServerGroupService,
               public containers: ICacheContainer[],
-              public serverGroups: IMap<IServerGroup>) {
+              public serverGroups: IMap<IServerGroup>,
+              private launchType: LaunchTypeService) {
     this.getAllClusterEvents();
     this.getAllSGStatuses();
   }
@@ -46,6 +48,14 @@ export class ServerGroupsCtrl {
 
   getSGStatusClass(serverGroup: IServerGroup): string {
     return this.status[serverGroup.name] === "STARTED" ? "label-success" : "label-danger";
+  }
+
+  getMode(): string {
+    if (this.launchType.isDomainMode()) {
+      return "Domain";
+    } else {
+      return "Standalone";
+    }
   }
 
   private getAllSGStatuses(): void {

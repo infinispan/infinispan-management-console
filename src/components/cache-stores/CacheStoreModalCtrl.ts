@@ -1,14 +1,18 @@
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {isNotNullOrUndefined, isObject, convertCacheAttributeIntoFieldName} from "../../common/utils/Utils";
 import {makeFieldClean} from "../../common/configuration/ConfigUtil";
+import {generateFieldId} from "../directives/IdGeneratorDirective";
 
 export class CacheStoreModalCtrl {
 
-  static $inject: string[] = ["$uibModalInstance", "data", "meta", "fields", "prevData", "title"];
+  static $inject: string[] = ["$uibModalInstance", "data", "meta", "parent", "fields", "prevData", "title"];
+
+  parentId: Function = generateFieldId;
 
   constructor(private $uibModalInstance: IModalServiceInstance,
               public data: any,
               public meta: any,
+              public parent: string,
               public fields: {name: string}[],
               public prevData: any,
               public title: string) {

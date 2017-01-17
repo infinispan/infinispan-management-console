@@ -10,26 +10,26 @@
         <li class="active"><strong>nodes</strong>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
+        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle>
+        <button class="btn btn-default dropdown-toggle" type="button" id-generator="dropdown_menu" uib-dropdown-toggle>
           Actions
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" class="enabled">
-            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
+            <a id-generator="dropdown_menu.reset_stats" role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a role="menuitem" tabindex="-1"
+            <a role="menuitem" tabindex="-1" id-generator="dropdown_menu.config"
             ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})"
             >View configuration</a>
           </li>
         </ul>
       </div>
-      <h1><span id="currentCacheAvailability" class="label"
+      <h1><span id-generator="availability" class="label"
                 ng-class="ctrl.currentCacheAvailability() ? 'label-success' : 'label-danger'">
         {{ctrl.currentClusterAvailabilityAsString()}}
       </span>&nbsp;{{ctrl.cache.name}}</h1>
@@ -50,7 +50,7 @@
   <div class="col-md-12">
 
     <br>
-    <table class="datatable table table-striped table-bordered display" id="cachesTable">
+    <table class="datatable table table-striped table-bordered display" id-generator="table">
       <thead>
       <tr><th>Name</th>
         <th>Average reads</th>

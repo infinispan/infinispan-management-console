@@ -6,20 +6,20 @@
             </div>
             <div class="panel-body">
                 <div class="form-horizontal">
-                    <form-group data="$ctrl.type" field="type" meta="$ctrl.meta['class']"
+                    <form-group data="$ctrl.type" field="type" meta="$ctrl.meta['class']" parent="loaders"
                                 previous-value="$ctrl.prevData['class']" read-only="$ctrl.readOnly"
                                 option-string="item.class as item.label for item" option-values="$ctrl.cacheLoaders"
                                 change-callback="$ctrl.changeLoaderClass" undo-callback="$ctrl.undoClassChange"/>
                 </div>
 
                 <div class="form-horizontal" ng-if="$ctrl.type.type !== 'None'">
-                    <form-group data="$ctrl.data" field="class" meta="$ctrl.meta['class']"
+                    <form-group data="$ctrl.data" field="class" meta="$ctrl.meta['class']" parent="{{$ctrl.getStoreLabel()}}"
                                 previous-value="$ctrl.prevData['class']" read-only="$ctrl.readOnly || !$ctrl.isCustomLoader()"/>
                 </div>
 
 
                 <div class="form-horizontal" ng-repeat="field in $ctrl.fields" ng-if="$ctrl.type.type !== 'None'">
-                    <form-group data="$ctrl.data" field="{{field}}" meta="$ctrl.meta[field]"
+                    <form-group data="$ctrl.data" field="{{field}}" meta="$ctrl.meta[field]" parent="{{$ctrl.getStoreLabel()}}"
                                 previous-value="$ctrl.prevData[field]" read-only="$ctrl.readOnly"/>
                 </div>
 

@@ -8,14 +8,17 @@ import {
 } from "../../common/utils/Utils";
 import {CacheStoreModalCtrl} from "./CacheStoreModalCtrl";
 import {makeFieldDirty, makeFieldClean} from "../../common/configuration/ConfigUtil";
+import {generateFieldId} from "../directives/IdGeneratorDirective";
 import IModalService = angular.ui.bootstrap.IModalService;
 
 export class CacheStoreModalButtonCtrl {
 
   static $inject: string[] = ["$uibModal"];
 
+  parentId: Function = generateFieldId;
   data: any;
   field: string;
+  parent: string;
   fieldMeta: any;
   modalFields: string[];
   previousValues: any;
@@ -37,6 +40,7 @@ export class CacheStoreModalButtonCtrl {
       resolve: {
         data: (): any => this.resolveDataField(this.data, this.field),
         meta: (): any => this.fieldMeta,
+        parent: (): string => this.parent,
         prevData: (): any => isNullOrUndefined(this.previousValues) ? {} : this.previousValues,
         title: (): string => this.title,
         fields: (): any => this.modalFields

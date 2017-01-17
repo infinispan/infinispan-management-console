@@ -10,6 +10,7 @@ export class CacheStoreModal {
     this.bindings = {
       data: "=",
       field: "@",
+      parent: "@",
       fieldMeta: "=",
       modalFields: "=",
       previousValues: "=",

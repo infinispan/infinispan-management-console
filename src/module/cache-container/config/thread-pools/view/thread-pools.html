@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-sm-12 col-md-12">
+  <div class="col-sm-12 col-md-12" id-generator="container">
     <uib-tabset vertical="true" type="pills">
       <uib-tab heading="Async Operations" active="true" class="col-md10">
         <configuration-section
@@ -61,10 +61,10 @@
 
   <div class="form-group">
     <div class="col-md-6 col-md-offset-6">
-      <button id="createCacheButton" type="button" class="btn btn-primary" ng-disabled="!poolCtrl.isAnyFieldModified()"
+      <button id-generator="save" type="button" class="btn btn-primary" ng-disabled="!poolCtrl.isAnyFieldModified()"
               ng-click="poolCtrl.save()" translate>SAVE
       </button>
-      <button id="cancelCreateCacheButton" type="button" class="btn btn-default" ng-click="poolCtrl.cancel()"
+      <button id-generator="cancel" type="button" class="btn btn-default" ng-click="poolCtrl.cancel()"
               translate>CANCEL
       </button>
     </div>

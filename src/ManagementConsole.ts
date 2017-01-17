@@ -34,6 +34,7 @@ import {openErrorModal} from "./common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IAugmentedJQuery = angular.IAugmentedJQuery;
 import {LaunchTypeService} from "./services/launchtype/LaunchTypeService";
+import {IdGeneratorDirective} from "./components/directives/IdGeneratorDirective";
 
 const App: ng.IAngularStatic = angular;
 
@@ -70,6 +71,7 @@ module.directive("fileModel", () => {
 
 module.directive("vertilizeContainer", VertilizeContainerDirective.factory());
 module.directive("vertilize", VertilizeDirective.factory());
+module.directive("idGenerator", IdGeneratorDirective.factory());
 
 // @ngInject
 module.config(($urlRouterProvider: ng.ui.IUrlRouterProvider) => {

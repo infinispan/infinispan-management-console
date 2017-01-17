@@ -5,14 +5,14 @@
       <div class="form-group">
         <label class="col-md-2 control-label" for="roleMapper">Role Mapper</label>
         <div class="col-md-10">
-          <select id="roleMapper" ng-model="mapper" ng-options="mapper as item for item in securityCtrl.mappers"/>
+          <select id-generator="rolemapper" ng-model="mapper" ng-options="mapper as item for item in securityCtrl.mappers"/>
         </div>
       </div>
 
       <div class="form-group">
         <label class="col-md-2 control-label">Roles</label>
         <div class="col-md-6">
-          <table class="datatable table table-striped table-bordered">
+          <table class="datatable table table-striped table-bordered" id-generator="roles.table">
             <thead>
             <tr>
               <th colspan="2" class="text-right">
@@ -47,11 +47,11 @@
     </form>
     <div ng-if="!securityCtrl.securityAuthorizationDefined">
       <div class="form-group">
-        <label class="col-md-12 control-label" for="roleMapper" translate>DEFINE_AUTHORIZATION</label>
+        <label class="col-md-12 control-label" translate>DEFINE_AUTHORIZATION</label>
       </div>
       <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
-          <button type="button" class="btn btn-primary" ng-click="securityCtrl.defineAuthorization()" translate>YES</button>
+          <button id-generator="define_auth" type="button" class="btn btn-primary" ng-click="securityCtrl.defineAuthorization()" translate>YES</button>
         </div>
       </div>
     </div>

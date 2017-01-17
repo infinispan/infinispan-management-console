@@ -33,6 +33,10 @@ export class CacheContainersCtrl {
     }
   }
 
+  getContainerId(name: string, container: ICacheContainer): string {
+    return container.profile + "." + container.name + "." + name;
+  }
+
   getDefaultStack(container: ICacheContainer): string {
     if (isNotNullOrUndefined(this.stacks)) {
       let serverGroup: string = container.serverGroup.name;

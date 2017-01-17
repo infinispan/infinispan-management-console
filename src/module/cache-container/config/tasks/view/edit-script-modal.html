@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="myModalLabel"><span ng-if="!ctrl.editing" translate>CREATE_NEW_SCRIPT_TASK</span><span
+    <h4 class="modal-title" id-generator="edit_script.title"><span ng-if="!ctrl.editing" translate>CREATE_NEW_SCRIPT_TASK</span><span
       ng-if="ctrl.editing" translate>EDIT_SCRIPT_TASK</span></h4>
   </div>
   <div class="modal-body">
@@ -16,7 +16,7 @@
 
         <div class="col-md-8">
           <input type="text" class="form-control" name="taskName" ng-model="ctrl.task.name" ng-required="true"
-                 ng-disabled="ctrl.editing">
+                 id-generator="edit.name" ng-disabled="ctrl.editing">
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" tooltip="Name of the script task" tooltip-animation="true"
@@ -28,7 +28,7 @@
         <label class="col-md-3 control-label">* <span translate>LANGUAGE</span>:</label>
 
         <div class="col-md-8">
-          <select class="form-control" ng-model="ctrl.task.language" ng-required="true">
+          <select id-generator="edit.language" class="form-control" ng-model="ctrl.task.language" ng-required="true">
             <option>javascript</option>
             <!--option>Scala</option-->
           </select></div>
@@ -43,7 +43,7 @@
         <label class="col-md-3 control-label"><span translate>PARAMETERS</span>:</label>
 
         <div class="col-md-8">
-          <input class="form-control" type="text" name="taskParameters" ng-model="ctrl.task.parameters" ng-required="false">
+          <input id-generator="edit.params" class="form-control" type="text" name="taskParameters" ng-model="ctrl.task.parameters" ng-required="false">
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" tooltip-animation="true" tooltip-placement="top"
@@ -55,7 +55,7 @@
         <label class="col-md-3 control-label">* <span translate>EXECUTION_MODE</span>:</label>
 
         <div class="col-md-8">
-          <select class="form-control" name="taskExecutionMode" ng-model="ctrl.task.mode" ng-required="true">
+          <select id-generator="edit.exec_mode" class="form-control" name="taskExecutionMode" ng-model="ctrl.task.mode" ng-required="true">
             <option value="local">Local</option>
             <option value="distributed">Distributed</option>
           </select>
@@ -70,7 +70,7 @@
         <label class="col-md-3 control-label"><span translate>SECURITY_ROLE</span>:</label>
 
         <div class="col-md-8">
-          <input class="form-control" type="text" name="taskRole" ng-model="ctrl.task.role" ng-required="false">
+          <input id-generator="edit.roles" class="form-control" type="text" name="taskRole" ng-model="ctrl.task.role" ng-required="false">
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" tooltip-animation="true" tooltip-placement="top"
@@ -82,7 +82,7 @@
         <label class="col-md-3 control-label">* <span translate>SCRIPT_BODY</span>:</label>
 
         <div class="col-md-8">
-          <textarea class="form-control" rows="15" ng-model="ctrl.task.body" name="taskBody" ng-required="true"></textarea>
+          <textarea id-generator="edit.body.text" class="form-control" rows="15" ng-model="ctrl.task.body" name="taskBody" ng-required="true"></textarea>
         </div>
       </div>
       <!--------------------------------------------------------------------------------------------------------------->
@@ -90,11 +90,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id="cancelButton" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-    <button id="createScriptButton" ng-show="!ctrl.editing" ng-disabled="!taskForm.$valid" class="btn btn-primary"
+    <button id-generator="edit.cancel" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+    <button id-generator="edit.create" ng-show="!ctrl.editing" ng-disabled="!taskForm.$valid" class="btn btn-primary"
             ng-click="ctrl.createScript();$dismiss()"><span translate>CREATE_SCRIPT_TASK</span>
     </button>
-    <button id="editScriptButton" ng-show="ctrl.editing"
+    <button id-generator="edit.update" ng-show="ctrl.editing"
             ng-disabled="!taskForm.taskName.$valid || !taskForm.taskBody.$valid " class="btn btn-primary"
             ng-click="ctrl.createScript();$dismiss()"><span translate>UPDATE_SCRIPT_TASK</span>
     </button>

@@ -10,15 +10,16 @@
       </ol>
 
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refreshStats()">
+        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refreshStats()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
+        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button" id-generator="dropdown_menu"
+                uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>
-          <li role="presentation" ng-class="!ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
-          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id="dropdownMenuStart" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.start" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>
+          <li role="presentation" ng-class="!ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.stop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.remove" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
         </ul>
       </div>
       <h1><span class="label" ng-class="ctrl.serverInstance.isRunning()?'label-success':'label-danger'">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}
@@ -31,7 +32,7 @@
     <div class="row row-cards-pf">
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-2 col-sm-2 col-md-2">
+      <div class="col-xs-2 col-sm-2 col-md-2" id-generator="perf">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title" translate>PERFORMANCE</h2>
@@ -42,15 +43,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td id="averageReads">{{ctrl.nodeStats['average-read-time'] | number}} ms</td>
+                    <td id-generator="perf.reads">{{ctrl.nodeStats['average-read-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td id="averageWrites">{{ctrl.nodeStats['average-write-time'] | number}} ms</td>
+                    <td id-generator="perf.writes">{{ctrl.nodeStats['average-write-time'] | number}} ms</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td id="averageRemoves">{{ctrl.nodeStats['average-remove-time'] | number}} ms</td>
+                    <td id-generator="perf.remove">{{ctrl.nodeStats['average-remove-time'] | number}} ms</td>
                   </tr>
                 </table>
               </div>
@@ -62,7 +63,7 @@
 
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-2 col-sm-2 col-md-2">
+      <div class="col-xs-2 col-sm-2 col-md-2" id-generator="caching">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title" translate>CACHING_ACTIVITY</h2>
@@ -73,23 +74,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th>READ Hits</th>
-                    <td id="numberOfReadHits">{{ctrl.nodeStats['hits'] | number}}</td>
+                    <td id-generator="caching.read_hit">{{ctrl.nodeStats['hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th>READ misses</th>
-                    <td id="numberOfReadMisses">{{ctrl.nodeStats['misses'] | number}}</td>
+                    <td id-generator="caching.read_miss">{{ctrl.nodeStats['misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th>REMOVE hits</th>
-                    <td id="numberOfRemoveHits">{{ctrl.nodeStats['remove-hits'] | number}}</td>
+                    <td id-generator="caching.rm_hit">{{ctrl.nodeStats['remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th>REMOVE misses</th>
-                    <td id="numberOfRemoveMisses">{{ctrl.nodeStats['remove-misses'] | number}}</td>
+                    <td id-generator="caching.rm_miss">{{ctrl.nodeStats['remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th>PUTS</th>
-                    <td id="numberOfPuts">{{ctrl.nodeStats['stores'] | number}}</td>
+                    <td id-generator="caching.put">{{ctrl.nodeStats['stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -99,7 +100,7 @@
       </div>
       <!-- END CARD -->
 
-      <div class="col-xs-6 col-sm-6 col-md-6">
+      <div class="col-xs-6 col-sm-6 col-md-6" id-generator="perf_metrics">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title" translate>PERFORMANCE_METRICS</h2>
@@ -108,7 +109,7 @@
             <div class="row">
               <div class="col-md-8" ng-show="ctrl.serverInstance.isRunning()">
                 <h4>Heap Memory Usage</h4>
-                <div id="chart"></div>
+                <div id-generator="perf_metrics.chart"></div>
               </div>
               <div class="col-md-8" ng-show="false">
                 <h4>Node is stopped</h4>
@@ -118,37 +119,37 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td id="threadCount">{{ctrl.threadCount}}</td>
+                    <td id-generator="perf_metrics.thread.count">{{ctrl.threadCount}}</td>
                   </tr>
                   <tr>
                     <th>Peak</th>
-                    <td id="threadPeakCount">{{ctrl.threadPeakCount}}</td>
+                    <td id-generator="perf_metrics.thread.peak">{{ctrl.threadPeakCount}}</td>
                   </tr>
                   <tr>
                     <th>Daemon</th>
-                    <td id="threadDaemonCount">{{ctrl.threadDaemonCount}}</td>
+                    <td id-generator="perf_metrics.thread.daemon">{{ctrl.threadDaemonCount}}</td>
                   </tr>
                 </table>
                 <h4>Direct Buffers</h4>
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td id="directBufferPoolCount">{{ctrl.directBufferPoolCount}}</td>
+                    <td id-generator="perf_metrics.direct_buff.count">{{ctrl.directBufferPoolCount}}</td>
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td id="directBufferPoolMemoryUsed">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
+                    <td id-generator="perf_metrics.direct_buff.mem">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
                   </tr>
                 </table>
                 <h4>Mapped Buffers</h4>
                 <table class="col-md-12">
                   <tr>
                     <th>Count</th>
-                    <td id="mappedBufferPoolCount">{{ctrl.mappedBufferPoolCount}}</td>
+                    <td id-generator="perf_metrics.mapped_buff.count">{{ctrl.mappedBufferPoolCount}}</td>
                   </tr>
                   <tr>
                     <th>Memory</th>
-                    <td id="mappedBufferPoolMemoryUsed">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
+                    <td id-generator="perf_metrics.mapped_buff.mem">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
                   </tr>
                 </table>
               </div>

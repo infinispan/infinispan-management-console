@@ -7,7 +7,7 @@
             <div class="panel-body">
                 <div class="form-horizontal">
 
-                    <form-group data="$ctrl.data" field="store-type" meta="$ctrl.meta['store-type']"
+                    <form-group data="$ctrl.data" field="store-type" meta="$ctrl.meta['store-type']" parent="stores"
                                 previous-value="$ctrl.prevData['store-type']" read-only="$ctrl.readOnly"
                                 option-string="item.id as item.label for item" option-values="$ctrl.storeTypes"
                                 change-callback="$ctrl.updateStoreType" undo-callback="$ctrl.undoStoreTypeChange"/>

@@ -8,10 +8,12 @@ import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {ITemplate} from "../../../services/container-config/ITemplate";
 import {CacheService} from "../../../services/cache/CacheService";
 import {IMap} from "../../../common/utils/IMap";
-import {isNullOrUndefined} from "../../../common/utils/Utils";
+import {isNullOrUndefined, isNotNullOrUndefined} from "../../../common/utils/Utils";
+import {ContainerService} from "../../../services/container/ContainerService";
+import interpolateNumber = d3.interpolateNumber;
 
 export class CachesCtrl {
-  static $inject: string[] = ["$uibModal", "container", "caches", "templates", "cacheService"];
+  static $inject: string[] = ["$uibModal", "container", "caches", "templates", "cacheService", "containerService"];
 
   traitCheckboxes: TraitCheckboxes = new TraitCheckboxes();
   typeCheckboxes: TypeCheckboxes = new TypeCheckboxes();
@@ -27,14 +29,47 @@ export class CachesCtrl {
               public container: ICacheContainer,
               public caches: ICache[],
               public templates: ITemplate[],
-              public cacheService: CacheService) {
-    for (let c of caches) {
-      this.cacheService.isAvailable(this.container, c)
-        .then(result => this.cacheAvailability[c.name] = result);
+              public cacheService: CacheService,
+              private containerService: ContainerService) {
 
-      this.cacheService.isEnabled(this.container.profile, c)
-        .then(result => this.cacheEnablement[c.name] = !result[c.name]);
+    //query only distributed and replicated caches (local and invalidation don't have availability attribute)
+    let cacheToQuery: ICache [] = [];
+    for (let cache of caches) {
+      if (cache.isLocal() || cache.isInvalidation()) {
+        this.cacheAvailability[cache.name] = true;
+      } else {
+        cacheToQuery.push(cache);
+      }
     }
+
+    this.containerService.cachesAvailability(this.container, cacheToQuery).then((result)=> {
+      let cacheCounter: number = 0;
+      for (let resultField in result) {
+        let cacheResponse: any = result[resultField];
+        let validResponse: boolean = cacheResponse.outcome === "success" ? true : false;
+        let cacheName: string = cacheToQuery[cacheCounter].name;
+        if (validResponse) {
+          this.cacheAvailability[cacheName] = cacheResponse.result === "AVAILABLE" ? true : false;
+        } else {
+          this.cacheAvailability[cacheName] = false;
+        }
+        cacheCounter += 1;
+      }
+    });
+
+    this.containerService.cachesEnablement(this.container, caches).then((result) => {
+        for (let resultField in result) {
+          let cacheResponse: any = result[resultField];
+          let validResponse: boolean = cacheResponse.outcome === "success" ? true : false;
+          if (validResponse) {
+            let cacheEnablementResponse: any = cacheResponse.result;
+            for (let cacheName in cacheEnablementResponse) {
+              this.cacheEnablement[cacheName] = !cacheEnablementResponse[cacheName];
+            }
+          }
+        }
+      }
+    );
   }
 
   createCache(): void {
@@ -65,5 +100,14 @@ export class CachesCtrl {
     } else {
       return result;
     }
+  }
+
+  isStatusAvailable(cache: ICache): boolean {
+    return isNotNullOrUndefined(this.cacheAvailability[cache.name]) &&
+      isNotNullOrUndefined(this.cacheEnablement[cache.name]);
+  }
+
+  isAvailableAndEnabled(cache: ICache): boolean {
+    return this.isEnabled(cache) && this.isAvailable(cache);
   }
 }

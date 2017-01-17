@@ -3,6 +3,7 @@ import "../../services/dmr/DmrService";
 import {CacheTemplatesCtrl} from "./CacheTemplatesCtrl";
 import {IRedirectState} from "../../common/IRedirectState";
 import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.cache-templates", []);
 
@@ -46,8 +47,8 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       container: ["$stateParams", "containerService", ($stateParams, containerService) => {
         return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
       }],
-      template: ["$q", "$stateParams", "container", "cacheConfigService",
-        ($q: ng.IQService, $stateParams, container, cacheConfigService) => {
+      template: ["$q", "$stateParams", "container", "cacheConfigService", "launchType",
+        ($q: ng.IQService, $stateParams, container, cacheConfigService, launchType: LaunchTypeService) => {
           let deferred: ng.IDeferred<any> = $q.defer<any>();
           if (isNotNullOrUndefined($stateParams.baseType) && isNotNullOrUndefined($stateParams.baseName)) {
             cacheConfigService.getTemplate(container, $stateParams.baseType, $stateParams.baseName).then(template => {
@@ -56,9 +57,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
               deferred.resolve(template);
             });
           } else {
+            let cacheType: string = launchType.isStandaloneLocalMode() ? "local-cache" : "distributed-cache";
             deferred.resolve({
               name: $stateParams.name,
-              type: "distributed-cache",
+              type: cacheType,
               mode: "SYNC",
               "template-name": $stateParams.templateName
             });

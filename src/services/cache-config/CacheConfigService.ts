@@ -176,9 +176,10 @@ export class CacheConfigService {
       }
     };
 
+    let allowedCachesTypes: string [] = this.launchType.isStandaloneLocalMode() ? ["local-cache"] : CACHE_TYPES;
     meta.type = {
       description: "The cache configuration type",
-      allowed: CACHE_TYPES,
+      allowed: allowedCachesTypes,
       type: {
         TYPE_MODEL_VALUE: "STRING"
       }

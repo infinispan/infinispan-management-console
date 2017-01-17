@@ -4,9 +4,10 @@ import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {CacheService} from "../../../services/cache/CacheService";
 import {openErrorModal, openConfirmationModal} from "../../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
+import {LaunchTypeService} from "../../../services/launchtype/LaunchTypeService";
 
 export class AddCacheModalCtrl {
-  static $inject: string[] = ["$state", "$uibModal", "cacheService", "container", "templates"];
+  static $inject: string[] = ["$state", "$uibModal", "cacheService", "container", "templates", "launchType"];
 
   newCacheName: string;
   baseTemplate: ITemplate;
@@ -20,9 +21,19 @@ export class AddCacheModalCtrl {
               private $uibModal: IModalService,
               private cacheService: CacheService,
               private container: ICacheContainer,
-              public templates: ITemplate[]) {
+              private templates: ITemplate[],
+              private launchType: LaunchTypeService) {
     this.templates.unshift(this.noBaseTemplate);
     this.baseTemplate = this.templates[0];
+    if (launchType.isStandaloneLocalMode()) {
+      let localTemplates: ITemplate[] = [];
+      for (let template of templates) {
+        if (template.type === "local-cache" || template.type === "<none>") {
+          localTemplates.push(template);
+        }
+      }
+      this.templates = localTemplates;
+    }
   }
 
   isBaseTemplateSelected(): boolean {

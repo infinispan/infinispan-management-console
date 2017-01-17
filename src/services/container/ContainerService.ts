@@ -14,6 +14,8 @@ import {CacheService} from "../cache/CacheService";
 import IQService = angular.IQService;
 import {SecurityService} from "../security/SecurityService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
+import {ICache} from "../cache/ICache";
+import {CompositeOpBuilder} from "../dmr/CompositeOpBuilder";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -170,6 +172,35 @@ export class ContainerService {
     return deferred.promise;
   }
 
+  cachesAvailability(container: ICacheContainer, caches: ICache[]): ng.IPromise<any> {
+    let firstServer: IServerAddress = container.serverGroup.members[0];
+    let address: string [] = this.getContainerAddress(container, firstServer);
+
+    let builder: CompositeOpBuilder = new CompositeOpBuilder();
+    for (let cache of caches) {
+      let op: IDmrRequest = {
+        address: address.concat(cache.type, cache.name),
+        name: "cache-availability",
+        operation: "read-attribute"
+      };
+      builder.add(op);
+    }
+    return this.dmrService.executePost(builder.build());
+  }
+
+  cachesEnablement(container: ICacheContainer, caches: ICache[]): ng.IPromise<any> {
+    let builder: CompositeOpBuilder = new CompositeOpBuilder();
+    for (let cache of caches) {
+      let op: IDmrRequest = {
+        operation: "is-ignored-all-endpoints",
+        address: this.generateEndpointAddress(container.profile),
+        "cache-names": [cache.name]
+      };
+      builder.add(op);
+    }
+    return this.dmrService.executePost(builder.build());
+  }
+
   getSiteArrays(container: ICacheContainer): ng.IPromise<{[id: string]: string[]}> {
     let deferred: ng.IDeferred<{[id: string]: string[]}> = this.$q.defer<{[id: string]: string[]}>();
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
@@ -252,6 +283,12 @@ export class ContainerService {
     let containerPath: string[] = ["subsystem", "datagrid-infinispan"];
     return this.launchType.getProfilePath(profile).concat(containerPath);
   }
+
+  private generateEndpointAddress(profile?: string): string[] {
+    let path: string[] = ["subsystem", "datagrid-infinispan-endpoint"];
+    return this.launchType.getProfilePath(profile).concat(path);
+  }
+
 }
 
 module.service("containerService", ContainerService);

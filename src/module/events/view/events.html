@@ -8,10 +8,10 @@
       <br>
       <form class="form-inline">
         <div class="form-group">
-          <label class="control-label" for="maxLines">Retrieve &nbsp;</label>
+          <label class="control-label">Retrieve &nbsp;</label>
           <select
             class="form-control"
-            id="maxLines"
+            id-generator="max_lines"
             name="maxLines"
             ng-model="ctrl.lineCount"
             ng-options="option as option for option in ctrl.allPossibleLineCounts"
@@ -21,7 +21,7 @@
         </div>
       </form>
       <br>
-      <table class="table ispn-table">
+      <table class="table ispn-table" id-generator="table">
         <tbody>
         <tr>
           <th style="width: 100px" translate>TYPE</th>

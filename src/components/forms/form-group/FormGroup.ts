@@ -12,6 +12,7 @@ export class FieldInfo {
       data: "=",
       field: "@",
       label: "@",
+      parent: "@",
       meta: "=",
       previousValue: "=",
       placeholder: "@",

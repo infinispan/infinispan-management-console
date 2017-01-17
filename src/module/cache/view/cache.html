@@ -15,46 +15,44 @@
         <li class="active"><strong>{{ctrl.cache.name}}</strong> <small>({{ctrl.cache.type}})</small></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
+        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> Refresh
         </button>
-        <button class="btn btn-default" type="button" id="configureCacheButton"
+        <button class="btn btn-default" type="button" id-generator="edit_config"
         ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})">
           <span class="pficon pficon-settings"></span> Configuration
         </button>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" uib-dropdown-toggle>Actions<span class="caret"></span>
+        <button class="btn btn-default dropdown-toggle" type="button" id-generator="dropdown_menu" uib-dropdown-toggle>Actions<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation"><a role="menuitem" ng-click="ctrl.refresh()">Refresh</a></li>
+          <li role="presentation"><a role="menuitem" id-generator="dropdown_menu.refresh" ng-click="ctrl.refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
-
-          <li role="presentation" ng-class="ctrl.cacheEnabled?'enabled':'disabled'"><a id="dropdownMenuDisable" role="menuitem" ng-click="ctrl.createDisableModal()">Disable</a></li>
-          <li role="presentation" ng-class="!ctrl.cacheEnabled?'enabled':'disabled'"><a id="dropdownMenuEnable" role="menuitem" ng-click="ctrl.createEnableModal()">Enable</a></li>
+          <li role="presentation" ng-class="ctrl.cacheEnabled?'enabled':'disabled'"><a id-generator="dropdown_menu.disable" role="menuitem" ng-click="ctrl.createDisableModal()">Disable</a></li>
+          <li role="presentation" ng-class="!ctrl.cacheEnabled?'enabled':'disabled'"><a id-generator="dropdown_menu.enable" role="menuitem" ng-click="ctrl.createEnableModal()">Enable</a></li>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" ng-class="ctrl.cache.isIndexed()?'enabled':'disabled'"><a id="dropdownMenuMassIndexCache" role="menuitem" ng-click="ctrl.createReindexModal()">Reindex</a>
-          <li role="presentation" class="enabled"><a id="dropdownMenuFlushCache" role="menuitem" ng-click="ctrl.createFlushModal()">Flush</a>
+          <li role="presentation" ng-class="ctrl.cache.isIndexed()?'enabled':'disabled'"><a id-generator="dropdown_menu.reindex" role="menuitem" ng-click="ctrl.createReindexModal()">Reindex</a>
+          <li role="presentation" class="enabled"><a id-generator="dropdown_menu.flush" role="menuitem" ng-click="ctrl.createFlushModal()">Flush</a>
           <li role="presentation" class="divider"></li>
-          <li role="presentation" class="enabled"><a id="dropdownMenuClearCache" role="menuitem" ng-click="ctrl.createClearModal()">Clear</a>
+          <li role="presentation" class="enabled"><a id-generator="dropdown_menu.clear" role="menuitem" ng-click="ctrl.createClearModal()">Clear</a>
           <li role="presentation" class="divider"></li>
           <!-- Rebalancing options -->
           <li ng-if="!ctrl.isLocalMode()" role="presentation"
               ng-class="ctrl.stats['cache-rebalancing-status']=='SUSPENDED' ? 'enabled':'disabled'">
-            <a id="dropdownMenuStartRebalance" role="menuitem" ng-click="ctrl.createEnableRebalancingModal()">Enable rebalance</a>
+            <a id-generator="dropdown_menu.enable_rebalance" role="menuitem" ng-click="ctrl.createEnableRebalancingModal()">Enable rebalance</a>
           </li>
           <li ng-if="!ctrl.isLocalMode()" role="presentation"
               ng-class="ctrl.stats['cache-rebalancing-status']=='SUSPENDED' ? 'disabled':'enabled'">
-            <a id="dropdownMenuStopRebalance" role="menuitem" ng-click="ctrl.createDisableRebalancingModal()">Disable rebalance</a>
+            <a id-generator="dropdown_menu.disable_rebalance"  role="menuitem" ng-click="ctrl.createDisableRebalancingModal()">Disable rebalance</a>
           </li>
           <li role="presentation" class="divider"></li>
 
-          <!--li role="presentation" class="disabled"><a id="dropdownMenuStartMassIndex" role="menuitem" href="#">Start mass reindex</a-->
           <li role="presentation" class="enabled">
-            <a id="dropdownMenuResetStatistics" role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
+            <a id-generator="dropdown_menu.reset_stats"  role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
           </li>
         </ul>
       </div>
 
-      <h1><span class="label" id="currentCacheAvailability"
+      <h1><span class="label" id-generator="availability"
                 ng-class="ctrl.isCurrentCacheAvailable() ? 'label-success' : 'label-danger'">{{ctrl.availability}}
       </span>&nbsp;{{ctrl.cache.name}}
         <span ng-if="ctrl.stats['cache-rebalancing-status']=='SUSPENDED'"   class="small"><strong class="label label-danger"> - Rebalancing: SUSPENDED</strong></span>
@@ -72,7 +70,7 @@
   <!-- User feedback reporting -->
   <div class="row" ng-if="ctrl.errorExecuting || ctrl.successExecuteOperation">
     <div class="col-sm-12 col-md-12">
-      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successExecuteOperation">
+      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successExecuteOperation" id-generator="success" >
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
@@ -80,7 +78,7 @@
         <strong>Success!</strong> The operation has been successfully executed.
       </div>
 
-      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting">
+      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting" id-generator="error" >
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
           <span class="pficon pficon-close"></span>
         </button>
@@ -107,49 +105,49 @@
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.isPersistent()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-database" id="persistent" title="Persistent"></span> Persistent
+            <span class="fa fa-database" title="Persistent"></span> Persistent
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.isTransactional()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-arrow-circle-o-down" id="transactional" title="Transactional"></span> Transactional
+            <span class="fa fa-arrow-circle-o-down" title="Transactional"></span> Transactional
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.isBounded()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-stack-overflow" id="bounded" title="Bounded"></span> Bounded
+            <span class="fa fa-stack-overflow" title="Bounded"></span> Bounded
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.isIndexed()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-list-ol" id="indexed" title="Indexed"></span> Indexed
+            <span class="fa fa-list-ol" title="Indexed"></span> Indexed
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.hasCompatibility()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-puzzle-piece" id="compatible" title="Compatible"></span> Compatible
+            <span class="fa fa-puzzle-piece" title="Compatible"></span> Compatible
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.isSecured()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="fa fa-lock" id="secured" title="Secured"></span> Secured
+            <span class="fa fa-lock" title="Secured"></span> Secured
           </h2>
         </div>
       </div>
       <div class="col-xs-6 col-sm-4 col-md-3" ng-if="ctrl.cache.hasRemoteBackup()">
         <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action">
           <h2 class="card-pf-title">
-            <span class="pficon pficon-history" id="remotelyBackedUp" title="Remotely backed up"></span>Backup
+            <span class="pficon pficon-history" title="Remotely backed up"></span>Backup
           </h2>
         </div>
       </div>
@@ -157,7 +155,7 @@
 
     <div class="row row-cards-pf" ng-init="preappend = ctrl.cache.isLocal()?'':'clusterwide-'" vertilize-container>
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3"
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="sites"
            ng-if="ctrl.stats['sites-offline'].length > 0
                || ctrl.stats['sites-online'].length > 0
                || ctrl.stats['sites-mixed'].length > 0 ">
@@ -183,7 +181,7 @@
 
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" >
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="cache_content">
         <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Cache content</h2>
@@ -194,32 +192,16 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Entries</th>
-                    <td id="numberOfEntries">{{ctrl.stats[preappend + 'number-of-entries'] | number}}</td>
+                    <td id-generator="cache_content.entries">{{ctrl.stats[preappend + 'number-of-entries'] | number}}</td>
                   </tr>
                   <tr>
                     <th>READ / WRITE ratio</th>
-                    <td id="readWriteRatio">{{ctrl.stats[preappend + 'read-write-ratio'] | number}}</td>
+                    <td id-generator="cache_content.rw_ratio">{{ctrl.stats[preappend + 'read-write-ratio'] | number}}</td>
                   </tr>
                   <tr>
                     <th>HIT ratio</th>
-                    <td id="hitRatio">{{ctrl.stats[preappend + 'hit-ratio'] | number}}</td>
+                    <td id-generator="cache_content.hit_ratio">{{ctrl.stats[preappend + 'hit-ratio'] | number}}</td>
                   </tr>
-                  <!--tr>
-                    <th>Max capacity:</th>
-                    <td id="maxCapacity">TODO</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" style="padding-top: 10px">
-                      <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="50"
-                             aria-valuemin="0"
-                             aria-valuemax="100" style="width: 50%;">
-                          <span>340 / 680 - 50%</span>
-                        </div>
-                      </div>
-
-                    </td>
-                  </tr-->
                 </table>
               </div>
             </div>
@@ -229,7 +211,7 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" >
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="ops_perf">
         <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Operations performance</h2>
@@ -240,15 +222,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td id="avgReads">{{ctrl.stats[preappend + 'average-read-time'] | number}}</td>
+                    <td id-generator="ops_perf.reads">{{ctrl.stats[preappend + 'average-read-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td id="avgWrites">{{ctrl.stats[preappend + 'average-write-time'] | number}}</td>
+                    <td id-generator="ops_perf.writes">{{ctrl.stats[preappend + 'average-write-time'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td id="avgRemoves">{{ctrl.stats[preappend + 'average-remove-time'] | number}}</td>
+                    <td id-generator="ops_perf.removes">{{ctrl.stats[preappend + 'average-remove-time'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -259,7 +241,7 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3" >
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="cache_activity">
         <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Caching activity</h2>
@@ -270,23 +252,23 @@
                 <table class="col-md-12">
                   <tr>
                     <th>READ Hits</th>
-                    <td id="numberOfReadHits">{{ctrl.stats[preappend + 'hits'] | number}}</td>
+                    <td id-generator="cache_activity.read_hit">{{ctrl.stats[preappend + 'hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th>READ misses</th>
-                    <td id="numberOfReadMisses">{{ctrl.stats[preappend + 'misses'] | number}}</td>
+                    <td id-generator="cache_activity.read_miss">{{ctrl.stats[preappend + 'misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th>REMOVE hits</th>
-                    <td id="numberOfRemoveHits">{{ctrl.stats[preappend + 'remove-hits'] | number}}</td>
+                    <td id-generator="cache_activity.rm_hit">{{ctrl.stats[preappend + 'remove-hits'] | number}}</td>
                   </tr>
                   <tr>
                     <th>REMOVE misses</th>
-                    <td id="NumberOfRemoveMisses">{{ctrl.stats[preappend + 'remove-misses'] | number}}</td>
+                    <td id-generator="cache_activity.rm_misses">{{ctrl.stats[preappend + 'remove-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th>PUTS</th>
-                    <td id="numberOfPuts">{{ctrl.stats[preappend + 'stores'] | number}}</td>
+                    <td id-generator="cache_activity.puts">{{ctrl.stats[preappend + 'stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -301,7 +283,7 @@
     <div class="row row-cards-pf" vertilize-container>
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="e_lifecycle">
         <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Entries lifecycle</h2>
@@ -312,19 +294,19 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Activations</th>
-                    <td id="numberOfActivations">{{ctrl.stats[preappend + 'activations'] | number}}</td>
+                    <td id-generator="e_lifecycle.activations">{{ctrl.stats[preappend + 'activations'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Evictions</th>
-                    <td id="numberOfReadEvictions">{{ctrl.stats[preappend + 'evictions'] | number}}</td>
+                    <td id-generator="e_lifecycle.evictions">{{ctrl.stats[preappend + 'evictions'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Invalidations</th>
-                    <td id="numberOfInvalidations">{{ctrl.stats[preappend + 'invalidations'] | number}}</td>
+                    <td id-generator="e_lifecycle.invalidations">{{ctrl.stats[preappend + 'invalidations'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Passivations</th>
-                    <td id="numberOfPassivations">{{ctrl.stats[preappend + 'passivations'] | number}}</td>
+                    <td id-generator="e_lifecycle.passivations">{{ctrl.stats[preappend + 'passivations'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -335,7 +317,7 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="loader">
         <div class="card-pf card-pf-accented ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Cache loader</h2>
@@ -346,15 +328,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Loads</th>
-                    <td id="numberOfLoads">{{ctrl.stats[preappend + 'cache-loader-loads'] | number}}</td>
+                    <td id-generator="loader.loads">{{ctrl.stats[preappend + 'cache-loader-loads'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Misses</th>
-                    <td id="numberOfMisses">{{ctrl.stats[preappend + 'cache-loader-misses'] | number}}</td>
+                    <td id-generator="loader.misses">{{ctrl.stats[preappend + 'cache-loader-misses'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Stores</th>
-                    <td id="numberOfStores">{{ctrl.stats[preappend + 'cache-loader-stores'] | number}}</td>
+                    <td id-generator="loader.stores">{{ctrl.stats[preappend + 'cache-loader-stores'] | number}}</td>
                   </tr>
                 </table>
               </div>
@@ -365,7 +347,7 @@
       <!-- END CARD -->
 
       <!-- BEGIN CARD -->
-      <div class="col-xs-6 col-sm-4 col-md-3">
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="locking">
         <div class="card-pf card-pf-accented ispn-card ispn-card" vertilize>
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Locking</h2>
@@ -376,11 +358,11 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Locks available</th>
-                    <td id="numberOfLocksAvailable">{{ctrl.stats[preappend + 'number-of-locks-available'] | number}}</td>
+                    <td id-generator="locking.available">{{ctrl.stats[preappend + 'number-of-locks-available'] | number}}</td>
                   </tr>
                   <tr>
                     <th>Locks held</th>
-                    <td id="numberOfLocksHeld">{{ctrl.stats[preappend + 'number-of-locks-held'] | number}}</td>
+                    <td id-generator="locking.held">{{ctrl.stats[preappend + 'number-of-locks-held'] | number}}</td>
                   </tr>
                 </table>
               </div>

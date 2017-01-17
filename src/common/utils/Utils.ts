@@ -2,7 +2,7 @@ import {IServerAddress} from "../../services/server/IServerAddress";
 import {ServerAddress} from "../../services/server/ServerAddress";
 
 export function isString(object: any): boolean {
-  return (typeof object === "string");
+  return isNotNullOrUndefined(object) && typeof object === "string";
 }
 
 export function stringEndsWith(str: string, suffix: string): boolean {

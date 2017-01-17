@@ -3,7 +3,7 @@
     <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="myModalLabel" translate>LAUNCH_NEW_TASK</h4>
+    <h4 class="modal-title" id-generator="create_modal.title" translate>LAUNCH_NEW_TASK</h4>
   </div>
   <div class="modal-body">
 
@@ -14,7 +14,7 @@
 
     <div class="alert alert-danger alert-dismissable" ng-if="modalCtrl.errorExecuting">
       <span class="pficon pficon-error-circle-o"></span>
-      <strong>Error</strong> <span translate translate-values="{errorDescription:errorDescription}">SOME_UNEXECPECTED_OUTPUT</span>
+      <strong>Error</strong> <span translate translate-values="{errorDescription:errorDescription}">SOME_UNEXPECTED_OUTPUT</span>
     </div>
 
     <div class="alert alert-success alert-dismissable" ng-if="modalCtrl.successfulOperation">
@@ -36,7 +36,8 @@
           <select class="form-control"
                   ng-model="modalCtrl.task.name"
                   ng-required="true"
-                  ng-options="task.name as task.name for task in modalCtrl.availableTasks">
+                  ng-options="task.name as task.name for task in modalCtrl.availableTasks"
+                  id-generator="create.task_name">
             <option selected="selected">-- Select Task --</option>
           </select>
         </div>
@@ -52,7 +53,8 @@
                   name="selectedCache"
                   ng-model="modalCtrl.task.cache"
                   ng-options="cache.name as cache.name for cache in modalCtrl.caches"
-                  ng-required="true">
+                  ng-required="true"
+                  id-generator="create.cache">
             <option selected="selected">-- Select cache --</option>
           </select>
         </div>
@@ -70,7 +72,7 @@
                   ng-model="modalCtrl.task.originator"
                   ng-options="server as server.toString() for server in modalCtrl.servers"
                   ng-required="true"
-          >
+                  id-generator="create.originator">
           </select>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
@@ -82,11 +84,12 @@
       <div class="form-group" ng-repeat="param in modalCtrl.parameters">
         <label class="col-md-4 control-label">Parameter {{$index + 1}}:</label>
         <div class="col-md-3">
-          <input ng-model="param.name" class="form-control" type="text" placeholder="Name">
+          <input ng-model="param.name" class="form-control" type="text" placeholder="Name"
+                 id-generator="create.param.{{$index}}.name">
         </div>
         <div class="col-md-3">
           <input ng-model="param.value" class="form-control" type="text"
-                 placeholder="Value">
+                 placeholder="Value" id-generator="create.param.{{$index + 1}}.value">
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" uib-tooltip="Parameter {{$index + 1}}" tooltip-animation="true"
@@ -98,7 +101,7 @@
       <div class="form-group">
         <label class="col-md-2 control-label">&nbsp;</label>
         <div class="col-md-8">
-          <input ng-model="modalCtrl.task.async" type="checkbox"> &nbsp;&nbsp;<span translate>ASYNCHRONOUS_TASK</span>
+          <input ng-model="modalCtrl.task.async" type="checkbox" id-generator="create.asynch"> &nbsp;&nbsp;<span translate>ASYNCHRONOUS_TASK</span>
         </div>
       </div>
 
@@ -106,9 +109,9 @@
   </div>
   <div class="modal-footer">
     <button type="button" ng-disabled="!taskForm.$valid" class="btn btn-primary" ng-click="modalCtrl.submitTask()"
-            translate>
+            id-generator="create.submit" translate>
       LAUNCH_TASK
     </button>
-    <button type="button" class="btn btn-default" ng-click="$dismiss()" translate>CLOSE</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()" id-generator="create.close" translate>CLOSE</button>
   </div>
 </div>

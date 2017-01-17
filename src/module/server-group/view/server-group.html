@@ -8,21 +8,21 @@
         <li class="active"><strong>{{ctrl.serverGroup.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id="refreshButton" ng-click="ctrl.refresh()">
+        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button"
-                id="dropdownMenu" uib-dropdown-toggle><span translate>ACTIONS</span><span
+                id-generator="dropdown_menu" uib-dropdown-toggle><span translate>ACTIONS</span><span
           class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.available ? 'disabled' : 'enabled'"
               ng-click="ctrl.createConfirmationModal('start')">
-            <a id="dropdownMenuStart" role="menuitem" translate>START</a>
+            <a id-generator="dropdown_menu.start" role="menuitem" translate>START</a>
           </li>
           <li role="presentation" ng-class="ctrl.available ? 'enabled' : 'disabled'"
               ng-click="ctrl.createConfirmationModal('stop')">
-            <a id="dropdownMenuStop" role="menuitem" translate>STOP</a>
+            <a id-generator="dropdown_menu.stop" role="menuitem" translate>STOP</a>
           </li>
         </ul>
       </div>
@@ -43,7 +43,7 @@
   </div>
 
   <div class="row" vertilize-container>
-    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" id="cache-cards">
+    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" class="cache-cards" id-generator="cache_cards_container">
       <br/>
 
       <div class="alert alert-info" ng-show="filtered.length < ctrl.serverGroup.members.length">
@@ -52,7 +52,7 @@
       </div>
 
       <div ng-if="ctrl.isDomainMode()" class="col-xs-6 col-sm-4 col-md-2">
-        <a id="addNode" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
+        <a id-generator="add" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
            data-toggle="modal"
            class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
           <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
@@ -69,7 +69,7 @@
           </div>
         </a>
       </div>
-      <div class="col-xs-6 col-sm-4 col-md-2"
+      <div class="col-xs-6 col-sm-4 col-md-2" id-generator="groups"
            ng-repeat="server in filtered = (ctrl.serverGroup.members | serverFilter:ctrl.serverInetMap:searchNameQuery)"
            ng-show="true">
         <a ui-sref="server-instance({
@@ -100,15 +100,14 @@
       <form role="form" class="search-pf has-button">
         <div class="form-group has-clear">
           <div class="search-pf-input-group">
-            <label for="searchTextField" class="sr-only">Name</label>
-            <input id="searchTextField" class="form-control" ng-model="searchNameQuery"
+            <input id-generator="search" type="text" class="form-control" ng-model="searchNameQuery"
                    placeholder="Type name, IP address, ..." type="search">
             <button style="display: none;" type="button" class="clear" aria-hidden="true"><span
               class="pficon pficon-close"></span></button>
           </div>
         </div>
         <div class="form-group">
-          <button id="searchNodeButton" class="btn btn-default" type="submit"><span class="fa fa-search"></span>
+          <button id-generator="search" class="btn btn-default" type="submit"><span class="fa fa-search"></span>
           </button>
         </div>
       </form>

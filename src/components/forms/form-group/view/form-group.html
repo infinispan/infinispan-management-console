@@ -2,20 +2,21 @@
   <label class="col-md-4 control-label">{{$ctrl.resolveFieldName()}}</label>
 
   <div class="col-md-4">
-    <input class="form-control" type="text" ng-model="$ctrl.data[$ctrl.field]"
+    <input id-generator="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}"
+           class="form-control" type="text" ng-model="$ctrl.data[$ctrl.field]"
            ng-change="$ctrl.fieldValueModified()" ng-style="$ctrl.getStyle()"
            ng-if="!$ctrl.multiValue && $ctrl.type === 'text'"
            placeholder="{{$ctrl.placeholder}}"/>
 
     <div class="checkbox" ng-if="!$ctrl.multiValue && $ctrl.type === 'checkbox'">
       <label>
-        <input type="checkbox" ng-style="$ctrl.getStyle()" ng-model="$ctrl.data[$ctrl.field]"
+        <input id-generator="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}" type="checkbox" ng-style="$ctrl.getStyle()" ng-model="$ctrl.data[$ctrl.field]"
                ng-change="$ctrl.fieldValueModified()"/>
       </label>
     </div>
 
     <select class="form-control" ng-style="$ctrl.getStyle()" ng-model="$ctrl.data[$ctrl.field]"
-            ng-options="{{$ctrl.option}}"
+            ng-options="{{$ctrl.option}}" id-generator="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}" type="select"
             ng-if="$ctrl.multiValue" ng-change="$ctrl.fieldValueModified()"/>
 
     <!-- TODO Make a property table directive-->
@@ -69,6 +70,6 @@
       </form>
     </div>
   </div>
-  <field-info data="$ctrl.data" meta="$ctrl.meta" field="{{$ctrl.field}}" previous-value="$ctrl.previousValue" read-only="$ctrl.readOnly"
-              undo-callback="$ctrl.undoCallback"/>
+  <field-info parent="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}" data="$ctrl.data" meta="$ctrl.meta" field="{{$ctrl.field}}"
+              previous-value="$ctrl.previousValue" read-only="$ctrl.readOnly" undo-callback="$ctrl.undoCallback"/>
 </fieldset>

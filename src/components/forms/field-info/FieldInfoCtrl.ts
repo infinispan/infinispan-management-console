@@ -5,14 +5,17 @@ import {
   makeAllFieldsClean
 } from "../../../common/configuration/ConfigUtil";
 import {deepGet, isNotNullOrUndefined} from "../../../common/utils/Utils";
+import {generateFieldId} from "../../directives/IdGeneratorDirective";
 
 export class FieldInfoCtrl {
   data: any;
   meta: any;
+  parent: string;
   field: string;
   previousValue: any;
   readOnly: boolean;
   undoCallback: Function;
+  parentId: Function = generateFieldId;
 
   isFieldValueModified(): boolean {
     return isFieldValueModified(this.meta);

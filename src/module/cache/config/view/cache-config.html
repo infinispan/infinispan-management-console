@@ -26,7 +26,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <div id="templateConfiguration">
+            <div id-generator="content">
                 <cache-configuration cache-type="{{ctrl.template.type}}" data="ctrl.template"
                                      meta="ctrl.meta" init-defaults="!ctrl.isEditMode()" read-only="false"
                                      read-only-fields="ctrl.readOnlyFields" config-callbacks="ctrl.callbackArray"
@@ -36,15 +36,15 @@
             <br>
             <div class="form-group">
                 <div class="col-md-6 col-md-offset-6">
-                    <button id="saveCacheTemplateButton" type="button" class="btn btn-primary"
+                    <button id-generator="create" type="button" class="btn btn-primary"
                             ng-if="!ctrl.isEditMode()"
                             ng-disabled="ctrl.isTemplateNameEmpty()" ng-click="ctrl.createCache()" translate>CREATE
                     </button>
-                    <button id="editCacheTemplateButton" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
+                    <button id-generator="apply_changes" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
                             ng-disabled="!ctrl.isAnyFieldModified()" ng-click="ctrl.updateTemplate()" translate>
                         APPLY_CHANGES
                     </button>
-                    <button id="cancelCacheTemplateButton" type="button" class="btn btn-default"
+                    <button id-generator="cancel" type="button" class="btn btn-default"
                             ng-click="ctrl.goToContainerCachesView()"
                             translate>CANCEL
                     </button>

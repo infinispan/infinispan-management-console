@@ -149,6 +149,10 @@ export class CacheLoadersCtrl implements IConfigurationCallback {
     return isNotNullOrUndefined(this.meta[field]) ? this.meta[field].style : "";
   }
 
+  getStoreLabel(): string {
+    return this.cacheLoaders.filter((loader) => loader.class === this.type.type)[0].label;
+  }
+
   private undoFieldChange(field: string): void {
     this.data[field] = this.prevData[field];
     makeFieldClean(this.meta[field]);

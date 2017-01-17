@@ -16,7 +16,7 @@
 
                 </div>
                 <div class="form-horizontal" ng-if="$ctrl.isSecurityDefinedForContainer()">
-                    <form-group data="$ctrl.auth" field="enabled" meta="$ctrl.meta['enabled']"
+                    <form-group parent="security" data="$ctrl.auth" field="enabled" meta="$ctrl.meta['enabled']"
                                 previous-value="$ctrl.prevData['enabled']" read-only="$ctrl.readOnly"/>
                 </div>
                 <div class="form-horizontal" ng-if="$ctrl.auth.enabled">

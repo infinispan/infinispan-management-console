@@ -1,18 +1,18 @@
 import {
-  isNullOrUndefined, isBoolean, isNotNullOrUndefined,
+  isNullOrUndefined,
+  isBoolean,
+  isNotNullOrUndefined,
   convertCacheAttributeIntoFieldName
 } from "../../../common/utils/Utils";
-import {
-  makeFieldClean,
-  makeFieldDirty,
-  getTypeModelType
-} from "../../../common/configuration/ConfigUtil";
+import {makeFieldClean, makeFieldDirty, getTypeModelType} from "../../../common/configuration/ConfigUtil";
+import {generateFieldId} from "../../directives/IdGeneratorDirective";
 
 export class FormGroupCtrl {
 
   data: any;
   field: string;
   label: string;
+  parent: string;
   meta: any;
   previousValue: any;
   placeholder: string;
@@ -25,6 +25,7 @@ export class FormGroupCtrl {
   type: string;
   multiValue: boolean;
   option: string;
+  parentId: Function = generateFieldId;
 
   constructor() {
     if (isNullOrUndefined(this.optionString)) {

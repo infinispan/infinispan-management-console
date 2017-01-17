@@ -5,7 +5,7 @@
         <label class="control-label" for="taskCount">Retrieve &nbsp;</label>
         <select
           class="form-control"
-          id="taskCount"
+          id-generator="count"
           name="taskCount"
           ng-model="tasksCtrl.taskCount"
           ng-options="option as option for option in tasksCtrl.taskCountOptions"
@@ -15,7 +15,7 @@
       </div>
     </form>
     <br>
-    <table class="table ispn-table" ng-if="tasksCtrl.history.length > 0">
+    <table class="table ispn-table" ng-if="tasksCtrl.history.length > 0" id-generator="table">
       <tbody>
       <tr>
         <th style="width: 50px">Status</th>

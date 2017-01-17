@@ -6,7 +6,7 @@
       </ol>
       <h1 translate>CLUSTERS</h1>
       <br>
-      <table class="table ispn-aligned">
+      <table class="table ispn-aligned" id-generator="table">
         <tr>
           <th translate>NAME</th>
           <th translate>STATUS</th>
@@ -18,16 +18,17 @@
         <tr ng-repeat="serverGroup in ctrl.serverGroups track by $index">
           <td>
             <strong>
-              <a class="clusterName"
+              <a class="clusterName" id-generator="{{serverGroup.name}}.name"
                  ui-sref="server-group({serverGroup: serverGroup.name})">{{serverGroup.name}}
               </a>
             </strong>
           </td>
-          <td><span class="label clusterStatus"
-                    ng-class="ctrl.getSGStatusClass(serverGroup)">{{ctrl.getSGStatus(serverGroup)}}</span></td>
-          <td style="padding: 10px"><span class="label label-default clusterHostCount">{{ctrl.getSGHostCount(serverGroup)}}</span>
+          <td><span class="label clusterStatus" id-generator="{{serverGroup.name}}.status"
+                    ng-class="ctrl.getSGStatusClass(serverGroup)">{{ctrl.getSGStatus(serverGroup)}}</span>
           </td>
-          <td style="padding: 10px"><span class="label label-default clusterNodeCount">{{ctrl.getSGServerCount(serverGroup)}}</span>
+          <td style="padding: 10px"><span class="label label-default clusterHostCount" id-generator="{{serverGroup.name}}.hosts">{{ctrl.getSGHostCount(serverGroup)}}</span>
+          </td>
+          <td style="padding: 10px"><span class="label label-default clusterNodeCount" id-generator="{{serverGroup.name}}.nodes">{{ctrl.getSGServerCount(serverGroup)}}</span>
           </td>
         </tr>
       </table>
@@ -36,8 +37,8 @@
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>
       </div>
-      <ul class="list-group" ng-if="ctrl.gridEvents.length > 0">
-        <li class="list-group-item" ng-repeat="event in ctrl.gridEvents">
+      <ul class="list-group" ng-if="ctrl.gridEvents.length > 0" id-generator="events">
+        <li class="list-group-item" ng-repeat="event in ctrl.gridEvents" id-generator="events.{{$index}}">
           <h3 class="list-group-item-heading">
             <span ng-if="event.level=='WARN'" class="icon-class pficon-warning-triangle-o"></span>
             <span ng-if="event.level=='INFO'" class="icon-class pficon-info"></span>

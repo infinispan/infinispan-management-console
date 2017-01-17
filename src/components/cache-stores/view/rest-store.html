@@ -4,7 +4,7 @@
         <label class="col-md-4 control-label">Connection Pool</label>
 
         <div class="col-md-4">
-            <cache-store-modal data="$ctrl.store" field="connection-pool"
+            <cache-store-modal data="$ctrl.store" field="connection-pool" parent="{{$ctrl.data['store-type']}}"
                                field-meta="$ctrl.getFieldMetaValues('connection-pool')"
                                parent-meta="$ctrl.getFieldMetaObject('connection-pool')"
                                previous-values="$ctrl.prevData['connection-pool']" title="Connection Pool"
@@ -13,7 +13,7 @@
         </div>
 
         <field-info data="$ctrl.store" meta="$ctrl.getFieldMetaObject('connection-pool')" field="connection-pool"
-                    previous-value="$ctrl.prevData['connection-pool']"/>
+                    previous-value="$ctrl.prevData['connection-pool']" parent="{{$ctrl.data['store-type']}}"/>
     </div>
 </div>
 

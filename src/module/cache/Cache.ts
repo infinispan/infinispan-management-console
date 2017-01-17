@@ -90,7 +90,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
           } else {
             deferred.resolve({
               name: $stateParams.name,
-              type: "distributed-cache",
+              type: cacheConfigService.getDefaultCacheType(),
               mode: "SYNC",
               "template-name": $stateParams.cacheName
             });
@@ -120,7 +120,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
           return cacheService.getCache("default", "distributed-cache", $stateParams.containerName, $stateParams.profileName);
         }],
       allCacheStats: ["cacheService", "container", "cache",
-        (cacheService: CacheService, container: ICacheContainer, cache:ICache) => {
+        (cacheService: CacheService, container: ICacheContainer, cache: ICache) => {
           return cacheService.getCacheStatsForServers(container, cache);
         }]
     }

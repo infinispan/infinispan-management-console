@@ -4,9 +4,10 @@ import {ICacheContainer} from "../../../services/container/ICacheContainer";
 import {CacheService} from "../../../services/cache/CacheService";
 import {openErrorModal, openConfirmationModal} from "../../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
+import {CacheConfigService} from "../../../services/cache-config/CacheConfigService";
 
 export class AddCacheModalCtrl {
-  static $inject: string[] = ["$state", "$uibModal", "cacheService", "container", "templates"];
+  static $inject: string[] = ["$state", "$uibModal", "cacheService", "container", "templates", "cacheConfigService"];
 
   newCacheName: string;
   baseTemplate: ITemplate;
@@ -20,7 +21,10 @@ export class AddCacheModalCtrl {
               private $uibModal: IModalService,
               private cacheService: CacheService,
               private container: ICacheContainer,
-              public templates: ITemplate[]) {
+              private templates: ITemplate[],
+              private cacheConfigService: CacheConfigService) {
+
+    this.templates = this.cacheConfigService.filterTemplates(templates);
     this.templates.unshift(this.noBaseTemplate);
     this.baseTemplate = this.templates[0];
   }

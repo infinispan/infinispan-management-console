@@ -122,6 +122,9 @@ export class ServerGroupCtrl {
       resolve: {
         operation: (): string => {
           return operation;
+        },
+        clusterName: (): string => {
+          return this.serverGroup.name;
         }
       }
     });

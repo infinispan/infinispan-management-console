@@ -7,9 +7,9 @@
   </div>
   <div class="modal-body">
 
-    <h3 ng-if="ctrl.operation === 'start'" translate translate-values='{clusterName:clusterName}'>
+    <h3 ng-if="ctrl.operation === 'start'" translate translate-values='{clusterName:ctrl.clusterName}'>
       STARTING_CLUSTER</h3>
-    <h3 ng-if="ctrl.operation === 'stop'" translate translate-values='{clusterName:clusterName}'>
+    <h3 ng-if="ctrl.operation === 'stop'" translate translate-values='{clusterName:ctrl.clusterName}'>
       STOPPING_CLUSTER</h3>
   </div>
   <div class="modal-footer">

@@ -58,7 +58,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
           } else {
             deferred.resolve({
               name: $stateParams.name,
-              type: "distributed-cache",
+              type: cacheConfigService.getDefaultCacheType(),
               mode: "SYNC",
               "template-name": $stateParams.templateName
             });

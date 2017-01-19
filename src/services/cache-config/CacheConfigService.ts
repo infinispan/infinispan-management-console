@@ -17,7 +17,8 @@ import {deepMergeTemplates} from "../../common/configuration/ConfigUtil";
 
 const module: ng.IModule = App.module("managementConsole.services.cache-config", []);
 
-export const CACHE_TYPES: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
+export const DOMAIN_CACHE_TYPES: string[] = ["distributed-cache", "replicated-cache", "local-cache", "invalidation-cache"];
+export const STANDALONE_CACHE_TYPES: string[] = ["local-cache"];
 
 export class CacheConfigService {
   static $inject: string[] = ["$q", "dmrService", "launchType"];
@@ -86,6 +87,30 @@ export class CacheConfigService {
       },
       error => deferred.reject(error));
     return deferred.promise;
+  }
+
+  getAllCacheTypes(): string [] {
+    if (this.launchType.isStandaloneLocalMode()) {
+      return STANDALONE_CACHE_TYPES;
+    }
+    else {
+      return DOMAIN_CACHE_TYPES;
+    }
+  }
+
+  getDefaultCacheType(): string {
+    return this.getAllCacheTypes()[0];
+  }
+
+  filterTemplates(templates: ITemplate []): ITemplate [] {
+    let allowedTypes: string [] = this.getAllCacheTypes();
+    let allowedTemplates: ITemplate[] = [];
+    for (let template of templates) {
+      if (allowedTypes.indexOf(template.type) >= 0) {
+        allowedTemplates.push(template);
+      }
+    }
+    return allowedTemplates;
   }
 
   getAllContainerTemplatesShallow(container: ICacheContainer): ng.IPromise<ITemplate[]> {
@@ -178,7 +203,7 @@ export class CacheConfigService {
 
     meta.type = {
       description: "The cache configuration type",
-      allowed: CACHE_TYPES,
+      allowed: this.getAllCacheTypes(),
       type: {
         TYPE_MODEL_VALUE: "STRING"
       }

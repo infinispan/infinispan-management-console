@@ -4,7 +4,7 @@ import {ICache} from "./ICache";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {Cache} from "./Cache";
-import {CacheConfigService, CACHE_TYPES} from "../cache-config/CacheConfigService";
+import {CacheConfigService} from "../cache-config/CacheConfigService";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {JGroupsService} from "../jgroups/JGroupsService";
@@ -34,7 +34,8 @@ export class CacheService {
     let caches: ICache[] = [];
     this.dmrService.readResource(request)
       .then(response => {
-        for (let cacheType of CACHE_TYPES) {
+        let cacheTypes: string [] = this.cacheConfigService.getAllCacheTypes();
+        for (let cacheType of cacheTypes) {
           if (isNullOrUndefined(response[cacheType])) {
             continue; // Do nothing as no caches of this type exist
           }

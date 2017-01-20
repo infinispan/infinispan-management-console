@@ -35,11 +35,10 @@ export class MemoryCtrl implements IConfigurationCallback {
         this.data.initialType = field;
       }
       this.data["is-new-node"] = false;
-    }
-    else {
-      this.data = {};
-      this.setMemoryType("NONE");
-      this.data["is-new-node"] = true;
+    } else {
+        this.data = {};
+        this.setMemoryType("NONE");
+        this.data["is-new-node"] = true;
     }
     this.prevData = {};
     this.cleanMetadata();
@@ -67,7 +66,7 @@ export class MemoryCtrl implements IConfigurationCallback {
     let fields: string [] = [];
     for (let field in data) {
       if (MEMORY_TYPES.indexOf(field) > -1) {
-        fields.push(field)
+        fields.push(field);
       }
     }
     return fields;

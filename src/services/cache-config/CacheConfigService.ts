@@ -399,11 +399,11 @@ export class CacheConfigService {
     return this.dmrService.executePost(builder.build());
   }
 
-  private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]) {
+  private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]): void {
     let memoryType: string = this.getMemoryType(config.memory);
     let oldMemoryType: string = isNotNullOrUndefined(config.memory) ? config.memory.initialType : null;
     let switchingMemoryType: boolean = memoryType !== "NONE" && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
-    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== "NONE" && memoryType == "NONE";
+    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== "NONE" && memoryType === "NONE";
     let addingMemory: boolean = this.isAddingMemoryType(config, oldMemoryType);
     if (removingMemory) {
       builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));

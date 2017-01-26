@@ -21,10 +21,6 @@ const CACHE_LOADERS: {class: string, label: string}[] = [
     label: "Advanced Async Cache Loader"
   },
   {
-    class: "org.infinispan.persistence.jdbc.binary.JdbcBinaryStore",
-    label: "Binary Based JDBC Store"
-  },
-  {
     class: "org.infinispan.persistence.cluster.ClusterLoader",
     label: "Cluster Loader"
   },
@@ -39,10 +35,6 @@ const CACHE_LOADERS: {class: string, label: string}[] = [
   {
     class: "org.infinispan.persistence.leveldb.LevelDBStore",
     label: "LevelDB Store"
-  },
-  {
-    class: "org.infinispan.persistence.jdbc.mixed.JdbcMixedStore",
-    label: "Mixed JDBC Store"
   },
   {
     class: "org.infinispan.persistence.remote.RemoteStore",

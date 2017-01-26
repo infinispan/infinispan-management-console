@@ -11,11 +11,6 @@ const CACHE_STORES: {[key: string]: {id: string, label: string, fields: string[]
     label: "No Cache Store",
     fields: []
   },
-  "binary-keyed-jdbc-store": {
-    id: "binary-keyed-jdbc-store",
-    label: "Binary Keyed JDBC Store",
-    fields: ["datasource", "dialect"]
-  },
   "store": {
     id: "store",
     label: "Custom Store",
@@ -30,11 +25,6 @@ const CACHE_STORES: {[key: string]: {id: string, label: string, fields: string[]
     id: "leveldb-store",
     label: "LevelDB Store",
     fields: ["path", "block-size", "cache-size", "clear-threshold"]
-  },
-  "mixed-keyed-jdbc-store": {
-    id: "mixed-keyed-jdbc-store",
-    label: "Mixed Keyed JDBC Store",
-    fields: ["datasource", "dialect"]
   },
   "remote-store": {
     id: "remote-store",
@@ -145,14 +135,6 @@ export class CacheStoresCtrl implements IConfigurationCallback {
       description: "The type of cache store."
     };
     this.data["store-original-type"] = this.prevData["store-type"];
-  }
-
-  hasStringKeyedTable(): boolean {
-    return isNotNullOrUndefined(this.data) && isNullOrUndefined(this.data["string-keyed-table"]);
-  }
-
-  hasBinaryKeyedTable(): boolean {
-    return isNotNullOrUndefined(this.data) && isNullOrUndefined(this.data["binary-keyed-table"]);
   }
 
   // Save callback as variable to ensure that this binds to the class scope
@@ -279,8 +261,6 @@ export class CacheStoresCtrl implements IConfigurationCallback {
       case "None":
         return null;
       case "string-keyed-jdbc-store":
-      case "binary-keyed-jdbc-store":
-      case "mixed-keyed-jdbc-store":
         return viewDir + "jdbc-store.html";
       default:
         return viewDir + storeType + ".html";

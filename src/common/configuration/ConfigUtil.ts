@@ -43,13 +43,17 @@ export function convertListToJson(data: any, meta: any, field: string): void {
 }
 
 export function makeFieldDirty(field: any): void {
-  field.uiModified = true;
-  field.style = {"background-color": "#fbeabc"};
+  if (isNotNullOrUndefined(field)) {
+    field.uiModified = true;
+    field.style = {"background-color": "#fbeabc"};
+  }
 }
 
 export function makeFieldClean(field: any): void {
-  field.uiModified = false;
-  field.style = null;
+  if (isNotNullOrUndefined(field)) {
+    field.uiModified = false;
+    field.style = null;
+  }
 }
 
 export function makeAllFieldsClean(meta: any): void {
@@ -99,8 +103,6 @@ export function getTypeModelType(field: any): string {
         fieldType = undefined;
     }
     return fieldType;
-  } else {
-    throw new ISPNException("Unresolved field for" + field);
   }
 }
 

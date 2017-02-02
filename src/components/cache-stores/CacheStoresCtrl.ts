@@ -44,10 +44,6 @@ const CACHE_STORES: {[key: string]: {id: string, label: string, fields: string[]
 };
 const CUSTOM_FIELDS: string[] = ["is-new-node", "store-original-type"];
 
-interface StoreScope extends ng.IScope {
-  prevType: string;
-}
-
 export class CacheStoresCtrl implements IConfigurationCallback {
 
   cacheType: string;
@@ -170,7 +166,7 @@ export class CacheStoresCtrl implements IConfigurationCallback {
 
     this.storeView = this.getStoreView(storeType);
     if (this.isNoStoreSelected()) {
-      this.meta.currentStore = {};
+      this.meta.currentStore = undefined;
       return;
     }
 
@@ -188,8 +184,12 @@ export class CacheStoresCtrl implements IConfigurationCallback {
   };
 
   getFieldMetaValues(field: string, parent?: string): any {
-    let meta: any = this.getFieldMetaObject(field, parent)["value-type"];
-    return isNotNullOrUndefined(meta) ? meta : {};
+    let meta: any = this.getFieldMetaObject(field, parent);
+
+    if (isNullOrUndefined(meta) || isNullOrUndefined(meta["value-type"])) {
+      return {};
+    }
+    return meta["value-type"];
   }
 
   getStoreLabel(): string {
@@ -349,6 +349,10 @@ export class CacheStoresCtrl implements IConfigurationCallback {
   private getFieldMetaObject(field: string, parent?: string): any {
     let meta: any = this.meta.currentStore;
     if (isNotNullOrUndefined(parent)) {
+      // This can happen due to this function being called during a view change, so don't return anything
+      if (isNullOrUndefined(meta[parent])) {
+        return undefined;
+      }
       return meta[parent][field];
     }
     return this.meta.hasOwnProperty(field) ? this.meta[field] : this.meta.currentStore[field];

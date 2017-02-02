@@ -30,7 +30,7 @@ export class FormGroupCtrl {
   constructor() {
     if (isNullOrUndefined(this.optionString)) {
       this.type = getTypeModelType(this.meta);
-      this.multiValue = this.meta.hasOwnProperty("allowed") ? this.meta.allowed : false;
+      this.multiValue = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") ? this.meta.allowed : false;
       this.option = "item as item for item in $ctrl.meta.allowed";
     } else {
       this.multiValue = true;

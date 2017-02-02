@@ -36,8 +36,7 @@ export class Cache implements ICache {
   }
 
   isPersistent(): boolean {
-    let persistentFields: string[] = ["file-store", "leveldb-store", "rest-store", "store", "binary-keyed-jdbc-store",
-      "string-keyed-jdbc-store", "mixed-keyed-jdbc-store"];
+    let persistentFields: string[] = ["file-store", "rocksdb-store", "rest-store", "store", "string-keyed-jdbc-store"];
     return persistentFields.some(field => isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel[field]));
   }
 

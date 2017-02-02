@@ -21,9 +21,9 @@ const CACHE_STORES: {[key: string]: {id: string, label: string, fields: string[]
     label: "File Store",
     fields: ["max-entries", "path", "relative-to"]
   },
-  "leveldb-store": {
-    id: "leveldb-store",
-    label: "LevelDB Store",
+  "rocksdb-store": {
+    id: "rocksdb-store",
+    label: "RocksDB Store",
     fields: ["path", "block-size", "cache-size", "clear-threshold"]
   },
   "remote-store": {
@@ -183,10 +183,6 @@ export class CacheStoresCtrl implements IConfigurationCallback {
     this.previousStoreType = storeType;
   };
 
-  undoLdbImplementationChange: Function = () => {
-    this.undoLevelDbSelectChange("implementation", "implementation");
-  };
-
   undoLdbCompressionChange: Function = () => {
     this.undoLevelDbSelectChange("type", "compression");
   };
@@ -194,6 +190,10 @@ export class CacheStoresCtrl implements IConfigurationCallback {
   getFieldMetaValues(field: string, parent?: string): any {
     let meta: any = this.getFieldMetaObject(field, parent)["value-type"];
     return isNotNullOrUndefined(meta) ? meta : {};
+  }
+
+  getStoreLabel(): string {
+    return CACHE_STORES[this.data["store-type"]].label;
   }
 
   private updateStoreAttributesAndMeta(newStoreType: string, oldStoreType: string): void {
@@ -300,10 +300,10 @@ export class CacheStoresCtrl implements IConfigurationCallback {
   }
 
   private initLevelDbChildrenAndMeta(storeType: string): void {
-    if (this.isNoStoreSelected() || storeType !== "leveldb-store") {
+    if (this.isNoStoreSelected() || storeType !== "rocksdb-store") {
       return;
     }
-    let meta: any = angular.copy(getMetaForResource(this.meta, "leveldb-children"));
+    let meta: any = angular.copy(getMetaForResource(this.meta, "rocksdb-children"));
     delete meta["write-behind"]; // Remove so we don"t overwrite existing field on merge
     delete meta.property;
 
@@ -314,7 +314,6 @@ export class CacheStoresCtrl implements IConfigurationCallback {
     // Init levelDb select ng-models. Can"t use store object directly as it does not allow existing values to
     // be the initially selected option.
     this.levelDb = {};
-    this.levelDb.impl = deepGet(this.store, "implementation.IMPLEMENTATION");
     this.levelDb.comp = deepGet(this.store, "compression.COMPRESSION");
   }
 

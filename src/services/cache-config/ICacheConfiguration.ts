@@ -25,7 +25,7 @@ export interface ICacheConfiguration {
   expiration: any;
   "file-store": any;
   indexing: any;
-  "leveldb-store": any;
+  "rocksdb-store": any;
   loader: any;
   locking: any;
   "mixed-keyed-jdbc-store": any;

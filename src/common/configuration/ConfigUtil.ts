@@ -18,14 +18,14 @@ export const RESOURCE_DESCRIPTION_MAP: Object = {
   "string-keyed-jdbc-store": "children.string-keyed-jdbc-store.model-description.*.attributes",
   "remote-store": "children.remote-store.model-description.*.attributes",
   "file-store": "children.file-store.model-description.*.attributes",
-  "leveldb-store": "children.leveldb-store.model-description.*.attributes",
+  "rocksdb-store": "children.rocksdb-store.model-description.*.attributes",
   "store": "children.store.model-description.*.attributes",
   "rest-store": "children.rest-store.model-description.*.attributes",
   "backup": "children.backup.model-description.*.attributes",
   "loader": "children.loader.model-description.*.attributes",
   "authorization": "children.security.model-description.*.children.authorization.model-description.*.attributes",
   "write-behind": "children.store.model-description.*.children",
-  "leveldb-children": "children.leveldb-store.model-description.*.children",
+  "rocksdb-children": "children.rocksdb-store.model-description.*.children",
 };
 
 export function isFieldValueModified(meta: any): boolean {

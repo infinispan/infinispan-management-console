@@ -7,21 +7,13 @@
             <cache-store-modal data="$ctrl.store" field="expiration.EXPIRATION" parent="{{$ctrl.data['store-type']}}"
                                field-meta="$ctrl.getFieldMetaObject('expiration')"
                                parent-meta="$ctrl.getFieldMetaObject('expiration')"
-                               previous-values="$ctrl.prevData['expiration']['EXPIRATION']" title="{{$ctrl.data['store-type']}} Expiration"
+                               previous-values="$ctrl.prevData['expiration']['EXPIRATION']" title="{{$ctrl.getStoreLabel()}} Expiration"
                                modal-fields="[{name: 'path'}, {name: 'queue-size'}]"/>
         </div>
 
         <field-info data="$ctrl.store" meta="$ctrl.getFieldMetaObject('expiration')" field="expiration"
                     previous-value="$ctrl.prevData['expiration']" parent="{{$ctrl.data['store-type']}}"/>
     </div>
-</div>
-
-<!--Implementation-->
-<div class="form-horizontal">
-    <form-group data="$ctrl.levelDb.impl" field="implementation"
-                meta="$ctrl.getFieldMetaObject('implementation', 'implementation')"
-                read-only="$ctrl.readOnly" previous-value="$ctrl.getLevelDbPrevVal('implementation', 'implementation')"
-                undo-callback="$ctrl.undoLdbImplementationChange" parent="{{$ctrl.data['store-type']}}">
 </div>
 
 <!--Compression-->

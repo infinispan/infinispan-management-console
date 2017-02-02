@@ -33,8 +33,8 @@ const CACHE_LOADERS: {class: string, label: string}[] = [
     label: "JPA Store"
   },
   {
-    class: "org.infinispan.persistence.leveldb.LevelDBStore",
-    label: "LevelDB Store"
+    class: "org.infinispan.persistence.rocksdb.RocksDBStore",
+    label: "RocksDB Store"
   },
   {
     class: "org.infinispan.persistence.remote.RemoteStore",

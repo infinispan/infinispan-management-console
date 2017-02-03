@@ -4,7 +4,7 @@ import {
   isFieldValueModified,
   fieldChangeRequiresRestart,
   convertListToJson,
-  makeFieldClean
+  makeFieldClean, makeFieldDirty
 } from "../../common/configuration/ConfigUtil";
 
 export class ConfigurationSectionCtrl implements IConfigurationCallback {
@@ -17,6 +17,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   readOnly: boolean;
   readOnlyFields: string[];
   configCallbacks: IConfigurationCallback[];
+  removable: boolean;
   placeholders: any;
 
   constructor() {
@@ -70,6 +71,40 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     }
     return false;
   }
+
+  createNewDefault(): void {
+    //initialize all fields with default values, make fields dirty
+    this.iterateFields((att: string) => {
+      this.data[att] = this.meta[att].default;
+      makeFieldDirty(this.meta[att]);
+    });
+    this.data["is-new-node"] = true;
+    this.data["is-removed"] = false;
+  }
+
+  destroy(): void {
+    this.data = {};
+    this.prevData = {};
+    this.data["is-new-node"] = false;
+    this.data["is-removed"] = true;
+    this.cleanMetadata();
+    this.createPlaceholders();
+
+    // turn on Apply changes button as we need to indicate that section removal needs to be saved
+    this.iterateFields((att: string) => makeFieldDirty(this.meta[att]));
+  }
+
+  iterateFields(callback: (attribute: string) => void): void {
+    this.fields.forEach((group) => {
+      group.fields.forEach((attrName) => {
+        if (this.meta[attrName].hasOwnProperty("default")) {
+          callback(attrName);
+        }
+      });
+    });
+  }
+
+  isRemovable: Function = () => isNotNullOrUndefined(this.removable) ? this.removable : false;
 
   private createPlaceholders(): void {
     if (!this.initDefaults) {

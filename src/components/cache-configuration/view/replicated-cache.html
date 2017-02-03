@@ -12,7 +12,7 @@
             <configuration-section fields="[{name: 'Locking', fields: ['acquire-timeout', 'concurrency-level', 'isolation', 'striping']}]"
                                    data="$ctrl.data.locking.LOCKING" meta="$ctrl.getMetaForResource('locking')"
                                    init-defaults="initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
         <uib-tab heading="Memory">
            <memory data="$ctrl.data.memory"
@@ -24,25 +24,25 @@
             <configuration-section fields="[{name: 'Expiration', fields: ['lifespan', 'interval', 'max-idle']}]"
                                    data="$ctrl.data.expiration.EXPIRATION" meta="$ctrl.getMetaForResource('expiration')"
                                    init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
         <uib-tab heading="Indexing">
             <configuration-section fields="[{name: 'Indexing', fields: ['indexing', 'auto-config', 'indexing-properties']}]"
                                    data="$ctrl.data.indexing.INDEXING" meta="$ctrl.getMetaForResource('indexing')"
                                    init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
         <uib-tab heading="Compatibility">
             <configuration-section fields="[{name: 'Compatibility', fields: ['enabled', 'marshaller']}]" data="$ctrl.data.compatibility.COMPATIBILITY"
                                    meta="$ctrl.getMetaForResource('compatibility')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
 
         <uib-tab heading="Transactions">
 
             <configuration-section fields="[{name: 'Transactions', fields:['locking', 'mode', 'stop-timeout']}]" data="$ctrl.data.transaction.TRANSACTION"
                                    meta="$ctrl.getMetaForResource('tx')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
 
         <uib-tab heading="Security">
@@ -55,13 +55,13 @@
         <uib-tab heading="Partition handling">
             <configuration-section fields="[{name: 'Partition handling', fields: ['enabled']}]" data="$ctrl.data['partition-handling'].PARTITION_HANDLING"
                                    meta="$ctrl.getMetaForResource('partition-handling')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
 
         <uib-tab heading="State transfer">
             <configuration-section fields="[{name: 'State transfer', fields: ['await-initial-transfer', 'chunk-size', 'enabled', 'timeout']}]" data="$ctrl.data['state-transfer'].STATE_TRANSFER"
                                    meta="$ctrl.getMetaForResource('statetransfer')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks"/>
+                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
 
         <uib-tab heading="Loader">

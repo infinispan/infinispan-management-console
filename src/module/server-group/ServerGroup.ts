@@ -2,7 +2,6 @@ import {App} from "../../ManagementConsole";
 import "../../services/dmr/DmrService";
 import {ServerGroupCtrl} from "./ServerGroupCtrl";
 import {serverFilter} from "./ServerGroupFilter";
-import {IStateParamsService} from "angular-ui-router";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {IServerGroup} from "../../services/server-group/IServerGroup";
 

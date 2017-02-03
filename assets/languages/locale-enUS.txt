@@ -160,5 +160,6 @@
   "YES":"Yes",
   "NEXT":"Next",
   "CLOSE":"Close",
-  "LOADING": "Loading"
+  "LOADING": "Loading",
+  "DEFINE_SECTION":"{{name}} has not been defined for this configuration. Do you want to define it now?"
   }

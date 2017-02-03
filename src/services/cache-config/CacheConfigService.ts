@@ -337,7 +337,7 @@ export class CacheConfigService {
 
   private createHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -467,7 +467,7 @@ export class CacheConfigService {
   private updateHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
       // Same for LevelDB->Compression. TODO need a better way to make exceptions
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -564,6 +564,7 @@ export class CacheConfigService {
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,
                                           excludedAttributes: string[], force: boolean = false): void {
     let createAddOp: boolean = force || config["is-new-node"];
+    let remove: boolean = config["is-removed"];
     if (createAddOp) {
       let request: IDmrRequest = this.createAddOperation(address, config, excludedAttributes);
       if (Object.keys(request).length > 2 || config["required-node"]) {
@@ -572,6 +573,8 @@ export class CacheConfigService {
         // This is required for when child nodes may also have been defined without the parent.
         builder.add(this.createAddOperation(address, config, excludedAttributes));
       }
+    } else if (remove) {
+      builder.add(this.createRemoveOperation(address));
     } else {
       this.createWriteAttributeOperations(builder, address, config, excludedAttributes);
       this.composeWriteObjectOperations(builder, address, config);

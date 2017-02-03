@@ -19,6 +19,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   configCallbacks: IConfigurationCallback[];
   removable: boolean;
   placeholders: any;
+  loadedWithData: boolean;
 
   constructor() {
     if (isNullOrUndefined(this.data)) {
@@ -28,7 +29,9 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
       this.configCallbacks.push(this);
     }
     this.prevData = {};
-    this.data["is-new-node"] = !this.hasAnyFieldPreviousData();
+    let hasFieldsWithData: boolean = this.hasAnyFieldPreviousData();
+    this.loadedWithData = hasFieldsWithData;
+    this.data["is-new-node"] = !hasFieldsWithData;
     this.cleanMetadata();
     this.createPlaceholders();
   }
@@ -78,15 +81,15 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
       this.data[att] = this.meta[att].default;
       makeFieldDirty(this.meta[att]);
     });
-    this.data["is-new-node"] = true;
+    this.data["is-new-node"] = !this.loadedWithData;
     this.data["is-removed"] = false;
   }
 
   destroy(): void {
     this.data = {};
     this.prevData = {};
-    this.data["is-new-node"] = false;
-    this.data["is-removed"] = true;
+    this.data["is-new-node"] = !this.loadedWithData;
+    this.data["is-removed"] = this.loadedWithData;
     this.cleanMetadata();
     this.createPlaceholders();
 

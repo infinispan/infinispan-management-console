@@ -337,7 +337,7 @@ export class CacheConfigService {
 
   private createHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -467,7 +467,7 @@ export class CacheConfigService {
   private updateHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
       // Same for LevelDB->Compression. TODO need a better way to make exceptions
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }

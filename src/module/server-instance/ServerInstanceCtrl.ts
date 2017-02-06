@@ -63,7 +63,7 @@ export class ServerInstanceCtrl {
       if (this.chart) {
         this.chart.destroy();
       }
-      this.chart = new InstanceMemoryChart("#chart", used, max);
+      this.chart = new InstanceMemoryChart(".chart", used, max);
     });
   }
 

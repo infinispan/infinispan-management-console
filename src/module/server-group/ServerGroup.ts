@@ -25,10 +25,14 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         let serverGroup: string = $stateParams.serverGroup;
         return serverGroupService.getServerGroupMapWithMembers(serverGroup);
       }],
-      available: ["$stateParams", "serverGroupService", "serverGroup",
-        ($stateParams:IStateParamsService, serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
+      available: ["serverGroupService", "serverGroup",
+        (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
         return serverGroupService.isGroupAvailable(serverGroup);
-      }]
+      }],
+      runningInstances: ["serverGroupService", "serverGroup",
+        (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
+          return serverGroupService.getRunningServerInstances(serverGroup);
+        }],
     }
   });
 });

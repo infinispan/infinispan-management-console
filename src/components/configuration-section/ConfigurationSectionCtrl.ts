@@ -20,6 +20,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   removable: boolean;
   placeholders: any;
   loadedWithData: boolean;
+  createdOrDestroyedFromUI: boolean = false;
 
   constructor() {
     if (isNullOrUndefined(this.data)) {
@@ -43,7 +44,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   }
 
   isAnyFieldModified(): boolean {
-    return this.fields.some(group => {
+    return this.createdOrDestroyedFromUI || this.fields.some(group => {
       return group.fields.some(attrName => {
         return isNotNullOrUndefined(this.meta) && isFieldValueModified(this.meta[attrName]);
       }, this);
@@ -79,10 +80,11 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     //initialize all fields with default values, make fields dirty
     this.iterateFields((att: string) => {
       this.data[att] = this.meta[att].default;
-      makeFieldDirty(this.meta[att]);
+      this.prevData[att] = this.meta[att].default;
     });
     this.data["is-new-node"] = !this.loadedWithData;
     this.data["is-removed"] = false;
+    this.createdOrDestroyedFromUI = true;
   }
 
   destroy(): void {
@@ -91,10 +93,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     this.data["is-new-node"] = !this.loadedWithData;
     this.data["is-removed"] = this.loadedWithData;
     this.cleanMetadata();
-    this.createPlaceholders();
-
-    // turn on Apply changes button as we need to indicate that section removal needs to be saved
-    this.iterateFields((att: string) => makeFieldDirty(this.meta[att]));
+    this.createdOrDestroyedFromUI = true;
   }
 
   iterateFields(callback: (attribute: string) => void): void {

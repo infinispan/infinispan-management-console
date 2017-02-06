@@ -16,7 +16,7 @@ import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available"];
+    "jGroupsService", "launchType", "serverGroup", "available", "runningInstances"];
 
   status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
@@ -32,12 +32,13 @@ export class ServerGroupCtrl {
               private jGroupsService: JGroupsService,
               private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
-              public available: boolean) {
+              public available: boolean,
+              public runningInstances:IServerAddress[]) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
-    this.status = available ? "STARTED" : "DEGRADED";
+    this.status = available ? "STARTED" : (isNotNullOrUndefined(runningInstances) && runningInstances.length > 0) ? "DEGRADED" : "STOPPED";
   }
 
   isCoordinator(server: IServerAddress): boolean {

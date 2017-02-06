@@ -62,7 +62,11 @@ export class SchemaService {
           });
         },
         error => deferred.reject(error))
-      .then(() => deferred.resolve(), error => deferred.reject(error));
+      .then(() => {
+        this.getProtoSchemaErrors(container, schema.fileName).then((error) => {
+          deferred.reject(error);
+        });
+      }, error => deferred.reject(error));
     return deferred.promise;
   }
 
@@ -77,6 +81,20 @@ export class SchemaService {
         });
       })
       .then(() => deferred.resolve());
+    return deferred.promise;
+  }
+
+  getProtoSchemaErrors(container: ICacheContainer, fileName: string): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
+    this.findTarget(container.serverGroup)
+      .then(coordinator => {
+        return this.dmrService.executePost({
+          address: this.getContainerAddress(container.name, coordinator),
+          operation: "get-proto-schema-errors",
+          "file-name": fileName
+        });
+      })
+      .then((response) => deferred.resolve(response));
     return deferred.promise;
   }
 

@@ -6,6 +6,7 @@ import {ICacheContainer} from "../container/ICacheContainer";
 import {ISchemaDefinition} from "./ISchemaDefinition";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {IServerGroup} from "../server-group/IServerGroup";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.schemas", []);
 
@@ -62,7 +63,16 @@ export class SchemaService {
           });
         },
         error => deferred.reject(error))
-      .then(() => deferred.resolve(), error => deferred.reject(error));
+      .then(() => this.getProtoSchemaErrors(container, schema.fileName),
+        error => deferred.reject(error))
+      .then(error => {
+          if (isNotNullOrUndefined(error)) {
+            deferred.reject(error);
+          } else {
+            deferred.resolve();
+          }
+        },
+        error => deferred.reject(error));
     return deferred.promise;
   }
 
@@ -77,6 +87,20 @@ export class SchemaService {
         });
       })
       .then(() => deferred.resolve());
+    return deferred.promise;
+  }
+
+  getProtoSchemaErrors(container: ICacheContainer, fileName: string): ng.IPromise<string> {
+    let deferred: ng.IDeferred<string> = this.$q.defer<string>();
+    this.findTarget(container.serverGroup)
+      .then(coordinator => {
+        return this.dmrService.executePost({
+          address: this.getContainerAddress(container.name, coordinator),
+          operation: "get-proto-schema-errors",
+          "file-name": fileName
+        });
+      })
+      .then((response) => deferred.resolve(response));
     return deferred.promise;
   }
 

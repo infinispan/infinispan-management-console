@@ -176,10 +176,17 @@ export function removeEmptyFieldsFromObject(object: any, recursive: boolean = fa
 export function setIsNewNodeRecursively(obj: Object, val: boolean = true): void {
   if (isNotNullOrUndefined(obj) && isObject(obj)) {
     obj["is-new-node"] = val;
-    Object.keys(obj).forEach((key) => {
+    Object.keys(obj).forEach(key => {
       let value: any = obj[key];
-      if (isObject(value)) {
-        setIsNewNodeRecursively(value);
+      if (isNullOrUndefined(value)) {
+        return;
+      }
+
+      // Only consider child nodes. Necessary to prevent is-new-node being set for attributes of type object
+      let objectKey: string = key.toUpperCase().replace(/-/g, "_");
+      value = value[objectKey];
+      if (isNotNullOrUndefined(value) && isObject(value)) {
+        setIsNewNodeRecursively(value, val);
       }
     });
   }

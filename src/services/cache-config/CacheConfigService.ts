@@ -422,17 +422,17 @@ export class CacheConfigService {
   private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]): void {
     let memoryType: string = this.getMemoryType(config.memory);
     let oldMemoryType: string = isNotNullOrUndefined(config.memory) ? config.memory.initialType : null;
-    let switchingMemoryType: boolean = memoryType !== "NONE" && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
-    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== "NONE" && memoryType === "NONE";
+    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && isNullOrUndefined(memoryType);
+    let switchingMemoryType: boolean = isNotNullOrUndefined(memoryType) && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
     let addingMemory: boolean = this.isAddingMemoryType(config, oldMemoryType);
-    if (removingMemory) {
-      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
-    } else if (switchingMemoryType) {
+    if (switchingMemoryType) {
       builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
       this.createHelper(builder, address.concat("memory", memoryType), config.memory);
     } else if (addingMemory) {
       this.createHelper(builder, address.concat("memory", memoryType), config.memory);
-    } else if (memoryType !== "NONE") {
+    } else if (removingMemory && oldMemoryType) {
+      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
+    } else {
       // normal update of memory tree fields
       this.updateHelper(builder, address.concat("memory", memoryType), config.memory);
     }
@@ -447,20 +447,15 @@ export class CacheConfigService {
     // there could be more that one fields in memory object - find the type of memory management object
     let fields: string [] = Object.keys(memory);
     for (let field of fields) {
-      if (this.isValidMemoryType(field, false)) {
+      if (this.isValidMemoryType(field)) {
         return field;
       }
     }
     return null;
   }
 
-  private isValidMemoryType (type: string, excludeNONE: boolean): boolean {
+  private isValidMemoryType (type: string): boolean {
     let types: string [] = MEMORY_TYPES;
-    if (excludeNONE) {
-      types = angular.copy(MEMORY_TYPES);
-      let index: number = types.indexOf("NONE");
-      types.splice(index);
-    }
     return types.indexOf(type) >= 0;
   }
 

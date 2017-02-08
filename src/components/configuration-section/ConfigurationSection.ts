@@ -15,7 +15,8 @@ export class ConfigurationSection {
       initDefaults: "=",
       readOnly: "=",
       readOnlyFields: "=",
-      configCallbacks: "="
+      configCallbacks: "=",
+      removable: "@"
     };
     this.controller = ConfigurationSectionCtrl;
     this.templateUrl = "components/configuration-section/view/configuration-section.html";

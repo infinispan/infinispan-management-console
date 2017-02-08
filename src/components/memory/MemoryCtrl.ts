@@ -7,7 +7,7 @@ import {
   makeFieldDirty
 } from "../../common/configuration/ConfigUtil";
 
-export const MEMORY_TYPES: string [] = [ "NONE", "BINARY", "OBJECT", "OFF-HEAP"];
+export const MEMORY_TYPES: string [] = [ "BINARY", "OBJECT", "OFF-HEAP"];
 
 export class MemoryCtrl implements IConfigurationCallback {
 
@@ -22,6 +22,8 @@ export class MemoryCtrl implements IConfigurationCallback {
   allfields: string [] = [];
   prevData: any;
   type: string = "";
+  loadedWithData: boolean = false;
+  createdOrDestroyedFromUI: boolean = false;
 
   constructor() {
     this.fields.length = 0;
@@ -34,10 +36,10 @@ export class MemoryCtrl implements IConfigurationCallback {
         this.setMemoryType(field);
         this.data.initialType = field;
       }
+      this.loadedWithData = true;
       this.data["is-new-node"] = false;
     } else {
         this.data = {};
-        this.setMemoryType("NONE");
         this.data["is-new-node"] = true;
     }
     this.prevData = {};
@@ -49,17 +51,44 @@ export class MemoryCtrl implements IConfigurationCallback {
       this.fields.length = 0;
       this.type = newType;
       this.memoryTypeData = isNotNullOrUndefined(this.data[newType]) ? this.data[newType] : {};
-      this.memoryTypeMeta = (newType !== "NONE") ? angular.copy(deepGet(this.meta, "children.memory.model-description." + newType + ".attributes")) : {};
+      this.memoryTypeMeta = angular.copy(deepGet(this.meta, "children.memory.model-description." + newType + ".attributes"));
       for (var field in this.memoryTypeMeta) {
         this.fields.push(field);
       }
       this.data[newType] = this.memoryTypeData;
       this.memoryTypeData.type = newType;
       this.memoryTypeMeta.type = {description: "Memory management type"};
-
       this.allfields = angular.copy(this.fields);
       this.allfields.push("type");
+
+      this.initializeDefaults();
     }
+  }
+
+  hasDefinedMemoryType(): boolean {
+    return this.fields.length > 0;
+  }
+
+  createNewDefault(): void {
+    this.setMemoryType("BINARY");
+    this.createdOrDestroyedFromUI = true;
+  }
+
+  destroy(): void {
+    delete this.data[this.type];
+    this.data["is-new-node"] = !this.loadedWithData;
+    this.fields.length = 0;
+    this.allfields.length = 0;
+    this.cleanMetadata();
+    this.createdOrDestroyedFromUI = true;
+  }
+
+  iterateFields(callback: (attribute: string) => void): void {
+    this.fields.forEach((attrName) => {
+      if (this.memoryTypeMeta[attrName].hasOwnProperty("default")) {
+        callback(attrName);
+      }
+    });
   }
 
   filterFields(data: any): string [] {
@@ -90,7 +119,7 @@ export class MemoryCtrl implements IConfigurationCallback {
   }
 
   isAnyFieldModified(): boolean {
-    return this.allfields.some(attrName => isFieldValueModified(this.memoryTypeMeta[attrName]));
+    return this.createdOrDestroyedFromUI || this.allfields.some(attrName => isFieldValueModified(this.memoryTypeMeta[attrName]));
   }
 
   isRestartRequired(): boolean {
@@ -112,5 +141,15 @@ export class MemoryCtrl implements IConfigurationCallback {
   private undoFieldChange(field: string): void {
     this.memoryTypeData[field] = this.prevData[field];
     makeFieldClean(this.memoryTypeMeta[field]);
+  }
+
+  private initializeDefaults(): void {
+    this.iterateFields((att: string) => {
+      let fieldHasValue: boolean = isNotNullOrUndefined(this.memoryTypeData[att]);
+      let fieldHasDefault: boolean = isNotNullOrUndefined(this.memoryTypeMeta[att]);
+      if (!fieldHasValue && fieldHasDefault) {
+        this.memoryTypeData[att] = this.memoryTypeMeta[att].default;
+      }
+    });
   }
 }

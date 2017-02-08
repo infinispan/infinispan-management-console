@@ -337,7 +337,7 @@ export class CacheConfigService {
 
   private createHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -422,17 +422,17 @@ export class CacheConfigService {
   private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]): void {
     let memoryType: string = this.getMemoryType(config.memory);
     let oldMemoryType: string = isNotNullOrUndefined(config.memory) ? config.memory.initialType : null;
-    let switchingMemoryType: boolean = memoryType !== "NONE" && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
-    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== "NONE" && memoryType === "NONE";
+    let removingMemory: boolean = isNotNullOrUndefined(oldMemoryType) && isNullOrUndefined(memoryType);
+    let switchingMemoryType: boolean = isNotNullOrUndefined(memoryType) && isNotNullOrUndefined(oldMemoryType) && oldMemoryType !== memoryType;
     let addingMemory: boolean = this.isAddingMemoryType(config, oldMemoryType);
-    if (removingMemory) {
-      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
-    } else if (switchingMemoryType) {
+    if (switchingMemoryType) {
       builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
       this.createHelper(builder, address.concat("memory", memoryType), config.memory);
     } else if (addingMemory) {
       this.createHelper(builder, address.concat("memory", memoryType), config.memory);
-    } else if (memoryType !== "NONE") {
+    } else if (removingMemory && oldMemoryType) {
+      builder.add(this.createRemoveOperation(address.concat("memory", oldMemoryType)));
+    } else {
       // normal update of memory tree fields
       this.updateHelper(builder, address.concat("memory", memoryType), config.memory);
     }
@@ -447,27 +447,22 @@ export class CacheConfigService {
     // there could be more that one fields in memory object - find the type of memory management object
     let fields: string [] = Object.keys(memory);
     for (let field of fields) {
-      if (this.isValidMemoryType(field, false)) {
+      if (this.isValidMemoryType(field)) {
         return field;
       }
     }
     return null;
   }
 
-  private isValidMemoryType (type: string, excludeNONE: boolean): boolean {
+  private isValidMemoryType (type: string): boolean {
     let types: string [] = MEMORY_TYPES;
-    if (excludeNONE) {
-      types = angular.copy(MEMORY_TYPES);
-      let index: number = types.indexOf("NONE");
-      types.splice(index);
-    }
     return types.indexOf(type) >= 0;
   }
 
   private updateHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
       // Same for LevelDB->Compression. TODO need a better way to make exceptions
-      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
+      let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
       }
@@ -564,6 +559,7 @@ export class CacheConfigService {
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,
                                           excludedAttributes: string[], force: boolean = false): void {
     let createAddOp: boolean = force || config["is-new-node"];
+    let remove: boolean = config["is-removed"];
     if (createAddOp) {
       let request: IDmrRequest = this.createAddOperation(address, config, excludedAttributes);
       if (Object.keys(request).length > 2 || config["required-node"]) {
@@ -572,6 +568,8 @@ export class CacheConfigService {
         // This is required for when child nodes may also have been defined without the parent.
         builder.add(this.createAddOperation(address, config, excludedAttributes));
       }
+    } else if (remove) {
+      builder.add(this.createRemoveOperation(address));
     } else {
       this.createWriteAttributeOperations(builder, address, config, excludedAttributes);
       this.composeWriteObjectOperations(builder, address, config);

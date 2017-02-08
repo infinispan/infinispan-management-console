@@ -4,7 +4,7 @@ import {
   isFieldValueModified,
   fieldChangeRequiresRestart,
   convertListToJson,
-  makeFieldClean
+  makeFieldClean, makeFieldDirty
 } from "../../common/configuration/ConfigUtil";
 
 export class ConfigurationSectionCtrl implements IConfigurationCallback {
@@ -17,7 +17,10 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   readOnly: boolean;
   readOnlyFields: string[];
   configCallbacks: IConfigurationCallback[];
+  removable: boolean;
   placeholders: any;
+  loadedWithData: boolean;
+  createdOrDestroyedFromUI: boolean = false;
 
   constructor() {
     if (isNullOrUndefined(this.data)) {
@@ -27,7 +30,9 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
       this.configCallbacks.push(this);
     }
     this.prevData = {};
-    this.data["is-new-node"] = !this.hasAnyFieldPreviousData();
+    let hasFieldsWithData: boolean = this.hasAnyFieldPreviousData();
+    this.loadedWithData = hasFieldsWithData;
+    this.data["is-new-node"] = !hasFieldsWithData;
     this.cleanMetadata();
     this.createPlaceholders();
   }
@@ -39,7 +44,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   }
 
   isAnyFieldModified(): boolean {
-    return this.fields.some(group => {
+    return this.createdOrDestroyedFromUI || this.fields.some(group => {
       return group.fields.some(attrName => {
         return isNotNullOrUndefined(this.meta) && isFieldValueModified(this.meta[attrName]);
       }, this);
@@ -70,6 +75,38 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     }
     return false;
   }
+
+  createNewDefault(): void {
+    //initialize all fields with default values, make fields dirty
+    this.iterateFields((att: string) => {
+      this.data[att] = this.meta[att].default;
+      this.prevData[att] = this.meta[att].default;
+    });
+    this.data["is-new-node"] = !this.loadedWithData;
+    this.data["is-removed"] = false;
+    this.createdOrDestroyedFromUI = true;
+  }
+
+  destroy(): void {
+    this.data = {};
+    this.prevData = {};
+    this.data["is-new-node"] = !this.loadedWithData;
+    this.data["is-removed"] = this.loadedWithData;
+    this.cleanMetadata();
+    this.createdOrDestroyedFromUI = true;
+  }
+
+  iterateFields(callback: (attribute: string) => void): void {
+    this.fields.forEach((group) => {
+      group.fields.forEach((attrName) => {
+        if (this.meta[attrName].hasOwnProperty("default")) {
+          callback(attrName);
+        }
+      });
+    });
+  }
+
+  isRemovable: Function = () => isNotNullOrUndefined(this.removable) ? this.removable : false;
 
   private createPlaceholders(): void {
     if (!this.initDefaults) {

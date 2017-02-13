@@ -3,7 +3,7 @@
     <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id-generator="create_modal.title" translate>LAUNCH_NEW_TASK</h4>
+    <h4 class="modal-title" id="create_modal.title" translate>LAUNCH_NEW_TASK</h4>
   </div>
   <div class="modal-body">
 
@@ -109,9 +109,9 @@
   </div>
   <div class="modal-footer">
     <button type="button" ng-disabled="!taskForm.$valid" class="btn btn-primary" ng-click="modalCtrl.submitTask()"
-            id-generator="create.submit" translate>
+            id="submit.button" translate>
       LAUNCH_TASK
     </button>
-    <button type="button" class="btn btn-default" ng-click="$dismiss()" id-generator="create.close" translate>CLOSE</button>
+    <button type="button" class="btn btn-default" ng-click="$dismiss()" id="close.button" translate>CLOSE</button>
   </div>
 </div>

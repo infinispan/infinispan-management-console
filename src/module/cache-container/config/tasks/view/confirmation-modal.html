@@ -3,14 +3,14 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id-generator="confirmation_modal.title" translate>CONFIRMATION</h4>
+    <h4 class="modal-title" id="confirmation_modal.title" translate>CONFIRMATION</h4>
   </div>
   <div class="modal-body">
     <h3 translate translate-values="{artifact:ctrl.task.name}">REMOVE_SCRIPT</h3>
   </div>
   <div class="modal-footer">
-    <button id-generator="remove.cancel" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-    <button id-generator="remove.confirm" type="button" class="btn btn-primary"
+    <button id="cancel.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+    <button id="confirm.button" type="button" class="btn btn-primary"
             ng-click="ctrl.removeScript();$dismiss()"><i class="pficon pficon-delete"></i> <span translate>REMOVE_SCRIPT_CONFIRM</span></button>
   </div>
 </div>

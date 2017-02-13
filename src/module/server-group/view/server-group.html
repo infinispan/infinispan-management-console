@@ -8,21 +8,21 @@
         <li class="active"><strong>{{ctrl.serverGroup.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refresh()">
+        <button class="btn btn-default" type="button" id="refresh.button" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
         <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button"
-                id-generator="dropdown_menu" uib-dropdown-toggle><span translate>ACTIONS</span><span
+                id="dropdown_menu.button" uib-dropdown-toggle><span translate>ACTIONS</span><span
           class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.available ? 'disabled' : 'enabled'"
               ng-click="ctrl.createConfirmationModal('start')">
-            <a id-generator="dropdown_menu.start" role="menuitem" translate>START</a>
+            <a id="start.button" role="menuitem" translate>START</a>
           </li>
           <li role="presentation" ng-class="ctrl.available ? 'enabled' : 'disabled'"
               ng-click="ctrl.createConfirmationModal('stop')">
-            <a id-generator="dropdown_menu.stop" role="menuitem" translate>STOP</a>
+            <a id="stop.button" role="menuitem" translate>STOP</a>
           </li>
         </ul>
       </div>
@@ -52,7 +52,7 @@
       </div>
 
       <div ng-if="ctrl.isDomainMode()" class="col-xs-6 col-sm-4 col-md-2">
-        <a id-generator="add" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
+        <a id="add.button" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
            data-toggle="modal"
            class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
           <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
@@ -107,7 +107,7 @@
           </div>
         </div>
         <div class="form-group">
-          <button id-generator="search" class="btn btn-default" type="submit"><span class="fa fa-search"></span>
+          <button id="search.button" class="btn btn-default" type="submit"><span class="fa fa-search"></span>
           </button>
         </div>
       </form>

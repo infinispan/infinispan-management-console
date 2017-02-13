@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id-generator="confirmation_modal.title">Confirmation</h4>
+    <h4 class="modal-title" id="confirmation_modal.title">Confirmation</h4>
   </div>
   <div class="modal-body">
 
@@ -14,11 +14,11 @@
   </div>
   <div class="modal-footer">
 
-    <button id-generator="confirm.cancel" type="button" class="btn btn-primary" ng-click="$dismiss()">Cancel</button>
-    <button id-generator="confirm.start" ng-if="ctrl.operation === 'start'" type="button" class="btn btn-default"
+    <button id="cancel.button" type="button" class="btn btn-primary" ng-click="$dismiss()">Cancel</button>
+    <button id="start.button" ng-if="ctrl.operation === 'start'" type="button" class="btn btn-default"
             ng-click="$close()">Start
     </button>
-    <button id-generator="confirm.stop" ng-if="ctrl.operation === 'stop'" type="button" class="btn btn-default"
+    <button id="stop.button" ng-if="ctrl.operation === 'stop'" type="button" class="btn btn-default"
             ng-click="$close()">Stop
     </button>
   </div>

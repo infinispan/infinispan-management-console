@@ -44,13 +44,13 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id-generator="add.cancel" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
-    <button id-generator="add.create" ng-show="!modalCtrl.editing" ng-disabled="!schemaForm.$valid"
+    <button id="cancel.button" class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+    <button id="add.button" ng-show="!modalCtrl.editing" ng-disabled="!schemaForm.$valid"
             ng-click="modalCtrl.createSchema()"
             class="btn btn-primary">
       Create schema
     </button>
-    <button id-generator="add.update" ng-show="modalCtrl.editing"
+    <button id="update.button" ng-show="modalCtrl.editing"
             ng-disabled="!schemaForm.schemaName.$valid || !schemaForm.schemaBody.$valid " class="btn btn-primary"
             ng-click="modalCtrl.createSchema()">Update schema
     </button>

@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id-generator="confirmation_modal.title">Confirmation</h4>
+    <h4 class="modal-title" id="confirmation_modal.title">Confirmation</h4>
   </div>
   <div class="modal-body">
 
@@ -16,12 +16,12 @@
 
   </div>
   <div class="modal-footer">
-    <button id-generator="confirm.cancel" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-    <button id-generator="confirm.deploy" ng-if="ctrl.isDeploy()" type="button" class="btn btn-primary"
+    <button id="cancel.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+    <button id="deploy.button" ng-if="ctrl.isDeploy()" type="button" class="btn btn-primary"
             ng-click="ctrl.confirmDeployArtifact();$dismiss()"><span translate>DEPLOY</span></button>
-    <button id-generator="confirm.undeploy" ng-if="ctrl.isUndeploy()" type="button" class="btn btn-primary"
+    <button id="undeploy.button" ng-if="ctrl.isUndeploy()" type="button" class="btn btn-primary"
             ng-click="ctrl.confirmUndeployArtifact();$dismiss()"><span translate>UNDEPLOY</span></button>
-    <button id-generator="confirm.remove" ng-if="ctrl.isRemove()" type="button" class="btn btn-primary"
+    <button id="remove.button" ng-if="ctrl.isRemove()" type="button" class="btn btn-primary"
             ng-click="ctrl.confirmRemoveArtifact();$dismiss()"><i class="pficon pficon-delete"></i><span translate>REMOVE</span>
     </button>
   </div>

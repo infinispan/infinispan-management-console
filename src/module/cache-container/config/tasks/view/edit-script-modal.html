@@ -3,7 +3,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id-generator="edit_script.title"><span ng-if="!ctrl.editing" translate>CREATE_NEW_SCRIPT_TASK</span><span
+    <h4 class="modal-title" id="edit_script.title"><span ng-if="!ctrl.editing" translate>CREATE_NEW_SCRIPT_TASK</span><span
       ng-if="ctrl.editing" translate>EDIT_SCRIPT_TASK</span></h4>
   </div>
   <div class="modal-body">
@@ -90,11 +90,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id-generator="edit.cancel" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-    <button id-generator="edit.create" ng-show="!ctrl.editing" ng-disabled="!taskForm.$valid" class="btn btn-primary"
+    <button id="cancel.button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+    <button id="create.button" ng-show="!ctrl.editing" ng-disabled="!taskForm.$valid" class="btn btn-primary"
             ng-click="ctrl.createScript();$dismiss()"><span translate>CREATE_SCRIPT_TASK</span>
     </button>
-    <button id-generator="edit.update" ng-show="ctrl.editing"
+    <button id="update.button" ng-show="ctrl.editing"
             ng-disabled="!taskForm.taskName.$valid || !taskForm.taskBody.$valid " class="btn btn-primary"
             ng-click="ctrl.createScript();$dismiss()"><span translate>UPDATE_SCRIPT_TASK</span>
     </button>

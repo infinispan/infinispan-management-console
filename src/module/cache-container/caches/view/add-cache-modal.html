@@ -1,9 +1,9 @@
 <div class="modal-content">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()" id-generator="create.close">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()" id="close.button">
             <span class="pficon pficon-close"></span>
         </button>
-        <h4 class="modal-title" id-generator="add_cache_modal.title"translate>CREATE_CACHE</h4>
+        <h4 class="modal-title" id="add_cache_modal.title"translate>CREATE_CACHE</h4>
     </div>
     <div class="modal-body">
 
@@ -52,8 +52,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button id-generator="create.name" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
-        <button id-generator="create.submit" type="button" class="btn btn-primary" ng-click="ctrl.createCache();$close()"
+        <button id="cancel.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+        <button id="submit.button" type="button" class="btn btn-primary" ng-click="ctrl.createCache();$close()"
                 ng-disabled="!templateForm.$valid">
                 <span ng-if="ctrl.displayNextButton()" translate>NEXT</span>
                 <span ng-if="!ctrl.displayNextButton()" translate>CREATE_CACHE</span>

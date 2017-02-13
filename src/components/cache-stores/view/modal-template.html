@@ -3,7 +3,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="ctrl.cancelModal()">
             <span class="pficon pficon-close"></span>
         </button>
-        <h4 class="modal-title" id-generator="store_modal.title">{{ctrl.title}}</h4>
+        <h4 class="modal-title" id="store_modal.title">{{ctrl.title}}</h4>
     </div>
     <div class="modal-body">
         <div class="form-horizontal" ng-repeat="field in ctrl.fields">
@@ -28,7 +28,7 @@
     </div>
 
     <div class="modal-footer">
-        <button id-generator="{{ctrl.parentId(ctrl.title, ctrl.parent)}}.cancel" type="button" class="btn btn-default" ng-click="ctrl.cancelModal()">Cancel</button>
-        <button id-generator="{{ctrl.parentId(ctrl.title, ctrl.parent)}}.ok" type="button" class="btn btn-primary" ng-click="ctrl.submitModal()">Ok</button>
+        <button id="cancel.button" type="button" class="btn btn-default" ng-click="ctrl.cancelModal()">Cancel</button>
+        <button id="ok.button" type="button" class="btn btn-primary" ng-click="ctrl.submitModal()">Ok</button>
     </div>
 </div>

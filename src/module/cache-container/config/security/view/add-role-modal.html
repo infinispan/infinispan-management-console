@@ -59,9 +59,9 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button id-generator="role.close" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CLOSE</button>
-    <button id-generator="role.new.save" ng-if="ctrl.isNewRole" type="button" class="btn btn-primary" ng-click="ctrl.createNewRole();$dismiss()" translate>SAVE</button>
-    <button id-generator="role.edit.save" ng-if="!ctrl.isNewRole" type="button" class="btn btn-primary" ng-click="ctrl.editExistingRole();$dismiss()" translate>SAVE</button>
+    <button id="close.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CLOSE</button>
+    <button id="new.save.button" ng-if="ctrl.isNewRole" type="button" class="btn btn-primary" ng-click="ctrl.createNewRole();$dismiss()" translate>SAVE</button>
+    <button id="edit.save.button" ng-if="!ctrl.isNewRole" type="button" class="btn btn-primary" ng-click="ctrl.editExistingRole();$dismiss()" translate>SAVE</button>
   </div>
 </div>
 

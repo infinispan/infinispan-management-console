@@ -9,30 +9,30 @@
         <li class="active"><strong>{{ctrl.name}}</strong></li>
       </ol>
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refresh()">
+        <button class="btn btn-default" type="button" id="refresh.button" ng-click="ctrl.refresh()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button class="btn btn-default" type="button" id-generator="edit_config"
+        <button class="btn btn-default" type="button" id="edit_config.button"
                 ui-sref="container-config({profileName: ctrl.container.profile, containerName: ctrl.name})">
           <span class="pficon pficon-settings"></span> <span translate>CONFIGURATION</span>
         </button>
-        <button ng-if="!ctrl.isLocalMode()" class="btn btn-default dropdown-toggle" type="button" id-generator="dropdown_menu" uib-dropdown-toggle>
+        <button ng-if="!ctrl.isLocalMode()" class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu.button" uib-dropdown-toggle>
           <span class="caret"></span> <span translate>ACTIONS</span>
         </button>
         <ul ng-if="!ctrl.isLocalMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'disabled' : 'enabled'">
-            <a id-generator="dropdown_menu.enable_rebalance" role="menuitem"
+            <a id="enable_rebalance.button" role="menuitem"
                ng-click="ctrl.enableContainerRebalance()"
                translate>ENABLE_REBALANCING</a>
           </li>
           <li role="presentation" ng-class="ctrl.isRebalancingEnabled ? 'enabled'  : 'disabled'">
-            <a id-generator="dropdown_menu.disable_rebalance" role="menuitem"
+            <a id="disable_rebalance.button" role="menuitem"
                ng-click="ctrl.disableContainerRebalance()"
                translate>DISABLE_REBALANCING</a>
           </li>
           <li role="presentation" class="divider"></li>
           <li role="presentation">
-            <a id-generator="dropdown_menu.sites" role="menuitem" ng-click="ctrl.createSiteModal()" translate>MANAGE_BACKUP_SITES</a>
+            <a id="sites.button" role="menuitem" ng-click="ctrl.createSiteModal()" translate>MANAGE_BACKUP_SITES</a>
           </li>
         </ul>
       </div>

@@ -39,13 +39,13 @@
       <br>
       <div class="form-group">
         <div class="col-md-6 col-md-offset-6">
-          <button id-generator="create" type="button" class="btn btn-primary" ng-if="!ctrl.isEditMode()"
+          <button id="create.button" type="button" class="btn btn-primary" ng-if="!ctrl.isEditMode()"
                   ng-disabled="ctrl.isTemplateNameEmpty()" ng-click="ctrl.createTemplate()" translate>CREATE
           </button>
-          <button id-generator="apply_changes" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
+          <button id="apply_changes.button" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
                   ng-disabled="!ctrl.isAnyFieldModified()" ng-click="ctrl.updateTemplate()" translate>APPLY_CHANGES
           </button>
-          <button id-generator="cancel" type="button" class="btn btn-default"
+          <button id="cancel.button" type="button" class="btn btn-default"
                   ng-click="ctrl.goToTemplateView()"
                   translate>CANCEL
           </button>

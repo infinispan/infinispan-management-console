@@ -10,10 +10,10 @@
       </ol>
 
       <div class="dropdown pull-right" uib-dropdown>
-        <button class="btn btn-default" type="button" id-generator="refresh" ng-click="ctrl.refreshStats()">
+        <button class="btn btn-default" type="button" id="refresh.button" ng-click="ctrl.refreshStats()">
           <span class="pficon pficon-refresh"></span> <span translate>REFRESH</span>
         </button>
-        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button" id-generator="dropdown_menu"
+        <button ng-if="ctrl.isDomainMode()" class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu.button"
                 uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">

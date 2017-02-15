@@ -67,7 +67,7 @@ export class ContainerService {
     this.serverGroupService.getServerGroupByProfile(profile)
       .then(serverGroup => {
         container.serverGroup = serverGroup;
-        return this.endpointService.getAllEndpoints(profile, serverGroup["socket-binding-group"]);
+        return this.endpointService.getAllEndpoints(container);
       })
       .then(endpoints => {
         container.endpoints = endpoints;

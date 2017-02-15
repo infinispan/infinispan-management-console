@@ -51,6 +51,17 @@ export function getArraySize(array: string[]): number {
   return 0;
 }
 
+export function traverseObjectRecursively(obj: any, callback: (visitedObject: any) => void): void {
+  if (isNotNullOrUndefined(obj)) {
+    for (var k in obj) {
+      if (isNotNullOrUndefined(obj[k]) && isObject(obj[k])) {
+        callback(obj[k]);
+        traverseObjectRecursively(obj[k], callback);
+      }
+    }
+  }
+}
+
 export function isArray(value: any): boolean {
   return Object.prototype.toString.call(value) === "[object Array]";
 }
@@ -97,8 +108,14 @@ export function deepGet(object: Object, path: string): any {
   return o;
 }
 
-export function deepValue(object: Object, path: string): any {
-  for (var i: number = 0, pathArray: string[] = path.split("."), len: number = pathArray.length; i < len; i++) {
+export function deepValue(object: Object, path: any): any {
+  let pathArray: string [] = [];
+  if (isArray(path)) {
+    pathArray = path;
+  } else if (isString(path)) {
+    pathArray = path.split(".")
+  }
+  for (var i: number = 0, len: number = pathArray.length; i < len; i++) {
     if (isNotNullOrUndefined(object)) {
       object = object[pathArray[i]];
     } else {
@@ -120,7 +137,7 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
   Object.keys(obj).forEach((key) => {
     var value: any = obj[key];
 
-    if (Object.getPrototypeOf(value) === Object.prototype) {
+    if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
       traverse(value, callback, trail.concat(key));
     } else {
       callback.call(obj, key, value, trail);

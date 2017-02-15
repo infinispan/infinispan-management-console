@@ -25,8 +25,8 @@
             <small class="stack">{{ctrl.getDefaultStack(container)}}</small>
           </td>
           <td>
-            <span id-generator="{{ctrl.getContainerId('endpoints', container)}}" class="endpoint" ng-repeat="endpoint in container.endpoints" ng-init="socketBinding = endpoint['socket-binding']">
-                 {{socketBinding.name}} : {{socketBinding.port}} {{endpoint.encryption}}</br>
+            <span id-generator="{{ctrl.getContainerId('endpoints', container)}}" class="endpoint" ng-repeat="endpoint in container.endpoints" ng-init="edp = ctrl.displayEndpoint(endpoint)">
+                 {{edp}}</br>
             </span>
           </td>
           <td id-generator="{{ctrl.getContainerId('sites', container)}}">

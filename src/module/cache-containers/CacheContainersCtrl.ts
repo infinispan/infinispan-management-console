@@ -7,6 +7,8 @@ import {ClusterEventsService} from "../../services/cluster-events/ClusterEventsS
 import {IClusterEvent} from "../../services/cluster-events/IClusterEvent";
 import {IMap} from "../../common/utils/IMap";
 import {isNotNullOrUndefined, getArraySize} from "../../common/utils/Utils";
+import {IEndpoint} from "../../services/endpoint/IEndpoint";
+import {ISocketBinding} from "../../services/socket-binding/ISocketBinding";
 
 export class CacheContainersCtrl {
 
@@ -56,6 +58,15 @@ export class CacheContainersCtrl {
   isSitesEmpty(container: ICacheContainer): boolean {
     return getArraySize(container["sites-online"]) + getArraySize(container["sites-offline"]) +
       getArraySize(container["sites-mixed"]) === 0;
+  }
+
+  displayEndpoint(endpoint: IEndpoint): string {
+    let socketBinding: ISocketBinding = endpoint['socket-binding'];
+    if (isNotNullOrUndefined(socketBinding)) {
+      return socketBinding.name + " : " + socketBinding.port + " " + endpoint.encryption;
+    } else if (isNotNullOrUndefined(endpoint['hotrod-socket-binding']) || isNotNullOrUndefined(endpoint['rest-socket-binding'])){
+      return "mt-" + endpoint['hotrod-socket-binding'] + ":" + endpoint['rest-socket-binding'];
+    }
   }
 
   getAllClusterEvents(): void {

@@ -16,6 +16,7 @@ import {SecurityService} from "../security/SecurityService";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {ICache} from "../cache/ICache";
 import {CompositeOpBuilder} from "../dmr/CompositeOpBuilder";
+import {isNonEmptyArray} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -41,7 +42,7 @@ export class ContainerService {
     let deferred: ng.IDeferred<ICacheContainer[]> = this.$q.defer<ICacheContainer[]>();
 
     this.profileService.getAllProfileNames()
-      .then((profiles) => {
+      .then(profiles => {
         let promises: ng.IPromise<ICacheContainer[]>[] = [];
         for (let profileName of profiles) {
           promises.push(this.getAllCacheContainersByProfile(profileName));
@@ -49,7 +50,7 @@ export class ContainerService {
         return this.$q.all(promises);
       })
       .then((containers: [ICacheContainer[]]) => {
-        let allContainers: ICacheContainer[] = containers.reduce((a, b) => a.concat(b));
+        let allContainers: ICacheContainer[] = isNonEmptyArray(containers) ? containers.reduce((a, b) => a.concat(b)) : [];
         deferred.resolve(allContainers);
       });
     return deferred.promise;

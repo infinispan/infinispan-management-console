@@ -5,6 +5,7 @@ import {IDmrRequest} from "../dmr/IDmrRequest";
 import IQService = angular.IQService;
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
+import {isNotNullOrUndefined, deepGet} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.profile", []);
 
@@ -35,12 +36,16 @@ export class ProfileService {
     let request: IDmrRequest = <IDmrRequest>{
       address: [],
       "child-type": "profile",
+      "recursive-depth": 1
     };
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
-    this.dmrService.readChildResources(request).then((response) => {
+    this.dmrService.readChildResources(request).then(response => {
       let profiles: string[] = [];
       for (let key in response) {
-        profiles.push(key);
+        let path: string = key + ".subsystem.datagrid-infinispan";
+        if (isNotNullOrUndefined(deepGet(response, path))) {
+          profiles.push(key);
+        }
       }
       deferred.resolve(profiles);
     });

@@ -84,10 +84,13 @@ export class ServerInstanceCtrl {
     return this.serverInstance.address.host === this.coord.host && this.serverInstance.address.name === this.coord.name;
   };
 
-  createStartModal(): void {
-    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, "Start server " + this.serverInstance.address.name + "?");
+  createStartModal(server: IServer): void {
+
+    let actionRequired: string = this.getActionRequired(server);
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, this.capitalizeFirstLetter(actionRequired) +
+      " server " + this.serverInstance.address.name + "?");
     modal.result.then(() => {
-      let promise: ng.IPromise<string> = this.serverService.startServer(this.serverInstance.address);
+      let promise: ng.IPromise<string> = this.serverService.executeServerOp(this.serverInstance.address, actionRequired);
       promise.then(() => this.refresh());
     });
   }
@@ -109,9 +112,34 @@ export class ServerInstanceCtrl {
     });
   }
 
+  canStart(server: IServer): boolean {
+    return server.isReloadRequired() || server.isRestartRequired() || server.isStopped();
+  }
+
+  canStop(server: IServer): boolean {
+    return !this.canStart(server);
+  }
+
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
   }
+
+  private capitalizeFirstLetter(s: string): string {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+
+  private getActionRequired(serverState: IServer): string {
+    let actionRequired: string;
+    if (serverState.isStopped()) {
+      actionRequired = "start";
+    } else if (serverState.isRestartRequired()) {
+      actionRequired = "restart";
+    } else if (serverState.isReloadRequired()) {
+      actionRequired = "reload";
+    }
+    return actionRequired;
+  }
+
 
   private refresh(): void {
     this.$state.reload();

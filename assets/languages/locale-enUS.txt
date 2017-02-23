@@ -38,6 +38,7 @@
   "COORDINATOR": "Coordinator",
   "START":"Start",
   "STOP":"Stop",
+  "START_RELOAD_RESTART":"Start/Reload/Restart",
   "REMOVE":"Remove",
   "DISABLE":"Disable",
   "ENABLE":"Enable",

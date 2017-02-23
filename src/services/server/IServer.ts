@@ -7,6 +7,8 @@ export interface IServer {
   serverGroup: string;
   isStopped(): boolean;
   isRunning(): boolean;
+  isReloadRequired(): boolean;
+  isRestartRequired(): boolean;
   equals(other: IServer): boolean;
   toString(): string;
 }

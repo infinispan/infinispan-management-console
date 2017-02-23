@@ -17,6 +17,13 @@ export class Server implements IServer {
     return this.state.toUpperCase() === "RUNNING";
   }
 
+  isReloadRequired(): boolean {
+    return this.state.toUpperCase() === "RELOAD-REQUIRED";
+  }
+  isRestartRequired(): boolean {
+    return this.state.toUpperCase() === "RESTART-REQUIRED";
+  }
+
   toString(): string {
     return this.address.toString();
   }

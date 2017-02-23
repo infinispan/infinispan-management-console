@@ -17,9 +17,11 @@
                 uib-dropdown-toggle><span translate>ACTIONS</span><span class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.start" role="menuitem" ng-click="ctrl.createStartModal()" translate>START</a></li>
-          <li role="presentation" ng-class="!ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.stop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
-          <li role="presentation" ng-class="ctrl.serverInstance.isRunning()?'disabled':''"><a id-generator="dropdown_menu.remove" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isStopped()?'':'disabled'"><a id-generator="dropdown_menu.start" role="menuitem" ng-click="ctrl.createStartModal(ctrl.serverInstance)" translate>START</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isRestartRequired()?'':'disabled'"><a id-generator="dropdown_menu.restart" role="menuitem" ng-click="ctrl.createStartModal(ctrl.serverInstance)" translate>RESTART</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isReloadRequired()?'':'disabled'"><a id-generator="dropdown_menu.reload" role="menuitem" ng-click="ctrl.createStartModal(ctrl.serverInstance)" translate>RELOAD</a></li>
+          <li role="presentation" ng-class="!ctrl.serverInstance.isStopped()?'':'disabled'"><a id-generator="dropdown_menu.stop" role="menuitem" ng-click="ctrl.createStopModal()" translate>STOP</a></li>
+          <li role="presentation" ng-class="ctrl.serverInstance.isStopped()?'':'disabled'"><a id-generator="dropdown_menu.remove" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
         </ul>
       </div>
       <h1><span class="label" ng-class="ctrl.serverInstance.isRunning()?'label-success':'label-danger'">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}

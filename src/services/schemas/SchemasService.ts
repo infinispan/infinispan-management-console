@@ -67,6 +67,7 @@ export class SchemaService {
         error => deferred.reject(error))
       .then(error => {
           if (isNotNullOrUndefined(error)) {
+            this.unregisterProtoSchema(container, schema.fileName);
             deferred.reject(error);
           } else {
             deferred.resolve();

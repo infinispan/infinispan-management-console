@@ -29,24 +29,28 @@ export class ServerService {
   }
 
   startServer(server: IServerAddress): ng.IPromise<string> {
-    return this.dmrService.executePost({
-      operation: "start",
-      address: [].concat("host", server.host, "server-config", server.name),
-      blocking: true
-    }, true);
+    return this.executeServerOp(server, "start");
+  }
+
+  restartServer(server: IServerAddress): ng.IPromise<string> {
+    return this.executeServerOp(server, "restart");
+  }
+
+  reloadServer(server: IServerAddress): ng.IPromise<string> {
+    return this.executeServerOp(server, "reload");
   }
 
   stopServer(server: IServerAddress): ng.IPromise<string> {
-    return this.dmrService.executePost({
-      operation: "stop",
-      address: [].concat("host", server.host, "server-config", server.name),
-      blocking: true
-    }, true);
+    return this.executeServerOp(server, "stop");
   }
 
   removeServer(server: IServerAddress): ng.IPromise<string> {
+    return this.executeServerOp(server, "remove");
+  }
+
+  executeServerOp(server: IServerAddress, op: string): ng.IPromise<string> {
     return this.dmrService.executePost({
-      operation: "remove",
+      operation: op,
       address: [].concat("host", server.host, "server-config", server.name),
       blocking: true
     }, true);

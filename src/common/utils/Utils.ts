@@ -147,6 +147,10 @@ export function getInstanceFromDmr<T>(dmr: any): T {
   return retObject;
 }
 
+export function capitalizeFirstLetter(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export function createPath(separator: string, args: string[]): string {
     if (isArray(args)) {
       let path: string = "";

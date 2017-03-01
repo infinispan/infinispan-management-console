@@ -1,4 +1,4 @@
-import {deepGet} from "../../common/utils/Utils";
+import {deepGet, capitalizeFirstLetter} from "../../common/utils/Utils";
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 import {ServerService} from "../../services/server/ServerService";
 import {IServerAddress} from "../../services/server/IServerAddress";
@@ -84,10 +84,13 @@ export class ServerInstanceCtrl {
     return this.serverInstance.address.host === this.coord.host && this.serverInstance.address.name === this.coord.name;
   };
 
-  createStartModal(): void {
-    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, "Start server " + this.serverInstance.address.name + "?");
+  createStartModal(server: IServer): void {
+
+    let actionRequired: string = this.getActionRequired(server);
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, capitalizeFirstLetter(actionRequired) +
+      " server " + this.serverInstance.address.name + "?");
     modal.result.then(() => {
-      let promise: ng.IPromise<string> = this.serverService.startServer(this.serverInstance.address);
+      let promise: ng.IPromise<string> = this.serverService.executeServerOp(this.serverInstance.address, actionRequired);
       promise.then(() => this.refresh());
     });
   }
@@ -112,6 +115,19 @@ export class ServerInstanceCtrl {
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
   }
+
+  private getActionRequired(serverState: IServer): string {
+    let actionRequired: string;
+    if (serverState.isStopped()) {
+      actionRequired = "start";
+    } else if (serverState.isRestartRequired()) {
+      actionRequired = "restart";
+    } else if (serverState.isReloadRequired()) {
+      actionRequired = "reload";
+    }
+    return actionRequired;
+  }
+
 
   private refresh(): void {
     this.$state.reload();

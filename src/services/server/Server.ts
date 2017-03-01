@@ -18,10 +18,10 @@ export class Server implements IServer {
   }
 
   isReloadRequired(): boolean {
-    return this.state.toUpperCase() == "RELOAD-REQUIRED";
+    return this.state.toUpperCase() === "RELOAD-REQUIRED";
   }
   isRestartRequired(): boolean {
-    return this.state.toUpperCase() == "RESTART-REQUIRED";
+    return this.state.toUpperCase() === "RESTART-REQUIRED";
   }
 
   toString(): string {

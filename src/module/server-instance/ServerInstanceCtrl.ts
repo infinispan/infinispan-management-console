@@ -1,4 +1,4 @@
-import {deepGet} from "../../common/utils/Utils";
+import {deepGet, capitalizeFirstLetter} from "../../common/utils/Utils";
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 import {ServerService} from "../../services/server/ServerService";
 import {IServerAddress} from "../../services/server/IServerAddress";
@@ -87,7 +87,7 @@ export class ServerInstanceCtrl {
   createStartModal(server: IServer): void {
 
     let actionRequired: string = this.getActionRequired(server);
-    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, this.capitalizeFirstLetter(actionRequired) +
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, capitalizeFirstLetter(actionRequired) +
       " server " + this.serverInstance.address.name + "?");
     modal.result.then(() => {
       let promise: ng.IPromise<string> = this.serverService.executeServerOp(this.serverInstance.address, actionRequired);
@@ -114,10 +114,6 @@ export class ServerInstanceCtrl {
 
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
-  }
-
-  private capitalizeFirstLetter(s: string): string {
-    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
   private getActionRequired(serverState: IServer): string {

@@ -112,14 +112,6 @@ export class ServerInstanceCtrl {
     });
   }
 
-  canStart(server: IServer): boolean {
-    return server.isReloadRequired() || server.isRestartRequired() || server.isStopped();
-  }
-
-  canStop(server: IServer): boolean {
-    return !this.canStart(server);
-  }
-
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
   }

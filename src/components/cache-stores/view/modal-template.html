@@ -12,7 +12,7 @@
             <!--There must be a less repetitive way to achieve the same thing-->
 
             <div>
-                <form-group data="ctrl.data[field.parent]" field="{{field.name}}"
+                <form-group data="ctrl.data[field.parent]" field="{{field.name}}" parent="{{field.parent}}"
                             meta="ctrl.getMetadataObject(field.name, field.parent)"
                             previous-value="ctrl.prevData[field.parent][field.name]" read-only="ctrl.readOnly"
                             label="{{ctrl.resolveFieldName(field.name, field.parent)}}"
@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <form-group data="ctrl.data" field="{{field.name}}" meta="ctrl.getMetadataObject(field.name)"
+                <form-group data="ctrl.data" field="{{field.name}}" parent="{{field.parent}}" meta="ctrl.getMetadataObject(field.name)"
                             previous-value="ctrl.prevData[field.name]" read-only="ctrl.readOnly"
                             ng-if="!ctrl.isParentDefined(field)" parent="{{ctrl.parentId(ctrl.title, ctrl.parent)}}"/>
             </div>

@@ -11,6 +11,7 @@ import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
+import {SERVER_STATE_STOPPED} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
@@ -218,7 +219,7 @@ export class ServerGroupService {
     this.$q.all(promises).then(statuses => {
       let activeServers: IServerAddress[] = [];
       for (let index in statuses) {
-        if (statuses[index] !== "STOPPED") {
+        if (statuses[index] !== SERVER_STATE_STOPPED) {
           activeServers.push(serverGroup.members[index]);
         }
       }

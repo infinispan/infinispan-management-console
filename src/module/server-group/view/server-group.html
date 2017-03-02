@@ -78,7 +78,9 @@
             server:server.name})" title="View Node Details">
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
             <h2 class="card-pf-title">
-              <span class="pficon" ng-class="ctrl.isServerStopped(server)?'fa fa-power-off':'pficon-ok'"></span>{{server.name}}
+              <span class="pficon" ng-class="{'fa fa-power-off':ctrl.isServerStopped(server),
+              'pficon-warning-triangle-o':(ctrl.isServerInReloadRequired(server) || ctrl.isServerInRestartRequired(server)),
+              'pficon-ok':ctrl.isServerRunning(server)}"></span>{{server.name}}
             </h2>
 
             <div class="card-pf-body">

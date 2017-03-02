@@ -13,6 +13,10 @@ import {openErrorModal} from "../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {
+  SERVER_STATE_RUNNING, SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED,
+  SERVER_STATE_RESTART_REQUIRED
+} from "../../services/server/Server";
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
@@ -45,8 +49,24 @@ export class ServerGroupCtrl {
     return (this.coordinator) ? this.coordinator.equals(server) : false;
   }
 
+  isServerRunning(server: IServerAddress): boolean {
+    return this.isServerInState(server, SERVER_STATE_RUNNING);
+  }
+
   isServerStopped(server: IServerAddress): boolean {
-    return this.getServerStatus(server) === "STOPPED";
+    return this.isServerInState(server, SERVER_STATE_STOPPED);
+  }
+
+  isServerInReloadRequired(server: IServerAddress): boolean {
+    return this.isServerInState(server, SERVER_STATE_RELOAD_REQUIRED);
+  }
+
+  isServerInRestartRequired(server: IServerAddress): boolean {
+    return this.isServerInState(server, SERVER_STATE_RESTART_REQUIRED);
+  }
+
+  isServerInState(server: IServerAddress, state: string): boolean {
+    return this.getServerStatus(server) === state;
   }
 
   getSGStatus(): string {
@@ -57,7 +77,8 @@ export class ServerGroupCtrl {
     if (isEmptyObject(this.serverStatusMap)) {
       return "";
     }
-    return this.serverStatusMap[server.toString()];
+    let state:string = this.serverStatusMap[server.toString()];
+    return state.toUpperCase();
   }
 
   getServerInetAddress(server: IServerAddress): string {

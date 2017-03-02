@@ -5,6 +5,7 @@ import {IServerAddress} from "../../services/server/IServerAddress";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {ServerService} from "../../services/server/ServerService";
+import {SERVER_STATE_STOPPED} from "../../services/server/Server";
 
 const module: ng.IModule = App.module("managementConsole.server-instance", []);
 
@@ -25,7 +26,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
           let deferred: ng.IDeferred<IServerAddress> = $q.defer<IServerAddress>();
           let server: IServerAddress = new ServerAddress($stateParams.host, $stateParams.server);
           serverService.getServerStatus(server).then(status => {
-            if (status === "STOPPED") {
+            if (status === SERVER_STATE_STOPPED) {
               deferred.resolve(new ServerAddress("", ""));
             } else {
               return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroupName).then(resp => {

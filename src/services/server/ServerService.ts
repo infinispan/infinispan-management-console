@@ -5,7 +5,7 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {INewServerInstance} from "./INewServerInstance";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServer} from "../server/IServer";
-import {Server} from "../server/Server";
+import {Server, SERVER_STATE_STOPPED} from "../server/Server";
 import {StandaloneService} from "../standalone/StandaloneService";
 import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
@@ -77,7 +77,7 @@ export class ServerService {
   getServerInetAddress(server: IServerAddress): ng.IPromise<string> {
     let deferred: ng.IDeferred<string> = this.$q.defer<string>();
     this.getServerStatus(server).then(status => {
-      if (status === "STOPPED") {
+      if (status === SERVER_STATE_STOPPED) {
         deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
         deferred.resolve(this.dmrService.readAttributeAndResolveExpression({
@@ -147,7 +147,7 @@ export class ServerService {
   getServerStats(server: IServerAddress): ng.IPromise<any> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     this.getServerStatus(server).then(status => {
-      if (status === "STOPPED") {
+      if (status === SERVER_STATE_STOPPED) {
         deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
         let request: IDmrRequest = <IDmrRequest>{
@@ -168,7 +168,7 @@ export class ServerService {
   getAggregateNodeStats(server: IServerAddress): ng.IPromise<string[]> {
     let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     this.getServerStatus(server).then(status => {
-      if (status === "STOPPED") {
+      if (status === SERVER_STATE_STOPPED) {
         deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
       } else {
         let request: IDmrRequest = <IDmrRequest>{
@@ -194,7 +194,7 @@ export class ServerService {
     let serverGroupName: string = this.launchType.isDomainMode() ? server["server-group"] : StandaloneService.SERVER_GROUP;
     let serverProfileName: string = this.launchType.isDomainMode() ? server["profile-name"] : StandaloneService.PROFILE_NAME;
 
-    if (serverState === "STOPPED") {
+    if (serverState === SERVER_STATE_STOPPED) {
       deferred.resolve(new Server(address, serverState, "", serverProfileName, serverGroupName));
     } else {
       this.dmrService.readAttributeAndResolveExpression({

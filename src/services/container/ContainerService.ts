@@ -17,6 +17,7 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {ICache} from "../cache/ICache";
 import {CompositeOpBuilder} from "../dmr/CompositeOpBuilder";
 import {isNonEmptyArray} from "../../common/utils/Utils";
+import {SERVER_STATE_STOPPED} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.container", []);
 
@@ -146,7 +147,7 @@ export class ContainerService {
     // Otherwise, ensure that the views of all nodes within the server group are the same. Is this second step necessary?
     this.$q.all(statusPromises)
       .then((statuses: string[]) => {
-        return statuses.indexOf("STOPPED") === -1;
+        return statuses.indexOf(SERVER_STATE_STOPPED) === -1;
       })
       .then((allServersRunning) => {
         if (allServersRunning) {

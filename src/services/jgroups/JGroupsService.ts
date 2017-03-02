@@ -10,6 +10,7 @@ import {IMap} from "../../common/utils/IMap";
 import {isNullOrUndefined} from "../../common/utils/Utils";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
+import {SERVER_STATE_STOPPED} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.jgroups", []);
 
@@ -29,7 +30,7 @@ export class JGroupsService {
     let deferred: ng.IDeferred<string> = this.$q.defer<string>();
     if (this.hasJGroupsStack()) {
       this.serverService.getServerStatus(server).then(status => {
-        if (status === "STOPPED") {
+        if (status === SERVER_STATE_STOPPED) {
           deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
         } else {
           deferred.resolve(this.dmrService.readAttributeAndResolveExpression({
@@ -91,7 +92,7 @@ export class JGroupsService {
     let deferred: ng.IDeferred<IServerAddress> = this.$q.defer<IServerAddress>();
     if (this.hasJGroupsStack()) {
       this.serverService.getServerStatus(server).then(status => {
-        if (status === "STOPPED") {
+        if (status === SERVER_STATE_STOPPED) {
           deferred.reject("It is not possible to connect to server '" + server.toString() + "' as it is stopped");
         } else {
 

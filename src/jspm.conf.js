@@ -39,6 +39,7 @@ System.config({
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
     "angular-ui-router": "npm:angular-ui-router@0.3.1",
     "babel": "npm:babel-core@5.8.38",
+    "babel-polyfill": "npm:babel-polyfill@6.16.0",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "bootstrap": "github:twbs/bootstrap@3.3.7",
     "bootstrap-css": "npm:bootstrap-css@3.0.0",
@@ -204,8 +205,20 @@ System.config({
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
       "url": "github:jspm/nodelibs-url@0.1.0"
     },
+    "npm:babel-polyfill@6.16.0": {
+      "babel-runtime": "npm:babel-runtime@6.18.0",
+      "core-js": "npm:core-js@2.4.1",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "regenerator-runtime": "npm:regenerator-runtime@0.9.6"
+    },
     "npm:babel-runtime@5.8.38": {
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:babel-runtime@6.18.0": {
+      "core-js": "npm:core-js@2.4.1",
+      "regenerator-runtime": "npm:regenerator-runtime@0.9.6"
     },
     "npm:base64id@0.1.0": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
@@ -516,6 +529,12 @@ System.config({
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:core-js@1.2.7": {
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
+    "npm:core-js@2.4.1": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -1449,6 +1468,10 @@ System.config({
       "readable-stream": "npm:readable-stream@2.1.5",
       "set-immediate-shim": "npm:set-immediate-shim@1.0.1",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:regenerator-runtime@0.9.6": {
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:regex-cache@0.4.3": {
       "is-equal-shallow": "npm:is-equal-shallow@0.1.3",

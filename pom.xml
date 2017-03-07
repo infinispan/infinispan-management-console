@@ -5,7 +5,7 @@
 
     <groupId>org.infinispan</groupId>
     <artifactId>infinispan-management-console</artifactId>
-    <version>9.0.0</version>
+    <version>9.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Infinispan Management Console</name>
     <description>Web Management Console for Infinispan</description>
@@ -85,7 +85,6 @@
     </properties>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
         <plugins>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -136,24 +135,6 @@
                             <directory>src/main/components</directory>
                         </fileset>
                     </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <shortRevisionLength>5</shortRevisionLength>
-                    <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
                 </configuration>
             </plugin>
             <plugin>

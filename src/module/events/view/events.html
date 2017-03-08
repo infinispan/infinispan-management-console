@@ -36,12 +36,14 @@
             <span ng-if="event.level=='WARN'" class="label label-warning">Warn</span>
             <span ng-if="event.level=='INFO'" class="label label-info">Info</span>
             <span ng-if="event.level=='ERROR'" class="label label-danger">Error</span>
+            <span ng-if="event.level=='FATAL'" class="label label-danger">Fatal</span>
           </td>
           <td style="padding: 10px">{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
           <td style="padding: 10px">
             <span ng-if="event.level=='WARN'" class="icon-class pficon-warning-triangle-o"></span>
             <span ng-if="event.level=='INFO'" class="icon-class pficon-info"></span>
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
+            <span ng-if="event.level=='FATAL'" class="pficon-error-circle-o"></span>
             {{event.message}}
           </td>
           <td>

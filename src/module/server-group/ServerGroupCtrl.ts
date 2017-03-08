@@ -114,7 +114,7 @@ export class ServerGroupCtrl {
           .then(() => {
             bootModal = this.createBootingModal();
             return this.serverService.startServer(newServer.address);
-          });
+          }, error => openErrorModal(this.$uibModal, error));
       })
       .finally(() => {
         if (isNotNullOrUndefined(bootModal)) {

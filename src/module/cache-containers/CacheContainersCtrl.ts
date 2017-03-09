@@ -62,10 +62,13 @@ export class CacheContainersCtrl {
 
   displayEndpoint(endpoint: IEndpoint): string {
     let socketBinding: ISocketBinding = endpoint['socket-binding'];
+    if (isNotNullOrUndefined(endpoint['hotrod-socket-binding']) || isNotNullOrUndefined(endpoint['rest-socket-binding'])){
+      return "multi-tenancy router\n" +
+        endpoint['hotrod-socket-binding'].name + ":" + endpoint['hotrod-socket-binding'].port + "\n" +
+        endpoint['rest-socket-binding'].name + ":" + endpoint['rest-socket-binding'].port;
+    }
     if (isNotNullOrUndefined(socketBinding)) {
       return socketBinding.name + " : " + socketBinding.port + " " + endpoint.encryption;
-    } else if (isNotNullOrUndefined(endpoint['hotrod-socket-binding']) || isNotNullOrUndefined(endpoint['rest-socket-binding'])){
-      return "mt-" + endpoint['hotrod-socket-binding'] + ":" + endpoint['rest-socket-binding'];
     }
   }
 

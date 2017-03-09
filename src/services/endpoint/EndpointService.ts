@@ -72,7 +72,10 @@ export class EndpointService {
       for (let socketBinding of socketBindings) {
         if (endpoint["socket-binding-name"] === socketBinding.name) {
           endpoint["socket-binding"] = socketBinding;
-          break;
+        } if (endpoint["hotrod-socket-binding"] === socketBinding.name) {
+          endpoint["hotrod-socket-binding"] = socketBinding;
+        } if (endpoint["rest-socket-binding"] === socketBinding.name) {
+          endpoint["rest-socket-binding"] = socketBinding;
         }
       }
     }

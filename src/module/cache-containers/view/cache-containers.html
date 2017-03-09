@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" xmlns="http://www.w3.org/1999/html">
   <div class="row header-row">
     <div class="col-sm-8 col-md-9">
       <ol class="breadcrumb">
@@ -25,9 +25,14 @@
             <small class="stack">{{ctrl.getDefaultStack(container)}}</small>
           </td>
           <td>
-            <span id-generator="{{ctrl.getContainerId('endpoints', container)}}" class="endpoint" ng-repeat="endpoint in container.endpoints" ng-init="edp = ctrl.displayEndpoint(endpoint)">
-                 {{edp}}</br>
-            </span>
+            <div id-generator="{{ctrl.getContainerId('endpoints', container)}}" class="endpoint" ng-repeat="endpoint in container.endpoints">
+                <div ng-if="ctrl.isMultiTenantRouter(endpoint)">
+                  <span>multi-tenancy router</span></br>
+                    <span ng-if="endpoint['hotrod-socket-binding']">&nbsp;&nbsp;{{endpoint['hotrod-socket-binding'].name + " : " + endpoint['hotrod-socket-binding'].port}}</span></br>
+                    <span ng-if="endpoint['rest-socket-binding']">&nbsp;&nbsp;{{endpoint['rest-socket-binding'].name + " : " + endpoint['rest-socket-binding'].port}}</span></br>
+                </div>
+                <span ng-if="!ctrl.isMultiTenantRouter(endpoint)"> {{ctrl.displayEndpoint(endpoint)}}</br></span>
+            </div>
           </td>
           <td id-generator="{{ctrl.getContainerId('sites', container)}}">
             <div id-generator="{{ctrl.getContainerId('sites-online', container)}}"

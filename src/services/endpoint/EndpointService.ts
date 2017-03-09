@@ -51,7 +51,7 @@ export class EndpointService {
               endpoints.push(endpoint);
             }
           } else if (isMultiRouterEndpoint) {
-            //TODO anything special needed here?
+            // TODO anything special needed here?
             let endpoint: IEndpoint = EndpointService.parseEndpoint(traversedObject.name, traversedObject);
             endpoints.push(endpoint);
           }

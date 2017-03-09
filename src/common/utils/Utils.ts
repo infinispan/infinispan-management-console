@@ -113,7 +113,7 @@ export function deepValue(object: Object, path: any): any {
   if (isArray(path)) {
     pathArray = path;
   } else if (isString(path)) {
-    pathArray = path.split(".")
+    pathArray = path.split(".");
   }
   for (var i: number = 0, len: number = pathArray.length; i < len; i++) {
     if (isNotNullOrUndefined(object)) {

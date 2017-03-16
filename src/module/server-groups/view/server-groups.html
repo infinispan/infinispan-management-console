@@ -43,6 +43,7 @@
             <span ng-if="event.level=='WARN'" class="icon-class pficon-warning-triangle-o"></span>
             <span ng-if="event.level=='INFO'" class="icon-class pficon-info"></span>
             <span ng-if="event.level=='ERROR'" class="pficon-error-circle-o"></span>
+            <span ng-if="event.level=='FATAL'" class="pficon-error-circle-o"></span>
             {{event.message}}.</h3>
           <small>{{event.when | date:'yyyy-MM-dd HH:mm:ss Z'}}<br></small>
           <small ng-if="event.server">{{event.server.host}}:{{event.server.name}}<br></small>

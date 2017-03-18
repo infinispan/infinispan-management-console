@@ -13,6 +13,7 @@ import {openErrorModal} from "../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {BootingModalCtrl} from "./BootingModalCtrl";
 import {
   SERVER_STATE_RUNNING, SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED,
   SERVER_STATE_RESTART_REQUIRED
@@ -20,10 +21,10 @@ import {
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available", "runningInstances"];
+    "jGroupsService", "launchType", "serverGroup", "available", "status"];
 
-  status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
+  statuses: string [] = [];
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
   hosts: string[];
@@ -37,12 +38,11 @@ export class ServerGroupCtrl {
               private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
               public available: boolean,
-              public runningInstances:IServerAddress[]) {
+              private status: string) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
-    this.status = available ? "STARTED" : (isNotNullOrUndefined(runningInstances) && runningInstances.length > 0) ? "DEGRADED" : "STOPPED";
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -51,6 +51,26 @@ export class ServerGroupCtrl {
 
   isServerRunning(server: IServerAddress): boolean {
     return this.isServerInState(server, SERVER_STATE_RUNNING);
+  }
+
+  isAtLeastOneServerInRunningState(): boolean {
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RUNNING);
+  }
+
+  isAtLeastOneServerInReloadRequiredState(): boolean {
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
+  }
+
+  isAtLeastOneServerInRestartRequiredState(): boolean {
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
+  }
+
+  isAtLeastOneServerInStoppedState(): boolean {
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_STOPPED);
+  }
+
+  areAllServersInStoppedState(): boolean {
+    return this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
   }
 
   isServerStopped(server: IServerAddress): boolean {
@@ -112,7 +132,7 @@ export class ServerGroupCtrl {
         newServer["socket-binding-group"] = this.serverGroup["socket-binding-group"];
         return this.serverService.createServer(newServer)
           .then(() => {
-            bootModal = this.createBootingModal();
+            bootModal = this.createBootingModal("start");
             return this.serverService.startServer(newServer.address);
           }, error => openErrorModal(this.$uibModal, error));
       })
@@ -124,9 +144,19 @@ export class ServerGroupCtrl {
       });
   }
 
-  createBootingModal(): IModalServiceInstance {
+  createBootingModal(operation: string): IModalServiceInstance {
     return this.$uibModal.open({
-      templateUrl: "module/server-group/view/booting-modal.html"
+      templateUrl: "module/server-group/view/booting-modal.html",
+      controller: BootingModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        operation: (): string => {
+          return operation;
+        },
+        clusterName: (): string => {
+          return this.serverGroup.name;
+        }
+      }
     });
   }
 
@@ -156,9 +186,15 @@ export class ServerGroupCtrl {
       .then(() => {
         // If we get here, then we know the modal was submitted
         if (operation === "start") {
-          bootModal = this.createBootingModal();
+          bootModal = this.createBootingModal(operation);
           return this.serverGroupService.startServers(this.serverGroup);
-        } else {
+        } else if (operation === "restart") {
+          bootModal = this.createBootingModal(operation);
+          return this.serverGroupService.restartServers(this.serverGroup);
+        } else if (operation === "reload") {
+          bootModal = this.createBootingModal(operation);
+          return this.serverGroupService.reloadServers(this.serverGroup);
+        } else if (operation === "stop") {
           bootModal = this.createStoppingModal();
           return this.serverGroupService.stopServers(this.serverGroup);
         }
@@ -174,6 +210,20 @@ export class ServerGroupCtrl {
     return this.launchType.isDomainMode();
   }
 
+  private areAllServersInServerGroupInState(state: string): boolean {
+    return this.serverStatuses().every((serverStatus: string) => {
+      return serverStatus === state;
+    });
+  }
+
+  private isAtLeastOneServerInServerGroupInState(state: string): boolean {
+    return this.serverStatuses().indexOf(state) > -1;
+  }
+
+  private serverStatuses(): string [] {
+    return this.statuses;
+  }
+
   private filterUniqueHosts(): string[] {
     return this.serverGroup.members
       .map((server) => server.host)
@@ -181,7 +231,10 @@ export class ServerGroupCtrl {
   }
 
   private fetchServerStatuses(): void {
-    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => this.serverStatusMap = statusMap);
+    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => {
+      this.serverStatusMap = statusMap;
+      this.statuses = this.serverGroupService.statusMapToArray(statusMap);
+    });
   }
 
   private fetchSGCoordinator(): void {

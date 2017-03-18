@@ -163,5 +163,10 @@
   "NEXT":"Next",
   "CLOSE":"Close",
   "LOADING": "Loading",
-  "DEFINE_SECTION":"{{name}} has not been defined for this configuration. Do you want to define it now?"
+  "DEFINE_SECTION":"{{name}} has not been defined for this configuration. Do you want to define it now?",
+  "RESTART_CLUSTER":"Restarting {{clusterName}} will restart all servers in this cluster. Restart {{clusterName}}?",
+  "RELOAD_CLUSTER":"Reloading {{clusterName}} will reload all servers in this cluster. Reload {{clusterName}}?",
+  "START_CLUSTER_INFO":"Starting {{clusterName}}, please wait while all servers boot...",
+  "RESTART_CLUSTER_INFO":"Restarting {{clusterName}}, please wait while all servers reboot...",
+  "RELOAD_CLUSTER_INFO":"Reloading {{clusterName}}, please wait while all servers reload..."
   }

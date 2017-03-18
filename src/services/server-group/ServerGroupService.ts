@@ -11,7 +11,10 @@ import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
-import {SERVER_STATE_STOPPED} from "../server/Server";
+import {
+  SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED, SERVER_STATE_RESTART_REQUIRED,
+  SERVER_STATE_RUNNING
+} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
@@ -233,6 +236,31 @@ export class ServerGroupService {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerStatus(server));
   }
 
+  getServerGroupStatus(serverGroup: IServerGroup): ng.IPromise<string> {
+    return this.getServerStatuses(serverGroup).then((statuses) => {
+      let status: string = "DEGRADED";
+      let statusArray: string[] = this.statusMapToArray(statuses);
+      let needsRestart: boolean = statusArray.indexOf(SERVER_STATE_RESTART_REQUIRED) > -1;
+      let needsReload: boolean = statusArray.indexOf(SERVER_STATE_RELOAD_REQUIRED) > -1;
+      if (needsRestart) {
+        status = SERVER_STATE_RESTART_REQUIRED;
+      } else if (needsReload) {
+        status = SERVER_STATE_RELOAD_REQUIRED;
+      } else {
+        status = statusArray.indexOf(SERVER_STATE_RUNNING) > -1 ? SERVER_STATE_RUNNING : SERVER_STATE_STOPPED;
+      }
+      return status;
+    });
+  }
+
+  public statusMapToArray(statusMap: IMap<String>): string [] {
+    let statusArray: string[] = [];
+    for (let serverKey in statusMap) {
+      statusArray.push(statusMap[serverKey].toUpperCase());
+    }
+    return statusArray;
+  }
+
   getServerInetAddresses(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerInetAddress(server));
   }
@@ -243,6 +271,10 @@ export class ServerGroupService {
 
   restartServers(serverGroup: IServerGroup): ng.IPromise<void> {
     return this.executeOp(serverGroup, "restart-servers");
+  }
+
+  reloadServers(serverGroup: IServerGroup): ng.IPromise<void> {
+    return this.executeOp(serverGroup, "reload-servers");
   }
 
   stopServers(serverGroup: IServerGroup): ng.IPromise<void> {

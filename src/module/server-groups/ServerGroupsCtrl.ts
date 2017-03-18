@@ -6,6 +6,10 @@ import {ServerGroupService} from "../../services/server-group/ServerGroupService
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {
+  SERVER_STATE_RELOAD_REQUIRED, SERVER_STATE_RESTART_REQUIRED,
+  SERVER_STATE_RUNNING
+} from "../../services/server/Server";
 
 export class ServerGroupsCtrl {
   static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups", "launchType"];
@@ -46,8 +50,22 @@ export class ServerGroupsCtrl {
     return this.status[serverGroup.name];
   }
 
-  getSGStatusClass(serverGroup: IServerGroup): string {
-    return this.status[serverGroup.name] === "STARTED" ? "label-success" : "label-danger";
+  isInReloadRequiredState(serverGroup: IServerGroup): boolean {
+    return this.status[serverGroup.name] === SERVER_STATE_RELOAD_REQUIRED;
+  }
+
+  isInRestartRequiredState(serverGroup: IServerGroup): boolean {
+    return this.status[serverGroup.name] === SERVER_STATE_RESTART_REQUIRED;
+  }
+
+  isInStartedState(serverGroup: IServerGroup): boolean {
+    return this.status[serverGroup.name] === SERVER_STATE_RUNNING;
+  }
+
+  isInOtherState(serverGroup: IServerGroup): boolean {
+    return !this.isInStartedState(serverGroup) &&
+      !this.isInRestartRequiredState(serverGroup) &&
+      !this.isInReloadRequiredState(serverGroup);
   }
 
   getMode(): string {
@@ -65,14 +83,16 @@ export class ServerGroupsCtrl {
   }
 
   private setSGStatus(serverGroup: IServerGroup): void {
-    this.serverGroupService.isGroupAvailable(serverGroup)
+    this.serverGroupService.getServerGroupStatus(serverGroup)
       .then((result) => {
         if (result) {
-          this.status[serverGroup.name] = "STARTED";
+          this.status[serverGroup.name] = result;
         } else {
           this.status[serverGroup.name] = "DEGRADED";
         }
-      });
+      }, () => {
+        this.status[serverGroup.name] = "DEGRADED";
+    });
   }
 
   private getAllClusterEvents(): void {

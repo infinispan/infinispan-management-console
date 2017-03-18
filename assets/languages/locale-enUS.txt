@@ -163,5 +163,7 @@
   "NEXT":"Next",
   "CLOSE":"Close",
   "LOADING": "Loading",
-  "DEFINE_SECTION":"{{name}} has not been defined for this configuration. Do you want to define it now?"
+  "DEFINE_SECTION":"{{name}} has not been defined for this configuration. Do you want to define it now?",
+  "RESTART_CLUSTER":"Restarting {{clusterName}} will restart all servers in this cluster. Restart {{clusterName}}?",
+  "RELOAD_CLUSTER":"Reloading {{clusterName}} will reload all servers in this cluster. Reload {{clusterName}}?"
   }

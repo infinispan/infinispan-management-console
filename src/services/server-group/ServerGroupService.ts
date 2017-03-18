@@ -11,7 +11,7 @@ import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
-import {SERVER_STATE_STOPPED} from "../server/Server";
+import {SERVER_STATE_STOPPED, SERVER_STATE_RUNNING} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
@@ -233,6 +233,26 @@ export class ServerGroupService {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerStatus(server));
   }
 
+  getServerGroupStatus(serverGroup: IServerGroup): ng.IPromise<string> {
+    return this.getServerStatuses(serverGroup).then((statuses) => {
+      let status: string = "";
+      let statusArray: string[] = [];
+      for (let serverKey in statuses) {
+        statusArray.push(statuses[serverKey].toUpperCase());
+      }
+      let allTheSame = !!statusArray.reduce(function (a, b) {
+        return (a === b) ? a : undefined;
+      });
+      let statusInferred: string = statusArray[0];
+      if (allTheSame) {
+        status = statusInferred;
+      } else {
+        status = "DEGRADED";
+      }
+      return status;
+    });
+  }
+
   getServerInetAddresses(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {
     return this.getStringFromAllMembers(serverGroup, (server) => this.serverService.getServerInetAddress(server));
   }
@@ -243,6 +263,10 @@ export class ServerGroupService {
 
   restartServers(serverGroup: IServerGroup): ng.IPromise<void> {
     return this.executeOp(serverGroup, "restart-servers");
+  }
+
+  reloadServers(serverGroup: IServerGroup): ng.IPromise<void> {
+    return this.executeOp(serverGroup, "reload-servers");
   }
 
   stopServers(serverGroup: IServerGroup): ng.IPromise<void> {

@@ -32,6 +32,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
           return serverGroupService.getRunningServerInstances(serverGroup);
         }],
+      status: ["serverGroupService", "serverGroup",
+        (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
+          return serverGroupService.getServerGroupStatus(serverGroup)
+        }]
     }
   });
 });

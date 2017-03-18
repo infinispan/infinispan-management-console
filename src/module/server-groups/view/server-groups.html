@@ -24,7 +24,9 @@
             </strong>
           </td>
           <td><span class="label clusterStatus" id-generator="{{serverGroup.name}}.status"
-                    ng-class="ctrl.getSGStatusClass(serverGroup)">{{ctrl.getSGStatus(serverGroup)}}</span>
+                    ng-class="{'label-success':ctrl.isInStartedState(serverGroup),
+                               'label-warning':ctrl.isInRestartRequiredState(serverGroup) || ctrl.isInReloadRequiredState(serverGroup),
+                               'label-danger':ctrl.isInOtherState(serverGroup)}">{{ctrl.getSGStatus(serverGroup)}}</span>
           </td>
           <td style="padding: 10px"><span class="label label-default clusterHostCount" id-generator="{{serverGroup.name}}.hosts">{{ctrl.getSGHostCount(serverGroup)}}</span>
           </td>

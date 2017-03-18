@@ -24,7 +24,9 @@
           <li role="presentation" ng-class="ctrl.serverInstance.isStopped()?'':'disabled'"><a id-generator="dropdown_menu.remove" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
         </ul>
       </div>
-      <h1><span class="label" ng-class="ctrl.serverInstance.isRunning()?'label-success':'label-danger'">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}
+      <h1><span class="label" ng-class="{'label-success':ctrl.serverInstance.isRunning(),
+                                         'label-warning':ctrl.serverInstance.isRestartRequired() || ctrl.serverInstance.isReloadRequired(),
+                                         'label-danger':ctrl.serverInstance.isStopped()}">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}
         <span ng-show="ctrl.isCoordinator()">(coordinator) </span><small>IP: {{ctrl.serverInstance.inetAddress}} - {{ctrl.nodeStats['number-of-entries']}} entries</small>
       </h1>
     </div>

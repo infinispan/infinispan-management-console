@@ -20,7 +20,7 @@ import {
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available", "runningInstances"];
+    "jGroupsService", "launchType", "serverGroup", "available", "runningInstances", "status"];
 
   status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
@@ -37,12 +37,13 @@ export class ServerGroupCtrl {
               private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
               public available: boolean,
-              public runningInstances:IServerAddress[]) {
+              public runningInstances:IServerAddress[],
+              private status: IMap<string>) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
-    this.status = available ? "STARTED" : (isNotNullOrUndefined(runningInstances) && runningInstances.length > 0) ? "DEGRADED" : "STOPPED";
+    this.status = status;
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -51,6 +52,32 @@ export class ServerGroupCtrl {
 
   isServerRunning(server: IServerAddress): boolean {
     return this.isServerInState(server, SERVER_STATE_RUNNING);
+  }
+
+  areAllServersInRunningState(): boolean {
+    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RUNNING);
+    return result;
+  }
+
+  areAllServersInReloadRequiredState(): boolean {
+    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
+    return result;
+  }
+
+  areAllServersInRestartRequiredState(): boolean {
+    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
+    return result;
+  }
+
+  areAllServersInStoppedOrOtherState(): boolean {
+    return !this.areAllServersInRunningState() &&
+      !this.areAllServersInReloadRequiredState() &&
+        !this.areAllServersInRestartRequiredState();
+  }
+
+  areAllServersInStoppedState(): boolean {
+    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
+    return result;
   }
 
   isServerStopped(server: IServerAddress): boolean {
@@ -158,7 +185,13 @@ export class ServerGroupCtrl {
         if (operation === "start") {
           bootModal = this.createBootingModal();
           return this.serverGroupService.startServers(this.serverGroup);
-        } else {
+        } else if (operation === "restart") {
+          bootModal = this.createBootingModal();
+          return this.serverGroupService.restartServers(this.serverGroup);
+        } else if (operation === "reload") {
+          bootModal = this.createBootingModal();
+          return this.serverGroupService.reloadServers(this.serverGroup);
+        } else if (operation === "stop") {
           bootModal = this.createStoppingModal();
           return this.serverGroupService.stopServers(this.serverGroup);
         }
@@ -172,6 +205,21 @@ export class ServerGroupCtrl {
 
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
+  }
+
+  private areAllServersInServerGroupInState(state: string): boolean {
+    let serverStatuses: string [] = this.serverStatuses();
+    return serverStatuses.every((serverStatus: string) => {
+      return serverStatus === state
+    });
+  }
+
+  private serverStatuses(): string [] {
+    let statusArray: string[] = [];
+    for (let serverKey in this.serverStatusMap) {
+      statusArray.push(this.serverStatusMap[serverKey].toUpperCase());
+    }
+    return statusArray;
   }
 
   private filterUniqueHosts(): string[] {

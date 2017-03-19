@@ -1,8 +1,13 @@
 <div class="modal-content">
   <div class="modal-header">
-    <h4 class="modal-title" id="booting_modal.title">Server(s) Starting</h4>
+    <h4 class="modal-title" id="booting_modal.title">Cluster {{ctrl.operation}}ing...</h4>
   </div>
   <div class="modal-body">
-    <h3>Server(s) starting. Please wait... <span class="spinner spinner-xs spinner-inline"/></h3>
+    <h3 ng-if="ctrl.operation === 'start'" translate translate-values='{clusterName:ctrl.clusterName}'>
+      START_CLUSTER_INFO</h3>
+    <h3 ng-if="ctrl.operation === 'reload'" translate translate-values='{clusterName:ctrl.clusterName}'>
+      RELOAD_CLUSTER_INFO</h3>
+    <h3 ng-if="ctrl.operation === 'restart'" translate translate-values='{clusterName:ctrl.clusterName}'>
+      RESTART_CLUSTER_INFO</h3>
   </div>
 </div>

@@ -34,7 +34,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }],
       status: ["serverGroupService", "serverGroup",
         (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
-          return serverGroupService.getServerGroupStatus(serverGroup)
+          return serverGroupService.getServerGroupStatus(serverGroup);
         }]
     }
   });

@@ -13,6 +13,7 @@ import {openErrorModal} from "../../common/dialogs/Modals";
 import IModalService = angular.ui.bootstrap.IModalService;
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {BootingModalCtrl} from "./BootingModalCtrl";
 import {
   SERVER_STATE_RUNNING, SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED,
   SERVER_STATE_RESTART_REQUIRED
@@ -22,7 +23,6 @@ export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
     "jGroupsService", "launchType", "serverGroup", "available", "runningInstances", "status"];
 
-  status: string = "DEGRADED";
   serverStatusMap: IMap<string> = {};
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
@@ -38,12 +38,11 @@ export class ServerGroupCtrl {
               public serverGroup: IServerGroup,
               public available: boolean,
               public runningInstances:IServerAddress[],
-              private status: IMap<string>) {
+              private status: string) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
-    this.status = status;
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -139,7 +138,7 @@ export class ServerGroupCtrl {
         newServer["socket-binding-group"] = this.serverGroup["socket-binding-group"];
         return this.serverService.createServer(newServer)
           .then(() => {
-            bootModal = this.createBootingModal();
+            bootModal = this.createBootingModal("start");
             return this.serverService.startServer(newServer.address);
           }, error => openErrorModal(this.$uibModal, error));
       })
@@ -151,9 +150,19 @@ export class ServerGroupCtrl {
       });
   }
 
-  createBootingModal(): IModalServiceInstance {
+  createBootingModal(operation: string): IModalServiceInstance {
     return this.$uibModal.open({
-      templateUrl: "module/server-group/view/booting-modal.html"
+      templateUrl: "module/server-group/view/booting-modal.html",
+      controller: BootingModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        operation: (): string => {
+          return operation;
+        },
+        clusterName: (): string => {
+          return this.serverGroup.name;
+        }
+      }
     });
   }
 
@@ -183,13 +192,13 @@ export class ServerGroupCtrl {
       .then(() => {
         // If we get here, then we know the modal was submitted
         if (operation === "start") {
-          bootModal = this.createBootingModal();
+          bootModal = this.createBootingModal(operation);
           return this.serverGroupService.startServers(this.serverGroup);
         } else if (operation === "restart") {
-          bootModal = this.createBootingModal();
+          bootModal = this.createBootingModal(operation);
           return this.serverGroupService.restartServers(this.serverGroup);
         } else if (operation === "reload") {
-          bootModal = this.createBootingModal();
+          bootModal = this.createBootingModal(operation);
           return this.serverGroupService.reloadServers(this.serverGroup);
         } else if (operation === "stop") {
           bootModal = this.createStoppingModal();
@@ -210,7 +219,7 @@ export class ServerGroupCtrl {
   private areAllServersInServerGroupInState(state: string): boolean {
     let serverStatuses: string [] = this.serverStatuses();
     return serverStatuses.every((serverStatus: string) => {
-      return serverStatus === state
+      return serverStatus === state;
     });
   }
 

@@ -11,7 +11,7 @@ import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
-import {SERVER_STATE_STOPPED, SERVER_STATE_RUNNING} from "../server/Server";
+import {SERVER_STATE_STOPPED} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
@@ -240,7 +240,7 @@ export class ServerGroupService {
       for (let serverKey in statuses) {
         statusArray.push(statuses[serverKey].toUpperCase());
       }
-      let allTheSame = !!statusArray.reduce(function (a, b) {
+      let allTheSame: boolean = !!statusArray.reduce((a: string, b: string) => {
         return (a === b) ? a : undefined;
       });
       let statusInferred: string = statusArray[0];

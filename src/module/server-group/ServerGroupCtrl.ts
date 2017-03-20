@@ -53,29 +53,28 @@ export class ServerGroupCtrl {
     return this.isServerInState(server, SERVER_STATE_RUNNING);
   }
 
-  areAllServersInRunningState(): boolean {
-    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RUNNING);
+  isAtLeastOneServerInRunningState(): boolean {
+    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RUNNING);
     return result;
   }
 
-  areAllServersInReloadRequiredState(): boolean {
-    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
+  isAtLeastOneServerInReloadRequiredState(): boolean {
+    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
     return result;
   }
 
-  areAllServersInRestartRequiredState(): boolean {
-    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
+  isAtLeastOneServerInRestartRequiredState(): boolean {
+    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
     return result;
   }
 
-  areAllServersInStoppedOrOtherState(): boolean {
-    return !this.areAllServersInRunningState() &&
-      !this.areAllServersInReloadRequiredState() &&
-        !this.areAllServersInRestartRequiredState();
+  isAtLeastOneServerInStoppedState(): boolean {
+    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_STOPPED);
+    return result;
   }
 
   areAllServersInStoppedState(): boolean {
-    let result:boolean = this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
+    let result: boolean = this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
     return result;
   }
 
@@ -221,6 +220,11 @@ export class ServerGroupCtrl {
     return serverStatuses.every((serverStatus: string) => {
       return serverStatus === state;
     });
+  }
+
+  private isAtLeastOneServerInServerGroupInState(state: string): boolean {
+    let serverStatuses: string [] = this.serverStatuses();
+    return serverStatuses.indexOf(state) > -1;
   }
 
   private serverStatuses(): string [] {

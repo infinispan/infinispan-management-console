@@ -11,7 +11,10 @@ import IQService = angular.IQService;
 import {IMap} from "../../common/utils/IMap";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {StandaloneService} from "../standalone/StandaloneService";
-import {SERVER_STATE_STOPPED} from "../server/Server";
+import {
+  SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED, SERVER_STATE_RESTART_REQUIRED,
+  SERVER_STATE_RUNNING
+} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.server-group", []);
 
@@ -235,19 +238,19 @@ export class ServerGroupService {
 
   getServerGroupStatus(serverGroup: IServerGroup): ng.IPromise<string> {
     return this.getServerStatuses(serverGroup).then((statuses) => {
-      let status: string = "";
+      let status: string = "DEGRADED";
       let statusArray: string[] = [];
       for (let serverKey in statuses) {
         statusArray.push(statuses[serverKey].toUpperCase());
       }
-      let allTheSame: boolean = !!statusArray.reduce((a: string, b: string) => {
-        return (a === b) ? a : undefined;
-      });
-      let statusInferred: string = statusArray[0];
-      if (allTheSame) {
-        status = statusInferred;
+      let needsRestart = statusArray.indexOf(SERVER_STATE_RESTART_REQUIRED) > -1;
+      let needsReload = statusArray.indexOf(SERVER_STATE_RELOAD_REQUIRED) > -1;
+      if (needsRestart) {
+        status = SERVER_STATE_RESTART_REQUIRED;
+      } else if (needsReload) {
+        status = SERVER_STATE_RELOAD_REQUIRED;
       } else {
-        status = "DEGRADED";
+        status = statusArray.indexOf(SERVER_STATE_RUNNING) > -1 ? SERVER_STATE_RUNNING : SERVER_STATE_STOPPED;
       }
       return status;
     });

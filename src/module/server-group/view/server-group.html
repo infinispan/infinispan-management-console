@@ -21,16 +21,16 @@
             <a id="start.button" role="menuitem" translate>START</a>
           </li>
 
-          <li role="presentation" ng-class="ctrl.areAllServersInReloadRequiredState() ? 'enabled' : 'disabled'"
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInReloadRequiredState() ? 'enabled' : 'disabled'"
               ng-click="ctrl.createConfirmationModal('reload')">
             <a id="reload.button" role="menuitem" translate>RELOAD</a>
           </li>
-          <li role="presentation" ng-class="ctrl.areAllServersInRestartRequiredState() ? 'enabled' : 'disabled'"
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRestartRequiredState() ? 'enabled' : 'disabled'"
               ng-click="ctrl.createConfirmationModal('restart')">
             <a id="restart.button" role="menuitem" translate>RESTART</a>
           </li>
 
-          <li role="presentation" ng-class="ctrl.areAllServersInRunningState() ? 'enabled' : 'disabled'"
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'"
               ng-click="ctrl.createConfirmationModal('stop')">
             <a id="stop.button" role="menuitem" translate>STOP</a>
           </li>
@@ -38,9 +38,9 @@
       </div>
 
       <h1><span class="label"
-                ng-class="{'label-success':ctrl.areAllServersInRunningState(),
-                           'label-warning':ctrl.areAllServersInRestartRequiredState() || ctrl.areAllServersInReloadRequiredState(),
-                           'label-danger':ctrl.areAllServersInStoppedOrOtherState()}">{{ctrl.status}}</span>&nbsp;Cluster:
+                ng-class="{'label-success':ctrl.isAtLeastOneServerInRunningState(),
+                           'label-warning':ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState(),
+                           'label-danger':ctrl.areAllServersInStoppedState()}">{{ctrl.status}}</span>&nbsp;Cluster:
         {{ctrl.serverGroup.name}}
       </h1>
     </div>

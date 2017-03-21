@@ -49,10 +49,12 @@ export class CacheStoreModalButtonCtrl {
 
     modal.result.then(storeObject => {
       removeEmptyFieldsFromObject(storeObject, true);
-      if (!isEmptyObject(storeObject) && storeObject.modified) {
-        delete storeObject.modified;
+      if (!isEmptyObject(storeObject)) {
         this.data[this.field] = storeObject;
-        makeFieldDirty(this.parentMeta);
+        if (storeObject.modified) {
+          makeFieldDirty(this.parentMeta);
+        }
+        delete storeObject.modified;
       }
     }, () => makeFieldClean(this.parentMeta));
   }

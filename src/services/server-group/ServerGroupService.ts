@@ -239,12 +239,9 @@ export class ServerGroupService {
   getServerGroupStatus(serverGroup: IServerGroup): ng.IPromise<string> {
     return this.getServerStatuses(serverGroup).then((statuses) => {
       let status: string = "DEGRADED";
-      let statusArray: string[] = [];
-      for (let serverKey in statuses) {
-        statusArray.push(statuses[serverKey].toUpperCase());
-      }
-      let needsRestart = statusArray.indexOf(SERVER_STATE_RESTART_REQUIRED) > -1;
-      let needsReload = statusArray.indexOf(SERVER_STATE_RELOAD_REQUIRED) > -1;
+      let statusArray: string[] = this.statusMapToArray(statuses);
+      let needsRestart: boolean = statusArray.indexOf(SERVER_STATE_RESTART_REQUIRED) > -1;
+      let needsReload: boolean = statusArray.indexOf(SERVER_STATE_RELOAD_REQUIRED) > -1;
       if (needsRestart) {
         status = SERVER_STATE_RESTART_REQUIRED;
       } else if (needsReload) {
@@ -254,6 +251,14 @@ export class ServerGroupService {
       }
       return status;
     });
+  }
+
+  public statusMapToArray(statusMap: IMap<String>): string [] {
+    let statusArray: string[] = [];
+    for (let serverKey in statusMap) {
+      statusArray.push(statusMap[serverKey].toUpperCase());
+    }
+    return statusArray;
   }
 
   getServerInetAddresses(serverGroup: IServerGroup): ng.IPromise<IMap<string>> {

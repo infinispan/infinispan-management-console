@@ -54,28 +54,23 @@ export class ServerGroupCtrl {
   }
 
   isAtLeastOneServerInRunningState(): boolean {
-    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RUNNING);
-    return result;
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RUNNING);
   }
 
   isAtLeastOneServerInReloadRequiredState(): boolean {
-    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
-    return result;
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RELOAD_REQUIRED);
   }
 
   isAtLeastOneServerInRestartRequiredState(): boolean {
-    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
-    return result;
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_RESTART_REQUIRED);
   }
 
   isAtLeastOneServerInStoppedState(): boolean {
-    let result: boolean = this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_STOPPED);
-    return result;
+    return this.isAtLeastOneServerInServerGroupInState(SERVER_STATE_STOPPED);
   }
 
   areAllServersInStoppedState(): boolean {
-    let result: boolean = this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
-    return result;
+    return this.areAllServersInServerGroupInState(SERVER_STATE_STOPPED);
   }
 
   isServerStopped(server: IServerAddress): boolean {
@@ -216,23 +211,17 @@ export class ServerGroupCtrl {
   }
 
   private areAllServersInServerGroupInState(state: string): boolean {
-    let serverStatuses: string [] = this.serverStatuses();
-    return serverStatuses.every((serverStatus: string) => {
+    return this.serverStatuses().every((serverStatus: string) => {
       return serverStatus === state;
     });
   }
 
   private isAtLeastOneServerInServerGroupInState(state: string): boolean {
-    let serverStatuses: string [] = this.serverStatuses();
-    return serverStatuses.indexOf(state) > -1;
+    return this.serverStatuses().indexOf(state) > -1;
   }
 
   private serverStatuses(): string [] {
-    let statusArray: string[] = [];
-    for (let serverKey in this.serverStatusMap) {
-      statusArray.push(this.serverStatusMap[serverKey].toUpperCase());
-    }
-    return statusArray;
+    return this.serverGroupService.statusMapToArray(this.serverStatusMap);
   }
 
   private filterUniqueHosts(): string[] {

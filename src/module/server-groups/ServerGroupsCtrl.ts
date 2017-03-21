@@ -90,7 +90,7 @@ export class ServerGroupsCtrl {
         } else {
           this.status[serverGroup.name] = "DEGRADED";
         }
-      },() => {
+      }, () => {
         this.status[serverGroup.name] = "DEGRADED";
     });
   }

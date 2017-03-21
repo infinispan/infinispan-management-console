@@ -13,14 +13,6 @@ const CACHE_LOADERS: {class: string, label: string}[] = [
     label: "No Cache Loader"
   },
   {
-    class: "org.infinispan.persistence.async.AsyncCacheLoader",
-    label: "Async Cache Loader"
-  },
-  {
-    class: "org.infinispan.persistence.async.AdvancedAsyncCacheLoader",
-    label: "Advanced Async Cache Loader"
-  },
-  {
     class: "org.infinispan.persistence.cluster.ClusterLoader",
     label: "Cluster Loader"
   },

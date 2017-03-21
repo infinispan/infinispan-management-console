@@ -21,9 +21,10 @@ import {
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available", "runningInstances", "status"];
+    "jGroupsService", "launchType", "serverGroup", "available", "status"];
 
   serverStatusMap: IMap<string> = {};
+  statuses: string [] = [];
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
   hosts: string[];
@@ -37,7 +38,6 @@ export class ServerGroupCtrl {
               private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
               public available: boolean,
-              public runningInstances:IServerAddress[],
               private status: string) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
@@ -221,7 +221,7 @@ export class ServerGroupCtrl {
   }
 
   private serverStatuses(): string [] {
-    return this.serverGroupService.statusMapToArray(this.serverStatusMap);
+    return this.statuses;
   }
 
   private filterUniqueHosts(): string[] {
@@ -231,7 +231,10 @@ export class ServerGroupCtrl {
   }
 
   private fetchServerStatuses(): void {
-    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => this.serverStatusMap = statusMap);
+    this.serverGroupService.getServerStatuses(this.serverGroup).then((statusMap) => {
+      this.serverStatusMap = statusMap;
+      this.statuses = this.serverGroupService.statusMapToArray(statusMap);
+    });
   }
 
   private fetchSGCoordinator(): void {

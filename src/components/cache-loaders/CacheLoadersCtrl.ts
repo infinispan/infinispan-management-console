@@ -19,34 +19,6 @@ const CACHE_LOADERS: {class: string, label: string}[] = [
   {
     class: "",
     label: "Custom Loader"
-  },
-  {
-    class: "org.infinispan.persistence.jpa.JpaStore",
-    label: "JPA Store"
-  },
-  {
-    class: "org.infinispan.persistence.rocksdb.RocksDBStore",
-    label: "RocksDB Store"
-  },
-  {
-    class: "org.infinispan.persistence.remote.RemoteStore",
-    label: "Remote Store"
-  },
-  {
-    class: "org.infinispan.persistence.rest.RestStore",
-    label: "Rest Store"
-  },
-  {
-    class: "org.infinispan.persistence.file.SingleFileStore",
-    label: "Single File Store"
-  },
-  {
-    class: "org.infinispan.persistence.sifs.SoftIndexFileStore",
-    label: "Soft Index File Store"
-  },
-  {
-    class: "org.infinispan.persistence.jdbc.stringbased.JdbcStringBasedStore",
-    label: "String Based JDBC Store"
   }
 ];
 

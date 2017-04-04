@@ -2,6 +2,12 @@
 
 pipeline {
     agent any
+    stage('Cleanup') {
+        steps{
+            step([$class: 'WsCleanup'])
+        }
+    }
+  
     stages {
         stage('SCM Checkout') {
             steps {

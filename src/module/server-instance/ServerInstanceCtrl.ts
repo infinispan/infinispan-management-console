@@ -105,11 +105,15 @@ export class ServerInstanceCtrl {
 
   createRemoveModal(): void {
     let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, "Remove server " +
-      this.serverInstance.address.name + " from " + this.serverInstance.serverGroup + "?");
+      this.serverInstance.address.name + "?");
     modal.result.then(() => {
       let promise: ng.IPromise<string> = this.serverService.removeServer(this.serverInstance.address);
-      promise.then(() => this.refresh());
+      promise.then(() => this.goToClustersView());
     });
+  }
+
+  goToClustersView(): void {
+    this.$state.go("server-groups", {});
   }
 
   isDomainMode(): boolean {

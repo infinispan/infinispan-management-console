@@ -16,23 +16,19 @@
           class="caret"></span>
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-          <li role="presentation" ng-class="ctrl.areAllServersInStoppedState() ? 'enabled' : 'disabled'"
-              ng-click="ctrl.createConfirmationModal('start')">
-            <a id="start.button" role="menuitem" translate>START</a>
+          <li role="presentation" ng-class="ctrl.areAllServersInStoppedState() ? 'enabled' : 'disabled'">
+            <a id="start.button" role="menuitem" ng-click="ctrl.createConfirmationModal('start')" translate>START</a>
           </li>
 
-          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInReloadRequiredState() ? 'enabled' : 'disabled'"
-              ng-click="ctrl.createConfirmationModal('reload')">
-            <a id="reload.button" role="menuitem" translate>RELOAD</a>
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInReloadRequiredState() ? 'enabled' : 'disabled'">
+            <a id="reload.button" role="menuitem" ng-click="ctrl.createConfirmationModal('reload')" translate>RELOAD</a>
           </li>
-          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRestartRequiredState() ? 'enabled' : 'disabled'"
-              ng-click="ctrl.createConfirmationModal('restart')">
-            <a id="restart.button" role="menuitem" translate>RESTART</a>
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRestartRequiredState() ? 'enabled' : 'disabled'">
+            <a id="restart.button" role="menuitem" ng-click="ctrl.createConfirmationModal('restart')" translate>RESTART</a>
           </li>
 
-          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'"
-              ng-click="ctrl.createConfirmationModal('stop')">
-            <a id="stop.button" role="menuitem" translate>STOP</a>
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'">
+            <a id="stop.button" role="menuitem" ng-click="ctrl.createConfirmationModal('stop')" translate>STOP</a>
           </li>
         </ul>
       </div>

@@ -14,7 +14,7 @@
 
     <div class="alert alert-danger alert-dismissable" ng-if="modalCtrl.errorExecuting">
       <span class="pficon pficon-error-circle-o"></span>
-      <strong>Error</strong> <span translate translate-values="{errorDescription:errorDescription}">SOME_UNEXPECTED_OUTPUT</span>
+      <strong>Error</strong> <span translate translate-values="{errorDescription:modalCtrl.errorDescription}">SOME_UNEXPECTED_OUTPUT</span>
     </div>
 
     <div class="alert alert-success alert-dismissable" ng-if="modalCtrl.successfulOperation">

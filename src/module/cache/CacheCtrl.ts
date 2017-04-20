@@ -158,6 +158,12 @@ export class CacheCtrl {
     return this.launchType.isStandaloneLocalMode();
   }
 
+  resetStats(): void {
+    this.cacheService.resetStats(this.container, this.cache).finally(() => {
+      this.refresh();
+    });
+  }
+
   private refresh(): void {
     this.cacheService.getCacheStats(this.container, this.cache).then((result) => {
       this.stats = result;

@@ -59,7 +59,6 @@
         <th>Total reads</th>
         <th>Total failed reads</th>
         <th>Total writes</th>
-        <th>Total failed writes</th>
       </tr></thead>
       <tbody>
         <tr ng-repeat="stats in ctrl.allCacheStats">
@@ -67,10 +66,9 @@
           <td class="AverageReadTime">{{stats['average-read-time'] | number}}</td>
           <td class="AverageWriteTime">{{stats['average-write-time'] | number}}</td>
           <td class="TotalEntries">{{stats['number-of-entries'] | number}}</td>
-          <td class="TotalReads">{{stats['average-read-time'] | number}}</td>
-          <td class="TotalFailedReads">{{stats['average-read-time'] | number}}</td>
-          <td class="TotalWrites">{{stats['average-read-time'] | number}}</td>
-          <td class="TotalFailedWrites">{{stats['average-read-time'] | number}}</td>
+          <td class="TotalReads">{{(stats['hits'] + stats['misses'])| number}}</td>
+          <td class="TotalFailedReads">{{stats['misses'] | number}}</td>
+          <td class="TotalWrites">{{stats['stores'] | number}}</td>
         </tr>
       </tbody></table>
   </div>

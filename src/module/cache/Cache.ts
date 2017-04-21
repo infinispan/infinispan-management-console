@@ -106,7 +106,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 
   $stateProvider.state("caches-node-stats", {
     parent: "root",
-    url: "containers/:profileName/:containerName/nodes",
+    url: "containers/:profileName/:containerName/caches/:cacheType/:cacheName/nodes",
     templateUrl: "module/cache/view/nodes.html",
     controller: CacheNodesCtrl,
     controllerAs: "ctrl",
@@ -117,7 +117,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }],
       cache: ["$stateParams", "cacheService",
         ($stateParams, cacheService: CacheService) => {
-          return cacheService.getCache("default", "distributed-cache", $stateParams.containerName, $stateParams.profileName);
+          return cacheService.getCache($stateParams.cacheName, $stateParams.cacheType, $stateParams.containerName, $stateParams.profileName);
         }],
       allCacheStats: ["cacheService", "container", "cache",
         (cacheService: CacheService, container: ICacheContainer, cache: ICache) => {

@@ -9,10 +9,12 @@ import {IMap} from "../../common/utils/IMap";
 import {isNotNullOrUndefined, getArraySize} from "../../common/utils/Utils";
 import {IEndpoint} from "../../services/endpoint/IEndpoint";
 import {ISocketBinding} from "../../services/socket-binding/ISocketBinding";
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {ModalService} from '../../services/modal/ModalService';
 
 export class CacheContainersCtrl {
 
-  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "containers"];
+  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "containers", "launchType", "modalService"];
 
   domain: IDomain;
   stacks: IMap<string>;
@@ -22,7 +24,9 @@ export class CacheContainersCtrl {
               private domainService: DomainService,
               private jGroupsService: JGroupsService,
               private clusterEventsService: ClusterEventsService,
-              public containers: ICacheContainer[]) {
+              public containers: ICacheContainer[],
+              private launchType: LaunchTypeService,
+              private modalService: ModalService) {
     if (this.jGroupsService.hasJGroupsStack()) {
       this.domainService.getHostsAndServers()
         .then((domain) => {
@@ -81,5 +85,17 @@ export class CacheContainersCtrl {
 
   isStandaloneLocalMode(): boolean {
     return !this.jGroupsService.hasJGroupsStack();
+  }
+
+  isLocalMode(): boolean {
+    return this.launchType.isStandaloneLocalMode();
+  }
+
+  enableContainerRebalance(container) {
+    this.modalService.createRebalanceModal(true, "ENABLE rebalancing for cache container?", container);
+  }
+
+  disableContainerRebalance(container) {
+    this.modalService.createRebalanceModal(false, "DISABLE rebalancing for cache container?", container);
   }
 }

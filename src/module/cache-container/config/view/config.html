@@ -5,8 +5,7 @@
         <li>
           <a ui-sref="containers" translate>CACHE_CONTAINERS</a>
         </li>
-        <li>{{ctrl.container.profile}}</li>
-        <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
+        <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">({{ctrl.container.profile}}) {{ctrl.container.name}}</a>
         </li>
         <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>

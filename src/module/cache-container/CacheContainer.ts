@@ -43,7 +43,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     url: "/caches",
     templateUrl: "module/cache-container/caches/view/caches.html",
     controller: CachesCtrl,
-    controllerAs: "cachesCtrl",
+    controllerAs: "$ctrl",
     resolve: {
       caches: ["container", "cacheService", (container, cacheService) => {
         return cacheService.getAllCachesInContainer(container);

@@ -7,10 +7,11 @@ import {openConfirmationModal} from "../../common/dialogs/Modals";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {ModalService} from '../../services/modal/ModalService';
 
 export class CacheContainerCtrl {
 
-  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "launchType", "container", "isRebalancingEnabled"];
+  static $inject: string[] = ["$state", "$uibModal", "containerService", "dmrService", "launchType", "container", "isRebalancingEnabled", "modalService"];
 
   name: string;
   serverGroup: string;
@@ -24,7 +25,8 @@ export class CacheContainerCtrl {
               private dmrService: DmrService,
               private launchType: LaunchTypeService,
               public container: ICacheContainer,
-              public isRebalancingEnabled: boolean) {
+              public isRebalancingEnabled: boolean,
+              private modalService: ModalService) {
     this.name = container.name;
     this.serverGroup = container.serverGroup.name;
   }
@@ -68,12 +70,7 @@ export class CacheContainerCtrl {
   }
 
   private createRebalanceModal(enableRebalance: boolean, message: string): void {
-    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, message);
-    modal.result.then(() => {
-      let promise: ng.IPromise<void> = enableRebalance ? this.containerService.enableRebalance(this.container) :
-        this.containerService.disableRebalance(this.container);
-
-      promise.then(() => {
+    this.modalService.createRebalanceModal(enableRebalance, message, this.container).then(() => {
         this.successfulOperation = true;
         this.isRebalancingEnabled = enableRebalance;
         this.errorDescription = "";
@@ -81,6 +78,5 @@ export class CacheContainerCtrl {
         this.errorExecuting = true;
         this.errorDescription = error;
       });
-    });
   }
 }

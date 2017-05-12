@@ -18,6 +18,7 @@ import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
 import "./services/standalone/StandaloneService";
+import "./services/modal/ModalService";
 import "./components/cache-loaders/CacheLoaders";
 import "./components/cache-security/CacheSecurity";
 import "./components/cache-stores/CacheStores";
@@ -84,6 +85,7 @@ App.element(document).ready(() => {
     "managementConsole.services.server",
     "managementConsole.services.server-group",
     "managementConsole.services.socket-binding",
-    "managementConsole.services.standalone"
+    "managementConsole.services.standalone",
+    "managementConsole.services.modal"
   ]);
 });

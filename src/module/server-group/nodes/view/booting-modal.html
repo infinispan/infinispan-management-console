@@ -1,8 +1,36 @@
 <div class="modal-content">
   <div class="modal-header">
-    <h4 class="modal-title" id="booting_modal.title">Server(s) {{ctrl.operation}}ing...</h4>
+    <h4 ng-if="ctrl.operation === 'start'" class="modal-title" translate>
+      START_SERVER_BOOT_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'reload'" class="modal-title" translate>
+      RELOAD_SERVER_BOOT_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'restart'" class="modal-title" translate>
+      RESTART_SERVER_BOOT_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'stop'" class="modal-title" translate>
+      STOPPING_SERVER_BOOT_TITLE
+    </h4>
   </div>
   <div class="modal-body">
-    <h3>Server(s) {{ctrl.operation}}ing. Please wait...<span class="spinner spinner-xs spinner-inline"/></h3>
-  </div>
+    <div class="row">
+      <div class="col-xs-1 modal-body-spinner-icon">
+        <span class="spinner spinner-lg spinner-inline"></span>
+      </div>
+      <div class="col-xs-11 modal-body-text">
+        <h3 ng-if="ctrl.operation === 'start'" class="modal-message" translate>
+          START_SERVER_BOOT_MESSAGE
+        </h3>
+        <h3 ng-if="ctrl.operation === 'reload'" class="modal-message" translate>
+          RELOAD_SERVER_BOOT_MESSAGE
+        </h3>
+        <h3 ng-if="ctrl.operation === 'restart'" class="modal-message" translate>
+          RESTART_SERVER_BOOT_MESSAGE
+        </h3>
+        <h3 ng-if="ctrl.operation === 'stop'" class="modal-message" translate>
+          STOPPING_SERVER_BOOT_MESSAGE
+        </h3>
+      </div>
+    </div>
 </div>

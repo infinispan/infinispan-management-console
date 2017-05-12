@@ -1,31 +1,31 @@
 System.config({
   defaultJSExtensions: true,
-  transpiler: "typescript",
+  transpiler: 'typescript',
   babelOptions: {
-    "optional": [
-      "runtime",
-      "optimisation.modules.system"
+    'optional': [
+      'runtime',
+      'optimisation.modules.system'
     ]
   },
   typescriptOptions: {
-    "tsconfig": "tsconfig.json"
+    'tsconfig': 'tsconfig.json'
   },
   paths: {
-    "app/*": "src/*",
-    "github:*": "vendor/jspm_packages/github/*",
-    "npm:*": "vendor/jspm_packages/npm/*"
+    'app/*': 'src/*',
+    'github:*': 'vendor/jspm_packages/github/*',
+    'npm:*': 'vendor/jspm_packages/npm/*'
   },
   buildCSS: true,
   separateCSS: false,
 
   packages: {
-    "app": {
-      "main": "index",
-      "format": "amd",
-      "defaultExtension": "js",
-      "meta": {
-        "*.css": {
-          "loader": "css"
+    'app': {
+      'main': 'index',
+      'format': 'amd',
+      'defaultExtension': 'js',
+      'meta': {
+        '*.css': {
+          'loader': 'css'
         }
       }
     }

@@ -18,16 +18,20 @@ import {
   SERVER_STATE_RUNNING, SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED,
   SERVER_STATE_RESTART_REQUIRED
 } from "../../services/server/Server";
+import {ModalService} from '../../services/modal/ModalService';
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available", "status"];
+    "jGroupsService", "launchType", "serverGroup", "available", "status", "$filter", "modalService"];
 
   serverStatusMap: IMap<string> = {};
   statuses: string [] = [];
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
   hosts: string[];
+
+  filteredMembers: any[];
+  searchNameQuery: string;
 
   constructor(private $state: IStateService,
               private $uibModal: IModalService,
@@ -38,11 +42,15 @@ export class ServerGroupCtrl {
               private launchType: LaunchTypeService,
               public serverGroup: IServerGroup,
               public available: boolean,
-              private status: string) {
+              private status: string,
+              private $filter: any,
+              private modalService: ModalService) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
     this.hosts = this.filterUniqueHosts();
+
+    this.filteredMembers = this.search();
   }
 
   isCoordinator(server: IServerAddress): boolean {
@@ -146,7 +154,7 @@ export class ServerGroupCtrl {
 
   createBootingModal(operation: string): IModalServiceInstance {
     return this.$uibModal.open({
-      templateUrl: "module/server-group/view/booting-modal.html",
+      templateUrl: "module/server-group/nodes/view/booting-modal.html",
       controller: BootingModalCtrl,
       controllerAs: "ctrl",
       resolve: {
@@ -166,44 +174,24 @@ export class ServerGroupCtrl {
     });
   }
 
-  createConfirmationModal(operation: string): void {
-    let modal: IModalServiceInstance = this.$uibModal.open({
-      templateUrl: "module/server-group/nodes/view/confirmation-modal.html",
-      controller: ConfirmationModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        operation: (): string => {
-          return operation;
-        },
-        clusterName: (): string => {
-          return this.serverGroup.name;
-        }
+  openServerConfirmationModal(operation: string): void {
+    let bootModal: IModalServiceInstance = undefined;
+    this.modalService.openServerConfirmationModal(
+      operation,
+      this.serverGroup
+    ).then((data) => {
+      if (data.hasOwnProperty('error', data)) {
+        return data;
+      }
+
+      this.refresh();
+    })
+    .catch(error => {
+      // Prevent opening the Error modal after closing confirm modal
+      if (error && error.action !== 'Cancelled' && error.error !== 'backdrop click') {
+        openErrorModal(this.$uibModal, error);
       }
     });
-
-    let bootModal: IModalServiceInstance = undefined;
-    modal.result
-      .then(() => {
-        // If we get here, then we know the modal was submitted
-        if (operation === "start") {
-          bootModal = this.createBootingModal(operation);
-          return this.serverGroupService.startServers(this.serverGroup);
-        } else if (operation === "restart") {
-          bootModal = this.createBootingModal(operation);
-          return this.serverGroupService.restartServers(this.serverGroup);
-        } else if (operation === "reload") {
-          bootModal = this.createBootingModal(operation);
-          return this.serverGroupService.reloadServers(this.serverGroup);
-        } else if (operation === "stop") {
-          bootModal = this.createStoppingModal();
-          return this.serverGroupService.stopServers(this.serverGroup);
-        }
-      })
-      .then(() => {
-        bootModal.close();
-        this.refresh();
-      })
-      .catch(error => openErrorModal(this.$uibModal, error));
   }
 
   isDomainMode(): boolean {
@@ -243,5 +231,24 @@ export class ServerGroupCtrl {
 
   private fetchInetAddresses(): void {
     this.serverGroupService.getServerInetAddresses(this.serverGroup).then((inetMap) => this.serverInetMap = inetMap);
+  }
+
+  public hasFiltersApplied() {
+    return this.searchNameQuery.length !== 0
+  }
+
+  public search() {
+    if (this.searchNameQuery && !this.hasFiltersApplied()) {
+      this.filteredMembers = this.serverGroup.members;
+    } else {
+      this.filteredMembers = this.$filter('serverFilter')(this.serverGroup.members, this.serverInetMap, this.searchNameQuery)
+    }
+
+    return this.filteredMembers;
+  }
+
+  public clearFilters() {
+    this.searchNameQuery = '';
+    this.filteredMembers = this.search();
   }
 }

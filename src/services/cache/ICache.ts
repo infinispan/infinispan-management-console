@@ -5,6 +5,7 @@ export interface ICache {
   type: string;
   configName: string;
   configModel?: ICacheConfiguration;
+  cardStatus: any;
 
   isDistributed(): boolean;
 

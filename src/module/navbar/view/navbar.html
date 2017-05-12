@@ -29,13 +29,13 @@
 
 
   <ul class="nav navbar-nav navbar-primary">
-    <li>
+    <li ng-class="{'active': ctrl.states[0].active}">
       <a href="#/containers" translate>CACHES</a>
     </li>
-    <li ng-if="ctrl.hasClusterView()">
+    <li ng-if="ctrl.hasClusterView()" ng-class="{'active': ctrl.states[1].active}">
       <a href="#/server-groups" translate>CLUSTERS</a>
     </li>
-    <li ng-if="ctrl.hasClusterView()">
+    <li ng-if="ctrl.hasClusterView()" ng-class="{'active': ctrl.states[2].active}">
       <a href="#/events" translate>STATUS_EVENTS</a>
     </li>
     <div ng-if="!ctrl.isApiAvailable()" class="toast-pf toast-pf-max-width toast-pf-top-right alert alert-warning alert-dismissable" >
@@ -52,7 +52,7 @@
 
 <div ng-if="!ctrl.stateChanging" ui-view=""/>
 <div class="container-fluid" ng-show="ctrl.stateChanging">
-  <div class="centering text-center">
+  <div class="centering text-center loader">
     <span class="spinner spinner-lg spinner-inline"></span>
     <p translate>LOADING</p>
   </div>

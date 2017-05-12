@@ -5,17 +5,33 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {INewServerInstance} from "./INewServerInstance";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServer} from "../server/IServer";
-import {Server, SERVER_STATE_STOPPED} from "../server/Server";
+import {
+  Server,
+  SERVER_STATE_STOPPED,
+  SERVER_STATE_RUNNING,
+  SERVER_STATE_RELOAD_REQUIRED,
+  SERVER_STATE_RESTART_REQUIRED
+} from "../server/Server";
 import {StandaloneService} from "../standalone/StandaloneService";
 import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
+import IModalService = angular.ui.bootstrap.IModalService;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {BootingModalCtrl} from "./../../module/server-group/BootingModalCtrl";
+import {IServerGroup} from "./../server-group/IServerGroup";
+import {ConfirmationModalCtrl} from "./../../module/server-group/nodes/ConfirmationModalCtrl";
+import {ServerGroupService} from "./../server-group/ServerGroupService";
 
 const module: ng.IModule = App.module("managementConsole.services.server", []);
 
 export class ServerService {
 
-  static $inject: string[] = ["$q", "dmrService", "launchType"];
+  static $inject: string[] = ["$q", "dmrService", "launchType", "$uibModal", "$injector"];
 
-  constructor(private $q: ng.IQService, private dmrService: DmrService, private launchType: LaunchTypeService) {
+  constructor(private $q: ng.IQService,
+              private dmrService: DmrService,
+              private launchType: LaunchTypeService,
+              private $uibModal: IModalService,
+              private $injector: any) {
   }
 
   createServer(server: INewServerInstance): ng.IPromise<void> {
@@ -182,6 +198,38 @@ export class ServerService {
       }
     });
     return deferred.promise;
+  }
+
+  public areAllServersInServerGroupInState(state: String, statuses: String[]): boolean {
+    return statuses.every((serverStatus: String) => {
+      return serverStatus === state;
+    });
+  }
+
+  public isAtLeastOneServerInServerGroupInState(state: string, statuses: String[]): boolean {
+    return statuses.indexOf(state) > -1;
+  }
+
+  public createStoppingModal(): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/nodes/view/stopping-modal.html"
+    });
+  }
+
+  createBootingModal(operation: string, serverGroupName: string): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/nodes/view/booting-modal.html",
+      controller: BootingModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        operation: (): string => {
+          return operation;
+        },
+        clusterName: (): string => {
+          return serverGroupName;
+        }
+      }
+    });
   }
 
   private generateAddress(server: IServerAddress): string[] {

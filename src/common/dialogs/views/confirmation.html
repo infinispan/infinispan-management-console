@@ -6,7 +6,14 @@
     <h4 class="modal-title" id="confirmation_modal.title">Confirmation</h4>
   </div>
   <div class="modal-body">
-    <h3><i class="pficon pficon-info"></i> {{ctrl.confirmationMessage}}</h3>
+    <div class="row">
+      <div class="col-xs-1 confirm-modal-body-icon">
+        <span class="pficon pficon-info"></span>
+      </div>
+      <div class="col-xs-11 modal-body-text">
+        <h3>{{ctrl.confirmationMessage}}</h3>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button id="cancel.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>

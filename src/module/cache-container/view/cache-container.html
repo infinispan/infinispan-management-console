@@ -38,6 +38,8 @@
       </div>
       <h1><span class="label"
                 ng-class="ctrl.container.available ? 'label-success' : 'label-danger'">
+            <span ng-if="ctrl.container.available" class="pficon-ok"></span>
+            <span ng-if="!ctrl.container.available" class="pficon-error-circle-o"></span>
         {{ctrl.getAvailability()}}
       </span>&nbsp;{{ctrl.name}}
         <span ng-if="!ctrl.isRebalancingEnabled" id-generator="rebalancing_disabled"> - <small

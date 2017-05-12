@@ -24,9 +24,15 @@
           <li role="presentation" ng-class="ctrl.serverInstance.isStopped()?'':'disabled'"><a id-generator="dropdown_menu.remove" role="menuitem" ng-click="ctrl.createRemoveModal()" translate>REMOVE</a></li>
         </ul>
       </div>
-      <h1><span class="label" ng-class="{'label-success':ctrl.serverInstance.isRunning(),
-                                         'label-warning':ctrl.serverInstance.isRestartRequired() || ctrl.serverInstance.isReloadRequired(),
-                                         'label-danger':ctrl.serverInstance.isStopped()}">{{ctrl.serverInstance.state.toUpperCase()}}</span> {{ctrl.serverInstance.address.name}}
+      <h1>
+        <span class="label" ng-class="{'label-success':ctrl.serverInstance.isRunning(),
+                                      'label-warning':ctrl.serverInstance.isRestartRequired() || ctrl.serverInstance.isReloadRequired(),
+                                      'label-danger':ctrl.serverInstance.isStopped()}">
+          <span ng-if="ctrl.serverInstance.isRunning()" class="pficon-ok"></span>
+          <span ng-if="ctrl.serverInstance.isRestartRequired() || ctrl.serverInstance.isReloadRequired()" class="pficon-warning-triangle-o"></span>
+          <span ng-if="ctrl.serverInstance.isStopped()" class="pficon-error-circle-o"></span>
+          {{ctrl.serverInstance.state.toUpperCase()}}
+        </span> {{ctrl.serverInstance.address.name}}
         <span ng-show="ctrl.isCoordinator()">(coordinator) </span><small>IP: {{ctrl.serverInstance.inetAddress}} - {{ctrl.nodeStats['number-of-entries']}} entries</small>
       </h1>
     </div>
@@ -104,58 +110,112 @@
       </div>
       <!-- END CARD -->
 
-      <div class="col-xs-6 col-sm-6 col-md-6" id-generator="perf_metrics">
+      <div class="col-xs-8 col-sm-8 col-md-8" id-generator="perf_metrics">
         <div class="card-pf card-pf-accented ispn-card">
           <div class="card-pf-heading">
             <h2 class="card-pf-title" translate>PERFORMANCE_METRICS</h2>
           </div>
           <div class="card-pf-body" vertilize>
             <div class="row">
-              <div class="col-md-8" ng-show="ctrl.serverInstance.isRunning()">
+              <div class="col-md-4 memory-usage text-center" ng-show="ctrl.serverInstance.isRunning()">
                 <h4>Heap Memory Usage</h4>
-                <div id-generator="perf_metrics.chart" class="chart"></div>
+                <pf-donut-pct-chart config="ctrl.config"
+                    center-label='ctrl.label'
+                    data="ctrl.data"
+                    chart-height="ctrl.chartHeight"></pf-donut-pct-chart>
               </div>
               <div class="col-md-8" ng-show="false">
                 <h4>Node is stopped</h4>
               </div>
-              <div class="col-md-4">
-                <h4>Threads</h4>
-                <table class="col-md-12">
-                  <tr>
-                    <th>Count</th>
-                    <td id-generator="perf_metrics.thread.count">{{ctrl.threadCount}}</td>
-                  </tr>
-                  <tr>
-                    <th>Peak</th>
-                    <td id-generator="perf_metrics.thread.peak">{{ctrl.threadPeakCount}}</td>
-                  </tr>
-                  <tr>
-                    <th>Daemon</th>
-                    <td id-generator="perf_metrics.thread.daemon">{{ctrl.threadDaemonCount}}</td>
-                  </tr>
-                </table>
-                <h4>Direct Buffers</h4>
-                <table class="col-md-12">
-                  <tr>
-                    <th>Count</th>
-                    <td id-generator="perf_metrics.direct_buff.count">{{ctrl.directBufferPoolCount}}</td>
-                  </tr>
-                  <tr>
-                    <th>Memory</th>
-                    <td id-generator="perf_metrics.direct_buff.mem">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
-                  </tr>
-                </table>
-                <h4>Mapped Buffers</h4>
-                <table class="col-md-12">
-                  <tr>
-                    <th>Count</th>
-                    <td id-generator="perf_metrics.mapped_buff.count">{{ctrl.mappedBufferPoolCount}}</td>
-                  </tr>
-                  <tr>
-                    <th>Memory</th>
-                    <td id-generator="perf_metrics.mapped_buff.mem">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</td>
-                  </tr>
-                </table>
+              <div class="col-md-6 memory-info">
+                <div class="row memory-info">
+                  <div class="col-md-12">
+                    <h4>Threads</h4>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Count</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.thread.count">{{ctrl.threadCount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Peak</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.thread.peak">{{ctrl.threadPeakCount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Daemon</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.thread.daemon">{{ctrl.threadDaemonCount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row memory-info">
+                  <div class="col-md-12">
+                    <h4>Direct Buffers</h4>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Count</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.direct_buff.count">{{ctrl.directBufferPoolCount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Memory</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.direct_buff.mem">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-12">
+                    <h4>Mapped Buffers</h4>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Count</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.direct_buff.count">{{ctrl.directBufferPoolCount}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Memory</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.mapped_buff.mem">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>

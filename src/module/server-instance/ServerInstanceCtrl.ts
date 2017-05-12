@@ -24,12 +24,28 @@ export class ServerInstanceCtrl {
   private mappedBufferPoolMemoryUsed: number;
 
   private nodeStats: any;
-  private chart: InstanceMemoryChart;
+  
+  public config: any;
+  public data: any;
+  public chartHeight: any;
+  public label: string;
 
   constructor(private $state: IStateService, private $interval: IIntervalService, private $uibModal: IModalService,
               private serverService: ServerService, private coord: IServerAddress, private serverInstance: IServer,
               private launchType: LaunchTypeService) {
     this.$interval(() => (this.refreshStats()), 500, 1);
+    this.chartHeight = 200;
+    this.label = 'percent';
+    this.data = {
+      dataAvailable: false,
+      used: 0,
+      total: 0
+    };
+    this.config = {
+      chartId: 'heapMemoryStats',
+      units: 'Heap Memory',
+      thresholds: { warning: 60, error: 90 }
+    };
   }
 
   refreshStats(): void {
@@ -41,9 +57,9 @@ export class ServerInstanceCtrl {
   fetchThreadAndMemoryStats(address: IServerAddress): void {
     this.serverService.getServerStats(address).then(response => {
       // memory
-      let memory: any = response.memory["heap-memory-usage"];
-      let used: number = (memory.used / 1024) / 1024;
-      let max: number = (memory.max / 1024) / 1024;
+      const memory: any = response.memory["heap-memory-usage"];
+      const used: number = (memory.used / 1024) / 1024;
+      const max: number = (memory.max / 1024) / 1024;
 
       // threading
       let threading: any = response.threading;
@@ -60,10 +76,11 @@ export class ServerInstanceCtrl {
       this.mappedBufferPoolCount = mappedBufferPool.count;
       this.mappedBufferPoolMemoryUsed = mappedBufferPool["memory-used"];
 
-      if (this.chart) {
-        this.chart.destroy();
-      }
-      this.chart = new InstanceMemoryChart(".chart", used, max);
+      this.data = {
+        dataAvailable: true,
+        used: Math.ceil(used),
+        total: Math.ceil(max)
+      };
     });
   }
 

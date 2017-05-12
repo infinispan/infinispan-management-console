@@ -1,12 +1,11 @@
-<div class="container-fluid">
+<div class="container-fluid containers-nav">
   <div class="row header-row">
     <div class="col-sm-12 col-md-12">
       <ol class="breadcrumb">
         <li>
           <a ui-sref="containers" translate>CACHE_CONTAINERS</a>
         </li>
-        <li>{{ctrl.container.profile}}</li>
-        <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
+        <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">({{ctrl.container.profile}}) {{ctrl.container.name}}</a>
         </li>
         <li class="active"><strong translate>CONFIGURATION</strong></li>
       </ol>

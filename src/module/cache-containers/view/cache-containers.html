@@ -14,12 +14,25 @@
           <th ng-if="!ctrl.isStandaloneLocalMode()" translate>CLUSTERING_INFO</th>
           <th translate>ENDPOINTS</th>
           <th translate>SITES</th>
+          <th translate>ACTIONS</th>
         </tr>
 
         <tr ng-repeat="container in ctrl.containers track by $index">
-          <td><strong><a id-generator="{{ctrl.getContainerId('name', container)}}" href="#/containers/{{container.profile}}/{{container.name}}/caches">{{container.name}}</a></strong></td>
-          <td><span id-generator="{{ctrl.getContainerId('status', container)}}" class="label isCacheAvailable" ng-class="ctrl.getAvailabilityClass(container)">{{ctrl.getAvailability(container)}}</span></td>
-          <td><span id-generator="{{ctrl.getContainerId('total_caches', container)}}" class="numberOfCaches label label-default">{{container.numberOfCaches}}</span></td>
+          <td>
+            <strong>
+              <a id-generator="{{ctrl.getContainerId('name', container)}}" href="#/containers/{{container.profile}}/{{container.name}}/caches">{{container.name}}</a>
+            </strong>
+          </td>
+          <td>
+            <span id-generator="{{ctrl.getContainerId('status', container)}}" class="label isCacheAvailable" ng-class="ctrl.getAvailabilityClass(container)">
+              <span ng-if="ctrl.getAvailabilityClass(container) === 'label-success'" class="pficon-ok"></span>
+              <span ng-if="ctrl.getAvailabilityClass(container) === 'label-danger'" class="pficon-error-circle-o"></span>
+              {{ctrl.getAvailability(container)}}
+            </span>
+          </td>
+          <td>
+            <span id-generator="{{ctrl.getContainerId('total_caches', container)}}" class="numberOfCaches label label-default">{{container.numberOfCaches}}</span>
+          </td>
           <td ng-if="!ctrl.isStandaloneLocalMode()">
             <a id-generator="{{ctrl.getContainerId('cluster', container)}}" class="clusterName" ui-sref="server-group({serverGroup: container.serverGroup.name})">{{container.serverGroup.name}}</a><br>
             <small class="stack">{{ctrl.getDefaultStack(container)}}</small>
@@ -34,21 +47,47 @@
           </td>
           <td id-generator="{{ctrl.getContainerId('sites', container)}}">
             <div id-generator="{{ctrl.getContainerId('sites-online', container)}}"
-                 ng-repeat="site in container['sites-online']"><span class="pficon pficon-ok"></span>{{site}}
+                ng-repeat="site in container['sites-online']">
+              <span class="pficon pficon-ok"></span>
+              {{site}}
             </div>
             <div id-generator="{{ctrl.getContainerId('name', container)}}"
-                 ng-repeat="site in container['sites-mixed']">
+                ng-repeat="site in container['sites-mixed']">
               <span class="pficon pficon-warning-triangle-o"></span> <span class="label label-warning">{{site}}</span>
             </div>
             <div id-generator="{{ctrl.getContainerId('name', container)}}"
-                 ng-repeat="site in container['sites-offline']">
+                ng-repeat="site in container['sites-offline']">
               <span class="pficon pficon-error-circle-o"></span> <span class="label label-danger">{{site}}</span>
             </div>
             <div id-generator="{{ctrl.getContainerId('name', container)}}" ng-if="ctrl.isSitesEmpty(container)">N/A</div>
           </td>
+          <td id-generator="{{ctrl.getContainerId('actions', container)}}">
+            <span class="dropdown  dropdown-kebab-pf">
+              <button class="btn btn-link dropdown-toggle" type="button" id="cache-list-dropdown-actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul ng-if="!ctrl.isLocalMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                <li role="presentation" ng-class="ctrl.rebalancingStatuses[$index].status ? 'disabled' : 'enabled'">
+                  <a id="enable_rebalance.button" role="menuitem"
+                    ng-click="ctrl.enableContainerRebalance(container)"
+                    translate>ENABLE_REBALANCING</a>
+                </li>
+                <li role="presentation" ng-class="ctrl.rebalancingStatuses[$index].status ? 'enabled'  : 'disabled'">
+                  <a id="disable_rebalance.button" role="menuitem"
+                    ng-click="ctrl.disableContainerRebalance(container)"
+                    translate>DISABLE_REBALANCING</a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation">
+                  <a id="sites.button" role="menuitem" ng-click="ctrl.createSiteModal(container)" translate>MANAGE_BACKUP_SITES</a>
+                </li>
+              </ul>
+            </span>
+          </td>
         </tr>
       </table>
     </div>
+
     <div id-generator="events" class="pre-scrollable col-sm-4 col-md-3 sidebar-pf sidebar-pf-right" style="min-height: 923px;">
       <div class="sidebar-header sidebar-header-bleed-left sidebar-header-bleed-right">
         <h2 class="h5" translate>LATEST_GRID_EVENTS</h2>

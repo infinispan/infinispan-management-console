@@ -45,45 +45,54 @@
              tooltip-placement="top"></i>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-md-3 control-label">JVM options:</label>
-      </div>
-      <div class="form-group">
-        <div class="col-md-12">
-          <div class="row">
-            <div class="col-sm-3 text-right">Stack:</div>
-            <div class="col-sm-9"><input id-generator="add.stack" type="text" class="form-control" placeholder="Stack"></div>
+
+      <collapsible>
+
+        <span translate>JVM options</span>
+        
+        <div>
+          <div class="form-group">
+            <label class="col-md-3 control-label">JVM options:</label>
           </div>
-          <div class="row" style="padding-top:4px">
-            <div class="col-sm-3 text-right">Heap:</div>
-            <div class="col-sm-9"><input id-generator="add.heap" type="text" class="form-control" placeholder="Heap"></div>
-          </div>
-          <div class="row" style="padding-top:4px">
-            <div class="col-sm-3 text-right">Agent
-              lib:
+          <div class="form-group">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-sm-3 text-right">Stack:</div>
+                <div class="col-sm-9"><input id-generator="add.stack" type="text" class="form-control" placeholder="Stack"></div>
+              </div>
+              <div class="row" style="padding-top:4px">
+                <div class="col-sm-3 text-right">Heap:</div>
+                <div class="col-sm-9"><input id-generator="add.heap" type="text" class="form-control" placeholder="Heap"></div>
+              </div>
+              <div class="row" style="padding-top:4px">
+                <div class="col-sm-3 text-right">Agent
+                  lib:
+                </div>
+                <div class="col-sm-9"><input id-generator="add.agent_lib" type="text" class="form-control" placeholder="Agent lib"></div>
+              </div>
+              <div class="row" style="padding-top:4px">
+                <div class="col-sm-3 text-right">Agent
+                  path:
+                </div>
+                <div class="col-sm-9"><input id-generator="add.agent_path" type="text" class="form-control" placeholder="Agent path"></div>
+              </div>
+              <div class="row" style="padding-top:4px">
+                <div class="col-sm-3 text-right">JVM
+                  options:
+                </div>
+                <div class="col-sm-9"><input id-generator="add.jvm_opts" type="text" class="form-control" placeholder="JVM options"></div>
+              </div>
+              <div class="row" style="padding-top:4px">
+                <div class="col-sm-3 text-right">System
+                  properties:
+                </div>
+                <div class="col-sm-9"><input id-generator="add.sys_props" type="text" class="form-control" placeholder="System properties"></div>
+              </div>
             </div>
-            <div class="col-sm-9"><input id-generator="add.agent_lib" type="text" class="form-control" placeholder="Agent lib"></div>
-          </div>
-          <div class="row" style="padding-top:4px">
-            <div class="col-sm-3 text-right">Agent
-              path:
-            </div>
-            <div class="col-sm-9"><input id-generator="add.agent_path" type="text" class="form-control" placeholder="Agent path"></div>
-          </div>
-          <div class="row" style="padding-top:4px">
-            <div class="col-sm-3 text-right">JVM
-              options:
-            </div>
-            <div class="col-sm-9"><input id-generator="add.jvm_opts" type="text" class="form-control" placeholder="JVM options"></div>
-          </div>
-          <div class="row" style="padding-top:4px">
-            <div class="col-sm-3 text-right">System
-              properties:
-            </div>
-            <div class="col-sm-9"><input id-generator="add.sys_props" type="text" class="form-control" placeholder="System properties"></div>
           </div>
         </div>
-      </div>
+
+      </collapsible>
     </form>
   </div>
   <div class="modal-footer">

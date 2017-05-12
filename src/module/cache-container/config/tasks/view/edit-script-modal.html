@@ -10,7 +10,8 @@
 
     <form class="form-horizontal" name="taskForm">
 
-      <!--------------------------------------------------------------------------------------------------------------->
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
+
       <div class="form-group">
         <label class="col-md-3 control-label">* <span translate>TASK_NAME</span>:</label>
 
@@ -20,10 +21,13 @@
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" uib-tooltip="Name of the script task" tooltip-animation="true"
-             tooltip-placement="left-bottom"></i>
+              tooltip-placement="left-bottom"></i>
+          </i>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
+
       <div class="form-group" ng-show="!ctrl.editing">
         <label class="col-md-3 control-label">* <span translate>LANGUAGE</span>:</label>
 
@@ -38,19 +42,21 @@
              tooltip-animation="true" tooltip-placement="left-bottom"></i>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
+
       <div class="form-group" ng-show="!ctrl.editing">
         <label class="col-md-3 control-label"><span translate>PARAMETERS</span>:</label>
 
         <div class="col-md-8">
-          <input id-generator="edit.params" class="form-control" type="text" name="taskParameters" ng-model="ctrl.task.parameters" ng-required="false">
+        <input id-generator="edit.params" class="form-control" type="text" name="taskParameters" ng-model="ctrl.task.parameters" ng-required="false">
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" tooltip-animation="true" tooltip-placement="left-bottom"
              uib-tooltip="An array of valid parameter names for this script. Invocations which specify parameter names not included in this list will cause an exception"></i>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+
       <div class="form-group" ng-show="!ctrl.editing">
         <label class="col-md-3 control-label">* <span translate>EXECUTION_MODE</span>:</label>
 
@@ -65,19 +71,23 @@
              tooltip-animation="true" tooltip-placement="left-bottom" uib-tooltip="Script execution mode"></i>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
+
       <div class="form-group" ng-show="!ctrl.editing">
         <label class="col-md-3 control-label"><span translate>SECURITY_ROLE</span>:</label>
 
         <div class="col-md-8">
-          <input id-generator="edit.roles" class="form-control" type="text" name="taskRole" ng-model="ctrl.task.role" ng-required="false">
+        <input id-generator="edit.roles" class="form-control" type="text" name="taskRole" ng-model="ctrl.task.role" ng-required="false">
         </div>
         <div class="col-md-1 pull-left">
           <i class="fa fa-info-circle ng-scope" tooltip-animation="true" tooltip-placement="left-bottom"
              uib-tooltip="A specific role which is required to execute the script"></i>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
+
       <div class="form-group">
         <label class="col-md-3 control-label">* <span translate>SCRIPT_BODY</span>:</label>
 
@@ -85,7 +95,7 @@
           <textarea id-generator="edit.body.text" class="form-control" rows="15" ng-model="ctrl.task.body" name="taskBody" ng-required="true"></textarea>
         </div>
       </div>
-      <!--------------------------------------------------------------------------------------------------------------->
+      <!-- ----------------------------------------------------------------------------------------------------------- -->
 
     </form>
   </div>

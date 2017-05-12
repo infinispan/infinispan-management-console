@@ -1,15 +1,16 @@
 import IModalService = angular.ui.bootstrap.IModalService;
 import {IServerGroup} from "../../../services/server-group/IServerGroup";
 import {IEndpoint} from "../../../services/endpoint/IEndpoint";
-import {AddEndpointModalCtrl} from "./AddEndpointModalCtrl";
 import {isNotNullOrUndefined} from "../../../common/utils/Utils";
+import {ModalService} from "./../../../services/modal/ModalService";
 
 export class EndpointsCtrl {
-  static $inject: string[] = ["$uibModal", "serverGroup", "endpoints"];
+  static $inject: string[] = ["$uibModal", "serverGroup", "endpoints", "modalService"];
 
   constructor(private $uibModal: IModalService,
               private serverGroup: IServerGroup,
-              private endpoints: IEndpoint[]) {
+              private endpoints: IEndpoint[],
+              private modalService: ModalService) {
   }
 
   isMultiTenantRouter(endpoint: IEndpoint): boolean {
@@ -17,15 +18,7 @@ export class EndpointsCtrl {
       endpoint.isMultiTenant();
   }
 
-  createEndpointModal(): void {
-    this.$uibModal.open({
-      templateUrl: "module/server-group/endpoints/view/add-endpoint-modal.html",
-      controller: AddEndpointModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        serverGroup: this.serverGroup
-      }
-    });
+  createEndpointAndEdit(type: string): void {
+    this.modalService.openEndpointModal(`${type}-connector`, this.serverGroup.name);
   }
-
 }

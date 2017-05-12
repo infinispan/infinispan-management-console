@@ -11,26 +11,66 @@
           <th translate>NAME</th>
           <th translate>STATUS</th>
           <th translate>NUMBER_OF_HOSTS</th>
-          <th translate>NUMBER_OF_NODES</span>
-          </th>
+          <th translate>NUMBER_OF_NODES</th>
+          <th translate>ACTIONS</th>
         </tr>
 
         <tr ng-repeat="serverGroup in ctrl.serverGroups track by $index">
           <td>
             <strong>
               <a class="clusterName" id-generator="{{serverGroup.name}}.name"
-                 ui-sref="server-group({serverGroup: serverGroup.name})">{{serverGroup.name}}
+                  ui-sref="server-group({serverGroup: serverGroup.name})">
+                {{serverGroup.name}}
               </a>
             </strong>
           </td>
-          <td><span class="label clusterStatus" id-generator="{{serverGroup.name}}.status"
-                    ng-class="{'label-success':ctrl.isInStartedState(serverGroup),
-                               'label-warning':ctrl.isInRestartRequiredState(serverGroup) || ctrl.isInReloadRequiredState(serverGroup),
-                               'label-danger':ctrl.isInOtherState(serverGroup)}">{{ctrl.getSGStatus(serverGroup)}}</span>
+
+          <td>
+            <span class="label cluster-status" id-generator="{{serverGroup.name}}.status"
+                ng-class="{'label-success':ctrl.isInStartedState(serverGroup),
+                          'label-warning':ctrl.isInRestartRequiredState(serverGroup) || ctrl.isInReloadRequiredState(serverGroup),
+                          'label-danger':ctrl.isInOtherState(serverGroup)}">
+              <span ng-if="ctrl.isInStartedState(serverGroup)" class="pficon-ok"></span>
+              <span ng-if="ctrl.isInRestartRequiredState(serverGroup) || ctrl.isInReloadRequiredState(serverGroup)" class="pficon-warning-triangle-o"></span>
+              <span ng-if="ctrl.isInOtherState(serverGroup)" class="pficon-error-circle-o"></span>
+              {{ctrl.getSGStatus(serverGroup)}}
+            </span>
           </td>
-          <td style="padding: 10px"><span class="label label-default clusterHostCount" id-generator="{{serverGroup.name}}.hosts">{{ctrl.getSGHostCount(serverGroup)}}</span>
+
+          <td style="padding: 10px">
+            <span class="label label-default clusterHostCount" id-generator="{{serverGroup.name}}.hosts">
+              {{ctrl.getSGHostCount(serverGroup)}}
+            </span>
           </td>
-          <td style="padding: 10px"><span class="label label-default clusterNodeCount" id-generator="{{serverGroup.name}}.nodes">{{ctrl.getSGServerCount(serverGroup)}}</span>
+
+          <td style="padding: 10px">
+            <span class="label label-default clusterNodeCount" id-generator="{{serverGroup.name}}.nodes">
+              {{ctrl.getSGServerCount(serverGroup)}}
+            </span>
+          </td>
+
+          <td>
+            <span class="dropdown dropdown-kebab-pf">
+              <button class="btn btn-link dropdown-toggle" type="button" id="node-list-dropdown-actions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="node-list-dropdown-actions">
+                <li role="presentation" ng-class="ctrl.isInStoppedState(serverGroup) ? 'enabled' : 'disabled'">
+                  <a id="start.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('start', serverGroup)" translate>START</a>
+                </li>
+
+                <li role="presentation" ng-class="ctrl.isInReloadRequiredState(serverGroup) ? 'enabled' : 'disabled'">
+                  <a id="reload.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('reload', serverGroup)" translate>RELOAD</a>
+                </li>
+                <li role="presentation" ng-class="ctrl.isInRestartRequiredState(serverGroup) ? 'enabled' : 'disabled'">
+                  <a id="restart.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('restart', serverGroup)" translate>RESTART</a>
+                </li>
+
+                <li role="presentation" ng-class="ctrl.isInStartedState(serverGroup) ? 'enabled' : 'disabled'">
+                  <a id="stop.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('stop', serverGroup)" translate>STOP</a>
+                </li>
+              </ul>
+            </span>
           </td>
         </tr>
       </table>

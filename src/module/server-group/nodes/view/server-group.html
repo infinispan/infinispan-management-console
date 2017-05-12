@@ -1,72 +1,116 @@
-<div class="container-fluid">
+<div class="container-fluid nodes">
   <div class="row" vertilize-container>
-    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" class="cache-cards" id-generator="cache_cards_container">
-      <br/>
-
-      <div class="alert alert-info" ng-show="filtered.length < ctrl.serverGroup.members.length">
-        <span class="fa fa-filter"></span> Showing {{filtered.length}} nodes out of {{ctrl.serverGroup.members.length}}
-        total.
-      </div>
-
-      <div ng-if="ctrl.isDomainMode()" class="col-xs-6 col-sm-4 col-md-2">
-        <a id="add.button" data-original-title="Add Node" ng-click="ctrl.createServerModal()"
-           data-toggle="modal"
-           class="add" data-toggle="tooltip" data-placement="top" title="Add Node">
-          <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
-            <h2 class="card-pf-title">Add Node
-            </h2>
-
-            <div style="height: 50px;" class="card-pf-body">
-              <p class="card-pf-aggregate-status-notifications">
-                <span class="card-pf-aggregate-status-notification">
-                    <span class="pficon pficon-add-circle-o"></span>
-                </span>
-              </p>
+    <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2">
+      <!-- NO RESULTS -->
+      <div ng-show="ctrl.filteredMembers.length === 0 && !ctrl.hasFiltersApplied()" translate>THERE_ARE_NO_NODES_TO_SHOW</div>
+      <div class="row no-results" ng-show="ctrl.filteredMembers.length === 0 && ctrl.hasFiltersApplied()">
+        <div class="col-xs-5 col-xs-push-4">
+          <h4 class="no-results__title">There are 0 results based on the filter criteria</h4>
+          <br>
+          <div>
+            <span class="no-results__suggestion">Suggestions</span>
+            <ul class="no-results__list">
+              <li>Make sure all words are spelled correctly.</li>
+              <li>Try different or more general keywords</li>
+            </ul>
+          </div>
+          <br>
+          <br>
+          <div class="row">
+            <div class="col-xs-4 col-xs-push-3">
+              <a href="" class="no-results__clear" ng-click="ctrl.clearFilters()">Clear all filters</span>
             </div>
           </div>
-        </a>
+        </div>
       </div>
-      <div class="col-xs-6 col-sm-4 col-md-2" id-generator="groups"
-           ng-repeat="server in filtered = (ctrl.serverGroup.members | serverFilter:ctrl.serverInetMap:searchNameQuery)"
-           ng-show="true">
-        <a ui-sref="server-instance({
-            serverGroupName:ctrl.serverGroup.name,
-            host:server.host,
-            server:server.name})" title="View Node Details">
-          <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
-            <h2 class="card-pf-title">
-              <span class="pficon" ng-class="{'fa fa-power-off':ctrl.isServerStopped(server),
-              'pficon-warning-triangle-o':(ctrl.isServerInReloadRequired(server) || ctrl.isServerInRestartRequired(server)),
-              'pficon-ok':ctrl.isServerRunning(server)}"></span>{{server.name}}
-            </h2>
+      <!-- NO RESULTS END -->
+      <div class="server-groups" id-generator="server_groups_container">
+        <div class="alert alert-info" ng-show="filteredMembers.length < ctrl.serverGroup.members.length">
+          <span class="fa fa-filter"></span> Showing {{filteredMembers.length}} nodes out of {{ctrl.serverGroup.members.length}}
+          total.
+        </div>
+        <!-- ADD NEW NODE -->
+        <div ng-if="ctrl.isDomainMode() && ctrl.filteredMembers.length > 0" class="col-xs-6 col-sm-4 col-md-3 add-new-node">
+          <a id="add.button"
+              data-original-title="Add Node"
+              ng-click="ctrl.createServerModal()"
+              data-toggle="modal"
+              class="add"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Add Node">
+            <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
+              <h2 class="card-pf-title server-name">
+                Add Node
+              </h2>
 
-            <div class="card-pf-body">
-              <h4 ng-show="ctrl.isDomainMode()">{{server.host}}</h4>
-              <p ng-show="ctrl.isCoordinator(server)" translate>COORDINATOR</p>
-              <p ng-show="!ctrl.isCoordinator(server)">&nbsp;</p>
-              <p class="card-pf-aggregate-status-notifications">
-                <span class="card-pf-aggregate-status-notification">{{ctrl.getServerInetAddress(server)}}</span>
-              </p>
+              <div style="height: 50px;" class="card-pf-body">
+                <p class="card-pf-aggregate-status-notifications">
+                  <span class="card-pf-aggregate-status-notification">
+                      <span class="pficon pficon-add-circle-o"></span>
+                  </span>
+                </p>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
+        <!-- ADD NEW NODE END -->
+
+        <div class="col-xs-6 col-sm-4 col-md-3 node" id-generator="groups"
+            ng-repeat="server in ctrl.filteredMembers">
+            <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
+              <h2 class="card-pf-title">
+                <a ui-sref="server-instance({
+                    serverGroupName:ctrl.serverGroup.name,
+                    host:server.host,
+                    server:server.name})"
+                    title="View Node Details">
+                  <span class="server-name"><span>{{server.name}}</span> <span ng-if="ctrl.isDomainMode()">{{server.host}}</span></span>
+                </a>
+              </h2>
+              <div class="card-pf-body card-pf-body--node">
+                <p>
+                  <div>
+                    <span ng-if="ctrl.isCoordinator(server)" translate>COORDINATOR</span>
+                    <span class="pficon"
+                        ng-if="ctrl.isCoordinator(server)"
+                        ng-class="{'fa fa-power-off':ctrl.isServerStopped(server),
+                        'pficon-warning-triangle-o':(ctrl.isServerInReloadRequired(server) || ctrl.isServerInRestartRequired(server)),
+                        'pficon-ok':ctrl.isServerRunning(server)}">
+                    </span>
+                  </div>
+                  <div class="card-pf-aggregate-status-notification">{{ctrl.getServerInetAddress(server)}}</div>
+                </p>
+              </div>
+            </div>
+        </div>
       </div>
     </div>
 
-    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left">
+    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left full-height">
       <br>
       <small>Quick search:</small>
       <form role="form" class="search-pf has-button">
         <div class="form-group has-clear">
           <div class="search-pf-input-group">
-            <input id-generator="search" type="text" class="form-control" ng-model="searchNameQuery"
-                   placeholder="Type name, IP address, ..." type="search">
-            <button style="display: none;" type="button" class="clear" aria-hidden="true"><span
-              class="pficon pficon-close"></span></button>
+            <input id-generator="search"
+                type="text"
+                class="form-control"
+                ng-model="ctrl.searchNameQuery"
+                ng-change="ctrl.search()"
+                placeholder="Type name, IP address, ..."
+                type="search">
+            <button style="display: none;"
+                type="button"
+                class="clear"
+                aria-hidden="true">
+              <span class="pficon pficon-close"></span>
+            </button>
           </div>
         </div>
         <div class="form-group">
-          <button id="search.button" class="btn btn-default" type="submit"><span class="fa fa-search"></span>
+          <button id="search.button" class="btn btn-default" type="submit" ng-click="ctrl.search()">
+            <span class="fa fa-search"></span>
           </button>
         </div>
       </form>

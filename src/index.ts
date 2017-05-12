@@ -18,6 +18,7 @@ import "./services/server/ServerService";
 import "./services/server-group/ServerGroupService";
 import "./services/socket-binding/SocketBindingService";
 import "./services/standalone/StandaloneService";
+import "./services/modal/ModalService";
 import "./components/cache-loaders/CacheLoaders";
 import "./components/cache-security/CacheSecurity";
 import "./components/cache-stores/CacheStores";
@@ -29,6 +30,7 @@ import "./components/forms/field-info/FieldInfo";
 import "./components/forms/form-group/FormGroup";
 import "./components/memory/Memory";
 import "./components/modals/information/InformationModal";
+import "./components/collapsible/CollapsibleComponent";
 import "./module/auth/Auth";
 import "./module/cache-container/CacheContainer";
 import "./module/cache-container/config/ContainerConfig";
@@ -68,6 +70,7 @@ App.element(document).ready(() => {
     "managementConsole.components.forms.field-info",
     "managementConsole.components.forms.form-group",
     "managementConsole.components.modals.information",
+    "managementConsole.components.collapsible",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
     "managementConsole.services.cache-config",
@@ -86,6 +89,7 @@ App.element(document).ready(() => {
     "managementConsole.services.server",
     "managementConsole.services.server-group",
     "managementConsole.services.socket-binding",
-    "managementConsole.services.standalone"
+    "managementConsole.services.standalone",
+    "managementConsole.services.modal"
   ]);
 });

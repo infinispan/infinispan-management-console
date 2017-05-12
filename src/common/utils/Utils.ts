@@ -132,7 +132,7 @@ export function convertCacheAttributeIntoFieldName(attribute: string): string {
   });
 }
 
-export function traverse(obj: any, callback: Function, trail?: any[]): void {
+export function traverse(obj: any = {}, callback: Function, trail?: any[]): void {
   trail = trail || [];
   Object.keys(obj).forEach((key) => {
     var value: any = obj[key];

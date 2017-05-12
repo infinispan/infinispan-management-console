@@ -4,3 +4,26 @@
 .unavailable {
   color: red;
 }
+.white-icon {
+  color: white;
+  font-size: smaller;
+}
+.label.cluster-status, .label {
+  margin-right: .3em;
+
+  &.label-success {
+    .pficon-ok::before {
+      &:extend(.white-icon);
+    }
+  }
+  &.label-warning {
+    .pficon-warning-triangle-o::before {
+      &:extend(.white-icon);
+    }
+  }
+  &.label-danger {
+    .pficon-error-circle-o::before {
+      &:extend(.white-icon);
+    }
+  }
+}

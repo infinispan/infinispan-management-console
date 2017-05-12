@@ -1,0 +1,14 @@
+<fieldset class="fields-section-pf" id="collapsible-content">
+  <!-- COLLAPSIBLE TITLE LINK -->
+  <legend class="fields-section-header-pf">
+    <span class="fa fa-angle-right field-section-toggle-pf" ng-class="{'fa-angle-down': !$ctrl.optionsOpen, 'fa-angle-up': $ctrl.optionsOpen}"></span>
+    <a href="" class="field-section-toggle-pf" ng-click="$ctrl.toggleOptions()">
+      <span ng-transclude='title'></span>
+    </a>
+  </legend>
+  <!-- COLLAPSIBLE TITLE LINK END -->
+
+  <!-- MAIN COLLAPSIBLE CONTENT -->
+  <div ng-show="$ctrl.optionsOpen" ng-transclude="content"></div>
+  <!-- MAIN COLLAPSIBLE CONTENT END -->
+</fieldset>

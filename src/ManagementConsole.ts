@@ -14,6 +14,8 @@ import "angular-local-storage";
 import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
+import "c3/c3.js";
+import "d3/d3.js";
 import "patternfly/dist/js/patternfly.js";
 import "angular-translate";
 import "angular-translate-loader-static-files";
@@ -48,7 +50,8 @@ const module: ng.IModule = angular.module("managementConsole", [
   "pascalprecht.translate",
   "ngSanitize",
   "dndLists",
-  "patternfly"
+  "patternfly",
+  "patternfly.charts"
 ]);
 
 // @ngInject

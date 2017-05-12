@@ -53,6 +53,7 @@
     "node": ">=5.6.0"
   },
   "scripts": {
+    "start": "gulp serve --watch-ts --watch-less",
     "test": "gulp test",
     "postinstall": "jspm install && typings install && webdriver-manager update"
   },

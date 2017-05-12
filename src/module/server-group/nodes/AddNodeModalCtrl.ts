@@ -9,6 +9,8 @@ export class AddNodeModalCtrl {
   serverName: string = "";
   portOffset: number = 0;
 
+  optionsOpen: boolean = false;
+
   constructor(private $uibModalInstance: IModalServiceInstance, public hosts: string[]) {
     this.host = hosts[0];
   }
@@ -18,5 +20,9 @@ export class AddNodeModalCtrl {
       address: new ServerAddress(this.host, this.serverName),
       portOffset: this.portOffset
     });
+  }
+
+  toggleOptions(): void {
+    this.optionsOpen = !this.optionsOpen;
   }
 }

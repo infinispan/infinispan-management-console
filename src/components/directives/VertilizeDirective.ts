@@ -35,7 +35,7 @@ export class VertilizeDirective implements IDirective {
         });
       element.after(clone);
       var realHeight: number = clone.height();
-      clone["remove"]();
+      clone.remove();
       return realHeight;
     }, (myNewHeight, myOldHeight) => {
       if (myNewHeight) {

@@ -5,17 +5,26 @@ import {LaunchTypeService} from "../launchtype/LaunchTypeService";
 import {INewServerInstance} from "./INewServerInstance";
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {IServer} from "../server/IServer";
-import {Server, SERVER_STATE_STOPPED} from "../server/Server";
+import {
+  Server,
+  SERVER_STATE_STOPPED,
+} from "../server/Server";
 import {StandaloneService} from "../standalone/StandaloneService";
 import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
+import IModalService = angular.ui.bootstrap.IModalService;
+import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
+import {BootingModalCtrl} from "./../../module/server-group/BootingModalCtrl";
 
 const module: ng.IModule = App.module("managementConsole.services.server", []);
 
 export class ServerService {
 
-  static $inject: string[] = ["$q", "dmrService", "launchType"];
+  static $inject: string[] = ["$q", "dmrService", "launchType", "$uibModal"];
 
-  constructor(private $q: ng.IQService, private dmrService: DmrService, private launchType: LaunchTypeService) {
+  constructor(private $q: ng.IQService,
+              private dmrService: DmrService,
+              private launchType: LaunchTypeService,
+              private $uibModal: IModalService) {
   }
 
   createServer(server: INewServerInstance): ng.IPromise<void> {
@@ -184,6 +193,42 @@ export class ServerService {
     return deferred.promise;
   }
 
+  areAllServersInServerGroupInState(state: String, statuses: String[]): boolean {
+    return statuses.every((serverStatus: String) => {
+      return serverStatus === state;
+    });
+  }
+
+  isAtLeastOneServerInServerGroupInState(state: string, statuses: String[]): boolean {
+    return statuses.indexOf(state) > -1;
+  }
+
+  createStoppingModal(): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/nodes/view/stopping-modal.html"
+    });
+  }
+
+  createBootingModal(operation: string, serverGroupName: string): IModalServiceInstance {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/nodes/view/booting-modal.html",
+      controller: BootingModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        operation: (): string => {
+          return operation;
+        },
+        clusterName: (): string => {
+          return serverGroupName;
+        }
+      }
+    });
+  }
+
+  refresh(): ng.IPromise<any> {
+    return this.$q.when(this.dmrService.clearGetCache());
+  }
+
   private generateAddress(server: IServerAddress): string[] {
     return this.launchType.getRuntimePath(server);
   }
@@ -206,7 +251,6 @@ export class ServerService {
     }
     return deferred.promise;
   }
-
 }
 
 module.service("serverService", ServerService);

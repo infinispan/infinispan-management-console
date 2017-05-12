@@ -1,89 +1,129 @@
-<div class="row" vertilize-container>
+<div class="row cache" vertilize-container>
   <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2 cache-cards" id-generator="cache_cards_container">
     <br/>
+    <div class="row">
+      <div class="alert alert-info" ng-show="filtered.length < $ctrl.caches.length">
+        <span class="fa fa-filter"></span> Showing {{filtered.length}} caches out of {{$ctrl.caches.length}} total.
+      </div>
 
-    <div class="alert alert-info" ng-show="filtered.length < cachesCtrl.caches.length">
-      <span class="fa fa-filter"></span> Showing {{filtered.length}} caches out of {{cachesCtrl.caches.length}} total.
-    </div>
+      <!-- NO RESULTS -->
+      <div ng-show="$ctrl.caches.length === 0" translate>THERE_ARE_NO_CACHES_TO_SHOW</div>
+      <div class="row no-results" ng-show="$ctrl.filteredCaches.length === 0 && $ctrl.hasFiltersApplied()">
+        <div class="col-xs-5 col-xs-push-4">
+          <h4 class="no-results__title">There are 0 results based on the filter criteria</h4>
+          <br>
+          <div>
+            <span class="no-results__suggestion">Suggestions</span>
+            <ul class="no-results__list">
+              <li>Make sure all words are spelled correctly.</li>
+              <li>Try different or more general keywords</li>
+            </ul>
+          </div>
+          <br>
+          <br>
+          <div class="row">
+            <div class="col-xs-4 col-xs-push-3">
+              <a href="" class="no-results__clear" ng-click="$ctrl.clearFilters()">Clear all filters</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- NO RESULTS END -->
 
-    <div class="col-xs-6 col-sm-4 col-md-2" id-generator="add">
-      <a data-original-title="Add Cache" data-toggle="modal" ng-click="cachesCtrl.createCache()"
-         class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
-          <h2 class="card-pf-title">Add Cache
-          </h2>
-          <div style="height: 50px;" class="card-pf-body">
-            <p class="card-pf-aggregate-status-notifications">
+      <!-- CACHE ARRAY -->
+      <div class="col-sm-9 col-md-10">
+        <div class="row">
+          <!-- ADD NEW CACHE -->
+          <div class="col-xs-6 col-sm-4 col-md-3 cache-card-new" id-generator="add" ng-hide="$ctrl.filteredCaches.length === 0">
+            <a data-original-title="Add Cache" data-toggle="modal" ng-click="$ctrl.createCache()"
+              class="add" data-toggle="tooltip" data-placement="top" title="Add Cache">
+              <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
+                <h2 class="card-pf-title">
+                  Add Cache
+                </h2>
+                <div style="height: 50px;" class="card-pf-body">
+                  <p class="card-pf-aggregate-status-notifications">
+                    <span class="card-pf-aggregate-status-notification">
+                      <span class="pficon pficon-add-circle-o"></span>
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- ADD NEW CACHE END -->
+
+          <!-- CACHES -->
+          <div class="col-xs-6 col-sm-4 col-md-3" id-generator="caches"
+              ng-repeat="cache in $ctrl.filteredCaches">
+              <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action cache-card" vertilize>
+                <h2 class="card-pf-title">
+                  <a
+                    ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: cache.name, cacheType:cache.type})"
+                    title="View Cache Details">
+                    {{cache.name}}
+                  </a>
+                </h2>
+
+                <div class="card-pf-body">
+                  <p>
+                    <span ng-if="cache.isReplicated()" translate>REPLICATED</span>
+                    <span ng-if="cache.isDistributed()" translate>DISTRIBUTED</span>
+                    <span ng-if="cache.isLocal()" translate>LOCAL</span>
+                    <span ng-if="cache.isInvalidation()" translate>INVALIDATION</span>
+                    <span class="pficon"
+                        ng-class="{'pficon-help':!$ctrl.isStatusAvailable(cache),
+                        'pficon-ok':$ctrl.isAvailableAndEnabled(cache),
+                        'pficon-warning-triangle-o':$ctrl.isStatusAvailable(cache) && !$ctrl.isAvailableAndEnabled(cache)}">
+                    </span>
+                  </p>
+                  <span>
+                    <p class="card-pf-aggregate-status-notifications cache-traits">
                       <span class="card-pf-aggregate-status-notification">
-                          <span class="pficon pficon-add-circle-o"></span>
+                        <span ng-repeat="status in cache.cardStatus.notifications" class="{{status.iconClass}}">
+                        </span>
                       </span>
-            </p>
-          </div>
-        </div>
-      </a>
-    </div>
-    <div ng-show="cachesCtrl.caches.length === 0" translate>THERE_ARE_NO_CACHES_TO_SHOW</div>
-    <div class="col-xs-6 col-sm-4 col-md-2" id-generator="caches"
-         ng-repeat="cache in filtered = (cachesCtrl.caches | filter: {name: searchNameQuery} |
-           cacheTraitFilter: cachesCtrl.traitCheckboxes | cacheTypeFilter: cachesCtrl.typeCheckboxes | cacheStatusFilter: cachesCtrl.statusCheckboxes)">
-      <a
-        ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: cache.name, cacheType:cache.type})"
-        title="View Cache Details">
-        <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
-          <h2 class="card-pf-title">
-            <span class="pficon"
-                  ng-class="{'pficon-help':!cachesCtrl.isStatusAvailable(cache),
-                  'pficon-ok':cachesCtrl.isAvailableAndEnabled(cache),
-                  'pficon-warning-triangle-o':cachesCtrl.isStatusAvailable(cache) && !cachesCtrl.isAvailableAndEnabled(cache)}">
-            </span>{{cache.name}}
-          </h2>
-
-          <div class="card-pf-body">
-            <p ng-if="cache.isReplicated()" translate>REPLICATED</p>
-            <p ng-if="cache.isDistributed()" translate>DISTRIBUTED</p>
-            <p ng-if="cache.isLocal()" translate>LOCAL</p>
-            <p ng-if="cache.isInvalidation()" translate>INVALIDATION</p>
-            <p class="card-pf-aggregate-status-notifications cache-traits">
-                  <span class="card-pf-aggregate-status-notification">
-                      <span class="fa fa-database" title="Persistent" ng-if="cache.isPersistent()"></span>
-                      <span class="fa fa-stack-overflow" title="Bounded" ng-if="cache.isBounded()"></span>
-                      <span class="fa fa-arrow-circle-o-down" title="Transactional"
-                            ng-if="cache.isTransactional()"></span>
-                      <span class="fa fa-lock" title="Secured" ng-if="cache.isSecured()"></span>
-                      <span class="fa fa-list-ol" title="Indexed" ng-if="cache.isIndexed()"></span>
-                      <span class="fa fa-puzzle-piece" title="Compatible" ng-if="cache.hasCompatibility()"></span>
-                      <span class="pficon pficon-history" title="Remotely backed up"
-                            ng-if="cache.hasRemoteBackup()"></span>
+                    </p>
+                    <p ng-if="cache.hasRemoteBackup()" style="height:20px" ng-init="container = ctrl.container">
+                        <span ng-repeat="site in container['sites-offline']"><span
+                          class="pficon pficon-error-circle-o"></span> {{site}} &nbsp;</span>
+                      <span ng-repeat="site in container['sites-mixed']"><span
+                        class="pficon pficon-warning-triangle-o"></span> {{site}} &nbsp;</span>
+                      <span ng-repeat="site in container['sites-online']"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
+                    </p>
                   </span>
-            </p>
-            <p ng-if="cache.hasRemoteBackup()" style="height:20px" ng-init="container = ctrl.container">
-                <span ng-repeat="site in container['sites-offline']"><span
-                  class="pficon pficon-error-circle-o"></span> {{site}} &nbsp;</span>
-              <span ng-repeat="site in container['sites-mixed']"><span
-                class="pficon pficon-warning-triangle-o"></span> {{site}} &nbsp;</span>
-              <span ng-repeat="site in container['sites-online']"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
-            </p>
+                </div>
+              </div>
           </div>
+          <!-- CACHES END -->
         </div>
-      </a>
+      </div>
     </div>
   </div>
 
-  <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left">
+  <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left full-height">
     <br>
     <small>Quick search:</small>
     <form role="form" class="search-pf has-button">
       <div class="form-group has-clear">
         <div class="search-pf-input-group">
-          <input class="form-control" id-generator="cache"  ng-model="searchNameQuery"
-                 placeholder="Type name, data center, ..."
-                 type="search" id-generator="cache">
-          <button style="display: none;" type="button" class="clear" aria-hidden="true"><span
-            class="pficon pficon-close"></span></button>
+          <input class="form-control"
+              id-generator="cache"
+              ng-model="$ctrl.searchNameQuery"
+              ng-change="$ctrl.search()"
+              placeholder="Type name, data center, ..."
+              type="search">
+          <button style="display: none;"
+              type="button"
+              class="clear"
+              aria-hidden="true">
+            <span class="pficon pficon-close"></span>
+          </button>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-default" id="search-cache.button"  type="submit"><span class="fa fa-search"></span>
+        <button class="btn btn-default" id="search-cache.button"  type="submit">
+          <span class="fa fa-search"></span>
         </button>
       </div>
     </form>
@@ -93,22 +133,30 @@
         <div class="panel-heading">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#filter-type-accordion"
-               ng-click="cachesCtrl.isCollapsedType = !cachesCtrl.isCollapsedType" class="collapsed">
+               ng-click="$ctrl.isCollapsedType = !$ctrl.isCollapsedType" class="collapsed">
               Type
             </a>
           </h4>
         </div>
-        <div id-generator="filter-type-accordian" class="panel-collapse" ng-class="cachesCtrl.isCollapsedType? 'collapse' : ''">
+        <div id-generator="filter-type-accordian" class="panel-collapse" ng-class="$ctrl.isCollapsedType? 'collapse' : ''">
           <div class="panel-body">
             <fieldset>
-              <label><input type="checkbox" id-generator="type" value="local"
-                            ng-model="cachesCtrl.typeCheckboxes.local"/> <span translate> LOCAL</span></label>
-              <label><input type="checkbox" id-generator="type" value="replicated"
-                            ng-model="cachesCtrl.typeCheckboxes.replicated"/> <span translate> REPLICATED</span></label>
-              <label><input type="checkbox" id-generator="type" value="distributed"
-                            ng-model="cachesCtrl.typeCheckboxes.distributed"/> <span translate> DISTRIBUTED</span></label>
-              <label><input type="checkbox" id-generator="type" value="invalidation"
-                            ng-model="cachesCtrl.typeCheckboxes.invalidation"/> <span translate> INVALIDATION</span></label>
+              <label>
+                <input type="checkbox" id-generator="type" value="local" ng-model="$ctrl.typeCheckboxes.local" ng-click="$ctrl.search()"/> 
+                <span translate> LOCAL</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="type" value="replicated" ng-model="$ctrl.typeCheckboxes.replicated" ng-click="$ctrl.search()"/>
+                <span translate> REPLICATED</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="type" value="distributed" ng-model="$ctrl.typeCheckboxes.distributed" ng-click="$ctrl.search()"/>
+                <span translate> DISTRIBUTED</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="type" value="invalidation" ng-model="$ctrl.typeCheckboxes.invalidation" ng-click="$ctrl.search()"/>
+                <span translate> INVALIDATION</span>
+              </label>
             </fieldset>
           </div>
         </div>
@@ -117,40 +165,50 @@
         <div class="panel-heading">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#filter-trait-accordion"
-               ng-click="cachesCtrl.isCollapsedTrait = !cachesCtrl.isCollapsedTrait"
+               ng-click="$ctrl.isCollapsedTrait = !$ctrl.isCollapsedTrait"
                class="collapsed">
               Trait
             </a>
           </h4>
         </div>
-        <div id-generator="filter-trait-accordion" class="panel-collapse" ng-class="cachesCtrl.isCollapsedTrait?'collapse':''">
+        <div id-generator="filter-trait-accordion" class="panel-collapse" ng-class="$ctrl.isCollapsedTrait?'collapse':''">
           <div class="panel-body">
             <fieldset>
-              <label><input type="checkbox" id-generator="trait" value="bounded"
-                            ng-model="cachesCtrl.traitCheckboxes.bounded"/> <span class="fa fa-stack-overflow"
-                                                                            title="Bounded"></span> <span translate>BOUNDED</span></label>
-              <label><input type="checkbox" id-generator="trait" value="compatible"
-                            ng-model="cachesCtrl.traitCheckboxes.compatible"/> <span class="fa fa-puzzle-piece"
-                                                                               title="Compatible"></span> <span
-                translate>COMPATIBLE</span></label>
-              <label><input type="checkbox" id-generator="trait" value="indexed"
-                            ng-model="cachesCtrl.traitCheckboxes.indexed"/> <span class="fa fa-list-ol"
-                                                                            title="Indexed"></span> <span translate>INDEXED</span></label>
-              <label><input type="checkbox" id-generator="trait" value="persistent"
-                            ng-model="cachesCtrl.traitCheckboxes.persistent"/> <span class="fa fa-database"
-                                                                               title="Persistent"></span> <span
-                translate>PERSISTENT</span></label>
-              <label><input type="checkbox" id-generator="trait" value="remotebackup"
-                            ng-model="cachesCtrl.traitCheckboxes.remotebackup"/> <span class="pficon pficon-history"
-                                                                                 title="Remote backup"></span> <span
-                translate>REMOTE_BACKUP</span></label>
-              <label><input type="checkbox" id-generator="trait" value="secure"
-                            ng-model="cachesCtrl.traitCheckboxes.secure"/> <span class="fa fa-lock" title="Indexed"></span>
-                <span translate>SECURE</span></label>
-              <label><input type="checkbox" id-generator="trait" value="transactional"
-                            ng-model="cachesCtrl.traitCheckboxes.transactional"/> <span class="fa fa-arrow-circle-o-down"
-                                                                                  title="Transactional"></span> <span
-                translate>TRANSACTIONAL</span></label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="bounded" ng-model="$ctrl.traitCheckboxes.bounded" ng-click="$ctrl.search()"/>
+                <span class="fa fa-stack-overflow" title="Bounded"></span>
+                <span translate>BOUNDED</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="compatible" ng-model="$ctrl.traitCheckboxes.compatible" ng-click="$ctrl.search()"/>
+                <span class="fa fa-puzzle-piece" title="Compatible"></span>
+                <span translate>COMPATIBLE</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="indexed" ng-model="$ctrl.traitCheckboxes.indexed" ng-click="$ctrl.search()"/>
+                <span class="fa fa-list-ol" title="Indexed"></span>
+                <span translate>INDEXED</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="persistent" ng-model="$ctrl.traitCheckboxes.persistent" ng-click="$ctrl.search()"/>
+                <span class="fa fa-database" title="Persistent"></span>
+                <span translate>PERSISTENT</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="remotebackup" ng-model="$ctrl.traitCheckboxes.remotebackup" ng-click="$ctrl.search()"/>
+                <span class="pficon pficon-history" title="Remote backup"></span>
+                <span translate>REMOTE_BACKUP</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="secure" ng-model="$ctrl.traitCheckboxes.secure" ng-click="$ctrl.search()"/>
+                <span class="fa fa-lock" title="Indexed"></span>
+                <span translate>SECURE</span>
+              </label>
+              <label>
+                <input type="checkbox" id-generator="trait" value="transactional" ng-model="$ctrl.traitCheckboxes.transactional" ng-click="$ctrl.search()"/>
+                <span class="fa fa-arrow-circle-o-down" title="Transactional"></span>
+                <span translate>TRANSACTIONAL</span>
+              </label>
             </fieldset>
           </div>
         </div>
@@ -159,23 +217,31 @@
         <div class="panel-heading">
           <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#filter-status-accordion"
-               ng-click="cachesCtrl.isCollapsedStatus = !cachesCtrl.isCollapsedStatus"
+               ng-click="$ctrl.isCollapsedStatus = !$ctrl.isCollapsedStatus"
                class="collapsed">
               Status
             </a>
           </h4>
         </div>
-        <div id-generator="filter-status-accordion" class="panel-collapse" ng-class="cachesCtrl.isCollapsedStatus?'collapse':''">
+        <div id-generator="filter-status-accordion" class="panel-collapse" ng-class="$ctrl.isCollapsedStatus?'collapse':''">
           <div class="panel-body">
             <fieldset>
-              <label><input type="checkbox" id-generator="status" value="indexing"
-                            ng-model="cachesCtrl.statusCheckboxes.indexing"/> Indexing</label>
-              <label><input type="checkbox" id-generator="status" value="maintenance"
-                            ng-model="cachesCtrl.statusCheckboxes.offline"/> Offline</label>
-              <label><input type="checkbox" id-generator="status" value="rebalancing"
-                            ng-model="cachesCtrl.statusCheckboxes.rebalancing"/> Rebalancing</label>
-              <label><input type="checkbox" id-generator="status" value="splitbrain"
-                            ng-model="cachesCtrl.statusCheckboxes.splitbrain"/> Split</label>
+              <label>
+                <input type="checkbox" id-generator="status" value="indexing" ng-model="$ctrl.statusCheckboxes.indexing" ng-click="$ctrl.search()"/>
+                Indexing
+              </label>
+              <label>
+                <input type="checkbox" id-generator="status" value="maintenance" ng-model="$ctrl.statusCheckboxes.offline" ng-click="$ctrl.search()"/>
+                Offline
+              </label>
+              <label>
+                <input type="checkbox" id-generator="status" value="rebalancing" ng-model="$ctrl.statusCheckboxes.rebalancing" ng-click="$ctrl.search()"/>
+                Rebalancing
+              </label>
+              <label>
+                <input type="checkbox" id-generator="status" value="splitbrain" ng-model="$ctrl.statusCheckboxes.splitbrain" ng-click="$ctrl.search()"/>
+                Split
+              </label>
             </fieldset>
           </div>
         </div>

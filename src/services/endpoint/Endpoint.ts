@@ -18,7 +18,7 @@ export class Endpoint implements IEndpoint {
       "tcp-nodelay": data["tcp-nodelay"],
       "send-buffer-size": data["end-buffer-size"],
       "receive-buffer-size": data["receive-buffer-size"],
-      "socket-binding": undefined
+      "socket-binding": data["socket-binding"]
     };
     // if we have data from DMR then copy the given name value to data name
     if (isNotNullOrUndefined(this.data)) {

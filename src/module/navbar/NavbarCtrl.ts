@@ -10,6 +10,7 @@ export class NavbarCtrl {
   brandImage: string = BRAND_IMAGE;
   showNavbar: boolean;
   stateChanging: boolean;
+  states: any[];
 
   constructor(private $scope: ng.IScope,
               private $state: IStateService,
@@ -18,8 +19,17 @@ export class NavbarCtrl {
               public user: string) {
     this.stateChanging = false;
     this.showNavbar = true;
+    this.states = [
+      { name: "container", active: false },
+      { name: "server-group", active: false },
+      { name: "event", active: false }
+    ];
+
     $scope.$on("$stateChangeStart", () => this.stateChanging = true);
-    $scope.$on("$stateChangeSuccess", () => this.stateChanging = false);
+    $scope.$on("$stateChangeSuccess", (event, destinationState) => {
+      this.stateChanging = false;
+      this.changeState(destinationState, this.states);
+    });
   }
 
   isVisible(): boolean {
@@ -37,5 +47,9 @@ export class NavbarCtrl {
 
   isApiAvailable(): boolean {
     return this.authService.isApiAvailable();
+  }
+
+  private changeState(currentState: any, states: any[]): void {
+    states.forEach(state => state.active = currentState.name.includes(state.name));
   }
 }

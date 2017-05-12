@@ -1,6 +1,7 @@
-module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
+module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot, config) => {
   const path = require('path');
   const TS_WATCH_FLAG = '--watch-ts';
+  const LESS_WATCH_FLAG = '--watch-less';
 
   return () => {
     const proxy = require('http-proxy-middleware');
@@ -33,7 +34,6 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
     });
 
     setWatchers(browserSync.reload);
-
     return browserSync;
   };
 
@@ -57,6 +57,17 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
       }
 
       gulp.watch(path.join(watchDir, '**', `*.${fileExtensionToWatch}`), callback);
+
+      if (shouldWatchLess()) {
+        fileExtensionToWatch = 'less';
+        callback = (event) => {
+          require('./less')(gulp, config)();
+          console.info(`LESS file ${event.path} was ${event.type}, running compilation...`);
+          reloadCallback();
+        }
+        gulp.watch(path.join(watchDir, '**', `*.${fileExtensionToWatch}`), callback);
+      }
+
     }
 
     console.info(`\n\tWatching TypeScript ${onOffFlag}\n`);
@@ -64,5 +75,9 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot) => {
 
   function shouldWatchTypeScript() {
     return process.argv.slice(3).indexOf(TS_WATCH_FLAG) !== -1;
+  }
+
+  function shouldWatchLess() {
+    return process.argv.some(arg => arg.includes(LESS_WATCH_FLAG));
   }
 };

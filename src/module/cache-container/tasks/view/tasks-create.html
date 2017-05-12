@@ -14,14 +14,19 @@
 
     <div class="alert alert-danger alert-dismissable" ng-if="modalCtrl.errorExecuting">
       <span class="pficon pficon-error-circle-o"></span>
-      <strong>Error</strong> <span translate translate-values="{errorDescription:modalCtrl.errorDescription}">SOME_UNEXPECTED_OUTPUT</span>
+      <strong>Error</strong> <span translate translate-values="{errorDescription:modalCtrl.errorDescription}">
+        SOME_UNEXPECTED_OUTPUT
+      </span>
     </div>
 
     <div class="alert alert-success alert-dismissable" ng-if="modalCtrl.successfulOperation">
       <span class="pficon pficon-ok"></span>
       <strong>Success!</strong> <span translate>TASK_LAUNCH_SUCCESS</span>
-      <span ng-if="modalCtrl.taskOutput">Click to see <a
-        ng-click="modalCtrl.displayOutput = !modalCtrl.displayOutput" class="alert-link">the task output</a>
+      <span ng-if="modalCtrl.taskOutput">
+        Click to see 
+        <a ng-click="modalCtrl.displayOutput = !modalCtrl.displayOutput" class="alert-link">
+          the task output
+        </a>
           <span class="fa fa-angle-down"></span>
         <br>
         <pre ng-if="modalCtrl.displayOutput">{{modalCtrl.taskOutput}}</pre>
@@ -79,39 +84,59 @@
           <i class="fa fa-info-circle ng-scope" uib-tooltip="Where to run the task"></i>
         </div>
       </div>
-
-      <!-------------------------------------->
-      <div class="form-group" ng-repeat="param in modalCtrl.parameters">
-        <label class="col-md-4 control-label">Parameter {{$index + 1}}:</label>
-        <div class="col-md-3">
-          <input ng-model="param.name" class="form-control" type="text" placeholder="Name"
-                 id-generator="create.param.{{$index}}.name">
-        </div>
-        <div class="col-md-3">
-          <input ng-model="param.value" class="form-control" type="text"
-                 placeholder="Value" id-generator="create.param.{{$index + 1}}.value">
-        </div>
-        <div class="col-md-2 pull-left" style="padding-left: 0">
-          <i class="fa fa-info-circle ng-scope" uib-tooltip="Parameter {{$index + 1}}" tooltip-animation="true"
-             tooltip-placement="top"></i>
-        </div>
-      </div>
-
-      <br>
       <div class="form-group">
-        <label class="col-md-2 control-label">&nbsp;</label>
+        <label class="col-md-4 control-label" translate>ASYNCHRONOUS_TASK</label>
         <div class="col-md-8">
-          <input ng-model="modalCtrl.task.async" type="checkbox" id-generator="create.asynch"> &nbsp;&nbsp;<span translate>ASYNCHRONOUS_TASK</span>
+          <input ng-model="modalCtrl.task.async" type="checkbox" id-generator="create.asynch">
         </div>
       </div>
+      <collapsible>
+        <span translate>PARAMS</span>
+        <div>
+          <div class="form-group" ng-repeat="param in modalCtrl.parameters">
+            <label class="col-md-4 control-label">Parameter {{$index + 1}}:</label>
+            <div class="col-md-3">
+              <input ng-model="param.name"
+                  class="form-control"
+                  type="text"
+                  placeholder="Name"
+                  id-generator="create.param.{{$index}}.name"/>
+            </div>
+            <div class="col-md-3">
+              <input ng-model="param.value"
+                  class="form-control"
+                  type="text"
+                  placeholder="Value"
+                  id-generator="create.param.{{$index + 1}}.value"/>
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope"
+                  uib-tooltip="Parameter {{$index + 1}}" 
+                  tooltip-animation="true"
+                  tooltip-placement="top">
+              </i>
+            </div>
+          </div>
+        </div>
+      </collapsible>
 
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" ng-disabled="!taskForm.$valid" class="btn btn-primary" ng-click="modalCtrl.submitTask()"
-            id="submit.button" translate>
+    <button type="button"
+        ng-disabled="!taskForm.$valid"
+        class="btn btn-primary"
+        ng-click="modalCtrl.submitTask()"
+        id="submit.button"
+        translate>
       LAUNCH_TASK
     </button>
-    <button type="button" class="btn btn-default" ng-click="$dismiss()" id="close.button" translate>CLOSE</button>
+    <button type="button"
+        class="btn btn-default"
+        ng-click="$dismiss()"
+        id="close.button"
+        translate>
+      CLOSE
+    </button>
   </div>
 </div>

@@ -2,6 +2,13 @@
 @import 'module/auth/view/login.less';
 @import 'module/cache-containers/view/cache-containers.less';
 @import 'module/server-groups/view/server-groups.less';
+@import 'module/server-instance/view/server-instance.less';
+@import 'module/cache-container/caches/view/caches.less';
+@import 'module/server-group/nodes/view/nodes.less';
+@import 'module/server-group/nodes/view/node-modal.less';
+@import 'module/server-group/endpoints/view/endpoints.less';
+@import 'module/cache-container/config/view/container.less';
+@import 'components/endpoint-configuration/view/endpoint-configuration.less';
 
 // This is needed for UI Bootstrap directives to work correctly with bootstrap css,
 // as stated on UI Bootstrap webpage.
@@ -48,5 +55,35 @@ li.disabled {
 }
 
 li.disabled a {
+  pointer-events: none;
+}
+
+.row--no-padding > [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.padding-left-5 {
+  padding-left: 5px !important;
+}
+
+.loader {
+  margin-top: 50px;
+}
+
+.full-height {
+  @media (min-width: @screen-md-min) {
+    height: 100%;
+    position: absolute !important;
+  }
+}
+
+.dropdown-menu {
+  & > li {
+    cursor: pointer;
+  }
+}
+
+.disabled {
   pointer-events: none;
 }

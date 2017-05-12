@@ -12,7 +12,7 @@ import {isNullOrUndefined, isNotNullOrUndefined} from "../../../common/utils/Uti
 import {ContainerService} from "../../../services/container/ContainerService";
 
 export class CachesCtrl {
-  static $inject: string[] = ["$uibModal", "container", "caches", "templates", "cacheService", "containerService"];
+  static $inject: string[] = ["$uibModal", "container", "caches", "templates", "cacheService", "containerService", "$filter"];
 
   traitCheckboxes: TraitCheckboxes = new TraitCheckboxes();
   typeCheckboxes: TypeCheckboxes = new TypeCheckboxes();
@@ -24,12 +24,16 @@ export class CachesCtrl {
   cacheAvailability: IMap<boolean> = {};
   cacheEnablement: IMap<boolean> = {};
 
+  searchNameQuery: string;
+  filteredCaches: ICache[];
+
   constructor(private $uibModal: IModalService,
               public container: ICacheContainer,
               public caches: ICache[],
               public templates: ITemplate[],
               public cacheService: CacheService,
-              private containerService: ContainerService) {
+              private containerService: ContainerService,
+              public $filter: any) {
 
     // query only distributed and replicated caches (local and invalidation don't have availability attribute)
     let cacheToQuery: ICache [] = [];
@@ -40,6 +44,36 @@ export class CachesCtrl {
         cacheToQuery.push(cache);
       }
     }
+
+    caches.forEach((cache) => {
+      cache.cardStatus = {
+        title: cache.name,
+        href: "#",
+        notifications: [
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-database", false),
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-stack-overflow", cache.isBounded())
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-arrow-circle-o-down", cache.isTransactional())
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-lock", cache.isSecured())
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-list-ol", cache.isIndexed())
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("fa-puzzle-piece", cache.hasCompatibility())
+          },
+          {
+            "iconClass": (this.calculateNotificationClasses)("pficon-history", cache.hasRemoteBackup())
+          }
+        ]
+      };
+    });
 
     this.containerService.cachesAvailability(this.container, cacheToQuery).then(result => {
       let cacheCounter: number = 0;
@@ -69,6 +103,8 @@ export class CachesCtrl {
         }
       }
     );
+
+    this.filteredCaches = this.search();
   }
 
   createCache(): void {
@@ -108,5 +144,51 @@ export class CachesCtrl {
 
   isAvailableAndEnabled(cache: ICache): boolean {
     return this.isEnabled(cache) && this.isAvailable(cache);
+  }
+
+  search(): any {
+    if (!this.hasFiltersApplied()) {
+      return this.filteredCaches = this.caches;
+    } else {
+      const byName: any  = this.$filter("filter")(this.caches, {name: this.searchNameQuery});
+      const byTrait: any = this.$filter("cacheTraitFilter")(byName, this.traitCheckboxes);
+      const byType: any  = this.$filter("cacheTypeFilter")(byTrait, this.typeCheckboxes);
+      const final: any   = this.$filter("cacheStatusFilter")(byType, this.statusCheckboxes);
+      this.filteredCaches = final;
+      return final;
+    }
+  }
+
+  clearFilters(): void {
+    this.resetFilterCheckboxes(this.traitCheckboxes);
+    this.resetFilterCheckboxes(this.typeCheckboxes);
+    this.resetFilterCheckboxes(this.statusCheckboxes);
+    this.filteredCaches = this.caches;
+    this.searchNameQuery = "";
+  }
+
+  hasFiltersApplied(): boolean {
+    return this.searchNameQuery && this.searchNameQuery.length > 0 ||
+        this.checkIfFilterSelected(this.traitCheckboxes) ||
+        this.checkIfFilterSelected(this.typeCheckboxes) ||
+        this.checkIfFilterSelected(this.statusCheckboxes);
+  }
+
+  private truthyCheckForCheckboxes(checkboxType: any): any {
+    return function(prop: any): any {
+      return checkboxType[prop];
+    };
+  }
+
+  private checkIfFilterSelected(filter: any): boolean {
+    return Object.keys(filter).some(this.truthyCheckForCheckboxes(filter));
+  }
+
+  private resetFilterCheckboxes(filter: any): any {
+    return Object.keys(filter).forEach((prop) => filter[prop] = false);
+  }
+
+  private calculateNotificationClasses(notificationClass: String, cacheMethod: Boolean): string {
+    return `fa ${notificationClass} ${cacheMethod ? "black" : "gray"}`;
   }
 }

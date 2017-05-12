@@ -1,8 +1,6 @@
 <div class="container-fluid">
   <div class="row header-row">
     <div class="col-sm-12 col-md-12">
-
-
       <ol class="breadcrumb">
         <li>
           <a ui-sref="containers">Cache containers</a>
@@ -53,7 +51,10 @@
       </div>
 
       <h1><span class="label" id-generator="availability"
-                ng-class="ctrl.isCurrentCacheAvailable() ? 'label-success' : 'label-danger'">{{ctrl.availability}}
+                ng-class="ctrl.isCurrentCacheAvailable() ? 'label-success' : 'label-danger'">
+            <span ng-if="ctrl.isCurrentCacheAvailable()" class="pficon-ok"></span>
+            <span ng-if="!ctrl.isCurrentCacheAvailable()" class="pficon-error-circle-o"></span>
+            {{ctrl.availability}}
       </span>&nbsp;{{ctrl.cache.name}}
         <span ng-if="ctrl.stats['cache-rebalancing-status']=='SUSPENDED'"   class="small"><strong class="label label-danger"> - Rebalancing: SUSPENDED</strong></span>
         <span ng-if="ctrl.stats['cache-rebalancing-status']=='PENDING'"     class="text-warning small"><span class="spinner spinner-xs spinner-inline" title="Rebalancing pending"></span> - Rebalancing: PENDING</span>

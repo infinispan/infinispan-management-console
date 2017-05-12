@@ -17,26 +17,31 @@
         </button>
         <ul ng-if="ctrl.isDomainMode()" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation" ng-class="ctrl.areAllServersInStoppedState() ? 'enabled' : 'disabled'">
-            <a id="start.button" role="menuitem" ng-click="ctrl.createConfirmationModal('start')" translate>START</a>
+            <a id="start.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('start')" translate>START</a>
           </li>
 
           <li role="presentation" ng-class="ctrl.isAtLeastOneServerInReloadRequiredState() ? 'enabled' : 'disabled'">
-            <a id="reload.button" role="menuitem" ng-click="ctrl.createConfirmationModal('reload')" translate>RELOAD</a>
+            <a id="reload.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('reload')" translate>RELOAD</a>
           </li>
           <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRestartRequiredState() ? 'enabled' : 'disabled'">
-            <a id="restart.button" role="menuitem" ng-click="ctrl.createConfirmationModal('restart')" translate>RESTART</a>
+            <a id="restart.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('restart')" translate>RESTART</a>
           </li>
 
           <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'">
-            <a id="stop.button" role="menuitem" ng-click="ctrl.createConfirmationModal('stop')" translate>STOP</a>
+            <a id="stop.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('stop')" translate>STOP</a>
           </li>
         </ul>
       </div>
 
-      <h1><span class="label"
-                ng-class="{'label-success':ctrl.isAtLeastOneServerInRunningState(),
-                           'label-warning':ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState(),
-                           'label-danger':ctrl.areAllServersInStoppedState()}">{{ctrl.status}}</span>&nbsp;Cluster:
+      <h1><span class="label cluster-status"
+              ng-class="{'label-success':ctrl.isAtLeastOneServerInRunningState(),
+                        'label-warning':ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState(),
+                        'label-danger':ctrl.areAllServersInStoppedState()}">
+            <span ng-if="ctrl.isAtLeastOneServerInRunningState(serverGroup)" class="pficon-ok"></span>
+            <span ng-if="ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState()" class="pficon-warning-triangle-o"></span>
+            <span ng-if="ctrl.ctrl.areAllServersInStoppedState()" class="pficon-error-circle-o"></span>
+              {{ctrl.status}}
+          </span>&nbsp;Cluster:
         {{ctrl.serverGroup.name}}
       </h1>
     </div>

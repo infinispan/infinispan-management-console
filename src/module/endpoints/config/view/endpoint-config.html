@@ -10,12 +10,6 @@
         <li><a ui-sref="server-group.endpoints({serverGroup: ctrl.serverGroup.name})" ui-sref-opts="{reload:true}">endpoints</a></li>
         <li>{{ctrl.endpointType}}</li>
       </ol>
-      <h1><span class="label"
-                ng-class="{'label-success':ctrl.isAtLeastOneServerInRunningState(),
-                           'label-warning':ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState(),
-                           'label-danger':ctrl.areAllServersInStoppedState()}">{{ctrl.status}}</span>&nbsp;Cluster:
-        {{ctrl.serverGroup.name}}
-      </h1>
     </div>
   </div>
   <!-- User feedback reporting -->

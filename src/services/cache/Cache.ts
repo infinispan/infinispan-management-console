@@ -5,6 +5,7 @@ import {isNotNullOrUndefined, deepValue} from "../../common/utils/Utils";
 export class Cache implements ICache {
 
   configModel: ICacheConfiguration;
+  cardStatus: any;
 
   constructor(public name: string,
               public type: string,

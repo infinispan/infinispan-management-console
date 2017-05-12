@@ -37,7 +37,7 @@ gulp.task('compile', ['compile:src']);
 
 gulp.task('serve:dist', ['build:dist'], require('./tasks/server')(gulp, config.distDir, false, true));
 gulp.task('serve', ['compile:src', 'less', 'fonts', 'html', 'assets'],
-    require('./tasks/server')(gulp, config.srcDir, config.watchDir, true, config.projectDir));
+    require('./tasks/server')(gulp, config.srcDir, config.watchDir, true, config.projectDir, config));
 
 gulp.task('check:eslint', require('./tasks/check-eslint')(gulp, config));
 gulp.task('check:tslint', ['check:tslint:src']);

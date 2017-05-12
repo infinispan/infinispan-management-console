@@ -3,33 +3,77 @@
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()">
       <span class="pficon pficon-close"></span>
     </button>
-    <h4 class="modal-title" id="confirmation_modal.title">Confirmation</h4>
+    <h4 ng-if="ctrl.operation === 'start'" class="modal-title" translate>
+      STARTING_CLUSTER_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'reload'" class="modal-title" translate>
+      RELOAD_CLUSTER_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'restart'" class="modal-title" translate>
+      RESTART_CLUSTER_TITLE
+    </h4>
+    <h4 ng-if="ctrl.operation === 'stop'" class="modal-title" translate>
+      STOPPING_CLUSTER_TITLE
+    </h4>
   </div>
   <div class="modal-body">
-
-    <h3 ng-if="ctrl.operation === 'start'" translate translate-values='{clusterName:ctrl.clusterName}'>
-      STARTING_CLUSTER</h3>
-    <h3 ng-if="ctrl.operation === 'reload'" translate translate-values='{clusterName:ctrl.clusterName}'>
-      RELOAD_CLUSTER</h3>
-    <h3 ng-if="ctrl.operation === 'restart'" translate translate-values='{clusterName:ctrl.clusterName}'>
-      RESTART_CLUSTER</h3>
-    <h3 ng-if="ctrl.operation === 'stop'" translate translate-values='{clusterName:ctrl.clusterName}'>
-      STOPPING_CLUSTER</h3>
+    <div class="row">
+      <div class="col-xs-1 modal-body-icon">
+        <span ng-if="ctrl.operation === 'stop'" class="pficon pficon-error-circle-o"></span>
+        <span ng-if="ctrl.operation === 'start'" class="pficon pficon-info"></span>
+        <span ng-if="ctrl.operation === 'reload' || ctrl.operation === 'restart'" class="pficon pficon-warning-triangle-o"></span>
+      </div>
+      <div class="col-xs-11 modal-body-text">
+        <h3 ng-if="ctrl.operation === 'start'" translate translate-values='{clusterName:ctrl.clusterName}'>
+          STARTING_CLUSTER
+        </h3>
+        <h3 ng-if="ctrl.operation === 'reload'" translate translate-values='{clusterName:ctrl.clusterName}'>
+          RELOAD_CLUSTER
+        </h3>
+        <h3 ng-if="ctrl.operation === 'restart'" translate translate-values='{clusterName:ctrl.clusterName}'>
+          RESTART_CLUSTER
+        </h3>
+        <h3 ng-if="ctrl.operation === 'stop'" translate translate-values='{clusterName:ctrl.clusterName}'>
+          STOPPING_CLUSTER
+        </h3>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
 
-    <button id="cancel.button" type="button" class="btn btn-primary" ng-click="$dismiss()">Cancel</button>
-    <button id="start.button" ng-if="ctrl.operation === 'start'"
-            type="button" class="btn btn-default" ng-click="$close()">Start
+    <button id="cancel.button"
+        type="button"
+        class="btn btn-default"
+        ng-click="$dismiss()">
+      Cancel
     </button>
-    <button id="restart.button" ng-if="ctrl.operation === 'restart'"
-            type="button" class="btn btn-default" ng-click="$close()">Restart
+    <button id="start.button"
+        ng-if="ctrl.operation === 'start'"
+        type="button"
+        class="btn btn-primary"
+        ng-click="$close()">
+      Start
     </button>
-    <button id="reload.button" ng-if="ctrl.operation === 'reload'"
-            type="button" class="btn btn-default" ng-click="$close()">Reload
+    <button id="restart.button"
+        ng-if="ctrl.operation === 'restart'"
+        type="button"
+        class="btn btn-warning"
+        ng-click="$close()">
+      Restart
     </button>
-    <button id="stop.button" ng-if="ctrl.operation === 'stop'" type="button" class="btn btn-default"
-            ng-click="$close()">Stop
+    <button id="reload.button"
+        ng-if="ctrl.operation === 'reload'"
+        type="button"
+        class="btn btn-warning"
+        ng-click="$close()">
+      Reload
+    </button>
+    <button id="stop.button"
+        ng-if="ctrl.operation === 'stop'"
+        type="button"
+        class="btn btn-danger"
+        ng-click="$close()">
+      Stop
     </button>
   </div>
 </div>

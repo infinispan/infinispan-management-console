@@ -38,15 +38,9 @@
             </div>
 
             <div class="form-group" ng-if="ctrl.isBaseTemplateSelected()">
-                <label class="col-md-4 control-label"><span translate>Edit Base Configuration</span></label>
-
-                <div class="col-md-6">
-                    <input type="checkbox" ng-model="ctrl.editConfig"/>
-                </div>
-                <div class="col-md-2 pull-left" style="padding-left: 0">
-                    <i class="fa fa-info-circle ng-scope" uib-tooltip="If selected, you will be forwarded to a separate
-                    page that allows this cache's configuration to be modified before this cache is created" tooltip-trigger=""
-                       tooltip-animation="true" tooltip-placement="top"></i>
+                <div class="col-md-push-4 col-md-8">
+                    <input type="checkbox" class="pull-left" ng-model="ctrl.editConfig"/>    
+                    <span class="col-md-9 padding-left-5" translate>EDIT_BASE_CONFIGURATION</span>
                 </div>
             </div>
         </form>

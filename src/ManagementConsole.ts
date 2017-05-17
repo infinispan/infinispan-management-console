@@ -18,6 +18,8 @@ import "patternfly/dist/js/patternfly.js";
 import "angular-translate";
 import "angular-translate-loader-static-files";
 import "bootstrap";
+import "angular-sanitize";
+import "angular-drag-and-drop-lists";
 import "angular-patternfly";
 import "angular-patternfly/styles/angular-patternfly.css!";
 import "patternfly/dist/css/patternfly.css!";
@@ -43,7 +45,10 @@ const App: ng.IAngularStatic = angular;
 const module: ng.IModule = angular.module("managementConsole", [
   "ui.router",
   "ui.bootstrap",
-  "pascalprecht.translate"
+  "pascalprecht.translate",
+  "ngSanitize",
+  "dndLists",
+  "patternfly"
 ]);
 
 // @ngInject

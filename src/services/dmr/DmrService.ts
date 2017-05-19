@@ -1,7 +1,11 @@
 import {App} from "../../ManagementConsole";
 import {IDmrRequest} from "./IDmrRequest";
 import {IDmrCompositeReq} from "./IDmrCompositeReq";
-import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
+import {
+  isNotNullOrUndefined, isNullOrUndefined, traverseObject, isObject,
+  isJsonString
+} from "../../common/utils/Utils";
+import {CompositeOpBuilder, createWriteAttrReq} from "./CompositeOpBuilder";
 
 const module: ng.IModule = App.module("managementConsole.services.dmr", []);
 
@@ -88,6 +92,21 @@ export class DmrService {
     this.$cacheFactory.get("$http").removeAll();
   }
 
+  traverseDMRTree(builder: CompositeOpBuilder, dmrRoot: any, dmrAddress: string [], excludedAttributes: string []) {
+    //traverse the object tree
+    traverseObject(dmrRoot, (key: string, value: any, trail: string []) => {
+      this.visitTraversedObject(builder, value, trail.concat(key), excludedAttributes);
+    }, dmrAddress);
+
+    //and finally visit root object itself...
+    this.visitTraversedObject(builder, dmrRoot, dmrAddress, excludedAttributes);
+  }
+
+  private visitTraversedObject(builder: CompositeOpBuilder, obj: any,
+                               address: string[], excludedAttributes: string []) {
+    this.addCompositeOperationsToBuilder(builder, address, obj, excludedAttributes);
+  }
+
   private executePostHelper(data: any, upload: boolean, noTimeout?: boolean): ng.IPromise<any> {
     if (upload) {
       return this.executePostUpload(data, noTimeout);
@@ -169,6 +188,101 @@ export class DmrService {
       }
       console.log(msg);
       promise.reject(msg);
+    }
+  }
+
+  private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,
+                                          excludedAttributes: string[], force: boolean = false): void {
+    let createAddOp: boolean = force || config["is-new-node"];
+    let remove: boolean = config["is-removed"];
+    if (createAddOp) {
+      let request: IDmrRequest = this.createAddOperation(address, config, excludedAttributes);
+      if (Object.keys(request).length > 2 || config["required-node"]) {
+        // request.length > 2 means that the operation has the address and operation type, so add to builder
+        // Or if 'required-node' is present, then we know that this node must be created, even if empty.
+        // This is required for when child nodes may also have been defined without the parent.
+        builder.add(this.createAddOperation(address, config, excludedAttributes));
+      }
+    } else if (remove) {
+      builder.add(this.createRemoveOperation(address));
+    } else {
+      this.createWriteAttributeOperations(builder, address, config, excludedAttributes);
+      this.composeWriteObjectOperations(builder, address, config);
+    }
+  }
+
+  private createAddOperation(address: string[], config: any, excludedAttributes: string[]): IDmrRequest {
+    let allowedObjects: string[] = ["indexing-properties", "string-keyed-table", "binary-keyed-table"];
+    let op: IDmrRequest = {
+      address: address,
+      operation: "add"
+    };
+
+    if (isNotNullOrUndefined(config)) {
+      // iterate properties of model object and append (key/value) properties to op object
+      angular.forEach(config, (value, key) => {
+        if (isNullOrUndefined(value)) {
+          return;
+        }
+
+        if (isObject(value)) {
+          // Only process allowed objects, these should be objects which are dmr attributes not children
+          if (allowedObjects.indexOf(key) > -1) {
+            op[key] = value;
+          }
+          return;
+        }
+
+        if (isJsonString(value)) { // handle JSON described objects
+          value = this.parseJson(value, key);
+        }
+        op[key] = value;
+      });
+    }
+    // Remove excluded attributes
+    angular.forEach(excludedAttributes, attribute => delete op[attribute]);
+    return op;
+  }
+
+  private createRemoveOperation(address: string[]): IDmrRequest {
+    return <IDmrRequest> {
+      address: address,
+      operation: "remove"
+    };
+  }
+
+  private createWriteAttributeOperations(builder: CompositeOpBuilder, address: string[], config: any,
+                                         excludedAttributes: string[]): void {
+    if (isNotNullOrUndefined(config)) {
+      angular.forEach(config, (value, key) => {
+        let excluded: boolean = excludedAttributes.some(attribute => key === attribute) || isNullOrUndefined(value) || isObject(value);
+        if (!excluded) {
+          if (isJsonString(value)) {
+            value = this.parseJson(value, key);
+          }
+          builder.add(createWriteAttrReq(address, key, value));
+        }
+      });
+    }
+  }
+
+  private composeWriteObjectOperations(builder: CompositeOpBuilder, address: string[], config: any): void {
+    if (isNotNullOrUndefined(config)) {
+      let includedAttributes: string[] = ["indexing-properties", "string-keyed-table", "binary-keyed-table"];
+      angular.forEach(config, (value, key) => {
+        let included: boolean = includedAttributes.some(attribute => key === attribute);
+        if (included && isObject(value)) {
+          builder.add(createWriteAttrReq(address, key, value));
+        }
+      });
+    }
+  }
+
+  private parseJson(value: string, key: string): string {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      console.log("Invalid JSON value " + value + " for field " + key);
     }
   }
 }

@@ -3,9 +3,9 @@ import {ServerGroupService} from "../../services/server-group/ServerGroupService
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {JGroupsService} from "../../services/jgroups/JGroupsService";
 import {IStateService} from "angular-ui-router";
-import {AddNodeModalCtrl} from "./AddNodeModalCtrl";
+import {AddNodeModalCtrl} from "./nodes/AddNodeModalCtrl";
 import {ServerService} from "../../services/server/ServerService";
-import {ConfirmationModalCtrl} from "./ConfirmationModalCtrl";
+import {ConfirmationModalCtrl} from "./nodes/ConfirmationModalCtrl";
 import {DmrService} from "../../services/dmr/DmrService";
 import {IMap} from "../../common/utils/IMap";
 import {isEmptyObject, isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
@@ -115,7 +115,7 @@ export class ServerGroupCtrl {
 
   createServerModal(): void {
     let modal: IModalServiceInstance = this.$uibModal.open({
-      templateUrl: "module/server-group/view/add-node-modal.html",
+      templateUrl: "module/server-group/nodes/view/add-node-modal.html",
       controller: AddNodeModalCtrl,
       controllerAs: "ctrl",
       resolve: {
@@ -162,13 +162,13 @@ export class ServerGroupCtrl {
 
   createStoppingModal(): IModalServiceInstance {
     return this.$uibModal.open({
-      templateUrl: "module/server-group/view/stopping-modal.html"
+      templateUrl: "module/server-group/nodes/view/stopping-modal.html"
     });
   }
 
   createConfirmationModal(operation: string): void {
     let modal: IModalServiceInstance = this.$uibModal.open({
-      templateUrl: "module/server-group/view/confirmation-modal.html",
+      templateUrl: "module/server-group/nodes/view/confirmation-modal.html",
       controller: ConfirmationModalCtrl,
       controllerAs: "ctrl",
       resolve: {

@@ -1,0 +1,45 @@
+<div>
+  <uib-tabset vertical="true" type="pills">
+    <uib-tab heading="General" active="true">
+      <configuration-section fields="[{name: 'Main', fields: ['name', 'cache-container']},
+                                      {name: 'TCP', fields: ['socket-binding','idle-timeout', 'receive-buffer-size', 'send-buffer-size', 'tcp-nodelay']},
+                                      {name: 'Other', fields: ['worker-threads']}]" data="$ctrl.data"
+                             meta="$ctrl.getMetaForResource('')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
+                             read-only-fields="$ctrl.readOnlyFields" config-callbacks="$ctrl.configCallbacks" render="true"/>
+    </uib-tab>
+
+    <uib-tab heading="Authentication">
+    <configuration-section fields="[{name: 'Authentication', fields: ['security-realm']}]"
+                           data="$ctrl.data.authentication.AUTHENTICATION" meta="$ctrl.getMetaForResource('.children.authentication.model-description.AUTHENTICATION')"
+                           init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                           config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+
+    <configuration-section fields="[{name: 'SASL configuration', fields: ['mechanisms', 'qop', 'server-context-name', 'server-name', 'strength']}]"
+                           data="$ctrl.data.authentication.AUTHENTICATION.sasl.SASL" meta="$ctrl.getMetaForResource('.children.authentication.model-description.AUTHENTICATION.children.sasl.model-description.SASL')"
+                           init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                           config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+
+      <configuration-section fields="[{name: 'SASL policy', fields: ['forward-secrecy', 'no-active', 'no-anonymous', 'no-dictionary', 'no-plain-text', 'pass-credentials']}]"
+                             data="$ctrl.data.authentication.AUTHENTICATION.sasl.SASL['sasl-policy'].SASL_POLICY" meta="$ctrl.getMetaForResource('.children.authentication.model-description.AUTHENTICATION.children.sasl.model-description.SASL.children.sasl-policy.model-description.SASL_POLICY')"
+                             init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                             config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+
+
+    </uib-tab>
+
+    <uib-tab heading="Topology State Transfer">
+      <configuration-section fields="[{name: 'Topology State Transfer', fields: ['await-initial-retrieval', 'external-host', 'external-port', 'lazy-retrieval', 'lock-timeout', 'replication-timeout']}]"
+                             data="$ctrl.data['topology-state-transfer'].TOPOLOGY_STATE_TRANSFER" meta="$ctrl.getMetaForResource('.children.topology-state-transfer.model-description.TOPOLOGY_STATE_TRANSFER')"
+                             init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                             config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+    </uib-tab>
+
+    <uib-tab heading="Encryption">
+      <configuration-section fields="[{name: 'Encryption', fields: ['require-ssl-client-auth', 'security-realm']}]"
+                             data="$ctrl.data.encryption.ENCRYPTION" meta="$ctrl.getMetaForResource('.children.encryption.model-description.ENCRYPTION')"
+                             init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                             config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+
+    </uib-tab>
+  </uib-tabset>
+</div>

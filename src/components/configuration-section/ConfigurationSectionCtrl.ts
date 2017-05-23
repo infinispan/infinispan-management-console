@@ -16,6 +16,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   initDefaults: boolean;
   readOnly: boolean;
   readOnlyFields: string[];
+  render: boolean;
   configCallbacks: IConfigurationCallback[];
   removable: boolean;
   placeholders: any;

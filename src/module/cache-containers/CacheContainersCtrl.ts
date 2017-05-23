@@ -61,15 +61,15 @@ export class CacheContainersCtrl {
   }
 
   displayEndpoint(endpoint: IEndpoint): string {
-    let socketBinding: ISocketBinding = endpoint["socket-binding"];
+    let socketBinding: ISocketBinding = endpoint.getSocketBinding();
     if (isNotNullOrUndefined(socketBinding)) {
-      return socketBinding.name + " : " + socketBinding.port + " " + endpoint.encryption;
+      return socketBinding.name + " : " + socketBinding.port + " " + (isNotNullOrUndefined(endpoint.getEncryption())?"encrypted":"");
     }
   }
 
   isMultiTenantRouter(endpoint: IEndpoint): boolean {
     return isNotNullOrUndefined(endpoint) &&
-      (isNotNullOrUndefined(endpoint["hotrod-socket-binding"]) || isNotNullOrUndefined(endpoint["rest-socket-binding"]));
+      endpoint.isMultiTenant();
   }
 
   getAllClusterEvents(): void {

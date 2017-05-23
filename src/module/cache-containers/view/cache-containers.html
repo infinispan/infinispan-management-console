@@ -28,8 +28,10 @@
             <div id-generator="{{ctrl.getContainerId('endpoints', container)}}" class="endpoint" ng-repeat="endpoint in container.endpoints">
                 <div ng-if="ctrl.isMultiTenantRouter(endpoint)">
                   <span>multi-tenancy router</span></br>
+                    <!--
                     <span ng-if="endpoint['hotrod-socket-binding']">&nbsp;&nbsp;{{endpoint['hotrod-socket-binding'].name + " : " + endpoint['hotrod-socket-binding'].port}}</span></br>
                     <span ng-if="endpoint['rest-socket-binding']">&nbsp;&nbsp;{{endpoint['rest-socket-binding'].name + " : " + endpoint['rest-socket-binding'].port}}</span></br>
+                    -->
                 </div>
                 <span ng-if="!ctrl.isMultiTenantRouter(endpoint)"> {{ctrl.displayEndpoint(endpoint)}}</br></span>
             </div>

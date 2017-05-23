@@ -40,6 +40,14 @@ export function isNullOrUndefined(value: any): boolean {
 
 }
 
+export function createObjectsFromPath(name, separator, container){
+  var ns = name.split(separator || '.'), o = container || window, i, len;
+  for(i = 0, len = ns.length; i < len; i++){
+    o = o[ns[i]] = o[ns[i]] || {};
+  }
+  return o;
+}
+
 export function isNonEmptyArray(array: any[]): boolean {
   return isNotNullOrUndefined(array) && array.length > 0;
 }
@@ -133,6 +141,19 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
     }
   });
 }
+
+export function traverseObject(obj: any, callback: Function, trail?: any[]): void {
+  trail = trail || [];
+  Object.keys(obj).forEach((key) => {
+    var value: any = obj[key];
+
+    if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
+      traverseObject(value, callback, trail.concat(key));
+      callback.call(obj, key, value, trail);
+    }
+  });
+}
+
 
 export function parseServerAddress(server: string): IServerAddress {
   let address: string[] = server.split(":");

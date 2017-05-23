@@ -23,6 +23,7 @@ import "./components/cache-security/CacheSecurity";
 import "./components/cache-stores/CacheStores";
 import "./components/cache-stores/CacheStoreModal";
 import "./components/cache-configuration/CacheConfiguration";
+import "./components/endpoint-configuration/EndpointConfiguration";
 import "./components/configuration-section/ConfigurationSection";
 import "./components/forms/field-info/FieldInfo";
 import "./components/forms/form-group/FormGroup";
@@ -61,6 +62,7 @@ App.element(document).ready(() => {
     "managementConsole.components.cache-stores.modal",
     "managementConsole.components.configuration",
     "managementConsole.components.configuration.cache",
+    "managementConsole.components.configuration.endpoint",
     "managementConsole.components.forms.field-info",
     "managementConsole.components.forms.form-group",
     "managementConsole.components.modals.information",

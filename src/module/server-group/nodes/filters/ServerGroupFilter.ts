@@ -1,5 +1,5 @@
-import {ServerAddress} from "../../services/server/ServerAddress";
-import {IMap} from "../../common/utils/IMap";
+import {ServerAddress} from "../../../../services/server/ServerAddress";
+import {IMap} from "../../../../common/utils/IMap";
 
 export function serverFilter(): Function {
   return (servers: ServerAddress[], inetMap: IMap<string>, query: string) => {

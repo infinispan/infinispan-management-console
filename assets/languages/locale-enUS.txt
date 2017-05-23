@@ -168,5 +168,12 @@
   "RELOAD_CLUSTER":"Reloading {{clusterName}} will reload all servers in this cluster. Reload {{clusterName}}?",
   "START_CLUSTER_INFO":"Starting {{clusterName}}, please wait while all servers boot...",
   "RESTART_CLUSTER_INFO":"Restarting {{clusterName}}, please wait while all servers reboot...",
-  "RELOAD_CLUSTER_INFO":"Reloading {{clusterName}}, please wait while all servers reload..."
-  }
+  "RELOAD_CLUSTER_INFO":"Reloading {{clusterName}}, please wait while all servers reload...",
+  "NODES":"Nodes",
+  "CREATE_ENDPOINT":"Add endpoint",
+  "PLEASE_ADD_REQUIRED_ENDPOINT_PROPS":"Please add required endpoint properties",
+  "ENDPOINT_NAME":"Name",
+  "ENDPOINT_TYPE":"Type",
+  "VIEW_EDIT_ENDPOINT_CONFIGURATION":"View / Edit endpoint configuration:",
+  "CREATE_ENDPOINT": "Create Endpoint"
+}

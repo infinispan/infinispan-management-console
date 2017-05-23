@@ -16,7 +16,8 @@ export class ConfigurationSection {
       readOnly: "=",
       readOnlyFields: "=",
       configCallbacks: "=",
-      removable: "@"
+      removable: "@",
+      render:"@"
     };
     this.controller = ConfigurationSectionCtrl;
     this.templateUrl = "components/configuration-section/view/configuration-section.html";

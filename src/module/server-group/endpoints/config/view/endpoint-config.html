@@ -1,0 +1,75 @@
+<div class="container-fluid">
+
+  <div class="row header-row">
+    <div class="col-sm-12 col-md-12">
+      <ol class="breadcrumb">
+        <li>
+          <a ui-sref="server-groups" translate>CLUSTERS</a>
+        </li>
+        <li><a ui-sref="server-group({serverGroup: ctrl.serverGroup.name})" ui-sref-opts="{reload:true}">{{ctrl.serverGroup.name}}</a></li>
+        <li><a ui-sref="server-group.endpoints({serverGroup: ctrl.serverGroup.name})" ui-sref-opts="{reload:true}">endpoints</a></li>
+        <li>{{ctrl.endpointType}}</li>
+      </ol>
+      <h1><span class="label"
+                ng-class="{'label-success':ctrl.isAtLeastOneServerInRunningState(),
+                           'label-warning':ctrl.isAtLeastOneServerInRestartRequiredState() || ctrl.isAtLeastOneServerInReloadRequiredState(),
+                           'label-danger':ctrl.areAllServersInStoppedState()}">{{ctrl.status}}</span>&nbsp;Cluster:
+        {{ctrl.serverGroup.name}}
+      </h1>
+    </div>
+  </div>
+  <!-- User feedback reporting -->
+  <div class="row" ng-if="ctrl.errorExecuting || ctrl.successfulOperation">
+    <div class="col-sm-12 col-md-12">
+      <div class="alert alert-success alert-dismissable" ng-if="ctrl.successfulOperation">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon pficon-ok"></span>
+        <strong>Success!</strong> The operation has been successfully executed.
+      </div>
+
+      <div class="alert alert-danger alert-dismissable" ng-if="ctrl.errorExecuting">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+          <span class="pficon pficon-close"></span>
+        </button>
+        <span class="pficon  pficon-error-circle-o"></span>
+        <strong>Error</strong><span translate translate_values="{errorDescription:ctrl.errorDescription}">ERROR_OP</span>
+      </div>
+    </div>
+  </div>
+  <!-- End of user feedback -->
+
+
+  <h2 ng-if="ctrl.isEditMode()" translate>VIEW_EDIT_ENDPOINT_CONFIGURATION</h2>
+    <h2 ng-if="!ctrl.isEditMode()" translate>CREATE_ENDPOINT</h2>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div id-generator="content">
+                <endpoint-configuration endpoint-type="{{ctrl.endpointType}}" data="ctrl.endpoint.data"
+                                     meta="ctrl.endpointMeta" init-defaults="!ctrl.isEditMode()" read-only="false"
+                                     read-only-fields="" config-callbacks="ctrl.callbackArray"
+                                     edit-mode="ctrl.isEditMode()"/>
+            </div>
+
+            <br>
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-6">
+                    <button id="create.button" type="button" class="btn btn-primary"
+                            ng-if="!ctrl.isEditMode()"
+                            ng-disabled="!ctrl.isAnyFieldModified()" ng-click="ctrl.createEndpoint(ctrl.endpoint)" translate>CREATE
+                    </button>
+                    <button id="apply_changes.button" type="button" class="btn btn-primary" ng-if="ctrl.isEditMode()"
+                            ng-disabled="!ctrl.isAnyFieldModified()" ng-click="ctrl.updateEndpoint(ctrl.endpoint)" translate>
+                        APPLY_CHANGES
+                    </button>
+                    <button id="cancel.button" type="button" class="btn btn-default"
+                            ng-click="ctrl.goToEndpointsView()"
+                            translate>CANCEL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

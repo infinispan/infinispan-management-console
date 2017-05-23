@@ -1,0 +1,49 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="$dismiss()" id="close.button">
+            <span class="pficon pficon-close"></span>
+        </button>
+        <h4 class="modal-title" id="add_cache_modal.title" translate>CREATE_ENDPOINT</h4>
+    </div>
+    <div class="modal-body">
+
+        <h4><span translate>PLEASE_ADD_REQUIRED_ENDPOINT_PROPS</span></h4>
+        <br>
+
+        <form class="form-horizontal" name="templateForm">
+            <div class="form-group">
+                <label class="col-md-4 control-label">* <span translate>ENDPOINT_NAME</span></label>
+
+                <div class="col-md-6">
+                    <input type="text" class="form-control" ng-model="ctrl.newEndpointName" id-generator="create.name" required>
+                </div>
+                <div class="col-md-2 pull-left" style="padding-left: 0">
+                    <i class="fa fa-info-circle ng-scope" uib-tooltip="The name of the endpoint to be created" tooltip-trigger=""
+                       tooltip-animation="true" tooltip-placement="top"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">* <span translate>ENDPOINT_TYPE</span></label>
+
+                <div class="col-md-6">
+                    <select ng-model="ctrl.endpointType" class="form-control"
+                            ng-options="endpointType as endpointType.name for endpointTypes in ctrl.endpointTypes"
+                            id-generator="create.baseEndpoint"/>
+                </div>
+                <div class="col-md-2 pull-left" style="padding-left: 0">
+                    <i class="fa fa-info-circle ng-scope" uib-tooltip="Endpoint type" tooltip-trigger=""
+                       tooltip-animation="true"
+                       tooltip-placement="top"></i>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="cancel.button" type="button" class="btn btn-default" ng-click="$dismiss()" translate>CANCEL</button>
+        <button id="submit.button" type="button" class="btn btn-primary" ng-click="ctrl.createEndpoint();$close()"
+                ng-disabled="!templateForm.$valid">
+                <span ng-if="ctrl.displayNextButton()" translate>NEXT</span>
+                <span ng-if="!ctrl.displayNextButton()" translate>CREATE_ENDPOINT</span>
+        </button>
+    </div>
+</div>

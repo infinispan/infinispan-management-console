@@ -23,6 +23,7 @@ import "./components/cache-security/CacheSecurity";
 import "./components/cache-stores/CacheStores";
 import "./components/cache-stores/CacheStoreModal";
 import "./components/cache-configuration/CacheConfiguration";
+import "./components/endpoint-configuration/EndpointConfiguration";
 import "./components/configuration-section/ConfigurationSection";
 import "./components/forms/field-info/FieldInfo";
 import "./components/forms/form-group/FormGroup";
@@ -39,6 +40,7 @@ import "./module/navbar/Navbar";
 import "./module/server-group/ServerGroup";
 import "./module/server-groups/ServerGroups";
 import "./module/server-instance/ServerInstance";
+import "./module/endpoints/Endpoints";
 
 App.element(document).ready(() => {
   App.bootstrap(document, [
@@ -53,6 +55,7 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.server-instance",
     "managementConsole.server-group",
+    "managementConsole.endpoints",
     "managementConsole.server-groups",
     "managementConsole.components.cache-loaders",
     "managementConsole.components.memory",
@@ -61,6 +64,7 @@ App.element(document).ready(() => {
     "managementConsole.components.cache-stores.modal",
     "managementConsole.components.configuration",
     "managementConsole.components.configuration.cache",
+    "managementConsole.components.configuration.endpoint",
     "managementConsole.components.forms.field-info",
     "managementConsole.components.forms.form-group",
     "managementConsole.components.modals.information",

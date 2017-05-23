@@ -40,6 +40,17 @@ export function isNullOrUndefined(value: any): boolean {
 
 }
 
+export function createObjectsFromPath(name: string, separator: string, container: any): any {
+  let ns: string [] = name.split(separator || ".");
+  let o: any = container || window;
+  let i: number;
+  let len: number;
+  for (i = 0, len = ns.length; i < len; i++) {
+    o = o[ns[i]] = o[ns[i]] || {};
+  }
+  return o;
+}
+
 export function isNonEmptyArray(array: any[]): boolean {
   return isNotNullOrUndefined(array) && array.length > 0;
 }
@@ -129,6 +140,18 @@ export function traverse(obj: any, callback: Function, trail?: any[]): void {
     if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
       traverse(value, callback, trail.concat(key));
     } else {
+      callback.call(obj, key, value, trail);
+    }
+  });
+}
+
+export function traverseObject(obj: any, callback: Function, trail?: any[]): void {
+  trail = trail || [];
+  Object.keys(obj).forEach((key) => {
+    var value: any = obj[key];
+
+    if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
+      traverseObject(value, callback, trail.concat(key));
       callback.call(obj, key, value, trail);
     }
   });

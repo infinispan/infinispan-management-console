@@ -1,6 +1,6 @@
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
-import {ServerAddress} from "../../services/server/ServerAddress";
-import {INewServerInstance} from "../../services/server/INewServerInstance";
+import {ServerAddress} from "../../../services/server/ServerAddress";
+import {INewServerInstance} from "../../../services/server/INewServerInstance";
 
 export class AddNodeModalCtrl {
   static $inject: string[] = ["$uibModalInstance", "hosts"];

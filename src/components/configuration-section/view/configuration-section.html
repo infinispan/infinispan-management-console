@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-if="$ctrl.hasAnyFieldPreviousData()">
+<div class="container-fluid" ng-if="$ctrl.hasAnyFieldPreviousData() || $ctrl.render">
   <div class="row">
     <div class="panel panel-default" ng-repeat="group in $ctrl.fields">
       <div class="panel-heading">
@@ -23,7 +23,7 @@
     </div>
   </div>
 </div>
-<div class="container-fluid" ng-if="!$ctrl.hasAnyFieldPreviousData()">
+<div class="container-fluid" ng-if="!$ctrl.hasAnyFieldPreviousData() && !$ctrl.render">
   <div class="row">
     <div class="panel panel-default" ng-repeat="group in $ctrl.fields">
       <div class="panel-heading">

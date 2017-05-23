@@ -1,0 +1,23 @@
+<div>
+  <uib-tabset vertical="true" type="pills">
+    <uib-tab heading="General" active="true">
+      <configuration-section fields="[{name: 'Main', fields: ['name', 'cache-container', 'context-path', 'extended-headers']},
+                                      {name: 'Sockets', fields: ['socket-binding']}]" data="$ctrl.data"
+                             meta="$ctrl.getMetaForResource('')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
+                             read-only-fields="$ctrl.readOnlyFields" config-callbacks="$ctrl.configCallbacks" render="true"/>
+    </uib-tab>
+    <uib-tab heading="Authentication">
+      <configuration-section fields="[{name: 'Authentication', fields: ['auth-method', 'security-realm']}]"
+                             data="$ctrl.data.authentication.AUTHENTICATION" meta="$ctrl.getMetaForResource('children.authentication.model-description.AUTHENTICATION')"
+                             init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                             config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+    </uib-tab>
+    <uib-tab heading="Encryption">
+      <configuration-section fields="[{name: 'Encryption', fields: ['require-ssl-client-auth', 'security-realm']}]"
+                             data="$ctrl.data.encryption.ENCRYPTION" meta="$ctrl.getMetaForResource('children.encryption.model-description.ENCRYPTION')"
+                             init-defaults="initDefaults" read-only="$ctrl.readOnly"
+                             config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
+
+    </uib-tab>
+  </uib-tabset>
+</div>

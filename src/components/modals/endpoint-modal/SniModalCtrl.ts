@@ -9,12 +9,8 @@ export class SniModalCtrl {
   }
 
   public saveSni() {
-    console.log({
-      name: this.sniName,
-      hostName: this.hostName,
-      securityRealm: this.securityRealm
-    })
     this.$scope.$close({
+      name: this.sniName,
       hostName: this.hostName,
       securityRealm: this.securityRealm
     })

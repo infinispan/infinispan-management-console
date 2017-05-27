@@ -36,13 +36,6 @@ export class EndpointsCtrl {
   }
 
   createEndpointAndEdit(type: string): void {
-    let params: any = {
-      endpointType: type + "-connector",
-      endpointName: "random_" + type,
-      serverGroup: this.serverGroup.name
-    };
-
     this.modalService.openEndpointModal(`${type}-connector`, this.serverGroup.name);
-    // this.$state.go("new-endpoint-config", params);
   }
 }

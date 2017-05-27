@@ -20,6 +20,7 @@ import {openConfirmationModal} from "../../common/dialogs/Modals";
 import {EndpointModalCtrl} from './../../components/modals/endpoint-modal/EndpointModalCtrl';
 import {SniModalCtrl} from './../../components/modals/endpoint-modal/SniModalCtrl';
 import {EndpointService} from '../endpoint/EndpointService';
+import {isNotNullOrUndefined, isNullOrUndefined} from "../../common/utils/Utils";
 
 
 const module: ng.IModule = App.module("managementConsole.services.modal", []);
@@ -118,14 +119,23 @@ export class ModalService {
     }).result;
   }
 
-  public openSniModal(): ng.IPromise<any> {
+  public openSniModal(encryptionNode: any): ng.IPromise<any> {
     return this.$uibModal.open({
       templateUrl: "components/endpoint-configuration/view/add-sni-modal.html",
       controller: SniModalCtrl,
       controllerAs: "ctrl"
     })
     .result
-    .then(data => {console.log('data', data); return data;})
+    .then(sni => {
+      if(isNotNullOrUndefined(encryptionNode) && isNullOrUndefined(encryptionNode.sni)){
+        encryptionNode.sni = {};
+      }
+      encryptionNode.sni[sni.name] = {
+        "host-name": sni.hostName,
+        "security-realm": sni.securityRealm,
+        "is-new-node": true
+      };
+    })
     .catch(err => {console.log('err', err); return err;});
   }
 }

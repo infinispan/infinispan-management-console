@@ -4,7 +4,7 @@
       <configuration-section fields="[{name: 'Main', fields: ['hotrod-socket-binding', 'rest-socket-binding']},
                                       {name: 'TCP', fields: ['receive-buffer-size', 'send-buffer-size', 'tcp-nodelay', 'keep-alive']}]"
                              data="$ctrl.data" meta="$ctrl.getMetaForResource('')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                             read-only-fields="$ctrl.readOnlyFields" config-callbacks="$ctrl.configCallbacks"/>
+                             read-only-fields="$ctrl.readOnlyFields" config-callbacks="$ctrl.configCallbacks" render="true"/>
     </uib-tab>
 
     <uib-tab heading="Hotrod">
@@ -69,7 +69,7 @@
 
 
               <div class="row">
-                
+
               </div>
               <!-- SNI LIST -->
               <pf-list-view id="hotrod"

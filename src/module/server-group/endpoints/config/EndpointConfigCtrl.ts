@@ -31,13 +31,6 @@ export class EndpointConfigCtrl extends AbstractConfigurationCtrl {
     super();
   }
 
-  goToContainerCachesView(): void {
-    this.$state.go("container.caches", {
-      //profileName: this.profile,
-      //containerName: this.containerName
-    });
-  }
-
   goToEndpointsView(): void {
     this.$state.go("server-group.endpoints", {serverGroup: this.serverGroup.name});
   }

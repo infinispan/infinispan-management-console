@@ -37,18 +37,14 @@ export class EndpointConfigurationCtrl {
     onDblClick: false
   };
 
-  static $inject: string[] = ["modalService"]; 
+  static $inject: string[] = ["modalService"];
+
   constructor(public modalService: ModalService) {
     this.newSni = {
       hostName: '',
       securityRealm: '',
       sniName: ''
     };
-  }
-
-
-  traverse(): void {
-
   }
 
   getTemplateUrl(): string {
@@ -65,7 +61,10 @@ export class EndpointConfigurationCtrl {
 
   openAddSniModal():void {
     // TODO: ADD SNI
-    console.log(this.newSni);
+    //console.log(this.newSni);
+    this.modalService.openSniModal(this.data.encryption.ENCRYPTION).then(done=> {
+      console.log("Completed add sni");
+    });
   }
 
   parseSniToArray(sniObject) {

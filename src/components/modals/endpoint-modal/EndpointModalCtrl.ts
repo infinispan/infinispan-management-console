@@ -1,23 +1,15 @@
-import {EndpointService} from './../../../services/endpoint/EndpointService';
 
 export class EndpointModalCtrl {
-  static $inject: string[] = ["endpointType", "serverGroup", "endpointService", "$scope", "$state"];
+  static $inject: string[] = ["endpointType", "serverGroup", "$scope", "$state"];
 
   public endpointTypes: string[];
   public newEndpointName: string;
 
   constructor(public endpointType: string,
               public serverGroup: any,
-              public endpointService: EndpointService,
               public $scope: any,
               public $state: any) {
-
-    this.endpointService
-    .getConfigurationMeta('clustered', 'datagrid-infinispan-endpoint', '')
-    .then(meta => {
-      this.endpointTypes = Object.keys(meta.children).map(child => child);
-      this.endpointType = this.endpointTypes[0];
-    });
+    this.endpointTypes = ["hotrod-connector", "websocket-connector", "rest-connector", "router-connector", "memcached-connector"];
   }
 
   public createEndpoint() {

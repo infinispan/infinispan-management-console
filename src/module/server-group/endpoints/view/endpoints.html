@@ -9,7 +9,7 @@
       </div>
      <!-- ADD NEW ENDPOINT -->
       <div class="col-xs-6 col-sm-4 col-md-3 add-new-endpoint">
-        <a id="add.button" data-original-title="Add Endpoint" ng-click="ctrl.createEndpointAndEdit('memcached')"
+        <a id="add.button" data-original-title="Add Endpoint" ng-click="ctrl.createEndpointAndEdit('hotrod')"
             data-toggle="modal"
             class="add" data-toggle="tooltip" data-placement="top" title="Add Endpoint">
         <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
@@ -31,7 +31,7 @@
       <div class="col-xs-6 col-sm-4 col-md-3" id-generator="groups"
            ng-repeat="endpoint in filtered = (ctrl.endpoints | endpointFilter:searchNameQuery)"
            ng-show="true">
-         
+
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
             <a ui-sref="edit-endpoint-config({serverGroup: ctrl.serverGroup.name, endpointType: endpoint.getType(), endpointName: endpoint.getName()})" title="View Endpoint Details">
               <h2 class="card-pf-title endpoint-name">

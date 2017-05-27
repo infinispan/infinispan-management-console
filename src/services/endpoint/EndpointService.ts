@@ -114,7 +114,8 @@ export class EndpointService {
 
   getConfigurationMeta(profile: string, endpointType: string, endpointName: string): ng.IPromise<any> {
     let deferred: ng.IDeferred<any> = this.$q.defer();
-    let address: string[] = this.getEndpointsRootAddress(profile).concat(endpointType).concat(endpointType);
+    let address: string[] = endpointName ?
+      this.getEndpointsRootAddress(profile).concat(endpointType).concat(endpointType) : this.getEndpointsRootAddress(profile).concat(endpointType);
     this.dmrService.readResourceDescription({
       address: address,
       recursive: true
@@ -128,6 +129,7 @@ export class EndpointService {
   }
 
   save(endpoint: IEndpoint, excludedAttributes: string []): ng.IPromise<any> {
+    console.log(endpoint, excludedAttributes);
     let builder: CompositeOpBuilder = new CompositeOpBuilder();
     let root: any = endpoint.getDMR();
     let dmrAddress: string [] = this.getEndpointAddress(endpoint, "clustered");

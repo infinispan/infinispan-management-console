@@ -30,7 +30,7 @@
           total.
         </div>
         <!-- ADD NEW NODE -->
-        <div ng-if="ctrl.isDomainMode() && ctrl.filteredMembers.length > 0" class="col-xs-6 col-sm-4 col-md-3">
+        <div ng-if="ctrl.isDomainMode() && ctrl.filteredMembers.length > 0" class="col-xs-6 col-sm-4 col-md-3 add-new-node">
           <a id="add.button"
               data-original-title="Add Node"
               ng-click="ctrl.createServerModal()"
@@ -40,7 +40,7 @@
               data-placement="top"
               title="Add Node">
             <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
-              <h2 class="card-pf-title">
+              <h2 class="card-pf-title server-name">
                 Add Node
               </h2>
 
@@ -65,21 +65,21 @@
                     host:server.host,
                     server:server.name})"
                     title="View Node Details">
-                  <span>{{server.name}}</span> <span ng-if="ctrl.isDomainMode()">{{server.host}}</span>
+                  <span class="server-name"><span>{{server.name}}</span> <span ng-if="ctrl.isDomainMode()">{{server.host}}</span></span>
                 </a>
               </h2>
               <div class="card-pf-body card-pf-body--node">
                 <p>
-                  <span ng-if="ctrl.isCoordinator(server)" translate>COORDINATOR</span>
-                  <span class="pficon"
-                      ng-if="ctrl.isCoordinator(server)"
-                      ng-class="{'fa fa-power-off':ctrl.isServerStopped(server),
-                      'pficon-warning-triangle-o':(ctrl.isServerInReloadRequired(server) || ctrl.isServerInRestartRequired(server)),
-                      'pficon-ok':ctrl.isServerRunning(server)}">
-                  </span>
-                </p>
-                <p>
-                  <span class="card-pf-aggregate-status-notification">{{ctrl.getServerInetAddress(server)}}</span>
+                  <div>
+                    <span ng-if="ctrl.isCoordinator(server)" translate>COORDINATOR</span>
+                    <span class="pficon"
+                        ng-if="ctrl.isCoordinator(server)"
+                        ng-class="{'fa fa-power-off':ctrl.isServerStopped(server),
+                        'pficon-warning-triangle-o':(ctrl.isServerInReloadRequired(server) || ctrl.isServerInRestartRequired(server)),
+                        'pficon-ok':ctrl.isServerRunning(server)}">
+                    </span>
+                  </div>
+                  <div class="card-pf-aggregate-status-notification">{{ctrl.getServerInetAddress(server)}}</div>
                 </p>
               </div>
             </div>

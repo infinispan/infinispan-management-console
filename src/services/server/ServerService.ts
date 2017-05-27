@@ -25,13 +25,13 @@ const module: ng.IModule = App.module("managementConsole.services.server", []);
 
 export class ServerService {
 
-  static $inject: string[] = ["$q", "dmrService", "launchType", "$uibModal", "$injector"];
+  static $inject: string[] = ["$q", "dmrService", "launchType", "$uibModal", "$timeout"];
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
               private launchType: LaunchTypeService,
               private $uibModal: IModalService,
-              private $injector: any) {
+              private $timeout: any) {
   }
 
   createServer(server: INewServerInstance): ng.IPromise<void> {
@@ -253,6 +253,15 @@ export class ServerService {
       });
     }
     return deferred.promise;
+  }
+
+  public refresh() {
+    const defer = this.$q.defer();
+    this.$timeout(() => {
+      this.dmrService.clearGetCache();
+      defer.resolve();
+    }, 0);
+    return defer.promise;
   }
 
 }

@@ -13,9 +13,10 @@ import {
   SERVER_STATE_RESTART_REQUIRED,
   SERVER_STATE_RUNNING
 } from "../../services/server/Server";
+import {ServerService} from "../../services/server/ServerService";
 
 export class ServerGroupsCtrl {
-  static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups", "launchType", "modalService"];
+  static $inject: string[] = ["clusterEventsService", "serverGroupService", "containers", "serverGroups", "launchType", "modalService", "$state", "serverService"];
 
   gridEvents: IClusterEvent[] = [];
   status: IMap<string> = {};
@@ -25,7 +26,9 @@ export class ServerGroupsCtrl {
               public containers: ICacheContainer[],
               public serverGroups: IMap<IServerGroup>,
               private launchType: LaunchTypeService,
-              private modalService: ModalService) {
+              private modalService: ModalService,
+              private $state: any,
+              private serverService: ServerService) {
     this.getAllClusterEvents();
     this.getAllSGStatuses();
   }
@@ -82,7 +85,7 @@ export class ServerGroupsCtrl {
       serverGroup
     ).then((data) => {
       if (data && data.action === 'Finished') {
-        location.reload();
+        this.serverService.refresh().then(() => this.$state.reload());
       }
     })
   }

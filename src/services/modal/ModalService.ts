@@ -5,6 +5,7 @@ import {
   SERVER_STATE_RUNNING, SERVER_STATE_STOPPED, SERVER_STATE_RELOAD_REQUIRED,
   SERVER_STATE_RESTART_REQUIRED
 } from "../../services/server/Server";
+import {ICacheContainer} from './../container/ICacheContainer';
 
 import {ServerService} from "../../services/server/ServerService";
 import {ServerGroupService} from "../server-group/ServerGroupService";
@@ -16,6 +17,9 @@ import {IServerGroup} from "../server-group/IServerGroup";
 
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 
+import {EndpointModalCtrl} from './../../components/modals/endpoint-modal/EndpointModalCtrl';
+import {SniModalCtrl} from './../../components/modals/endpoint-modal/SniModalCtrl';
+import {EndpointService} from '../endpoint/EndpointService';
 
 
 const module: ng.IModule = App.module("managementConsole.services.modal", []);
@@ -94,12 +98,36 @@ export class ModalService {
     });
   }
 
-  public createRebalanceModal(enableRebalance: boolean, message: string, container: ICacheContainer): void {
+  public createRebalanceModal(enableRebalance: boolean, message: string, container: ICacheContainer): ng.IPromise<any> {
     return openConfirmationModal(this.$uibModal, message).result.then(() => {
       return enableRebalance ? this.containerService.enableRebalance(container) : this.containerService.disableRebalance(container);
     });
   }
 
+  public openEndpointModal(endpointType: string, serverGroup: string): ng.IPromise<any> {
+    return this.$uibModal.open({
+      templateUrl: "module/server-group/endpoints/view/add-endpoint-modal.html",
+      controller: EndpointModalCtrl,
+      controllerAs: "ctrl",
+      resolve: {
+        endpointType: (): string => endpointType,
+        serverGroup: ["serverGroupService", (serverGroupService) =>
+          serverGroupService.getServerGroupMapWithMembers(serverGroup)
+        ]
+      }
+    }).result;
+  }
+
+  public openSniModal(): ng.IPromise<any> {
+    return this.$uibModal.open({
+      templateUrl: "components/endpoint-configuration/view/add-sni-modal.html",
+      controller: SniModalCtrl,
+      controllerAs: "ctrl"
+    })
+    .result
+    .then(data => {console.log('data', data); return data;})
+    .catch(err => {console.log('err', err); return err;});
+  }
 }
 
 module.service("modalService", ModalService);

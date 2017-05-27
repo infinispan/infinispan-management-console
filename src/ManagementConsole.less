@@ -6,6 +6,8 @@
 @import 'module/cache-container/caches/view/caches.less';
 @import 'module/server-group/nodes/view/nodes.less';
 @import 'module/server-group/nodes/view/node-modal.less';
+@import 'module/server-group/endpoints/view/endpoints.less';
+@import 'components/endpoint-configuration/view/endpoint-configuration.less';
 
 // This is needed for UI Bootstrap directives to work correctly with bootstrap css,
 // as stated on UI Bootstrap webpage.
@@ -75,4 +77,8 @@ li.disabled a {
   & > li {
     cursor: pointer;
   }
+}
+
+.disabled {
+  pointer-events: none;
 }

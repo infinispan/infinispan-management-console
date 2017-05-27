@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid endpoints">
   <div class="row" vertilize-container>
     <div class="col-sm-9 col-md-10 col-sm-push-3 col-md-push-2" class="cache-cards" id-generator="cache_cards_container">
       <br/>
@@ -7,14 +7,13 @@
         <span class="fa fa-filter"></span> Showing {{filtered.length}} endpoints out of {{ctrl.endpoints.length}}
         total.
       </div>
-
-      <div ng-if="true" class="col-xs-6 col-sm-4 col-md-2">
-        <a id="add.button" data-original-title="Add Endpoint" ng-click="ctrl.createEndpointAndEdit('rest')"
-           data-toggle="modal"
-           class="add" data-toggle="tooltip" data-placement="top" title="Add Endpoint">
-          <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
-            <h2 class="card-pf-title">Add Endpoint
-            </h2>
+     <!-- ADD NEW ENDPOINT -->
+      <div class="col-xs-6 col-sm-4 col-md-3 add-new-endpoint">
+        <a id="add.button" data-original-title="Add Endpoint" ng-click="ctrl.createEndpointAndEdit('memcached')"
+            data-toggle="modal"
+            class="add" data-toggle="tooltip" data-placement="top" title="Add Endpoint">
+        <div class="card-pf card-pf-accented card-pf-aggregate-status" vertilize>
+            <h2 class="card-pf-title endpoint-name ">Add Endpoint</h2>
 
             <div style="height: 50px;" class="card-pf-body">
               <p class="card-pf-aggregate-status-notifications">
@@ -26,16 +25,20 @@
           </div>
         </a>
       </div>
-      <div class="col-xs-6 col-sm-4 col-md-2" id-generator="groups"
+      <!-- ADD NEW ENDPOINT END -->
+
+      <!-- ENDPOINTS -->
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="groups"
            ng-repeat="endpoint in filtered = (ctrl.endpoints | endpointFilter:searchNameQuery)"
            ng-show="true">
-          <a ui-sref="edit-endpoint-config({serverGroup: ctrl.serverGroup.name, endpointType: endpoint.getType(), endpointName: endpoint.getName()})" title="View Endpoint Details">
+         
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
-            <h2 class="card-pf-title">
-              <span class="pficon" ng-class="{'fa fa-power-off':ctrl.isEndpointDisabled(endpoint),
-              'pficon-ok':ctrl.isEndpointEnabled(endpoint)}"></span>{{endpoint.getName()}}
-            </h2>
-
+            <a ui-sref="edit-endpoint-config({serverGroup: ctrl.serverGroup.name, endpointType: endpoint.getType(), endpointName: endpoint.getName()})" title="View Endpoint Details">
+              <h2 class="card-pf-title endpoint-name">
+                <span class="pficon" ng-class="{'fa fa-power-off':ctrl.isEndpointDisabled(endpoint),
+                'pficon-ok':ctrl.isEndpointEnabled(endpoint)}"></span>{{endpoint.getName()}}
+              </h2>
+            </a>
             <div class="card-pf-body">
               <h4 ng-show="ctrl.isDomainMode()">{{endpoint.name}}</h4>
               <h5 ng-if="!ctrl.isMultiTenantRouter(endpoint) && endpoint.hasSocketBinding()">{{endpoint.getSocketBinding().name}}:{{endpoint.getSocketBinding().port}}</h5>
@@ -49,11 +52,10 @@
               </p>
             </div>
           </div>
-        </a>
       </div>
     </div>
-
-    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left">
+    <!-- ENDPOINTS END -->
+    <div class="col-sm-3 col-md-2 col-sm-pull-9 col-md-pull-10 sidebar-pf sidebar-pf-left full-height">
       <br>
       <small>Quick search:</small>
       <form role="form" class="search-pf has-button">

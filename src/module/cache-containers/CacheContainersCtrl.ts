@@ -14,7 +14,7 @@ import {ModalService} from '../../services/modal/ModalService';
 
 export class CacheContainersCtrl {
 
-  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "containers", "launchType", "modalService"];
+  static $inject: string[] = ["containerService", "domainService", "jGroupsService", "clusterEventsService", "containers", "launchType", "modalService", "$state"];
 
   domain: IDomain;
   stacks: IMap<string>;
@@ -26,7 +26,8 @@ export class CacheContainersCtrl {
               private clusterEventsService: ClusterEventsService,
               public containers: ICacheContainer[],
               private launchType: LaunchTypeService,
-              private modalService: ModalService) {
+              private modalService: ModalService,
+              private $state: any) {
     if (this.jGroupsService.hasJGroupsStack()) {
       this.domainService.getHostsAndServers()
         .then((domain) => {
@@ -92,7 +93,10 @@ export class CacheContainersCtrl {
   }
 
   enableContainerRebalance(container) {
-    this.modalService.createRebalanceModal(true, "ENABLE rebalancing for cache container?", container);
+    this.modalService.createRebalanceModal(true, "ENABLE rebalancing for cache container?", container)
+    .then(() => {
+      this.$state.reload();
+    });
   }
 
   disableContainerRebalance(container) {

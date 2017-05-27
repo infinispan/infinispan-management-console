@@ -3,10 +3,12 @@
   "version": "9.0.0-SNAPSHOT",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/lodash": "^4.14.64",
     "bootstrap": "3.3.7",
     "gulp-filter": "~4.0.0",
     "gulp-flatten": "~0.3.1",
-    "patternfly": "~4.0.0-rc.1"
+    "patternfly": "~4.0.0-rc.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "browser-sync": "~2.14.0",
@@ -67,6 +69,7 @@
     },
     "configFile": "src/jspm.conf.js",
     "dependencies": {
+      "@types/lodash@4.14.50": "npm:@types/lodash@4.14.50",
       "angular": "npm:angular@1.5.11",
       "angular-drag-and-drop-lists": "npm:angular-drag-and-drop-lists@2.0.0",
       "angular-local-storage": "npm:angular-local-storage@^0.5.0",
@@ -84,7 +87,9 @@
       "d3": "npm:d3@3.5.17",
       "http-proxy": "npm:http-proxy@^1.14.0",
       "jquery": "npm:jquery@^3.1.0",
-      "patternfly": "npm:patternfly@4.0.0-rc.1"
+      "lodash": "npm:lodash@^4.17.4",
+      "patternfly": "npm:patternfly@4.0.0-rc.1",
+      "underscore": "npm:underscore@^1.8.3"
     },
     "devDependencies": {
       "ts": "github:frankwallis/plugin-typescript@4.0.5",

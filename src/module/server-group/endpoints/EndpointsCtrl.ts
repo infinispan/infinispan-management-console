@@ -7,16 +7,19 @@ import {EndpointService} from "../../../services/endpoint/EndpointService";
 import {CompositeOpBuilder} from "../../../services/dmr/CompositeOpBuilder";
 import {DmrService} from "../../../services/dmr/DmrService";
 import {IStateService} from "angular-ui-router";
+import {ModalService} from './../../../services/modal/ModalService';
 
 export class EndpointsCtrl {
-  static $inject: string[] = ["$uibModal", "$state", "endpointService", "dmrService", "serverGroup", "endpoints"];
+  static $inject: string[] = ["$state", "endpointService", "dmrService", "serverGroup", "endpoints", "modalService"];
 
-  constructor(private $uibModal: IModalService,
-              private $state: IStateService,
+
+
+  constructor(private $state: IStateService,
               private endpointService: EndpointService,
               private dmrService: DmrService,
               private serverGroup: IServerGroup,
-              private endpoints: IEndpoint[]){
+              private endpoints: IEndpoint[],
+              private modalService: ModalService){
   }
 
   isEndpointEnabled(endpoint: IEndpoint): boolean {
@@ -39,19 +42,7 @@ export class EndpointsCtrl {
       serverGroup: this.serverGroup.name
     };
 
-    this.$state.go("new-endpoint-config", params);
+    this.modalService.openEndpointModal(`${type}-connector`, this.serverGroup.name);
+    // this.$state.go("new-endpoint-config", params);
   }
-
-  createEndpointModal(): void {
-    this.$uibModal.open({
-      templateUrl: "module/server-group/endpoints/view/add-endpoint-modal.html",
-      controller: AddEndpointModalCtrl,
-      controllerAs: "ctrl",
-      resolve: {
-        //container: (): ICacheContainer => this.container,
-        //templates: (): ITemplate[] => this.templates
-      }
-    });
-  }
-
 }

@@ -117,8 +117,7 @@ export class ServerGroupCtrl {
   }
 
   refresh(): void {
-    this.dmrService.clearGetCache();
-    this.$state.reload();
+    this.serverService.refresh().then(() => this.$state.reload());
   }
 
   createServerModal(): void {

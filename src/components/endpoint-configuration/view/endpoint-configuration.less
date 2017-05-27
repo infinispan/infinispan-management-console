@@ -15,8 +15,17 @@
     padding-right: 0px;
 
     .add-sni-button {
-      margin: 10px 0px 10px 0px;
+      margin: 10px 0px -10px 0px;
       text-align: center;
+    }
+    .multi-tenancy {
+      .list-group-item-container.container-fluid {
+        .list-group-item:first-child {
+            display: block;
+        }
+        padding: 0px;
+        width: auto;
+      }
     }
   }
 }

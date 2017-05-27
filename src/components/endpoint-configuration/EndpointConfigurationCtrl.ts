@@ -14,6 +14,8 @@ export class EndpointConfigurationCtrl {
   readOnlyFields: string[];
   configCallbacks: IConfigurationCallback[];
 
+  public newSni: any;
+
   listConfig: any = {
     selectItems: false,
     multiSelect: false,
@@ -22,7 +24,7 @@ export class EndpointConfigurationCtrl {
     dragEnd: false,
     dragMoved: false,
     dragStart: false,
-    selectionMatchProp: 'name',
+    selectionMatchProp: 'data',
     selectedItems: [],
     itemsAvailable: true,
     checkDisabled: false,
@@ -37,7 +39,11 @@ export class EndpointConfigurationCtrl {
 
   static $inject: string[] = ["modalService"]; 
   constructor(public modalService: ModalService) {
-
+    this.newSni = {
+      hostName: '',
+      securityRealm: '',
+      sniName: ''
+    };
   }
 
 
@@ -58,9 +64,17 @@ export class EndpointConfigurationCtrl {
   }
 
   openAddSniModal():void {
-    this.modalService.openSniModal()
-    .then(data => {
-      console.log(data);
-    });
+    // TODO: ADD SNI
+    console.log(this.newSni);
+  }
+
+  parseSniToArray(sniObject) {
+    return Object.keys(sniObject).reduce((acc, tally, index) => {
+      acc[index] = {
+        name: tally,
+        data: sniObject[tally]
+      };
+      return acc;
+    }, {});
   }
 }

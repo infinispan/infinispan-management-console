@@ -1,13 +1,14 @@
 <div class="list-view-pf-description">
   <div class="list-group-item-heading">
-    {{$ctrl.sniName}}
+    <label class="control-label">Sni name</label>
+    {{$ctrl.sni.name}}
   </div>
   <div class="list-group-item-text">
     <label class="control-label">Host name</label>
-    {{$ctrl.data['host-name']}}
+    {{$ctrl.sni.data['host-name']}}
   </div>
   <div class="list-group-item-text">
     <label class="control-label">Security realm</label>
-    {{$ctrl.data['security-realm']}}
+    {{$ctrl.sni.data['security-realm']}}
   </div>
 </div>

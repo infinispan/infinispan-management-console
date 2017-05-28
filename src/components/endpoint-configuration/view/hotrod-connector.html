@@ -1,4 +1,4 @@
-<div>
+<div class="hotrod-connector">
   <uib-tabset vertical="true" type="pills">
     <uib-tab heading="General" active="true">
       <configuration-section fields="[{name: 'Main', fields: ['name', 'cache-container']},
@@ -40,7 +40,7 @@
                              init-defaults="initDefaults" read-only="$ctrl.readOnly"
                              config-callbacks="$ctrl.configCallbacks" removable="true" render="true"/>
 
-          <div class="panel panel-default">
+          <div class="panel panel-default panel-list">
             <div class="panel-heading">
               <div class="row">
                 <div class="col-md-6"><h3 class="panel-title">SNI Configurations</h3></div>
@@ -50,31 +50,8 @@
 
             <div class="panel-body">
               <div class="form-horizontal">
-
                 <div class="col-md-12 list-view-container">
-                  <pf-list-view id="snis"
-                                items="::$ctrl.data.encryption.ENCRYPTION.sni"
-                                config="$ctrl.listConfig">
-                    <div class="list-view-pf-description">
-                      <!--<div class="list-group-item-heading">
-                        {{item.name}}
-                      </div> -->
-                      <div class="list-group-item-text">
-                        <label class="control-label">Host name</label>
-                        <input class="form-control" type="text" ng-model="item['host-name']"/>
-                      </div>
-                      <div class="list-group-item-text">
-                        <label class="control-label">Security realm</label>
-                        <input class="form-control" type="text" ng-model="item['security-realm']"/>
-                      </div>
-                    </div>
-                    <div class="list-view-pf-additional-info">
-                      <div class="list-view-pf-additional-info-item">
-                      </div>
-                      <div class="list-view-pf-additional-info-item">
-                      </div>
-                    </div>
-                  </pf-list-view>
+                  <sni-list add-action="$ctrl.addNewSniToHotrod($event)" remove-action="$ctrl.removeItem($event)" parent="$ctrl.data.encryption.ENCRYPTION" list-id="{{$ctrl.paths.encryptionSni}}"></sni-list>
                 </div>
 
               </div>

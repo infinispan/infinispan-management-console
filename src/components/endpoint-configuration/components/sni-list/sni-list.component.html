@@ -1,0 +1,17 @@
+<new-sni add-action="$ctrl.add($event)" parent="$ctrl.parent"></new-sni>
+                  
+<pf-list-view id="{{$ctrl.listId}}"
+              config="{selectionMatchProp: ''}"
+              action-buttons="$ctrl.actions"
+              items="$ctrl.parent.sni">
+    <div class="list-view-pf-description">
+      <div class="list-group-item-heading">
+        <label class="control-label">Host name: </label>
+        {{item['host-name']}}
+      </div>
+      <div class="list-group-item-text">
+        <label class="control-label">Security realm: </label>
+        {{item['security-realm']}}
+      </div>
+    </div>
+  </pf-list-view>

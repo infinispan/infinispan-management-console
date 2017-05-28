@@ -36,12 +36,12 @@ export class EndpointConfigCtrl extends AbstractConfigurationCtrl {
   }
 
   create(endpoint: IEndpoint): ng.IPromise<any> {
-    let excludedAttributes: string [] = ["is-new-node"];
+    let excludedAttributes: string [] = ["is-new-node", "isExpanded", "hash"];
     return this.endpointService.save(endpoint, excludedAttributes);
   }
 
   update(endpoint: IEndpoint): ng.IPromise<any> {
-    let excludedAttributes: string [] = ["socket-binding", "is-new-node"];
+    let excludedAttributes: string [] = ["socket-binding", "is-new-node", "isExpanded", "hash"];
     return this.endpointService.save(endpoint, excludedAttributes);
   }
 
@@ -80,7 +80,6 @@ export class EndpointConfigCtrl extends AbstractConfigurationCtrl {
   }
 
   updateEndpoint(endpoint:IEndpoint): void {
-    console.log(endpoint);
     let message: string = this.isEditMode()?"Update endpoint " + this.endpoint.getName() + "?": "Create endpoint " + this.endpoint.getName() + "?"
     openConfirmationModal(this.$uibModal, message).result.then(() => {
       this.update(endpoint)

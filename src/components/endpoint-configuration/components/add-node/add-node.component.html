@@ -1,0 +1,27 @@
+<pf-list-view id="{{$ctrl.nodeId}}"
+              config="{useExpandingRows:true}"
+              items="::[{}]">
+    <div class="list-view-pf-description">
+      <div class="list-group-item-heading">
+        <span translate>New node</span>
+      </div>
+    </div>
+  <list-expanded-content>
+    <form class="form-horizontal" name="templateForm">
+      <div class="form-group" ng-repeat="prop in $ctrl.props">
+        <label class="col-md-4 control-label">* <span translate>{{prop.name}}: </span></label>
+        <div class="col-md-6">
+          <input type="text" class="form-control" ng-model="$ctrl.newItem[prop.propName]" id-generator="sni-host-name" required/>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0" ng-if="prop.propInfoMessage">
+          <i class="fa fa-info-circle ng-scope" uib-tooltip="{{prop.propInfoMessage}}" tooltip-trigger="" tooltip-animation="true" tooltip-placement="top"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-12 add-sni-button">
+          <button type="button" class="btn btn-primary " ng-click="$ctrl.add()" translate>ADD</button>
+        </div>
+      </div>
+    </form>
+  </list-expanded-content>
+</pf-list-view>

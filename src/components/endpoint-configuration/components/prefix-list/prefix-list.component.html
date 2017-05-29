@@ -1,0 +1,13 @@
+<new-prefix add-action="$ctrl.add($event)" parent="$ctrl.parent"></new-prefix>
+
+<pf-list-view id="{{$ctrl.listId}}"
+              config="{selectionMatchProp: ''}"
+              action-buttons="$ctrl.actions"
+              items="$ctrl.parent.prefix">
+    <div class="list-view-pf-description">
+      <div class="list-group-item-heading">
+        <label class="control-label">Path: </label>
+        {{item['path']}}
+      </div>
+    </div>
+</pf-list-view>

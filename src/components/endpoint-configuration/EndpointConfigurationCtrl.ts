@@ -18,6 +18,7 @@ export class EndpointConfigurationCtrl {
 
   public newSni: any;
   public newHotrod: any;
+  public newRest: any;
   public hasChanged: boolean = false;
 
   public paths = {
@@ -165,7 +166,32 @@ export class EndpointConfigurationCtrl {
     this.hasChanged = true;
   }
 
-   public addNewSniToMultiTenancyHotrod($event) {
+  public addNewRest() {
+    // count how many children hotrod/rest has
+    //Object.keys(obj).length
+    let hotrodNodeCount: number = Object.keys(this.data['multi-tenancy'].MULTI_TENANCY.hotrod).length;
+    let restNodeCount: number = Object.keys(this.data['multi-tenancy'].MULTI_TENANCY.rest).length;
+
+    if (restNodeCount === 0 && hotrodNodeCount === 0) {
+      this.data['multi-tenancy'].MULTI_TENANCY["is-new-node"] = true;
+      this.data['multi-tenancy'].MULTI_TENANCY["required-node"] = true;
+    }
+    this.data['multi-tenancy'].MULTI_TENANCY.rest[this.newRest.name] = {
+      name: this.newRest.name,
+      prefix: {},
+      "is-new-node": true
+    };
+
+    this.fillOneNode(this.data['multi-tenancy'].MULTI_TENANCY.rest, this.newRest.name);
+    this.newRest = {
+      name: ''
+    };
+
+    this.hasChanged = true;
+  }
+
+
+  public addNewSniToMultiTenancyHotrod($event) {
      if (!this.data['multi-tenancy'].MULTI_TENANCY.hotrod[$event.parent.nodeName].sni) {
        this.data['multi-tenancy'].MULTI_TENANCY.hotrod[$event.parent.nodeName].sni = {};
      }
@@ -176,6 +202,17 @@ export class EndpointConfigurationCtrl {
      };
      this.fillOneNode(this.data['multi-tenancy'].MULTI_TENANCY.hotrod[$event.parent.nodeName].sni, $event.name);
    }
+
+  public addNewPrefixToMultiTenancyHotrod($event) {
+    if (!this.data['multi-tenancy'].MULTI_TENANCY.rest[$event.parent.name].prefix) {
+      this.data['multi-tenancy'].MULTI_TENANCY.rest[$event.parent.name].prefix = {};
+    }
+    this.data['multi-tenancy'].MULTI_TENANCY.rest[$event.parent.name].prefix[$event.name] = {
+      'path': $event.name,
+      "is-new-node": true
+    };
+    this.fillOneNode(this.data['multi-tenancy'].MULTI_TENANCY.rest[$event.parent.nodeName].prefix, $event.name);
+  }
 
    public addNewSniToHotrod($event) {
      this.checkAndFixPath($event.parent, "sni");

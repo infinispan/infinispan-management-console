@@ -140,10 +140,20 @@ export class EndpointConfigurationCtrl {
     }, {});
   }
 
-  public addNewHotrod() { 
+  public addNewHotrod() {
+    // count how many children hotrod/rest has
+    //Object.keys(obj).length
+    let hotrodNodeCount: number = Object.keys(this.data['multi-tenancy'].MULTI_TENANCY.hotrod).length;
+    let restNodeCount: number = Object.keys(this.data['multi-tenancy'].MULTI_TENANCY.rest).length;
+
+    if (restNodeCount === 0 && hotrodNodeCount === 0) {
+      this.data['multi-tenancy'].MULTI_TENANCY["is-new-node"] = true;
+      this.data['multi-tenancy'].MULTI_TENANCY["required-node"] = true;
+    }
     this.data['multi-tenancy'].MULTI_TENANCY.hotrod[this.newHotrod.hotrod] = {
-      name: this.newHotrod.name,
-      sni: {}
+      name: this.newHotrod.hotrod,
+      sni: {},
+      "is-new-node": true
     };
 
     this.fillOneNode(this.data['multi-tenancy'].MULTI_TENANCY.hotrod, this.newHotrod.hotrod);
@@ -161,18 +171,31 @@ export class EndpointConfigurationCtrl {
      }
      this.data['multi-tenancy'].MULTI_TENANCY.hotrod[$event.parent.nodeName].sni[$event.name] = {
        'host-name': $event.hostName,
-       'security-realm': $event.securityRealm
+       'security-realm': $event.securityRealm,
+       "is-new-node": true
      };
      this.fillOneNode(this.data['multi-tenancy'].MULTI_TENANCY.hotrod[$event.parent.nodeName].sni, $event.name);
    }
 
    public addNewSniToHotrod($event) {
+     this.checkAndFixPath($event.parent, "sni");
       $event.parent.sni[$event.name] = {
         'host-name': $event.hostName,
-        'security-realm': $event.securityRealm
-      }
+        'security-realm': $event.securityRealm,
+        "is-new-node": true
+      };
       this.fillOneNode($event.parent.sni, $event.name);
    }
+
+  public addNewSniToRest($event) {
+    this.checkAndFixPath($event.parent, "sni");
+    $event.parent.sni[$event.name] = {
+      'host-name': $event.hostName,
+      'security-realm': $event.securityRealm,
+      "is-new-node": true
+    };
+    this.fillOneNode($event.parent.sni, $event.name);
+  }
 
    public addNewConnectorToRest($event) {
      $event.parent[$event.newItem.connectorName] = {
@@ -208,7 +231,7 @@ export class EndpointConfigurationCtrl {
           if (index === 0 && !deepGet(tree, this.concatPath(nodes, 0))) {
             tree[node] = {}
           } else if (index > 0 && !deepGet(tree, this.concatPath(nodes, index))) {
-            deepValue(tree, this.concatPath(nodes, index - 1))[node] = {}; 
+            deepValue(tree, this.concatPath(nodes, index - 1))[node] = {};
           }
           return tree;
         }, tree);

@@ -20,7 +20,8 @@ export class SocketBindingService {
     };
   }
 
-  constructor(private $q: IQService, private dmrService: DmrService, private launchType: LaunchTypeService) {}
+  constructor(private $q: IQService, private dmrService: DmrService, private launchType: LaunchTypeService) {
+  }
 
   getAllSocketBindingGroups(): ng.IPromise<String[]> {
     let request: IDmrRequest = <IDmrRequest>{
@@ -36,6 +37,12 @@ export class SocketBindingService {
       deferred.resolve(groups);
     });
     return deferred.promise;
+  }
+
+  getDefaultSocketBindingGroup(): ng.IPromise<ISocketBinding[]> {
+    return this.getAllSocketBindingGroups().then(groups => {
+      return this.getAllSocketBindingsInGroup(groups[0]);
+    });
   }
 
   getAllSocketBindingsInGroup(socketBindingGroup: string): ng.IPromise<ISocketBinding[]> {

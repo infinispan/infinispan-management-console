@@ -24,17 +24,45 @@ export class FormGroupCtrl {
 
   type: string;
   multiValue: boolean;
+  multiSelect: boolean;
+  multiSettings: any;
   option: string;
   parentId: Function = generateFieldId;
 
   constructor() {
+    this.multiSettings = {
+      template: "{{option}}",
+      smartButtonTextConverter(skip: any, option: any): any {
+        return option;
+      }
+    };
+    this.type = getTypeModelType(this.meta);
+    if (this.meta.type.TYPE_MODEL_VALUE === "LIST") {
+      this.data[this.field] = JSON.parse(this.data[this.field]);
+    }
     if (isNullOrUndefined(this.optionString)) {
       this.type = getTypeModelType(this.meta);
       this.multiValue = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") ? this.meta.allowed : false;
-      this.option = "item as item for item in $ctrl.meta.allowed";
+      this.multiSelect = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") && this.meta["select-option"] === "multiple" ? true : false;
+      if (this.multiSelect) {
+        this.option = this.meta.allowed;
+        if (isNullOrUndefined(this.data[this.field])) {
+          this.data[this.field] = [];
+        }
+      } else {
+        this.option = "item as item for item in $ctrl.meta.allowed";
+      }
     } else {
+      this.multiSelect = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") && this.meta["select-option"] === "multiple" ? true : false;
       this.multiValue = true;
-      this.option = this.optionString.concat(" in $ctrl.optionValues");
+      if (this.multiSelect) {
+        this.option = this.meta.allowed;
+        if (isNullOrUndefined(this.data[this.field])) {
+          this.data[this.field] = [];
+        }
+      } else {
+        this.option = this.optionString.concat(" in $ctrl.optionValues");
+      }
     }
   }
 

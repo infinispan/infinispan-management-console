@@ -83,7 +83,7 @@ export function resolveFieldType(metadata: Object, field: string): string {
 }
 
 export function getTypeModelType(field: any): string {
-  if (isNotNullOrUndefined(field)) {
+  if (isNotNullOrUndefined(field) && isNotNullOrUndefined(field.type)) {
     var fieldType: string;
     switch (field.type.TYPE_MODEL_VALUE) {
       case "DOUBLE":

@@ -15,9 +15,12 @@
       </label>
     </div>
 
+    <div ng-if="$ctrl.multiValue && $ctrl.multiSelect" ng-dropdown-multiselect=""
+         options="$ctrl.option" extra-settings="$ctrl.multiSettings" selected-model="$ctrl.data[$ctrl.field]"></div>
+
     <select class="form-control" ng-style="$ctrl.getStyle()" ng-model="$ctrl.data[$ctrl.field]"
             ng-options="{{$ctrl.option}}" id-generator="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}" type="select"
-            ng-if="$ctrl.multiValue" ng-change="$ctrl.fieldValueModified()"/>
+            ng-if="$ctrl.multiValue && !$ctrl.multiSelect" ng-change="$ctrl.fieldValueModified()"/>
 
     <!-- TODO Make a property table directive-->
     <div ng-if="$ctrl.type === 'table'">

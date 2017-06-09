@@ -32,6 +32,7 @@ System.config({
   },
 
   map: {
+    "@types/lodash@4.14.50": "npm:@types/lodash@4.14.50",
     "angular": "npm:angular@1.5.11",
     "angular-drag-and-drop-lists": "npm:angular-drag-and-drop-lists@2.0.0",
     "angular-local-storage": "npm:angular-local-storage@0.5.0",
@@ -41,6 +42,7 @@ System.config({
     "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
     "angular-ui-router": "npm:angular-ui-router@0.3.1",
+    "angularjs-dropdown-multiselect": "npm:angularjs-dropdown-multiselect@2.0.0-beta.10",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "bootstrap": "github:twbs/bootstrap@3.3.7",
@@ -50,11 +52,14 @@ System.config({
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.33",
     "d3": "npm:d3@3.5.17",
+    "deepmerge": "npm:deepmerge@1.3.2",
     "http-proxy": "npm:http-proxy@1.14.0",
     "jquery": "npm:jquery@3.1.1",
+    "lodash": "npm:lodash@4.17.4",
     "patternfly": "npm:patternfly@4.0.0-rc.1",
     "ts": "github:frankwallis/plugin-typescript@4.0.5",
     "typescript": "npm:typescript@1.8.9",
+    "underscore": "npm:underscore@1.8.3",
     "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1": {
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },
@@ -184,6 +189,14 @@ System.config({
     "npm:angular-ui-router@0.3.1": {
       "angular": "npm:angular@1.5.11",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:angularjs-dropdown-multiselect@2.0.0-beta.10": {
+      "angular": "npm:angular@1.5.11",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:anymatch@1.3.0": {
       "arrify": "npm:arrify@1.0.1",

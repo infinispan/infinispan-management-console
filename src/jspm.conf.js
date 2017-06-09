@@ -1,37 +1,38 @@
 System.config({
   defaultJSExtensions: true,
-  transpiler: 'typescript',
+  transpiler: "typescript",
   babelOptions: {
-    'optional': [
-      'runtime',
-      'optimisation.modules.system'
+    "optional": [
+      "runtime",
+      "optimisation.modules.system"
     ]
   },
   typescriptOptions: {
-    'tsconfig': 'tsconfig.json'
+    "tsconfig": "tsconfig.json"
   },
   paths: {
-    'app/*': 'src/*',
-    'github:*': 'vendor/jspm_packages/github/*',
-    'npm:*': 'vendor/jspm_packages/npm/*'
+    "app/*": "src/*",
+    "github:*": "vendor/jspm_packages/github/*",
+    "npm:*": "vendor/jspm_packages/npm/*"
   },
   buildCSS: true,
   separateCSS: false,
 
   packages: {
-    'app': {
-      'main': 'index',
-      'format': 'amd',
-      'defaultExtension': 'js',
-      'meta': {
-        '*.css': {
-          'loader': 'css'
+    "app": {
+      "main": "index",
+      "format": "amd",
+      "defaultExtension": "js",
+      "meta": {
+        "*.css": {
+          "loader": "css"
         }
       }
     }
   },
 
   map: {
+    "@types/lodash@4.14.50": "npm:@types/lodash@4.14.50",
     "angular": "npm:angular@1.5.11",
     "angular-drag-and-drop-lists": "npm:angular-drag-and-drop-lists@2.0.0",
     "angular-local-storage": "npm:angular-local-storage@0.5.0",
@@ -50,11 +51,14 @@ System.config({
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.33",
     "d3": "npm:d3@3.5.17",
+    "deepmerge": "npm:deepmerge@1.3.2",
     "http-proxy": "npm:http-proxy@1.14.0",
     "jquery": "npm:jquery@3.1.1",
+    "lodash": "npm:lodash@4.17.4",
     "patternfly": "npm:patternfly@4.0.0-rc.1",
     "ts": "github:frankwallis/plugin-typescript@4.0.5",
     "typescript": "npm:typescript@1.8.9",
+    "underscore": "npm:underscore@1.8.3",
     "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1": {
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },

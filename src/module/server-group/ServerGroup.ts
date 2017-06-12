@@ -4,6 +4,7 @@ import {ServerGroupCtrl} from "./ServerGroupCtrl";
 import {EndpointsCtrl} from "./endpoints/EndpointsCtrl";
 import {serverFilter} from "./nodes/filters/ServerGroupFilter";
 import {ServerGroupService} from "../../services/server-group/ServerGroupService";
+import {MetadataService} from "../../services/metadata/MetadataService";
 import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {IRedirectState} from "../../common/IRedirectState";
 import {EndpointService} from "../../services/endpoint/EndpointService";
@@ -74,8 +75,11 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       endpoint: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
         return endpointService.getEndpoint(serverGroup, $stateParams.endpointType, $stateParams.endpointName);
       }],
-      endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
-        return endpointService.getConfigurationMeta(serverGroup.profile,  $stateParams.endpointType,  $stateParams.endpointType);
+      endpointMeta: ["$stateParams", "endpointService", "metadataService", "serverGroup", ($stateParams, endpointService, metadataService:MetadataService, serverGroup) => {
+        return endpointService.getConfigurationMeta(serverGroup.profile,
+          $stateParams.endpointType, $stateParams.endpointType).then(originalMeta => {
+          return metadataService.mergeMetadata(originalMeta, "components/endpoint-configuration/view/" + $stateParams.endpointType + "-meta.json");
+        });
       }],
       endpointName: ["$stateParams", ($stateParams) => $stateParams.endpointName],
       endpointType: ["$stateParams", ($stateParams) => $stateParams.endpointType]
@@ -97,8 +101,11 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       endpoint: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
         return EndpointService.parseEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName), {});
       }],
-      endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
-        return endpointService.getConfigurationMeta(serverGroup.profile,  $stateParams.endpointType,  $stateParams.endpointType);
+      endpointMeta: ["$stateParams", "endpointService", "metadataService", "serverGroup", ($stateParams, endpointService, metadataService, serverGroup) => {
+        return endpointService.getConfigurationMeta(serverGroup.profile,
+          $stateParams.endpointType, $stateParams.endpointType).then(originalMeta => {
+          return metadataService.mergeMetadata(originalMeta, "components/endpoint-configuration/view/" + $stateParams.endpointType + "-meta.json");
+        });
       }],
       endpointName: ["$stateParams", ($stateParams) => $stateParams.endpointName],
       endpointType: ["$stateParams", ($stateParams) => $stateParams.endpointType]

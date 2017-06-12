@@ -38,6 +38,12 @@ export class SocketBindingService {
     return deferred.promise;
   }
 
+  getDefaultSocketBindingGroup(): ng.IPromise<ISocketBinding[]> {
+    return this.getAllSocketBindingGroups().then(groups => {
+      return this.getAllSocketBindingsInGroup(groups[0]);
+    })
+  }
+
   getAllSocketBindingsInGroup(socketBindingGroup: string): ng.IPromise<ISocketBinding[]> {
     let request: IDmrRequest = <IDmrRequest>{
       address: [].concat("socket-binding-group", socketBindingGroup),

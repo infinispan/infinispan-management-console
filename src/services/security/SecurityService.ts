@@ -6,16 +6,24 @@ import IQService = angular.IQService;
 import {IDmrRequest} from "../dmr/IDmrRequest";
 import {isNullOrUndefined, deepGet} from "../../common/utils/Utils";
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
+import {IServerAddress} from "../server/IServerAddress";
+import {ServerAddress} from "../server/ServerAddress";
+import {ServerGroupService} from "../server-group/ServerGroupService";
+import {JGroupsService} from "../jgroups/JGroupsService";
+import {IServerGroup} from "../server-group/IServerGroup";
+import {IMap} from "../../common/utils/IMap";
 
 const module: ng.IModule = App.module("managementConsole.services.security", []);
 
 export class SecurityService {
 
-  static $inject: string[] = ["$q", "dmrService", "launchType"];
+  static $inject: string[] = ["$q", "dmrService", "launchType", "serverGroupService","jGroupsService"];
 
   constructor(private $q: IQService,
               private dmrService: DmrService,
-              private launchType: LaunchTypeService) {
+              private launchType: LaunchTypeService,
+              private serverGroupService: ServerGroupService,
+              private jGroupsService: JGroupsService) {
   }
 
   getContainerAuthorization(container: ICacheContainer): ng.IPromise<IAuthorization> {
@@ -50,9 +58,45 @@ export class SecurityService {
     return deferred.promise;
   }
 
+  getSecurityRealms():ng.IPromise<string[]>{
+    return this.serverGroupService.getAllServerGroupsMap().then(groups => {
+      for (let group in groups) {
+        //get the realms for the first server group as they are shared across groups
+        return this.serverGroupService.getServerGroupMapWithMembers(group).then(serverGroup => {
+          return this.getSecurityRealmsForServerGroup(serverGroup);
+        });
+      }
+    });
+  }
+
+  getSecurityRealmsForServerGroup(serverGroup: IServerGroup): ng.IPromise<string[]> {
+    let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
+    let securityRealms: string [] = [];
+    this.jGroupsService.getServerGroupCoordinator(serverGroup).then(coord => {
+      let request: IDmrRequest = {
+        address: this.getServerAddress(coord).concat("core-service", "management"),
+        "child-type": "security-realm",
+        recursive: false
+      };
+
+      this.dmrService.readChildResources(request)
+        .then(realms => {
+          for(let realm in realms){
+            securityRealms.push(realm);
+          }
+          deferred.resolve(securityRealms);
+        });
+    });
+    return deferred.promise;
+  }
+
   private getDatagridAddress(profile: string): string[] {
     let endpointPath: string[] = ["subsystem", "datagrid-infinispan"];
     return this.launchType.getProfilePath(profile).concat(endpointPath);
+  }
+
+  private getServerAddress(server: IServerAddress): string[] {
+    return this.launchType.getRuntimePath(server);
   }
 }
 

@@ -42,6 +42,7 @@ System.config({
     "angular-translate-loader-static-files": "github:angular-translate/bower-angular-translate-loader-static-files@2.11.1",
     "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
     "angular-ui-router": "npm:angular-ui-router@0.3.1",
+    "angularjs-dropdown-multiselect": "npm:angularjs-dropdown-multiselect@2.0.0-beta.10",
     "babel": "npm:babel-core@5.8.38",
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "bootstrap": "github:twbs/bootstrap@3.3.7",
@@ -188,6 +189,14 @@ System.config({
     "npm:angular-ui-router@0.3.1": {
       "angular": "npm:angular@1.5.11",
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:angularjs-dropdown-multiselect@2.0.0-beta.10": {
+      "angular": "npm:angular@1.5.11",
+      "fs": "github:jspm/nodelibs-fs@0.1.2",
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
+      "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:anymatch@1.3.0": {
       "arrify": "npm:arrify@1.0.1",

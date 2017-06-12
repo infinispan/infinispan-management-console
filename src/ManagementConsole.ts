@@ -16,6 +16,7 @@ import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
 import "deepmerge";
+import "angularjs-dropdown-multiselect";
 import 'c3/c3.js';
 import 'd3/d3.js';
 import "patternfly/dist/js/patternfly.js";
@@ -53,7 +54,8 @@ const module: ng.IModule = angular.module("managementConsole", [
   "ngSanitize",
   "dndLists",
   "patternfly",
-  "patternfly.charts"
+  "patternfly.charts",
+  "angularjs-dropdown-multiselect"
 ]);
 
 // @ngInject

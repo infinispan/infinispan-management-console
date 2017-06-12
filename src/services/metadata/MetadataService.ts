@@ -1,6 +1,6 @@
 import {App} from "../../ManagementConsole";
 import {DmrService} from "../dmr/DmrService";
-import {deepValue, traverseObject} from "../../common/utils/Utils";
+import {deepValue, traverseObject, isNotNullOrUndefined} from "../../common/utils/Utils";
 import IInjectorService = angular.auto.IInjectorService;
 import deepmerge = require("deepmerge");
 import IHttpService = angular.IHttpService;
@@ -56,7 +56,13 @@ export class MetadataService {
         let promise: ng.IPromise<any> = service[methodName]().then(objArrayResponse => {
           let stringArray: string [] = [];
           for(let responseObject of objArrayResponse){
-            stringArray.push(deepValue(responseObject, objectPath));
+            if (isNotNullOrUndefined(objectPath)) {
+              //peel into object and resolve object path
+              stringArray.push(deepValue(responseObject, objectPath));
+            } else {
+              //otherwise assume we got a simple object and use it directly
+              stringArray.push(responseObject);
+            }
           }
           //assign response to attribute "allowed" of the parent meta node relative to resolve
           parentObject["allowed"] = stringArray;

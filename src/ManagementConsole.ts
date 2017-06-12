@@ -15,7 +15,6 @@ import "angular-local-storage";
 import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
-import "patternfly";
 import "deepmerge";
 import "angularjs-dropdown-multiselect";
 import "c3/c3.js";

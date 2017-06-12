@@ -23,12 +23,12 @@ export class SocketBindingService {
   constructor(private $q: IQService, private dmrService: DmrService, private launchType: LaunchTypeService) {
   }
 
-  getAllSocketBindingGroups(): ng.IPromise<String[]> {
+  getAllSocketBindingGroups(): ng.IPromise<string[]> {
     let request: IDmrRequest = <IDmrRequest>{
       address: [],
       "child-type": "socket-binding-group"
     };
-    let deferred: ng.IDeferred<String[]> = this.$q.defer<String[]>();
+    let deferred: ng.IDeferred<string[]> = this.$q.defer<string[]>();
     this.dmrService.readChildResources(request).then((response) => {
       let groups: string[] = [];
       for (let name in response) {

@@ -37,7 +37,7 @@ export class FormGroupCtrl {
       }
     };
     this.type = getTypeModelType(this.meta);
-    if (this.meta.type.TYPE_MODEL_VALUE === "LIST") {
+    if (this.meta.type.TYPE_MODEL_VALUE === "LIST" && isNotNullOrUndefined(this.data[this.field])) {
       this.data[this.field] = JSON.parse(this.data[this.field]);
     }
     if (isNullOrUndefined(this.optionString)) {

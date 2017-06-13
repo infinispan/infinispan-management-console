@@ -36,8 +36,11 @@ export class FormGroupCtrl {
         return option;
       }
     };
+    this.type = getTypeModelType(this.meta);
+    if (this.meta.type.TYPE_MODEL_VALUE === "LIST") {
+      this.data[this.field] = JSON.parse(this.data[this.field]);
+    }
     if (isNullOrUndefined(this.optionString)) {
-      this.type = getTypeModelType(this.meta);
       this.multiValue = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") ? this.meta.allowed : false;
       this.multiSelect = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") && this.meta["select-option"] === "multiple"? true : false;
       if (this.multiSelect) {

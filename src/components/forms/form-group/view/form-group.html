@@ -15,8 +15,21 @@
       </label>
     </div>
 
-    <div ng-if="$ctrl.multiValue && $ctrl.multiSelect" ng-dropdown-multiselect=""
-         options="$ctrl.option" extra-settings="$ctrl.multiSettings" selected-model="$ctrl.data[$ctrl.field]"></div>
+    <!-- <ui-select id="$ctrl.field" ng-if="$ctrl.multiValue && $ctrl.multiSelect" ng-model="$ctrl.data[$ctrl.field]" multiple theme="selectize">
+        <ui-select-match>{{$item}}</ui-select-match>
+        <ui-select-choices repeat="option in $ctrl.option">
+          {{option}}
+        </ui-select-choices>
+    </ui-select> -->
+
+    <!-- <div ng-if="$ctrl.multiValue && $ctrl.multiSelect" ng-dropdown-multiselect=""
+         options="$ctrl.option" extra-settings="$ctrl.multiSettings" selected-model="$ctrl.data[$ctrl.field]"></div> -->
+
+    <ol multiple ng-if="$ctrl.multiValue && $ctrl.multiSelect" class="nya-bs-select" ng-model="$ctrl.data[$ctrl.field]">
+      <li nya-bs-option="option in $ctrl.option">
+        <a>{{option}}</a>
+      </li>
+    </ol>
 
     <select class="form-control" ng-style="$ctrl.getStyle()" ng-model="$ctrl.data[$ctrl.field]"
             ng-options="{{$ctrl.option}}" id-generator="{{$ctrl.parentId($ctrl.field, $ctrl.parent)}}" type="select"

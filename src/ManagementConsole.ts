@@ -16,9 +16,6 @@ import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
 import "deepmerge";
-import "angularjs-dropdown-multiselect";
-import "angular-multiple-select";
-import "nya-bootstrap-select";
 import "ui-select";
 import 'c3/c3.js';
 import 'd3/d3.js';
@@ -59,10 +56,7 @@ const module: ng.IModule = angular.module("managementConsole", [
   "dndLists",
   "patternfly",
   "patternfly.charts",
-  "angularjs-dropdown-multiselect",
-  "multipleSelect",
-  "ui.select",
-  "nya.bootstrap.select"
+  "ui.select"
 ]);
 
 // @ngInject

@@ -26,6 +26,7 @@ export class EndpointConfigCtrl extends AbstractConfigurationCtrl {
               private endpointType: string,
               private endpointName: string) {
     super();
+    this.readOnlyFields = ["name"];
   }
 
   goToEndpointsView(): void {

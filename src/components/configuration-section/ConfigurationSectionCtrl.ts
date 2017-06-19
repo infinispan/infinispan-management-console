@@ -31,9 +31,11 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
       this.configCallbacks.push(this);
     }
     this.prevData = {};
-    let hasFieldsWithData: boolean = this.hasAnyFieldPreviousData();
-    this.loadedWithData = hasFieldsWithData;
-    this.data["is-new-node"] = !hasFieldsWithData;
+    if (isNullOrUndefined(this.data["is-new-node"])) {
+      let hasFieldsWithData: boolean = this.hasAnyFieldPreviousData();
+      this.loadedWithData = hasFieldsWithData;
+      this.data["is-new-node"] = !hasFieldsWithData;
+    }
     this.cleanMetadata();
     this.createPlaceholders();
   }

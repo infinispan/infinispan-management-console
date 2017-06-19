@@ -9,6 +9,7 @@ import {IRedirectState} from "../../common/IRedirectState";
 import {EndpointService} from "../../services/endpoint/EndpointService";
 import {endpointFilter} from "./endpoints/filters/EndpointFilter";
 import {EndpointConfigCtrl} from "./endpoints/config/EndpointConfigCtrl";
+import {IEndpoint} from "../../services/endpoint/IEndpoint";
 
 const module: ng.IModule = App.module("managementConsole.server-group", []);
 
@@ -87,8 +88,8 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
         return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
       }],
-      endpoint: ["$stateParams", ($stateParams) => {
-        return EndpointService.parseEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName), {});
+      endpoint: ["$stateParams", "endpointService", ($stateParams, endpointService) => {
+        return endpointService.createEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName));
       }],
       endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
         return endpointService.getConfigurationMeta(serverGroup.profile,  $stateParams.endpointType,  $stateParams.endpointType);

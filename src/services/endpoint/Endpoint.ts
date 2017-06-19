@@ -10,7 +10,7 @@ export class Endpoint implements IEndpoint {
   constructor(private namePath: string [], private data: any, private socketBinding: ISocketBinding) {
     this.connector = <IProtocolConnector> {
       name: isNotNullOrUndefined(namePath) && namePath.length > 1 ? namePath[1] : "N/A",
-      "type": isNotNullOrUndefined(namePath) && namePath.length > 0 ? namePath[0] : undefined,
+      type: isNotNullOrUndefined(namePath) && namePath.length > 0 ? namePath[0] : undefined,
       "cache-container": data["cache-container"],
       "socket-binding-name": data["socket-binding"],
       "worker-threads": data["worker-threads"],
@@ -20,10 +20,13 @@ export class Endpoint implements IEndpoint {
       "receive-buffer-size": data["receive-buffer-size"],
       "socket-binding": undefined
     };
+    if (isNotNullOrUndefined(this.data)) {
+      this.data.name = this.getName();
+    }
   }
 
   getType(): string {
-    return this.connector['type'];
+    return this.connector["type"];
   }
 
   getName(): string {
@@ -35,7 +38,7 @@ export class Endpoint implements IEndpoint {
   }
 
   getSocketBindingName(): string {
-    return isNotNullOrUndefined(this.getSocketBinding()) ? this.getSocketBinding().name : this.connector['socket-binding-name'];
+    return isNotNullOrUndefined(this.getSocketBinding()) ? this.getSocketBinding().name : this.connector["socket-binding-name"];
   }
 
   setSocketBinding(binding: ISocketBinding): void {
@@ -51,7 +54,7 @@ export class Endpoint implements IEndpoint {
   }
 
   getEncryption(): any {
-    return this.data['encryption'];
+    return this.data["encryption"];
   }
 
   isMultiTenant(): boolean {

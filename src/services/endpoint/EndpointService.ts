@@ -26,6 +26,10 @@ export class EndpointService {
               private socketBindingService: SocketBindingService, private launchType: LaunchTypeService) {
   }
 
+  createEndpoint(namePath: string []): IEndpoint {
+    return new Endpoint(namePath, {"is-new-node": true}, undefined);
+  }
+
   getAllEndpoints(cacheContainer: ICacheContainer): ng.IPromise<IEndpoint[]> {
     let request: IDmrRequest = <IDmrRequest>{
       address: this.getEndpointsRootAddress(cacheContainer.profile),

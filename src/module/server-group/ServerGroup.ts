@@ -16,7 +16,6 @@ module.controller("ServerGroupCtrl", ServerGroupCtrl);
 module.filter("serverFilter", serverFilter);
 module.filter("endpointFilter", endpointFilter);
 
-// @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
   $stateProvider.state("server-group", <IRedirectState>{
     parent: "root",
@@ -27,9 +26,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     redirectTo: "server-group.nodes",
     resolve: {
       serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
-        // TODO add serverGroup object as optional parameter and if exists don't call service again unless refresh is true
-        let serverGroup: string = $stateParams.serverGroup;
-        return serverGroupService.getServerGroupMapWithMembers(serverGroup);
+        return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
       }],
       available: ["serverGroupService", "serverGroup",
         (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
@@ -66,10 +63,8 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controllerAs: "ctrl",
     templateUrl: "module/server-group/endpoints/config/view/endpoint-config.html",
     resolve: {
-      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService, endpointService) => {
-        // TODO add serverGroup object as optional parameter and if exists don't call service again unless refresh is true
-        let serverGroup: string = $stateParams.serverGroup;
-        return serverGroupService.getServerGroupMapWithMembers(serverGroup);
+      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
+        return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
       }],
       endpoint: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
         return endpointService.getEndpoint(serverGroup, $stateParams.endpointType, $stateParams.endpointName);
@@ -89,12 +84,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     controllerAs: "ctrl",
     templateUrl: "module/server-group/endpoints/config/view/endpoint-config.html",
     resolve: {
-      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService, endpointService) => {
-        // TODO add serverGroup object as optional parameter and if exists don't call service again unless refresh is true
-        let serverGroup: string = $stateParams.serverGroup;
-        return serverGroupService.getServerGroupMapWithMembers(serverGroup);
+      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
+        return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
       }],
-      endpoint: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
+      endpoint: ["$stateParams", ($stateParams) => {
         return EndpointService.parseEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName), {});
       }],
       endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {

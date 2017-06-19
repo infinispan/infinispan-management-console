@@ -92,18 +92,18 @@ export class DmrService {
     this.$cacheFactory.get("$http").removeAll();
   }
 
-  traverseDMRTree(builder: CompositeOpBuilder, dmrRoot: any, dmrAddress: string [], excludedAttributes: string []) {
-    //traverse the object tree
+  traverseDMRTree(builder: CompositeOpBuilder, dmrRoot: any, dmrAddress: string [], excludedAttributes: string []): void {
+    // traverse the object tree
     traverseObject(dmrRoot, (key: string, value: any, trail: string []) => {
       this.visitTraversedObject(builder, value, trail.concat(key), excludedAttributes);
     }, dmrAddress);
 
-    //and finally visit root object itself...
+    // and finally visit root object itself...
     this.visitTraversedObject(builder, dmrRoot, dmrAddress, excludedAttributes);
   }
 
   private visitTraversedObject(builder: CompositeOpBuilder, obj: any,
-                               address: string[], excludedAttributes: string []) {
+                               address: string[], excludedAttributes: string []): void {
     this.addCompositeOperationsToBuilder(builder, address, obj, excludedAttributes);
   }
 

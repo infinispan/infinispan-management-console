@@ -1,4 +1,3 @@
-import {IProtocolConnector} from "./IProtocolConnector";
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 
 export interface IEndpoint {

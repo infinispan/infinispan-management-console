@@ -63,7 +63,7 @@ export class CacheContainersCtrl {
   displayEndpoint(endpoint: IEndpoint): string {
     let socketBinding: ISocketBinding = endpoint.getSocketBinding();
     if (isNotNullOrUndefined(socketBinding)) {
-      return socketBinding.name + " : " + socketBinding.port + " " + (isNotNullOrUndefined(endpoint.getEncryption())?"encrypted":"");
+      return socketBinding.name + " : " + socketBinding.port + " " + (isNotNullOrUndefined(endpoint.getEncryption()) ? "encrypted" : "");
     }
   }
 

@@ -6,15 +6,10 @@ import {SocketBindingService} from "../socket-binding/SocketBindingService";
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 import IQService = angular.IQService;
 import {LaunchTypeService} from "../launchtype/LaunchTypeService";
-import {
-  isNotNullOrUndefined, traverse, deepValue, isNullOrUndefined, isObject,
-  isJsonString, traverseObject
-} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, traverse, deepValue} from "../../common/utils/Utils";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {IServerGroup} from "../server-group/IServerGroup";
-import {IServerAddress} from "../server/IServerAddress";
-import {CompositeOpBuilder, createWriteAttrReq} from "../dmr/CompositeOpBuilder";
-import IPromise = angular.IPromise;
+import {CompositeOpBuilder} from "../dmr/CompositeOpBuilder";
 import {Endpoint} from "./Endpoint";
 import {IDmrCompositeReq} from "../dmr/IDmrCompositeReq";
 
@@ -118,13 +113,20 @@ export class EndpointService {
     this.dmrService.readResourceDescription({
       address: address,
       recursive: true
-    }).then(
-      response => {
-        //TODO perhaps inspect and adjust the response
-        deferred.resolve(response);
-      },
-      error => deferred.reject(error));
+    }).then(response => deferred.resolve(response), error => deferred.reject(error));
     return deferred.promise;
+  }
+
+  getEndpointTypes(): string [] {
+    return ["hotrod", "rest", "websocket", "router", "memcached"];
+  }
+
+  update(endpoint: IEndpoint): ng.IPromise<any> {
+    return this.save(endpoint, ["socket-binding", "is-new-node"]);
+  }
+
+  create(endpoint: IEndpoint): ng.IPromise<any> {
+    return this.save(endpoint, ["is-new-node"]);
   }
 
   save(endpoint: IEndpoint, excludedAttributes: string []): ng.IPromise<any> {

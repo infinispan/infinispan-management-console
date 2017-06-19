@@ -40,9 +40,12 @@ export function isNullOrUndefined(value: any): boolean {
 
 }
 
-export function createObjectsFromPath(name, separator, container){
-  var ns = name.split(separator || '.'), o = container || window, i, len;
-  for(i = 0, len = ns.length; i < len; i++){
+export function createObjectsFromPath(name: string, separator: string, container: any): any {
+  let ns: string [] = name.split(separator || ".");
+  let o: any = container || window;
+  let i: number;
+  let len: number;
+  for (i = 0, len = ns.length; i < len; i++) {
     o = o[ns[i]] = o[ns[i]] || {};
   }
   return o;
@@ -153,7 +156,6 @@ export function traverseObject(obj: any, callback: Function, trail?: any[]): voi
     }
   });
 }
-
 
 export function parseServerAddress(server: string): IServerAddress {
   let address: string[] = server.split(":");

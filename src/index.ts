@@ -40,6 +40,7 @@ import "./module/navbar/Navbar";
 import "./module/server-group/ServerGroup";
 import "./module/server-groups/ServerGroups";
 import "./module/server-instance/ServerInstance";
+import "./module/endpoints/Endpoints";
 
 App.element(document).ready(() => {
   App.bootstrap(document, [
@@ -54,6 +55,7 @@ App.element(document).ready(() => {
     "managementConsole.navbar",
     "managementConsole.server-instance",
     "managementConsole.server-group",
+    "managementConsole.endpoints",
     "managementConsole.server-groups",
     "managementConsole.components.cache-loaders",
     "managementConsole.components.memory",

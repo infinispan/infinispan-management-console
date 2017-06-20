@@ -16,7 +16,7 @@ export class AddEndpointModalCtrl {
     let params: any = {
       endpointType: this.endpointType + "-connector",
       endpointName: this.newEndpointName,
-      serverGroup: this.serverGroup.name
+      profile: this.serverGroup.profile
     };
     this.$scope.$close();
     this.$state.go("new-endpoint-config", params);

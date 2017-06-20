@@ -66,10 +66,10 @@ export class EndpointService {
     return deferred.promise;
   }
 
-  getEndpoint(serverGroup: IServerGroup, endpointType: string, name: string): ng.IPromise<IEndpoint> {
+  getEndpoint(profile: string, endpointType: string, name: string): ng.IPromise<IEndpoint> {
     let resolvedName: string = isNotNullOrUndefined(name) ? name : endpointType;
     let request: IDmrRequest = <IDmrRequest>{
-      address: this.getEndpointsRootAddress(serverGroup.profile).concat(endpointType).concat(resolvedName),
+      address: this.getEndpointsRootAddress(profile).concat(endpointType).concat(resolvedName),
       recursive: true,
     };
     return this.dmrService.readResource(request).then((endpointResponse: any): IEndpoint => {

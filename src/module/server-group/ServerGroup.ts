@@ -8,12 +8,11 @@ import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {IRedirectState} from "../../common/IRedirectState";
 import {EndpointService} from "../../services/endpoint/EndpointService";
 import {endpointFilter} from "./endpoints/filters/EndpointFilter";
-import {EndpointConfigCtrl} from "./endpoints/config/EndpointConfigCtrl";
-import {IEndpoint} from "../../services/endpoint/IEndpoint";
 
 const module: ng.IModule = App.module("managementConsole.server-group", []);
 
 module.controller("ServerGroupCtrl", ServerGroupCtrl);
+module.controller("EndpointsCtrl", EndpointsCtrl);
 module.filter("serverFilter", serverFilter);
 module.filter("endpointFilter", endpointFilter);
 
@@ -54,48 +53,6 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         (endpointService: EndpointService, serverGroup: IServerGroup) => {
           return endpointService.getAllClusterEndpoints(serverGroup);
         }],
-    }
-  });
-
-  $stateProvider.state("edit-endpoint-config", {
-    parent: "root",
-    url: "/server-groups/:serverGroup/endpoints/:endpointType/:endpointName/config",
-    controller: EndpointConfigCtrl,
-    controllerAs: "ctrl",
-    templateUrl: "module/server-group/endpoints/config/view/endpoint-config.html",
-    resolve: {
-      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
-        return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
-      }],
-      endpoint: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
-        return endpointService.getEndpoint(serverGroup, $stateParams.endpointType, $stateParams.endpointName);
-      }],
-      endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
-        return endpointService.getConfigurationMeta(serverGroup.profile,  $stateParams.endpointType,  $stateParams.endpointType);
-      }],
-      endpointName: ["$stateParams", ($stateParams) => $stateParams.endpointName],
-      endpointType: ["$stateParams", ($stateParams) => $stateParams.endpointType]
-    }
-  });
-
-  $stateProvider.state("new-endpoint-config", {
-    parent: "root",
-    url: "/server-groups/:serverGroup/endpoints/:endpointType/:endpointName/newEndpoint",
-    controller: EndpointConfigCtrl,
-    controllerAs: "ctrl",
-    templateUrl: "module/server-group/endpoints/config/view/endpoint-config.html",
-    resolve: {
-      serverGroup: ["$stateParams", "serverGroupService", ($stateParams, serverGroupService) => {
-        return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
-      }],
-      endpoint: ["$stateParams", "endpointService", ($stateParams, endpointService) => {
-        return endpointService.createEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName));
-      }],
-      endpointMeta: ["$stateParams", "endpointService", "serverGroup", ($stateParams, endpointService, serverGroup) => {
-        return endpointService.getConfigurationMeta(serverGroup.profile,  $stateParams.endpointType,  $stateParams.endpointType);
-      }],
-      endpointName: ["$stateParams", ($stateParams) => $stateParams.endpointName],
-      endpointType: ["$stateParams", ($stateParams) => $stateParams.endpointType]
     }
   });
 });

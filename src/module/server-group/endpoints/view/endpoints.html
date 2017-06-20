@@ -29,7 +29,7 @@
       <div class="col-xs-6 col-sm-4 col-md-2" id-generator="groups"
            ng-repeat="endpoint in filtered = (ctrl.endpoints | endpointFilter:searchNameQuery)"
            ng-show="true">
-          <a ui-sref="edit-endpoint-config({serverGroup: ctrl.serverGroup.name, endpointType: endpoint.getType(), endpointName: endpoint.getName()})" title="View Endpoint Details">
+          <a ui-sref="edit-endpoint-config({profile: ctrl.serverGroup.profile, endpointType: endpoint.getType(), endpointName: endpoint.getName()})" title="View Endpoint Details">
           <div class="card-pf card-pf-accented card-pf-aggregate-status card-pf-with-action" vertilize>
             <h2 class="card-pf-title">
               <span class="pficon" ng-class="{'fa fa-power-off':ctrl.isEndpointDisabled(endpoint),

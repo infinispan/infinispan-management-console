@@ -1,12 +1,12 @@
 import {IStateService} from "angular-ui-router";
-import {AbstractConfigurationCtrl} from "../../../../common/configuration/AbstractConfigurationCtrl";
+import {AbstractConfigurationCtrl} from "../../../common/configuration/AbstractConfigurationCtrl";
 import IModalService = angular.ui.bootstrap.IModalService;
-import {LaunchTypeService} from "../../../../services/launchtype/LaunchTypeService";
-import {ServerGroupService} from "../../../../services/server-group/ServerGroupService";
-import {IServerGroup} from "../../../../services/server-group/IServerGroup";
-import {IEndpoint} from "../../../../services/endpoint/IEndpoint";
-import {openConfirmationModal, openErrorModal, openRestartModal} from "../../../../common/dialogs/Modals";
-import {EndpointService} from "../../../../services/endpoint/EndpointService";
+import {LaunchTypeService} from "../../../services/launchtype/LaunchTypeService";
+import {ServerGroupService} from "../../../services/server-group/ServerGroupService";
+import {IServerGroup} from "../../../services/server-group/IServerGroup";
+import {IEndpoint} from "../../../services/endpoint/IEndpoint";
+import {openConfirmationModal, openErrorModal, openRestartModal} from "../../../common/dialogs/Modals";
+import {EndpointService} from "../../../services/endpoint/EndpointService";
 
 export class EndpointConfigCtrl extends AbstractConfigurationCtrl {
   static $inject: string[] = ["$state", "$scope", "$uibModal", "serverGroupService", "endpointService", "launchType",

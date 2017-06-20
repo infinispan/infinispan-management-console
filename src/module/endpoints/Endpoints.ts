@@ -1,9 +1,10 @@
 import {App} from "../../ManagementConsole";
 import "../../services/dmr/DmrService";
 import {EndpointConfigCtrl} from "./../endpoints/config/EndpointConfigCtrl";
+import {EndpointsCtrl} from "../server-group/endpoints/EndpointsCtrl";
 
 const module: ng.IModule = App.module("managementConsole.endpoints", []);
-
+module.controller("EndpointsCtrl", EndpointsCtrl);
 
 module.config(($stateProvider: ng.ui.IStateProvider) => {
 
@@ -30,7 +31,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
 
   $stateProvider.state("new-endpoint-config", {
     parent: "root",
-    url: "endpoints/:profile/:endpointType/:endpointName/newEndpoint",
+    url: "endpoints/:profile/:endpointType/:endpointName/new",
     controller: EndpointConfigCtrl,
     controllerAs: "ctrl",
     templateUrl: "module/endpoints/config/view/endpoint-config.html",

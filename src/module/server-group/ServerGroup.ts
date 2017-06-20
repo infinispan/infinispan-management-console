@@ -12,7 +12,6 @@ import {endpointFilter} from "./endpoints/filters/EndpointFilter";
 const module: ng.IModule = App.module("managementConsole.server-group", []);
 
 module.controller("ServerGroupCtrl", ServerGroupCtrl);
-module.controller("EndpointsCtrl", EndpointsCtrl);
 module.filter("serverFilter", serverFilter);
 module.filter("endpointFilter", endpointFilter);
 

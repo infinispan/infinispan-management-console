@@ -130,6 +130,8 @@ export class EndpointService {
   }
 
   create(endpoint: IEndpoint): ng.IPromise<any> {
+    // mark new node
+    endpoint.getDMR()["is-new-node"] = true;
     return this.save(endpoint, ["is-new-node"]);
   }
 

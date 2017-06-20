@@ -20,13 +20,14 @@ export class Endpoint implements IEndpoint {
       "receive-buffer-size": data["receive-buffer-size"],
       "socket-binding": undefined
     };
+    // if we have data from DMR then copy the given name value to data name
     if (isNotNullOrUndefined(this.data)) {
       this.data.name = this.getName();
     }
   }
 
   getType(): string {
-    return this.connector["type"];
+    return this.connector.type;
   }
 
   getName(): string {
@@ -54,7 +55,7 @@ export class Endpoint implements IEndpoint {
   }
 
   getEncryption(): any {
-    return this.data["encryption"];
+    return this.data.encryption;
   }
 
   isMultiTenant(): boolean {

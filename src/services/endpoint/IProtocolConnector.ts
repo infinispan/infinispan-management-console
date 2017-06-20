@@ -1,6 +1,7 @@
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 export interface IProtocolConnector {
   name: string;
+  type: string;
   "cache-container": string;
   "worker-threads": number;
   "idle-timeout": number;

@@ -3,7 +3,7 @@ import {IDmrRequest} from "./IDmrRequest";
 import {IDmrCompositeReq} from "./IDmrCompositeReq";
 import {
   isNotNullOrUndefined, isNullOrUndefined, traverseObject, isObject,
-  isJsonString
+  isJsonString, isArray
 } from "../../common/utils/Utils";
 import {CompositeOpBuilder, createWriteAttrReq} from "./CompositeOpBuilder";
 
@@ -227,6 +227,13 @@ export class DmrService {
         if (isObject(value)) {
           // Only process allowed objects, these should be objects which are dmr attributes not children
           if (allowedObjects.indexOf(key) > -1) {
+            op[key] = value;
+          }
+          return;
+        }
+
+        if (isArray(value)) {
+          if (value.length > 0){
             op[key] = value;
           }
           return;

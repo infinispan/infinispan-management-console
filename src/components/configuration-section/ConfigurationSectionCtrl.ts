@@ -18,7 +18,7 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
   readOnlyFields: string[];
   render: boolean;
   configCallbacks: IConfigurationCallback[];
-  removable: boolean;
+  removable: string;
   placeholders: any;
   loadedWithData: boolean;
   createdOrDestroyedFromUI: boolean = false;
@@ -107,7 +107,9 @@ export class ConfigurationSectionCtrl implements IConfigurationCallback {
     });
   }
 
-  isRemovable: Function = () => isNotNullOrUndefined(this.removable) ? this.removable : false;
+  isRemovable () : boolean {
+    return isNotNullOrUndefined(this.removable) ? this.removable === "true" : false;
+  }
 
   private createPlaceholders(): void {
     if (!this.initDefaults) {

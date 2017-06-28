@@ -37,10 +37,13 @@ export class FormGroupCtrl {
       }
     };
     this.type = getTypeModelType(this.meta);
-    if (isNotNullOrUndefined(this.type) && this.meta.type.TYPE_MODEL_VALUE === "LIST" && isNotNullOrUndefined(this.data[this.field])) {
-      let json: string = this.data[this.field];
-      if (isNotNullOrUndefined(json)) {
-        this.data[this.field] = JSON.parse(json);
+    if (isNotNullOrUndefined(this.type) && this.meta.type.TYPE_MODEL_VALUE === "LIST") {
+      let listValue: string = this.data[this.field];
+      if (isNotNullOrUndefined(listValue)) {
+        this.data[this.field] = JSON.parse(listValue);
+      } else {
+        // initialize the value to empty array so we can add values from UI
+        this.data[this.field] = [];
       }
     }
     if (isNullOrUndefined(this.optionString)) {
@@ -49,9 +52,6 @@ export class FormGroupCtrl {
       this.multiSelect = isNotNullOrUndefined(this.meta) && this.meta.hasOwnProperty("allowed") && this.meta["select-option"] === "multiple" ? true : false;
       if (this.multiSelect) {
         this.option = this.meta.allowed;
-        if (isNullOrUndefined(this.data[this.field])) {
-          this.data[this.field] = [];
-        }
       } else {
         this.option = "item as item for item in $ctrl.meta.allowed";
       }
@@ -60,9 +60,6 @@ export class FormGroupCtrl {
       this.multiValue = true;
       if (this.multiSelect) {
         this.option = this.meta.allowed;
-        if (isNullOrUndefined(this.data[this.field])) {
-          this.data[this.field] = [];
-        }
       } else {
         this.option = this.optionString.concat(" in $ctrl.optionValues");
       }

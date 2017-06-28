@@ -37,8 +37,11 @@ export class FormGroupCtrl {
       }
     };
     this.type = getTypeModelType(this.meta);
-    if (this.meta.type.TYPE_MODEL_VALUE === "LIST" && isNotNullOrUndefined(this.data[this.field])) {
-      this.data[this.field] = JSON.parse(this.data[this.field]);
+    if (isNotNullOrUndefined(this.type) && this.meta.type.TYPE_MODEL_VALUE === "LIST" && isNotNullOrUndefined(this.data[this.field])) {
+      let json: string = this.data[this.field];
+      if (isNotNullOrUndefined(json)) {
+        this.data[this.field] = JSON.parse(json);
+      }
     }
     if (isNullOrUndefined(this.optionString)) {
       this.type = getTypeModelType(this.meta);

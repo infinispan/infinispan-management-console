@@ -41,7 +41,7 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
     templateUrl: "module/endpoints/config/view/endpoint-config.html",
     resolve: {
       endpoint: ["$stateParams", "endpointService", ($stateParams, endpointService) => {
-        return endpointService.createEndpoint([].concat($stateParams.endpointType).concat($stateParams.endpointName));
+        return endpointService.createEndpoint($stateParams.profile, [].concat($stateParams.endpointType).concat($stateParams.endpointName));
       }],
       endpointMeta: ["$stateParams", "endpointService", "metadataService", "serverGroup", ($stateParams, endpointService, metadataService, serverGroup) => {
         return endpointService.getConfigurationMeta(serverGroup.profile,

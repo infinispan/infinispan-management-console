@@ -7,7 +7,7 @@ export class Endpoint implements IEndpoint {
 
   private connector: IProtocolConnector;
 
-  constructor(private namePath: string [], private data: any, private socketBinding: ISocketBinding) {
+  constructor(private profile: string, private namePath: string [], private data: any, private socketBinding: ISocketBinding) {
     this.connector = <IProtocolConnector> {
       name: isNotNullOrUndefined(namePath) && namePath.length > 1 ? namePath[1] : "N/A",
       type: isNotNullOrUndefined(namePath) && namePath.length > 0 ? namePath[0] : undefined,
@@ -24,6 +24,10 @@ export class Endpoint implements IEndpoint {
     if (isNotNullOrUndefined(this.data)) {
       this.data.name = this.getName();
     }
+  }
+
+  getProfileName(): string {
+    return this.profile;
   }
 
   getType(): string {

@@ -3,6 +3,7 @@ import {ISocketBinding} from "../socket-binding/ISocketBinding";
 export interface IEndpoint {
   getName(): string;
   getType(): string;
+  getProfileName(): string;
   getCacheContainer(): string;
   getSocketBindingName(): string;
   setSocketBinding(binding: ISocketBinding): void;

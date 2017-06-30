@@ -18,16 +18,16 @@ const module: ng.IModule = App.module("managementConsole.services.endpoint", [])
 export class EndpointService {
   static $inject: string[] = ["$q", "dmrService", "socketBindingService", "launchType"];
 
-  static parseEndpoint(namePath: string [], object: any, socketBinding?: ISocketBinding): IEndpoint {
-    return new Endpoint(namePath, object, socketBinding);
+  static parseEndpoint(profile: string, namePath: string [], object: any, socketBinding?: ISocketBinding): IEndpoint {
+    return new Endpoint(profile, namePath, object, socketBinding);
   }
 
   constructor(private $q: IQService, private dmrService: DmrService,
               private socketBindingService: SocketBindingService, private launchType: LaunchTypeService) {
   }
 
-  createEndpoint(namePath: string []): IEndpoint {
-    return new Endpoint(namePath, {"is-new-node": true}, undefined);
+  createEndpoint(profile: string, namePath: string []): IEndpoint {
+    return new Endpoint(profile, namePath, {"is-new-node": true}, undefined);
   }
 
   getAllEndpoints(cacheContainer: ICacheContainer): ng.IPromise<IEndpoint[]> {
@@ -46,12 +46,12 @@ export class EndpointService {
           let isEndpoint: boolean = isNotNullOrUndefined(traversedObject) && key === "cache-container";
           let isMultiRouterEndpoint: boolean = (isNotNullOrUndefined(traversedObject) && key === "hotrod-socket-binding");
           if (isEndpoint) {
-            let endpoint: IEndpoint = EndpointService.parseEndpoint(trail, traversedObject);
+            let endpoint: IEndpoint = EndpointService.parseEndpoint(cacheContainer.profile, trail, traversedObject);
             if (endpoint.getCacheContainer() === cacheContainer.name) {
               endpoints.push(endpoint);
             }
           } else if (isMultiRouterEndpoint) {
-            let endpoint: IEndpoint = EndpointService.parseEndpoint(trail, traversedObject);
+            let endpoint: IEndpoint = EndpointService.parseEndpoint(cacheContainer.profile, trail, traversedObject);
             endpoints.push(endpoint);
           }
         }, trail);
@@ -73,7 +73,7 @@ export class EndpointService {
       recursive: true,
     };
     return this.dmrService.readResource(request).then((endpointResponse: any): IEndpoint => {
-      return EndpointService.parseEndpoint([].concat(endpointType).concat(name), endpointResponse);
+      return EndpointService.parseEndpoint(profile, [].concat(endpointType).concat(name), endpointResponse);
     });
   }
 
@@ -93,10 +93,10 @@ export class EndpointService {
           let isEndpoint: boolean = isNotNullOrUndefined(traversedObject) && key === "cache-container";
           let isMultiRouterEndpoint: boolean = (isNotNullOrUndefined(traversedObject) && key === "hotrod-socket-binding");
           if (isEndpoint) {
-            let endpoint: IEndpoint = EndpointService.parseEndpoint(trail, traversedObject);
+            let endpoint: IEndpoint = EndpointService.parseEndpoint(serverGroup.profile, trail, traversedObject);
             endpoints.push(endpoint);
           } else if (isMultiRouterEndpoint) {
-            let endpoint: IEndpoint = EndpointService.parseEndpoint(trail, traversedObject);
+            let endpoint: IEndpoint = EndpointService.parseEndpoint(serverGroup.profile, trail, traversedObject);
             endpoints.push(endpoint);
           }
         }, trail);
@@ -138,7 +138,7 @@ export class EndpointService {
   save(endpoint: IEndpoint, excludedAttributes: string []): ng.IPromise<any> {
     let builder: CompositeOpBuilder = new CompositeOpBuilder();
     let root: any = endpoint.getDMR();
-    let dmrAddress: string [] = this.getEndpointAddress(endpoint, "clustered");
+    let dmrAddress: string [] = this.getEndpointAddress(endpoint);
     this.dmrService.traverseDMRTree(builder, root, dmrAddress, excludedAttributes);
     let req: IDmrCompositeReq  = builder.build();
     req.steps = req.steps.reverse();
@@ -160,9 +160,9 @@ export class EndpointService {
     return this.launchType.getProfilePath(profile).concat(endpointPath);
   }
 
-  private getEndpointAddress(endpoint: IEndpoint, profile: string): string[] {
-    let endpointPath: string[] = ["subsystem", "datagrid-infinispan-endpoint"];
-    return this.launchType.getProfilePath(profile).concat(endpointPath).concat(endpoint.getType()).concat(endpoint.getName());
+  private getEndpointAddress(e: IEndpoint): string[] {
+    let ePath: string[] = ["subsystem", "datagrid-infinispan-endpoint"];
+    return this.launchType.getProfilePath(e.getProfileName()).concat(ePath).concat(e.getType()).concat(e.getName());
   }
 }
 

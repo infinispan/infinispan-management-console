@@ -7,9 +7,7 @@ const module: ng.IModule = App.module("managementConsole.services.authentication
 
 export class AuthenticationService {
 
-  static $inject: string[] = ["$q", "$http", "$interval", "$location", "$window", "$timeout", "dmrService"];
-
-  private availability: AvailabilityCheck;
+  static $inject: string[] = ["$q", "$http", "$interval", "$location", "$window", "$timeout", "dmrService", "availabilityCheck"];
 
   constructor(private $q: ng.IQService,
               private $http: ng.IHttpService,
@@ -17,7 +15,8 @@ export class AuthenticationService {
               private $location: ng.ILocationService,
               private $window: ng.IWindowService,
               private $timeout: ng.ITimeoutService,
-              private dmrService: DmrService) {
+              private dmrService: DmrService,
+              private availability: AvailabilityCheck) {
   }
 
   login(): ng.IPromise<string> {
@@ -26,7 +25,8 @@ export class AuthenticationService {
       if (isNotNullOrUndefined(this.availability)) {
         this.availability.stopApiAccessibleCheck();
       }
-      this.availability = new AvailabilityCheck (this.$interval, this.dmrService);
+
+      this.availability.checkServerIsAlive();
       deferred.resolve(user);
     }, deferred.reject);
     return deferred.promise;

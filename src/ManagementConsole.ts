@@ -137,6 +137,10 @@ module.config(($provide) => {
   });
 });
 
+module.config(["$httpProvider", function($httpProvider: any): void {
+  $httpProvider.interceptors.push("serverStatusInterceptor");
+}]);
+
 // @ngInject
 module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService) => {
   $rootScope.page = <IPage>{htmlClass: ""};

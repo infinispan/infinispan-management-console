@@ -4,17 +4,19 @@ import {deepValue, traverseObject, isNotNullOrUndefined} from "../../common/util
 import IInjectorService = angular.auto.IInjectorService;
 import deepmerge = require("deepmerge");
 import IHttpService = angular.IHttpService;
+import {IStateParamsService} from "angular-ui-router";
 
 const module: ng.IModule = App.module("managementConsole.services.metadata", []);
 
 export class MetadataService {
 
-  static $inject: string[] = ["$q", "$http", "$injector", "dmrService"];
+  static $inject: string[] = ["$q", "$http", "$injector", "dmrService", "$stateParams"];
 
   constructor(private $q: ng.IQService,
               private $http: IHttpService,
               private $injector: IInjectorService,
-              private dmrService: DmrService) {
+              private dmrService: DmrService,
+              private $stateParams: IStateParamsService) {
   }
 
   public mergeMetadata(meta: any, json: string): ng.IPromise<any> {
@@ -53,7 +55,20 @@ export class MetadataService {
         let objectPath: string = invocationMeta.objectPath;
         let service: any = this.$injector.get(serviceName);
         let parentObject: any = deepValue(rootOfAugmentedTree, trail);
-        let promise: ng.IPromise<any> = service[methodName]().then(objArrayResponse => {
+
+        // resolve function to invoke
+        let f: Function = service[methodName];
+
+        // and then the parameters (if any)
+        let declaredParams: any = invocationMeta.params;
+        let actualParams: any[] = [];
+        if (isNotNullOrUndefined(declaredParams)) {
+          for (let param of declaredParams) {
+            actualParams.push(this.$stateParams[param]);
+          }
+        }
+        // finally invoke function
+        let promise: ng.IPromise<any> = f.apply(service, actualParams).then(objArrayResponse => {
           let stringArray: string [] = [];
           for (let responseObject of objArrayResponse) {
             if (isNotNullOrUndefined(objectPath)) {

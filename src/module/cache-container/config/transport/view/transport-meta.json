@@ -1,0 +1,12 @@
+{
+  "attributes": {
+    "channel": {
+      "select-option": "single",
+      "resolve": {
+        "service": "jGroupsService",
+        "method": "getChannelNamesByProfile",
+        "params": ["profileName"]
+      }
+    }
+  }
+}

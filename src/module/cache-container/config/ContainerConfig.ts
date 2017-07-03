@@ -51,8 +51,10 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       transport: ["container", "containerConfigService", (container, containerConfigService) => {
         return containerConfigService.getTransportConfig(container);
       }],
-      meta: ["container", "containerConfigService", (container, containerConfigService) => {
-        return containerConfigService.getTransportMeta(container);
+      meta: ["container", "containerConfigService", "metadataService", (container, containerConfigService, metadataService) => {
+        return containerConfigService.getTransportMeta(container).then(originalMeta => {
+          return metadataService.mergeMetadata(originalMeta, "module/cache-container/config/transport/view/transport-meta.json");
+        });
       }]
     }
   });

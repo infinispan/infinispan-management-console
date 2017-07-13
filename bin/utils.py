@@ -381,7 +381,7 @@ def maven_build_distribution(version):
     
   for c in mvn_commands:
     if settings['dry_run']:
-      c.append("-Dmaven.deploy.skip=true")
+      c.append("-DskipNexusStagingDeployMojo=true -Dmaven.deploy.skip=true")
     if not settings['verbose']:
       c.insert(0, '-q')
     c.insert(0, 'mvn')

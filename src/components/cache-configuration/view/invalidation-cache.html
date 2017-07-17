@@ -25,12 +25,6 @@
                                    init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
                                    config-callbacks="$ctrl.configCallbacks" removable="true"/>
         </uib-tab>
-        <uib-tab heading="Indexing">
-            <configuration-section fields="[{name: 'Indexing', fields: ['indexing', 'auto-config', 'indexing-properties']}]"
-                                   data="$ctrl.data.indexing.INDEXING" meta="$ctrl.getMetaForResource('indexing')"
-                                   init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"
-                                   config-callbacks="$ctrl.configCallbacks" removable="true"/>
-        </uib-tab>
         <uib-tab heading="Compatibility">
             <configuration-section fields="[{name: 'Compatibility', fields: ['enabled', 'marshaller']}]" data="$ctrl.data.compatibility.COMPATIBILITY"
                                    meta="$ctrl.getMetaForResource('compatibility')" init-defaults="$ctrl.initDefaults" read-only="$ctrl.readOnly"

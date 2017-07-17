@@ -303,34 +303,44 @@ export class CacheConfigService {
     let address: string[] = this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name);
     let builder: CompositeOpBuilder = new CompositeOpBuilder();
     let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    let validConfiguration: boolean = true;
+
+    try {
+      this.verifyConfiguration(config, deferred);
+    } catch (e) {
+      validConfiguration = false;
+      deferred.reject(e.message);
+    }
+
     config.template = template;
 
     let createNodeRequest: IDmrRequest = this.createAddOperation(address, config, ["name", "type", "template-name", "is-new-node"]);
 
-    this.dmrService.executePost(createNodeRequest)
-      .then(() => {
-        this.createHelper(builder, address.concat("locking", "LOCKING"), config.locking);
-        this.createHelper(builder, address.concat("memory", this.getMemoryType(config.memory)), config.memory);
-        this.createHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
-        this.createHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
-        this.createHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
-        this.createHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
-        this.createHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
-        this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
-        this.createBackupNodes(builder, address.concat("backup"), config.backup);
+    if (validConfiguration) {
+      this.dmrService.executePost(createNodeRequest)
+        .then(() => {
+          this.createHelper(builder, address.concat("locking", "LOCKING"), config.locking);
+          this.createHelper(builder, address.concat("memory", this.getMemoryType(config.memory)), config.memory);
+          this.createHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
+          this.createHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
+          this.createHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
+          this.createHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
+          this.createHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
+          this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+          this.createBackupNodes(builder, address.concat("backup"), config.backup);
+          if (this.isSecurityAuthorizationEnabled(config)) {
+            this.updateSecurityAuthorization(config);
+            this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
+            this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
+          }
 
-        if (this.isSecurityAuthorizationEnabled(config)) {
-          this.updateSecurityAuthorization(config);
-          this.createHelper(builder, address.concat("security", "SECURITY"), config.security);
-          this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
-        }
+          this.createCacheLoader(builder, address, config);
+          this.createCacheStore(builder, address, config);
 
-        this.createCacheLoader(builder, address, config);
-        this.createCacheStore(builder, address, config);
-
-        return this.dmrService.executePost(builder.build());
-      }, error => deferred.reject(error))
-      .then(() => deferred.resolve(), error => deferred.reject(error));
+          return this.dmrService.executePost(builder.build());
+        }, error => deferred.reject(error))
+        .then(() => deferred.resolve(), error => deferred.reject(error));
+    }
 
     return deferred.promise;
   }
@@ -389,34 +399,64 @@ export class CacheConfigService {
     }
   }
 
+  private verifyConfiguration(config: any, deferred: ng.IDeferred<void>): void {
+    this.verifyTransactionNode(config, deferred);
+  }
+
+  private verifyTransactionNode(config: any, deferred: ng.IDeferred<void>): void {
+    if (isNotNullOrUndefined(config.transaction) && isNotNullOrUndefined(config.transaction.TRANSACTION)) {
+      let txMode: string = config.transaction.TRANSACTION.mode;
+      let syncMode: string = config.mode;
+      let cacheType: string = config.type;
+      let validTxMode: boolean = !(cacheType === "distributed-cache" && txMode === "FULL_XA" && syncMode === "ASYNC");
+      if (!validTxMode) {
+        throw new Error("Cannot set TX mode to FULL_XA with ASYNC cache mode");
+      }
+    }
+  }
+
   private updateConfiguration(address: string[], config: any): ng.IPromise<void> {
     let builder: CompositeOpBuilder = new CompositeOpBuilder();
+    let deferred: ng.IDeferred<void> = this.$q.defer<void>();
+    let validConfiguration: boolean = true;
+
+    try {
+      this.verifyConfiguration(config, deferred);
+    } catch (e) {
+      validConfiguration = false;
+      deferred.reject(e.message);
+    }
+
     let exludedAttributes: string[] = ["name", "type", "template-name", "is-new-node", "is-create-with-bare-template",
       "is-create-mode", "store-type", "store-original-type", "required-node"];
 
-    // Update the configuration node
-    this.addCompositeOperationsToBuilder(builder, address, config, exludedAttributes);
-    this.composeWriteObjectOperations(builder, address, config);
+    if (validConfiguration) {
 
-    // Update child nodes
-    this.updateHelper(builder, address.concat("locking", "LOCKING"), config.locking);
-    this.updateMemoryHelper(config, builder, address);
-    this.updateHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
-    this.updateHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
-    this.updateHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
-    this.updateHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
-    this.updateHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
-    this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+      // Update the configuration node
+      this.addCompositeOperationsToBuilder(builder, address, config, exludedAttributes);
+      this.composeWriteObjectOperations(builder, address, config);
 
-    if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
-      this.updateSecurityAuthorization(config);
-      this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
-      this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
+      // Update child nodes
+      this.updateHelper(builder, address.concat("locking", "LOCKING"), config.locking);
+      this.updateMemoryHelper(config, builder, address);
+      this.updateHelper(builder, address.concat("expiration", "EXPIRATION"), config.expiration);
+      this.updateHelper(builder, address.concat("indexing", "INDEXING"), config.indexing);
+      this.updateHelper(builder, address.concat("compatibility", "COMPATIBILITY"), config.compatibility);
+      this.updateHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
+      this.updateHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
+      this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+
+      if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
+        this.updateSecurityAuthorization(config);
+        this.updateHelper(builder, address.concat("security", "SECURITY"), config.security);
+        this.updateHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
+      }
+
+      this.updateCacheLoader(builder, address, config);
+      this.updateCacheStore(builder, address, config);
+      this.dmrService.executePost(builder.build()).then(() => deferred.resolve(), error => deferred.reject(error));
     }
-
-    this.updateCacheLoader(builder, address, config);
-    this.updateCacheStore(builder, address, config);
-    return this.dmrService.executePost(builder.build());
+    return deferred.promise;
   }
 
   private updateMemoryHelper(config: any, builder: CompositeOpBuilder, address: string[]): void {

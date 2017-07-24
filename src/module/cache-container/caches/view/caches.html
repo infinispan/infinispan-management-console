@@ -84,13 +84,6 @@
                         </span>
                       </span>
                     </p>
-                    <p ng-if="cache.hasRemoteBackup()" style="height:20px" ng-init="container = ctrl.container">
-                        <span ng-repeat="site in container['sites-offline']"><span
-                          class="pficon pficon-error-circle-o"></span> {{site}} &nbsp;</span>
-                      <span ng-repeat="site in container['sites-mixed']"><span
-                        class="pficon pficon-warning-triangle-o"></span> {{site}} &nbsp;</span>
-                      <span ng-repeat="site in container['sites-online']"><span class="pficon pficon-ok"></span> {{site}} &nbsp;</span>
-                    </p>
                   </span>
                 </div>
               </div>
@@ -142,7 +135,7 @@
           <div class="panel-body">
             <fieldset>
               <label>
-                <input type="checkbox" id-generator="type" value="local" ng-model="$ctrl.typeCheckboxes.local" ng-click="$ctrl.search()"/> 
+                <input type="checkbox" id-generator="type" value="local" ng-model="$ctrl.typeCheckboxes.local" ng-click="$ctrl.search()"/>
                 <span translate> LOCAL</span>
               </label>
               <label>

@@ -40,6 +40,8 @@ gulp.task('serve:dist', ['build:dist'], require('./tasks/server')(gulp, config.d
 gulp.task('serve', ['compile:src', 'less', 'fonts', 'html', 'json', 'assets'],
     require('./tasks/server')(gulp, config.srcDir, config.watchDir, true, config.projectDir, config));
 
+gulp.task('typedoc',require('./tasks/typedoc')(gulp, 'src/services/**/*.ts'));
+
 gulp.task('check:eslint', require('./tasks/check-eslint')(gulp, config));
 gulp.task('check:tslint', ['check:tslint:src']);
 gulp.task('check:tslint:src', require('./tasks/check-tslint')(gulp, config.srcDir, config.tsLintSrcConf));

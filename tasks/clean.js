@@ -25,7 +25,8 @@ module.exports = (gulp, dir, config, cleanAll) => () => {
       config.npmDir,
       config.jspmDir,
       config.typingsDir,
-      config.targetDir
+      config.targetDir,
+      config.docsDir
     ]);
   }
 

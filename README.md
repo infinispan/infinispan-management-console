@@ -15,6 +15,10 @@
 - run server by going to $ISPN_HOME/server/integration/build/target/infinispan-server-* and running `./bin/domain.sh`
 - Run locally in development mode by utilising the gulp:serve task detailed below
 
+# Creating Typescript documentation
+- install Typedoc (see http://typedoc.org for details)
+- run `gulp typedoc`
+
 # Gulp Tasks
 
 ### Gulp tasks
@@ -61,4 +65,9 @@ gulp clean      # clean both src and dist folders
 gulp clean:src  # removes *.map, *.js and *.css files from source directory
 gulp clean:dist # removes the created dist folder
 gulp clean:all  # calls clean:src and clean:dist as well as removing the node_modules and typings folders.
+```
+
+Documentation
+```
+gulp typedoc      # create documentation for service layer
 ```

@@ -26,7 +26,7 @@ export class DomainService {
         let domain: IDomain = <IDomain>{servers: {}};
 
         for (let hostname in response) {
-          var host: any = response[hostname];
+          let host: any = response[hostname];
           if (host.master) {
             domain.controller = hostname;
           }

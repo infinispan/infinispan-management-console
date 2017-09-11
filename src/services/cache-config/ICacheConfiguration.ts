@@ -7,6 +7,7 @@ export interface ICacheConfiguration {
   mode: string;
   module: string;
   owners: number;
+  memory: any;
   "remote-cache": string;
   "remote-site": string;
   "remote-timeout": number;

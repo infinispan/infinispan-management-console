@@ -7,6 +7,8 @@ import {ICache} from "../../services/cache/ICache";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {IServerGroup} from "../../services/server-group/IServerGroup";
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 export class CacheCtrl {
   static $inject: string[] = ["$state", "$interval", "$uibModal", "cacheService", "launchType",
@@ -162,6 +164,18 @@ export class CacheCtrl {
     this.cacheService.resetStats(this.container, this.cache).finally(() => {
       this.refresh();
     });
+  }
+
+  clusterSize(): number {
+    if (this.isLocalMode()) {
+      return 1;
+    } else {
+      if (isNotNullOrUndefined(this.container.serverGroup)) {
+        return this.container.serverGroup.members.length;
+      } else {
+        return 1;
+      }
+    }
   }
 
   private refresh(): void {

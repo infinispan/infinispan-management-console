@@ -59,6 +59,7 @@
         <th>Total reads</th>
         <th>Total failed reads</th>
         <th>Total writes</th>
+        <th>Off-Heap used</th>
       </tr></thead>
       <tbody>
         <tr ng-repeat="stats in ctrl.allCacheStats">
@@ -69,6 +70,7 @@
           <td class="TotalReads">{{(stats['hits'] + stats['misses'])| number}}</td>
           <td class="TotalFailedReads">{{stats['misses'] | number}}</td>
           <td class="TotalWrites">{{stats['stores'] | number}}</td>
+          <td class="OffHeap">{{(stats['off-heap-memory-used'])/1024/1024 | number}}</td>
         </tr>
       </tbody></table>
   </div>

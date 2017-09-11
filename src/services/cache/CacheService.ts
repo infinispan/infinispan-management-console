@@ -76,6 +76,21 @@ export class CacheService {
     return deferred.promise;
   }
 
+  getCacheWithConfiguration(container: ICacheContainer, type: string, name: string): ng.IPromise<ICache> {
+    let deferred: ng.IDeferred<ICache> = this.$q.defer<ICache>();
+    let request: IDmrRequest = {
+      address: this.generateContainerAddress(container.name, container.profile).concat(type, name),
+    };
+    this.dmrService.readResource(request).then((response) => {
+      let c: ICache = new Cache(name, type, response.configuration);
+      this.getCacheTemplate(container, type, name).then((response) => {
+        c.configModel = response;
+        deferred.resolve(c);
+      });
+    });
+    return deferred.promise;
+  }
+
   getCacheTemplate(container: ICacheContainer, type: string, name: string): ng.IPromise<any> {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.getCache(name, type, container.name, container.profile)

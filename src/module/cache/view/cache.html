@@ -371,7 +371,37 @@
           </div>
         </div>
       </div>
+      </div>
+    <!-- END CARD -->
+
+    <div class="row row-cards-pf" vertilize-container>
+
+      <!-- BEGIN CARD -->
+      <div class="col-xs-6 col-sm-4 col-md-3" id-generator="locking" ng-if="ctrl.cache.hasOffHeapMemory()">
+        <div class="card-pf card-pf-accented ispn-card ispn-card" vertilize>
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Off-Heap Memory</h2>
+          </div>
+          <div class="card-pf-body">
+            <div class="row">
+              <div class="col-md-12">
+                <table class="col-md-12">
+                  <tr>
+                    <th>Used</th>
+                    <td id-generator="cache_content.off_heap_used">{{(ctrl.stats[preappend + 'off-heap-memory-used']/1024/1024) | number}} MB</td>
+                  </tr>
+                  <tr ng-if="ctrl.cache.isOffHeapEvictionTypeMemory()">
+                    <th>Max</th>
+                    <td id-generator="cache_content.off_heap_max">{{((ctrl.cache.offHeapSize() * ctrl.clusterSize())/1024/1024) | number}} MB</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- END CARD -->
+
     </div>
   </div>
 </div>

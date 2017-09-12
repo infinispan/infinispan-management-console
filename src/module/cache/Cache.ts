@@ -115,9 +115,9 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         ($stateParams, containerService: ContainerService) => {
           return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
         }],
-      cache: ["$stateParams", "cacheService",
-        ($stateParams, cacheService: CacheService) => {
-          return cacheService.getCache($stateParams.cacheName, $stateParams.cacheType, $stateParams.containerName, $stateParams.profileName);
+      cache: ["$stateParams", "cacheService", "container",
+        ($stateParams, cacheService: CacheService, container: ICacheContainer) => {
+          return cacheService.getCacheWithConfiguration(container, $stateParams.cacheType, $stateParams.cacheName);
         }],
       allCacheStats: ["cacheService", "container", "cache",
         (cacheService: CacheService, container: ICacheContainer, cache: ICache) => {

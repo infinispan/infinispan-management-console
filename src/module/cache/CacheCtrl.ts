@@ -178,6 +178,19 @@ export class CacheCtrl {
     }
   }
 
+  calculateMaxOffHeap(cache: ICache): number {
+    let size: number = cache.offHeapSize();
+    if (size > -1) {
+      return size * this.clusterSize();
+    } else {
+      return -1;
+    }
+  }
+
+  hasMaxOffHeapValue(cache: ICache): boolean {
+    return this.calculateMaxOffHeap(cache) > 0;
+  }
+
   private refresh(): void {
     this.cacheService.getCacheStats(this.container, this.cache).then((result) => {
       this.stats = result;

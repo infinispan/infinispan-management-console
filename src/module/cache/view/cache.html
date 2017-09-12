@@ -392,7 +392,8 @@
                   </tr>
                   <tr ng-if="ctrl.cache.isOffHeapEvictionTypeMemory()">
                     <th>Max</th>
-                    <td id-generator="cache_content.off_heap_max">{{((ctrl.cache.offHeapSize() * ctrl.clusterSize())/1024/1024) | number}} MB</td>
+                    <td ng-if="ctrl.hasMaxOffHeapValue(ctrl.cache)" id-generator="cache_content.off_heap_max">{{((ctrl.calculateMaxOffHeap(ctrl.cache))/1024/1024) | number}} MB</td>
+                    <td ng-if="!ctrl.hasMaxOffHeapValue(ctrl.cache)" id-generator="cache_content.off_heap_max">N/A</td>
                   </tr>
                 </table>
               </div>

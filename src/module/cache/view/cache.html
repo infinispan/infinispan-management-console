@@ -388,11 +388,11 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Used</th>
-                    <td id-generator="cache_content.off_heap_used">{{(ctrl.stats[preappend + 'off-heap-memory-used']/1024/1024) | number}} MB</td>
+                    <td id-generator="cache_content.off_heap_used">{{(ctrl.convertBytes(ctrl.stats[preappend + 'off-heap-memory-used']))}}</td>
                   </tr>
                   <tr ng-if="ctrl.cache.isOffHeapEvictionTypeMemory()">
                     <th>Max</th>
-                    <td ng-if="ctrl.hasMaxOffHeapValue(ctrl.cache)" id-generator="cache_content.off_heap_max">{{((ctrl.calculateMaxOffHeap(ctrl.cache))/1024/1024) | number}} MB</td>
+                    <td ng-if="ctrl.hasMaxOffHeapValue(ctrl.cache)" id-generator="cache_content.off_heap_max">{{ctrl.convertBytes(ctrl.calculateMaxOffHeap(ctrl.cache))}}</td>
                     <td ng-if="!ctrl.hasMaxOffHeapValue(ctrl.cache)" id-generator="cache_content.off_heap_max">N/A</td>
                   </tr>
                 </table>

@@ -7,7 +7,7 @@ import {ICache} from "../../services/cache/ICache";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
-import {isNullOrUndefined} from "../../common/utils/Utils";
+import {isNullOrUndefined, convertBytes} from "../../common/utils/Utils";
 
 export class CacheCtrl {
   static $inject: string[] = ["$state", "$interval", "$uibModal", "cacheService", "launchType",
@@ -180,6 +180,10 @@ export class CacheCtrl {
 
   hasMaxOffHeapValue(cache: ICache): boolean {
     return this.calculateMaxOffHeap(cache) > 0;
+  }
+
+  convertBytes(bytes: number): string {
+    return convertBytes(bytes, this.launchType.getMemoryUnit());
   }
 
   private refresh(): void {

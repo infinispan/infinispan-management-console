@@ -1,6 +1,12 @@
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {ServerAddress} from "../../services/server/ServerAddress";
 
+export const enum MemoryUnits {
+  KB,
+  MB,
+  GB
+}
+
 export function isString(object: any): boolean {
   return isNotNullOrUndefined(object) && typeof object === "string";
 }
@@ -174,6 +180,29 @@ export function getInstanceFromDmr<T>(dmr: any): T {
     retObject[key] = dmr[key];
   }
   return retObject;
+}
+
+export function convertBytes(bytes: number, unit: MemoryUnits): string {
+  let result: string;
+  switch (+unit) {
+    case (MemoryUnits.KB):
+      result = round((bytes / 1024), 2) + " KB";
+      break;
+    case(MemoryUnits.MB):
+      result = round((bytes / 1024 / 1024), 2) + " MB";
+      break;
+    case (MemoryUnits.GB):
+      result = round((bytes / 1024 / 1024 / 1024), 2) + " GB";
+      break;
+    default:
+      break;
+  }
+  return result;
+}
+
+export function round(value: number, precision: number): number {
+  let multiplier: number = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
 }
 
 export function capitalizeFirstLetter(s: string): string {

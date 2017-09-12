@@ -1,12 +1,6 @@
 import {IServerAddress} from "../../services/server/IServerAddress";
 import {ServerAddress} from "../../services/server/ServerAddress";
 
-export const enum MemoryUnits {
-  KB,
-  MB,
-  GB
-}
-
 export function isString(object: any): boolean {
   return isNotNullOrUndefined(object) && typeof object === "string";
 }
@@ -182,27 +176,20 @@ export function getInstanceFromDmr<T>(dmr: any): T {
   return retObject;
 }
 
-export function convertBytes(bytes: number, unit: MemoryUnits): string {
-  let result: string;
-  switch (+unit) {
-    case (MemoryUnits.KB):
-      result = round((bytes / 1024), 2) + " KB";
-      break;
-    case(MemoryUnits.MB):
-      result = round((bytes / 1024 / 1024), 2) + " MB";
-      break;
-    case (MemoryUnits.GB):
-      result = round((bytes / 1024 / 1024 / 1024), 2) + " GB";
-      break;
-    default:
-      break;
+export function convertBytes(bytes: number): string {
+  if (isNullOrUndefined(bytes) || bytes < 0) {
+    return "N/A"
   }
-  return result;
-}
-
-export function round(value: number, precision: number): number {
-  let multiplier: number = Math.pow(10, precision || 0);
-  return Math.round(value * multiplier) / multiplier;
+  else if (bytes === 0) {
+    return "0 Bytes";
+  } else {
+    let sizes: string [] = ["Bytes", "KB", "MB", "GB", "TB"];
+    let i: number = Number(Math.floor(Math.log(bytes) / Math.log(1024)));
+    if (i === 0) {
+      return bytes + " " + sizes[i];
+    }
+    return (bytes / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
+  }
 }
 
 export function capitalizeFirstLetter(s: string): string {

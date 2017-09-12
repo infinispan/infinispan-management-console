@@ -1,5 +1,5 @@
 import {App} from "../../ManagementConsole";
-import {isNullOrUndefined, isNotNullOrUndefined, MemoryUnits} from "../../common/utils/Utils";
+import {isNullOrUndefined, isNotNullOrUndefined} from "../../common/utils/Utils";
 import ILocalStorageService = angular.local.storage.ILocalStorageService;
 import {IServerAddress} from "../server/IServerAddress";
 import {DmrService} from "../dmr/DmrService";
@@ -76,10 +76,6 @@ export class LaunchTypeService {
     } else if (this.isStandaloneMode()) {
       return [];
     }
-  }
-
-  getMemoryUnit(): MemoryUnits {
-    return MemoryUnits.MB;
   }
 
   private set(launchType: string, hasJgroupsSubsystem: boolean): void {

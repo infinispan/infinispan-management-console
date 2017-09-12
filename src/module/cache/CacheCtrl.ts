@@ -183,7 +183,7 @@ export class CacheCtrl {
   }
 
   convertBytes(bytes: number): string {
-    return convertBytes(bytes, this.launchType.getMemoryUnit());
+    return convertBytes(bytes);
   }
 
   private refresh(): void {

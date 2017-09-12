@@ -72,7 +72,9 @@ export class CacheService {
     let request: IDmrRequest = {
       address: this.generateContainerAddress(container, profile).concat(type, name)
     };
-    this.dmrService.readResource(request).then((response) => deferred.resolve(new Cache(name, type, response.configuration)));
+    this.dmrService.readResource(request).then((response) => {
+      deferred.resolve(new Cache(name, type, response.configuration));
+    }, error => deferred.reject(error));
     return deferred.promise;
   }
 
@@ -87,7 +89,7 @@ export class CacheService {
         c.configModel = response;
         deferred.resolve(c);
       });
-    });
+    }, error => deferred.reject(error));
     return deferred.promise;
   }
 

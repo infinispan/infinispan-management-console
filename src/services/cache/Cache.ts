@@ -61,19 +61,19 @@ export class Cache implements ICache {
 
   hasOffHeapMemory(): boolean {
     return isNotNullOrUndefined(this.configModel) && isNotNullOrUndefined(this.configModel.memory)
-      && isNotNullOrUndefined(this.configModel.memory['OFF-HEAP']);
+      && isNotNullOrUndefined(this.configModel.memory["OFF-HEAP"]);
   }
 
   offHeapSize(): number {
     if (this.hasOffHeapMemory()) {
-      return this.configModel.memory['OFF-HEAP'].size;
+      return this.configModel.memory["OFF-HEAP"].size;
     } else {
       return -1;
     }
   }
 
   isOffHeapEvictionTypeMemory(): boolean {
-    return this.hasOffHeapMemory() && this.configModel.memory['OFF-HEAP'].eviction == "MEMORY";
+    return this.hasOffHeapMemory() && this.configModel.memory["OFF-HEAP"].eviction === "MEMORY";
   }
 
 }

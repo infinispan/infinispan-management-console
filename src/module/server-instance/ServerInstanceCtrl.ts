@@ -1,4 +1,4 @@
-import {deepGet, capitalizeFirstLetter} from "../../common/utils/Utils";
+import {deepGet, capitalizeFirstLetter, convertBytes} from "../../common/utils/Utils";
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 import {ServerService} from "../../services/server/ServerService";
 import {IServerAddress} from "../../services/server/IServerAddress";
@@ -94,6 +94,10 @@ export class ServerInstanceCtrl {
         break;
       }
     });
+  }
+
+  convertBytes(bytes: number): string {
+    return convertBytes(bytes);
   }
 
   isCoordinator(): boolean {

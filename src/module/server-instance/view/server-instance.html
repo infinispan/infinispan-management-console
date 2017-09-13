@@ -184,12 +184,12 @@
                         <span class="prop">Memory</span>
                       </div>
                       <div class="col-md-5">
-                        <span id-generator="perf_metrics.direct_buff.mem">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                        <span id-generator="perf_metrics.direct_buff.mem">{{ctrl.convertBytes(ctrl.directBufferPoolMemoryUsed)}}</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="row">
                   <div class="col-md-12">
                     <h4>Mapped Buffers</h4>
@@ -210,12 +210,35 @@
                         <span class="prop">Memory</span>
                       </div>
                       <div class="col-md-5">
-                        <span id-generator="perf_metrics.mapped_buff.mem">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                        <span id-generator="perf_metrics.mapped_buff.mem">{{ctrl.convertBytes(ctrl.mappedBufferPoolMemoryUsed)}}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 memory-usage text-center" ng-show="ctrl.serverInstance.isRunning()">
+                <h4>Off-Heap Memory Usage</h4>
+              </div>
+
+              <div class="col-md-6 memory-info">
+                <div class="row memory-info">
+                  <div class="col-md-12">
+                    <h4>Memory</h4>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-7">
+                        <span class="prop">Used</span>
+                      </div>
+                      <div class="col-md-5">
+                        <span id-generator="perf_metrics.thread.count">{{ctrl.convertBytes(ctrl.nodeStats['off-heap-memory-used'])}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

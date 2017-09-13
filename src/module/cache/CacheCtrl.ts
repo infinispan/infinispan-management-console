@@ -7,6 +7,7 @@ import {ICache} from "../../services/cache/ICache";
 import IModalServiceInstance = angular.ui.bootstrap.IModalServiceInstance;
 import IModalService = angular.ui.bootstrap.IModalService;
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {isNullOrUndefined, convertBytes} from "../../common/utils/Utils";
 
 export class CacheCtrl {
   static $inject: string[] = ["$state", "$interval", "$uibModal", "cacheService", "launchType",
@@ -162,6 +163,27 @@ export class CacheCtrl {
     this.cacheService.resetStats(this.container, this.cache).finally(() => {
       this.refresh();
     });
+  }
+
+  clusterSize(): number {
+    if (this.isLocalMode() || isNullOrUndefined(this.container.serverGroup)) {
+      return 1;
+    } else {
+      return this.container.serverGroup.members.length;
+    }
+  }
+
+  calculateMaxOffHeap(cache: ICache): number {
+    let size: number = cache.offHeapSize();
+    return size > -1 ? size * this.clusterSize() : -1;
+  }
+
+  hasMaxOffHeapValue(cache: ICache): boolean {
+    return this.calculateMaxOffHeap(cache) > 0;
+  }
+
+  convertBytes(bytes: number): string {
+    return convertBytes(bytes);
   }
 
   private refresh(): void {

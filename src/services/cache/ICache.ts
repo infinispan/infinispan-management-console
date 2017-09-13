@@ -28,4 +28,10 @@ export interface ICache {
   hasCompatibility(): boolean;
 
   hasRemoteBackup(): boolean;
+
+  hasOffHeapMemory(): boolean;
+
+  offHeapSize(): number;
+
+  isOffHeapEvictionTypeMemory(): boolean;
 }

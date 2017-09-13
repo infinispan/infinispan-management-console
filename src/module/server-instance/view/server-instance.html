@@ -184,7 +184,7 @@
                         <span class="prop">Memory</span>
                       </div>
                       <div class="col-md-5">
-                        <span id-generator="perf_metrics.direct_buff.mem">{{(ctrl.directBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                        <span id-generator="perf_metrics.direct_buff.mem">{{ctrl.convertBytes(ctrl.directBufferPoolMemoryUsed)}}</span>
                       </div>
                     </div>
                   </div>
@@ -210,7 +210,7 @@
                         <span class="prop">Memory</span>
                       </div>
                       <div class="col-md-5">
-                        <span id-generator="perf_metrics.mapped_buff.mem">{{(ctrl.mappedBufferPoolMemoryUsed/1024/1024)|number}} MB</span>
+                        <span id-generator="perf_metrics.mapped_buff.mem">{{ctrl.convertBytes(ctrl.mappedBufferPoolMemoryUsed)}}</span>
                       </div>
                     </div>
                   </div>
@@ -234,7 +234,7 @@
                         <span class="prop">Used</span>
                       </div>
                       <div class="col-md-5">
-                        <span id-generator="perf_metrics.thread.count">{{(ctrl.nodeStats['off-heap-memory-used']/1024/1024) | number}} MB</span>
+                        <span id-generator="perf_metrics.thread.count">{{ctrl.convertBytes(ctrl.nodeStats['off-heap-memory-used'])}}</span>
                       </div>
                     </div>
                   </div>

@@ -104,9 +104,8 @@ export class ServerInstanceCtrl {
     return this.serverInstance.address.host === this.coord.host && this.serverInstance.address.name === this.coord.name;
   };
 
-  createStartModal(server: IServer): void {
+  createStartModal(server: IServer, actionRequired: string): void {
 
-    let actionRequired: string = this.getActionRequired(server);
     let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal, capitalizeFirstLetter(actionRequired) +
       " server " + this.serverInstance.address.name + "?");
     modal.result.then(() => {
@@ -138,18 +137,6 @@ export class ServerInstanceCtrl {
 
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
-  }
-
-  private getActionRequired(serverState: IServer): string {
-    let actionRequired: string;
-    if (serverState.isStopped()) {
-      actionRequired = "start";
-    } else if (serverState.isRestartRequired()) {
-      actionRequired = "restart";
-    } else if (serverState.isReloadRequired()) {
-      actionRequired = "reload";
-    }
-    return actionRequired;
   }
 
   private refresh(): void {

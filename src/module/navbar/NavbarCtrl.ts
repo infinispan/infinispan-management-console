@@ -49,6 +49,10 @@ export class NavbarCtrl {
     return this.authService.isApiAvailable();
   }
 
+  isStandaloneModeOpenshift(): boolean {
+    return this.launchType.isStandaloneLocalMode();
+  }
+
   private changeState(currentState: any, states: any[]): void {
     states.forEach(state => state.active = currentState.name.includes(state.name));
   }

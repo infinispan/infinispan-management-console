@@ -45,6 +45,13 @@
       <span class="pficon pficon-warning-triangle-o"></span>
       Connection to server has been lost!
     </div>
+    <div ng-if="ctrl.isStandaloneModeOpenshift()" class="toast-pf toast-pf-max-width toast-pf-top-right alert alert-warning alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <span class="pficon pficon-close"></span>
+      </button>
+      <span class="pficon pficon-warning-triangle-o"></span>
+      Running in standalone mode, use admin console primarily for monitoring!
+    </div>
   </ul>
 
   </div>

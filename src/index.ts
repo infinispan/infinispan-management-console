@@ -44,6 +44,8 @@ import "./module/server-group/ServerGroup";
 import "./module/server-groups/ServerGroups";
 import "./module/server-instance/ServerInstance";
 import "./module/endpoints/Endpoints";
+import "./services/authentication/AvailabilityCheck";
+import "./services/interceptors/ServerStatusInterceptor";
 
 App.element(document).ready(() => {
   App.bootstrap(document, [
@@ -92,6 +94,7 @@ App.element(document).ready(() => {
     "managementConsole.services.metadata",
     "managementConsole.services.socket-binding",
     "managementConsole.services.standalone",
-    "managementConsole.services.modal"
+    "managementConsole.services.modal",
+    "managementConsole.services.interceptors"
   ]);
 });

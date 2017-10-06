@@ -159,6 +159,7 @@ export class DmrService {
       .then(
         (success: any) => deferred.resolve(success.data.result),
         (failure: any) => {
+          console.log(failure);
           this.processDmrFailure(deferred, failure);
           this.url = null;
         });

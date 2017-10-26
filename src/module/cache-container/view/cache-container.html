@@ -75,6 +75,7 @@
     <div class="col-sm-12 col-md-12">
       <ul class="nav nav-tabs">
         <li ui-sref-active="active" ui-sref=".caches"><a translate>CACHES</a></li>
+        <li ui-sref-active="active" ui-sref=".counters" ng-if="!ctrl.isLocalMode()"><a translate>COUNTERS</a></li>
         <li ui-sref-active="active" ui-sref=".tasks" ng-if="!ctrl.isLocalMode()"><a translate>TASK_EXECUTION</a></li>
       </ul>
     </div>

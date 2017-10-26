@@ -10,6 +10,7 @@ import {IRedirectState} from "../../common/IRedirectState";
 import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {ContainerService} from "../../services/container/ContainerService";
 import {IStateParamsService} from "angular-ui-router";
+import {CountersCtrl} from "./counters/CountersCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache-container", []);
 
@@ -50,6 +51,18 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
       }],
       templates: ["container", "cacheConfigService", (container, cacheConfigService) => {
         return cacheConfigService.getAllContainerTemplatesShallow(container);
+      }]
+    }
+  });
+
+  $stateProvider.state("container.counters", {
+    url: "/counters",
+    templateUrl: "module/cache-container/counters/view/counters.html",
+    controller: CountersCtrl,
+    controllerAs: "counterCtrl",
+    resolve: {
+      counters: ["container", "counterService", (container, counterService) => {
+        return counterService.getAllCounters(container);
       }]
     }
   });

@@ -189,5 +189,6 @@
   "ENDPOINT_NAME":"Name",
   "ENDPOINT_TYPE":"Type",
   "VIEW_EDIT_ENDPOINT_CONFIGURATION":"View / Edit endpoint configuration:",
-  "CREATE_ENDPOINT": "Create Endpoint"
+  "CREATE_ENDPOINT": "Create Endpoint",
+  "COUNTERS": "Counters"
 }

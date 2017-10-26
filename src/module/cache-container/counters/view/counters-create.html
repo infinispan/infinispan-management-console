@@ -1,0 +1,124 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="$dismiss()" aria-hidden="true">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <h4 class="modal-title" id="create_modal.title">Create a new counter</h4>
+  </div>
+  <div class="modal-body">
+
+    <span ng-if="!modalCtrl.successfulOperation && !modalCtrl.errorExecuting">
+    <h4 translate>Please enter counter properties</h4>
+    <br>
+    </span>
+
+    <form class="form-horizontal" name="counterForm">
+      <div class="form-group">
+        <label class="col-md-4 control-label">* <span>Name</span>:</label>
+        <div class="col-md-6">
+          <input ng-model="modalCtrl.name"
+                 class="form-control"
+                 type="text"
+                 placeholder="Name"
+                 id-generator="create.counter.name"/>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0">
+          <i class="fa fa-info-circle ng-scope" uib-tooltip="Counter name"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4 control-label"><span>Type</span>:</label>
+        <div class="col-md-6">
+
+          <select class="form-control"
+                  name="selectedCounterType"
+                  ng-model="modalCtrl.type"
+                  ng-options="type as type for type in modalCtrl.getCounterTypes()"
+                  ng-required="true"
+                  id-generator="create.counter.types">
+            <option selected="selected">-- Select counter type --</option>
+          </select>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0">
+          <i class="fa fa-info-circle ng-scope" uib-tooltip="Counter type"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-4 control-label"><span>Storage</span>:</label>
+        <div class="col-md-6">
+
+          <select class="form-control"
+                  name="selectedStorage"
+                  ng-model="modalCtrl.storage"
+                  ng-options="storage as storage for storage in modalCtrl.getStorageTypes()"
+                  ng-required="true"
+                  id-generator="create.counter.storage">
+          </select>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0">
+          <i class="fa fa-info-circle ng-scope" uib-tooltip="Counter storage type"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-4 control-label"><span>Initial value</span>:</label>
+        <div class="col-md-6">
+          <input ng-model="modalCtrl.initialValue"
+                 class="form-control"
+                 type="text"
+                 placeholder="Initial value"
+                 id-generator="create.counter.initialValue"/>
+        </div>
+        <div class="col-md-2 pull-left" style="padding-left: 0">
+          <i class="fa fa-info-circle ng-scope" uib-tooltip="Counter initial value"></i>
+        </div>
+      </div>
+      <collapsible ng-if="modalCtrl.isNewCounterStrong()">
+        <span>Bound values</span>
+        <div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Enter bound values</label>
+            <div class="col-md-3">
+              <input ng-model="modalCtrl.lowerBound"
+                  class="form-control"
+                  type="text"
+                  placeholder="Lower Bound"
+                  id-generator="create.lower_bound"/>
+            </div>
+            <div class="col-md-3">
+              <input ng-model="modalCtrl.upperBound"
+                  class="form-control"
+                  type="text"
+                  placeholder="Upper Bound"
+                  id-generator="create.upper_bound"/>
+            </div>
+            <div class="col-md-2 pull-left" style="padding-left: 0">
+              <i class="fa fa-info-circle ng-scope"
+                  uib-tooltip="Strong counter bound values"
+                  tooltip-animation="true"
+                  tooltip-placement="top">
+              </i>
+            </div>
+          </div>
+        </div>
+      </collapsible>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button"
+        class="btn btn-primary"
+        ng-click="modalCtrl.createCounter();$dismiss()"
+        id="submit.button"
+        translate>
+      CREATE
+    </button>
+    <button type="button"
+        class="btn btn-default"
+        ng-click="$dismiss()"
+        id="close.button"
+        translate>
+      CLOSE
+    </button>
+  </div>
+</div>

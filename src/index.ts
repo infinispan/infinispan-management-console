@@ -9,6 +9,7 @@ import "./services/container-tasks/ContainerTasksService";
 import "./services/dmr/DmrService";
 import "./services/domain/DomainService";
 import "./services/endpoint/EndpointService";
+import "./services/counters/CounterService";
 import "./services/jgroups/JGroupsService";
 import "./services/launchtype/LaunchTypeService";
 import "./services/profile/ProfileService";
@@ -82,6 +83,7 @@ App.element(document).ready(() => {
     "managementConsole.services.dmr",
     "managementConsole.services.domain",
     "managementConsole.services.endpoint",
+    "managementConsole.services.counter",
     "managementConsole.services.jgroups",
     "managementConsole.services.launchtype",
     "managementConsole.services.profile",

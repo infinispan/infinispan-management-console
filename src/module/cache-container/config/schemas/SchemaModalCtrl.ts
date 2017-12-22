@@ -30,9 +30,7 @@ export class SchemaModalCtrl {
     this.schemaService.registerProtoSchema(this.container, this.schema)
       .then(() => {
           this.successfulOperation = true;
-          if (!this.editing) {
-            this.$uibModalInstance.close(true);
-          }
+          this.$uibModalInstance.close(true);         
         },
         error => {
           this.errorExecuting = true;

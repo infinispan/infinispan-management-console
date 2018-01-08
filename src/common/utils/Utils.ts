@@ -176,6 +176,22 @@ export function getInstanceFromDmr<T>(dmr: any): T {
   return retObject;
 }
 
+export function convertTime(nanos: number): string {
+  if (isNullOrUndefined(nanos) || nanos < 0) {
+    return "N/A";
+  } else if (nanos === 0) {
+    return "0 ms";
+  } else {
+    let sizes: string[] = ["ns", "ms", "s"];
+    let i: number = Number(Math.floor(Math.log(nanos) / Math.log(1000)));
+    if (i === 0) {
+      return nanos + " " + sizes[i];
+    }
+    return (nanos / Math.pow(1000, i)).toFixed(0) + " " + sizes[i];
+  }
+}
+
+
 export function convertBytes(bytes: number): string {
   if (isNullOrUndefined(bytes) || bytes < 0) {
     return "N/A";

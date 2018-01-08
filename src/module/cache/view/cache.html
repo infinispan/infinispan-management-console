@@ -223,15 +223,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td id-generator="ops_perf.reads">{{ctrl.stats[preappend + 'average-read-time'] | number}}</td>
+                    <td id-generator="ops_perf.reads">{{ctrl.convertTime(ctrl.stats[preappend + 'average-read-time'])}}</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td id-generator="ops_perf.writes">{{ctrl.stats[preappend + 'average-write-time'] | number}}</td>
+                    <td id-generator="ops_perf.writes">{{ctrl.convertTime(ctrl.stats[preappend + 'average-write-time'])}}</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td id-generator="ops_perf.removes">{{ctrl.stats[preappend + 'average-remove-time'] | number}}</td>
+                    <td id-generator="ops_perf.removes">{{ctrl.convertTime(ctrl.stats[preappend + 'average-remove-time'])}}</td>
                   </tr>
                 </table>
               </div>

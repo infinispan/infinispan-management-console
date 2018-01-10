@@ -20,10 +20,10 @@
             <a id="start.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('start')" translate>START</a>
           </li>
 
-          <li role="presentation" ng-class="enabled">
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'">
             <a id="reload.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('reload')" translate>RELOAD</a>
           </li>
-          <li role="presentation" ng-class="enabled">
+          <li role="presentation" ng-class="ctrl.isAtLeastOneServerInRunningState() ? 'enabled' : 'disabled'">
             <a id="restart.button" role="menuitem" ng-click="ctrl.openServerConfirmationModal('restart')" translate>RESTART</a>
           </li>
 

@@ -102,9 +102,12 @@ export class CounterService {
   }
 
   reset(container: ICacheContainer, counter: ICounter): ng.IPromise<any> {
-    return this.dmrService.executePost({
-      address: this.getCounterAddress(counter, container.name, container.profile),
-      operation: "counter-reset"
+    return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coord: IServerAddress) => {
+      console.log("Invoking reset on " + coord);
+      return this.dmrService.executePost({
+        address: this.getCounterRuntimeAddress(counter, container.name, coord.host, coord.name),
+        operation: "counter-reset"
+      });
     });
   }
 
@@ -159,6 +162,13 @@ export class CounterService {
   private getCountersRuntimeAddress(container: string, host: string, server: string): string[] {
     let path: string [] = [].concat("host", host).concat("server", server);
     return this.getContainerAddress(container, path).concat("counters", "COUNTERS");
+  }
+
+  private getCounterRuntimeAddress(c: ICounter, container: string, host: string, server: string): string[] {
+    let path: string [] = [].concat("host", host).concat("server", server);
+    return this.getContainerAddress(container, path).concat("counters", "COUNTERS")
+      .concat(c instanceof StrongCounter ? "strong-counter" : "weak-counter")
+      .concat(c.getName());
   }
 
 }

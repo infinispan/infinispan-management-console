@@ -20,7 +20,7 @@
                  class="form-control"
                  type="text"
                  placeholder="Name"
-                 id-generator="create.counter.name"/>
+                 id-generator="create.counter.name" required/>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
           <i class="fa fa-info-circle ng-scope" uib-tooltip="Counter name"></i>
@@ -32,10 +32,11 @@
 
           <select class="form-control"
                   name="selectedCounterType"
+                  ng-init="modalCtrl.type = modalCtrl.getCounterTypes()[0]"
                   ng-model="modalCtrl.type"
                   ng-options="type as type for type in modalCtrl.getCounterTypes()"
                   ng-required="true"
-                  id-generator="create.counter.types">
+                  id-generator="create.counter.types" required>
             <option selected="selected">-- Select counter type --</option>
           </select>
         </div>
@@ -50,10 +51,11 @@
 
           <select class="form-control"
                   name="selectedStorage"
+                  ng-init="modalCtrl.storage = modalCtrl.getStorageTypes()[0]"
                   ng-model="modalCtrl.storage"
                   ng-options="storage as storage for storage in modalCtrl.getStorageTypes()"
                   ng-required="true"
-                  id-generator="create.counter.storage">
+                  id-generator="create.counter.storage" required>
           </select>
         </div>
         <div class="col-md-2 pull-left" style="padding-left: 0">
@@ -80,13 +82,13 @@
             <label class="col-md-4 control-label">Enter bound values</label>
             <div class="col-md-3">
               <input ng-model="modalCtrl.lowerBound"
-                  class="form-control"
+                  class="form-control" ng-init="modalCtrl.lowerBound = (modalCtrl.isNewCounterStrong() ? 0 : undefined)"
                   type="text"
                   placeholder="Lower Bound"
                   id-generator="create.lower_bound"/>
             </div>
             <div class="col-md-3">
-              <input ng-model="modalCtrl.upperBound"
+              <input ng-model="modalCtrl.upperBound" ng-init="modalCtrl.upperBound = (modalCtrl.isNewCounterStrong() ? 100 : undefined)"
                   class="form-control"
                   type="text"
                   placeholder="Upper Bound"
@@ -107,7 +109,7 @@
   </div>
   <div class="modal-footer">
     <button type="button"
-        class="btn btn-primary"
+        class="btn btn-primary" ng-disabled="!counterForm.$valid"
         ng-click="modalCtrl.createCounter();$dismiss()"
         id="submit.button"
         translate>

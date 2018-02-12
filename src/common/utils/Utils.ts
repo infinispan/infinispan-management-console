@@ -191,7 +191,6 @@ export function convertTime(nanos: number): string {
   }
 }
 
-
 export function convertBytes(bytes: number): string {
   if (isNullOrUndefined(bytes) || bytes < 0) {
     return "N/A";

@@ -7,11 +7,13 @@ import {ICache} from "../../services/cache/ICache";
 import {CacheNodesCtrl} from "./CacheNodesCtrl";
 import {CacheConfigCtrl} from "./config/CacheConfigCtrl";
 import {isNotNullOrUndefined} from "../../common/utils/Utils";
+import {QueryCtrl} from "./QueryCtrl";
 
 const module: ng.IModule = App.module("managementConsole.cache", []);
 
 module.controller("CacheCtrl", CacheCtrl);
 module.controller("CacheCtrl", CacheNodesCtrl);
+module.controller("QueryCtrl", QueryCtrl);
 
 // @ngInject
 module.config(($stateProvider: ng.ui.IStateProvider) => {
@@ -125,4 +127,26 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }]
     }
   });
+
+  $stateProvider.state("caches-query", {
+        parent: "root",
+        url: "containers/:profileName/:containerName/caches/:cacheType/:cacheName/query",
+        templateUrl: "module/cache/view/query.html",
+        controller: QueryCtrl,
+        controllerAs: "ctrl",
+        resolve: {
+          container: ["$stateParams", "containerService",
+            ($stateParams, containerService: ContainerService) => {
+                return containerService.getContainer($stateParams.containerName, $stateParams.profileName);
+            }],
+          cache: ["$stateParams", "cacheService", "container",
+            ($stateParams, cacheService: CacheService, container: ICacheContainer) => {
+                return cacheService.getCacheWithConfiguration(container, $stateParams.cacheType, $stateParams.cacheName);
+            }],
+          allCacheStats: ["cacheService", "container", "cache",
+            (cacheService: CacheService, container: ICacheContainer, cache: ICache) => {
+                return cacheService.getCacheStatsForServers(container, cache);
+            }]
+        }
+    });
 });

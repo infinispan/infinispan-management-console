@@ -7,6 +7,7 @@ import "./services/container/ContainerService";
 import "./services/container-config/ContainerConfigService";
 import "./services/container-tasks/ContainerTasksService";
 import "./services/dmr/DmrService";
+import "./services/rest/RestService";
 import "./services/domain/DomainService";
 import "./services/endpoint/EndpointService";
 import "./services/counters/CounterService";
@@ -28,6 +29,7 @@ import "./components/cache-stores/CacheStoreModal";
 import "./components/cache-configuration/CacheConfiguration";
 import "./components/endpoint-configuration/EndpointConfiguration";
 import "./components/configuration-section/ConfigurationSection";
+import "./components/query-panel/QueryPanel";
 import "./components/forms/field-info/FieldInfo";
 import "./components/forms/form-group/FormGroup";
 import "./components/memory/Memory";
@@ -73,6 +75,7 @@ App.element(document).ready(() => {
     "managementConsole.components.forms.form-group",
     "managementConsole.components.modals.information",
     "managementConsole.components.collapsible",
+    "managementConsole.components.query-panel",
     "managementConsole.services.authentication",
     "managementConsole.services.cache",
     "managementConsole.services.cache-config",
@@ -81,6 +84,7 @@ App.element(document).ready(() => {
     "managementConsole.services.container-config",
     "managementConsole.services.container-tasks",
     "managementConsole.services.dmr",
+    "managementConsole.services.rest",
     "managementConsole.services.domain",
     "managementConsole.services.endpoint",
     "managementConsole.services.counter",

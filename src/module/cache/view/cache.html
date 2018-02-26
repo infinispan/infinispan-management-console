@@ -25,6 +25,8 @@
         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
           <li role="presentation"><a role="menuitem" id-generator="dropdown_menu.refresh" ng-click="ctrl.refresh()">Refresh</a></li>
           <li role="presentation" class="divider"></li>
+          <li role="presentation" ng-class="ctrl.cacheEnabled?'enabled':'disabled'"><a id-generator="dropdown_menu.disable" role="menuitem" ui-sref="caches-query({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName:ctrl.cache.name, cacheType: ctrl.cache.type})">Query</a></li>
+          <li role="presentation" class="divider"></li>
           <li role="presentation" ng-class="ctrl.cacheEnabled?'enabled':'disabled'"><a id-generator="dropdown_menu.disable" role="menuitem" ng-click="ctrl.createDisableModal()">Disable</a></li>
           <li role="presentation" ng-class="!ctrl.cacheEnabled?'enabled':'disabled'"><a id-generator="dropdown_menu.enable" role="menuitem" ng-click="ctrl.createEnableModal()">Enable</a></li>
           <li role="presentation" class="divider"></li>
@@ -96,6 +98,7 @@
       <ul class="nav nav-tabs nav-tabs">
         <li class="active"><a>General status</a></li>
         <li ng-if="!ctrl.isLocalMode()"><a ui-sref="caches-node-stats({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName:ctrl.cache.name, cacheType: ctrl.cache.type})">Nodes</a></li>
+        <li><a ui-sref="caches-query({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName:ctrl.cache.name, cacheType: ctrl.cache.type})">Query</a></li>
       </ul>
     </div>
   </div>

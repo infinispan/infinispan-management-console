@@ -32,6 +32,7 @@ System.config({
   },
 
   map: {
+    "@types/codemirror": "npm:@types/codemirror@0.0.55",
     "@types/lodash@4.14.50": "npm:@types/lodash@4.14.50",
     "angular": "npm:angular@1.5.11",
     "angular-drag-and-drop-lists": "npm:angular-drag-and-drop-lists@2.0.0",
@@ -49,6 +50,7 @@ System.config({
     "bootstrap-css": "npm:bootstrap-css@3.0.0",
     "browser-sync": "npm:browser-sync@2.14.3",
     "c3": "npm:c3@0.4.11",
+    "codemirror": "npm:codemirror@5.35.0",
     "core-js": "npm:core-js@1.2.7",
     "css": "github:systemjs/plugin-css@0.1.33",
     "d3": "npm:d3@3.5.17",
@@ -507,6 +509,10 @@ System.config({
     },
     "npm:code-point-at@1.0.0": {
       "number-is-nan": "npm:number-is-nan@1.0.0"
+    },
+    "npm:codemirror@5.35.0": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.1",
+      "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:combined-stream@1.0.5": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",

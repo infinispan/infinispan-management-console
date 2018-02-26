@@ -9,6 +9,8 @@
 @import 'module/server-group/endpoints/view/endpoints.less';
 @import 'module/cache-container/config/view/container.less';
 @import 'components/endpoint-configuration/view/endpoint-configuration.less';
+@import '../vendor/jspm_packages/npm/codemirror@5.35.0/lib/codemirror.css';
+@import 'components/query-panel/query-panel';
 
 // This is needed for UI Bootstrap directives to work correctly with bootstrap css,
 // as stated on UI Bootstrap webpage.
@@ -86,4 +88,14 @@ li.disabled a {
 
 .disabled {
   pointer-events: none;
+}
+
+// Panel stylings
+.panel-group .panel.panel-default {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.border-left-separator {
+  border-left: 1px solid #d1d1d1;
 }

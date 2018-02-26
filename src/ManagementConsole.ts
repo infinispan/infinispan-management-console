@@ -6,6 +6,7 @@
 /// <reference path="../typings/globals/angular-local-storage/index.d.ts" />
 /// <reference path="../typings/globals/angular-ui-bootstrap/index.d.ts" />
 /// <reference path="../typings/modules/deepmerge/index.d.ts" />
+/// <reference path="../typings/modules/codemirror/index.d.ts" />
 
 /* tslint:disable:variable-name */
 
@@ -16,6 +17,7 @@ import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
 import "deepmerge";
+import "codemirror";
 import "angularjs-dropdown-multiselect";
 import "c3/c3.js";
 import "d3/d3.js";
@@ -30,6 +32,7 @@ import "angular-patternfly/styles/angular-patternfly.css!";
 import "patternfly/dist/css/patternfly.css!";
 import "patternfly/dist/css/patternfly-additions.css!";
 import "./ManagementConsole.css!";
+import "codemirror";
 import {IUrlRouterService, IStateService} from "angular-ui-router";
 import {IPage} from "./common/IPage";
 import {IRootScopeService} from "./common/IRootScopeService";

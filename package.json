@@ -3,6 +3,7 @@
   "version": "9.0.0-SNAPSHOT",
   "license": "Apache-2.0",
   "dependencies": {
+    "@types/codemirror": "0.0.55",
     "bootstrap": "3.3.7",
     "gulp-filter": "~4.0.0",
     "gulp-flatten": "~0.3.1",

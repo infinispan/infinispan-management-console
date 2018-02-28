@@ -32,6 +32,7 @@ System.config({
   },
 
   map: {
+    "@types/codemirror": "npm:@types/codemirror@0.0.55",
     "@types/lodash@4.14.50": "npm:@types/lodash@4.14.50",
     "angular": "npm:angular@1.5.11",
     "angular-drag-and-drop-lists": "npm:angular-drag-and-drop-lists@2.0.0",

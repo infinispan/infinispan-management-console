@@ -135,9 +135,9 @@ export function convertCacheAttributeIntoFieldName(attribute: string): string {
 export function traverse(obj: any = {}, callback: Function, trail?: any[]): void {
   trail = trail || [];
   Object.keys(obj).forEach((key) => {
-    var value: any = obj[key];
+    let value: any = obj[key];
 
-    if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
+    if (isNotNullOrUndefined(value) && isObject(value)) {
       traverse(value, callback, trail.concat(key));
     } else {
       callback.call(obj, key, value, trail);
@@ -148,9 +148,9 @@ export function traverse(obj: any = {}, callback: Function, trail?: any[]): void
 export function traverseObject(obj: any, callback: Function, trail?: any[]): void {
   trail = trail || [];
   Object.keys(obj).forEach((key) => {
-    var value: any = obj[key];
+    let value: any = obj[key];
 
-    if (isNotNullOrUndefined(value) && Object.getPrototypeOf(value) === Object.prototype) {
+    if (isNotNullOrUndefined(value) && isObject(value)) {
       traverseObject(value, callback, trail.concat(key));
       callback.call(obj, key, value, trail);
     }

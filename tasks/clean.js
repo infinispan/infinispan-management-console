@@ -13,8 +13,7 @@ module.exports = (gulp, dir, config, cleanAll) => () => {
 
   var cleanDist = function (directory) {
     return del([
-      path.join(directory, '**', '*'),
-      '!' + path.join(directory, 'index.html')
+      path.join(directory, '**', '*')
     ]);
   };
 

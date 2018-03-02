@@ -1,6 +1,6 @@
 {
   "name": "management-console",
-  "version": "9.0.0-SNAPSHOT",
+  "version": "9.2.0-SNAPSHOT",
   "license": "Apache-2.0",
   "dependencies": {
     "bootstrap": "3.3.7",
@@ -23,6 +23,8 @@
     "gulp-ng-annotate": "~2.0.0",
     "gulp-protractor": "~2.3.0",
     "gulp-size": "2.1.0",
+    "gulp-string-replace": "^1.0.0",
+    "gulp-rename": "^1.2.2",
     "gulp-tslint": "~5.0.0",
     "gulp-typedoc": "~2.0.0",
     "gulp-util": "3.0.7",

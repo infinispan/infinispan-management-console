@@ -3,18 +3,22 @@
     <uib-accordion-heading>{{ctrl.name}} {{ctrl.description}}</uib-accordion-heading>
     <div class="row">
       <div class="col-sm-3 col-lg-2">
-        <span>Enter key: </span> <input class="form-control" type="text" id="{{ctrl.name}}-input-text"/>
+        <div class="form-group">
+          <span>Enter key: </span>
+          <input class="form-control" type="text" id="{{ctrl.name}}-input-text"/>
+        </div>
+      </div>
+      <div class="col-sm-9 col-lg-6">
+        <button type="button" class="btn btn-default execute-button" ng-click="ctrl.executeAction()">Execute</button>
       </div>
     </div>
-    <div class="row">
-      <button type="button" class="btn btn-default" ng-click="ctrl.executeAction()">Execute</button>
-    </div>
+    <hr class="query-panel-hr">
     <div class="row">
       <div class="col-sm-3 col-lg-2">
         <p>Status Code</p>
         <p><strong>{{ ctrl.statusCode ? ctrl.statusCode : ''}}</strong></p>
       </div>
-      <div class="col-sm-9 col-md-8 col-lg-6 border-left-separator">
+      <div class="col-sm-9 col-lg-6 border-left-separator">
         <p>Response</p>
         <textarea class="form-control" rows="10" id="{{ctrl.name}}-response-text-area"></textarea>
       </div>

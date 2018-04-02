@@ -1,7 +1,6 @@
 node
 node_modules
 dist
-!dist/index.html
 .idea
 .vscode
 .tmp

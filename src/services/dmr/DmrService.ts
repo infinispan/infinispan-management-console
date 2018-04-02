@@ -179,15 +179,43 @@ export class DmrService {
     let msg: string = "An unspecified error has been received from the server";
     if (response.status !== 401) {
       let result: any = response.data;
-      if (result && result["failure-description"] != null) {
-        if (isNotNullOrUndefined(result["failure-description"]["domain-failure-description"])) {
-          msg = result["failure-description"]["domain-failure-description"];
-        } else {
-          msg = result["failure-description"];
+      if (isNotNullOrUndefined(result)) {
+        if (isNotNullOrUndefined(result["failure-description"])) {
+          if (isNotNullOrUndefined(result["failure-description"]["domain-failure-description"])) {
+            msg = result["failure-description"]["domain-failure-description"];
+          } else {
+            msg = result["failure-description"];
+          }
+        }
+        // see if we can find the cause of this error
+        let cause: string = this.findErrorCause(result);
+        if (isNotNullOrUndefined(cause)) {
+          msg = cause;
         }
       }
       promise.reject(msg);
     }
+  }
+
+  private findErrorCause(root: any): string {
+    // traverse the object tree
+    let cause: string = undefined;
+    traverseObject(root, (key: string, value: any, trail: string []) => {
+      // NOTE "Operation step-1" contains the cause, adjust if necessary
+      let errorFound: string = this.visitTraversedErrorNode(value, "Operation step-1");
+      if (isNotNullOrUndefined(errorFound)) {
+        cause = errorFound;
+      }
+    });
+    return cause;
+  }
+
+  private visitTraversedErrorNode(obj: any, field: string): string {
+    let cause: string = undefined;
+    if (isNotNullOrUndefined(obj) && isNotNullOrUndefined(obj[field])) {
+      cause = obj[field];
+    }
+    return cause;
   }
 
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,

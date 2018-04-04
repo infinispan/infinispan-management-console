@@ -157,6 +157,19 @@ export function traverseObject(obj: any, callback: Function, trail?: any[]): voi
   });
 }
 
+export function traverseObjectForSome(obj: any, callback: Function, trail?: any[]): void {
+  trail = trail || [];
+  Object.keys(obj).some((key) => {
+    let result: boolean = false;
+    let value: any = obj[key];
+    if (isNotNullOrUndefined(value) && isObject(value)) {
+      traverseObject(value, callback, trail.concat(key));
+      result = callback.call(obj, key, value, trail);
+    }
+    return isBoolean(result) && result; // passed function could have returned something else than boolean
+  });
+}
+
 export function parseServerAddress(server: string): IServerAddress {
   let address: string[] = server.split(":");
   if (address.length !== 2) {

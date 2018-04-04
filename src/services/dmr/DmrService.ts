@@ -3,7 +3,7 @@ import {IDmrRequest} from "./IDmrRequest";
 import {IDmrCompositeReq} from "./IDmrCompositeReq";
 import {
   isNotNullOrUndefined, isNullOrUndefined, traverseObject, isObject,
-  isJsonString, isArray
+  isJsonString, isArray, traverseObjectForSome
 } from "../../common/utils/Utils";
 import {CompositeOpBuilder, createWriteAttrReq} from "./CompositeOpBuilder";
 
@@ -180,42 +180,30 @@ export class DmrService {
     if (response.status !== 401) {
       let result: any = response.data;
       if (isNotNullOrUndefined(result)) {
-        if (isNotNullOrUndefined(result["failure-description"])) {
-          if (isNotNullOrUndefined(result["failure-description"]["domain-failure-description"])) {
-            msg = result["failure-description"]["domain-failure-description"];
-          } else {
-            msg = result["failure-description"];
-          }
-        }
         // see if we can find the cause of this error
-        let cause: string = this.findErrorCause(result);
-        if (isNotNullOrUndefined(cause)) {
-          msg = cause;
-        }
+        let searchTokens: string [] = ["^Operation step", "^failure-description"];
+        traverseObjectForSome(result, (key, value, trail) => {
+          searchTokens.some((searchToken) => {
+            let propertyName: string = this.findPropertyNameByRegex(value, searchToken);
+            if (isNotNullOrUndefined(propertyName)) {
+              msg = value[propertyName];
+              return true;
+            }
+            return false;
+          });
+        });
       }
       promise.reject(msg);
     }
   }
 
-  private findErrorCause(root: any): string {
-    // traverse the object tree
-    let cause: string = undefined;
-    traverseObject(root, (key: string, value: any, trail: string []) => {
-      // NOTE "Operation step-1" contains the cause, adjust if necessary
-      let errorFound: string = this.visitTraversedErrorNode(value, "Operation step-1");
-      if (isNotNullOrUndefined(errorFound)) {
-        cause = errorFound;
+  private findPropertyNameByRegex(o: any, pattern:string): string {
+    for (var key in o) {
+      if (key.match(pattern)) {
+        return key;
       }
-    });
-    return cause;
-  }
-
-  private visitTraversedErrorNode(obj: any, field: string): string {
-    let cause: string = undefined;
-    if (isNotNullOrUndefined(obj) && isNotNullOrUndefined(obj[field])) {
-      cause = obj[field];
     }
-    return cause;
+    return undefined;
   }
 
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,

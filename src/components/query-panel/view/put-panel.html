@@ -5,13 +5,13 @@
       <div class="col-sm-3 col-lg-2">
         <div class="form-group">
           <span>Enter key: </span>
-          <input class="form-control" type="text" id="{{ctrl.name}}-input-text"/>
+          <input class="form-control" type="text" id="{{ctrl.name}}-input-text" ng-model="ctrl.inputParams[0]"/>
         </div>
       </div>
       <div class="col-sm-9 col-lg-6">
         <div class="form-group">
           <span>Enter value: </span>
-          <textarea id="{{ctrl.name}}-input-text-area" class="form-control vresize" rows="5"></textarea>
+          <textarea id="{{ctrl.name}}-input-text-area" class="form-control vresize" rows="5" ng-model="ctrl.inputParams[1]"></textarea>
           <button type="button" class="btn btn-default execute-button" ng-click="ctrl.executeAction()">Execute</button>
         </div>
       </div>

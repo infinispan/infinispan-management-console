@@ -1,8 +1,8 @@
 import {App} from "../../ManagementConsole";
-import {IRestRequest} from "./IRestRequest";
 import {ISocketBinding} from "../socket-binding/ISocketBinding";
 import {SocketBindingService} from "../socket-binding/SocketBindingService";
 import IHttpPromise = angular.IHttpPromise;
+import {isNotNullOrUndefined} from "../../common/utils/Utils";
 
 const module: ng.IModule = App.module("managementConsole.services.rest", []);
 
@@ -29,63 +29,33 @@ export class RestService {
   }
 
   executeCacheGet(cacheTarget: string, key: string): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: undefined,
-      cache: cacheTarget,
-      urlSuffix: "/".concat(key)
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("get", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, key);
+    return this.executeHelper("get", url, undefined, this.getDefaultHeaders());
   }
 
   executeCacheDelete(cacheTarget: string): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: undefined,
-      cache: cacheTarget,
-      urlSuffix: undefined
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("delete", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, undefined);
+    return this.executeHelper("delete", url, undefined, this.getDefaultHeaders());
   }
 
   executeCacheDeleteKey(cacheTarget: string, key: string): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: undefined,
-      cache: cacheTarget,
-      urlSuffix: "/".concat(key)
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("delete", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, key);
+    return this.executeHelper("delete", url, undefined, this.getDefaultHeaders());
   }
 
   executeCachePut(cacheTarget: string, key: string, data: any): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: data,
-      cache: cacheTarget,
-      urlSuffix: "/".concat(key)
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("put", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, key);
+    return this.executeHelper("put", url, data, this.getDefaultHeaders());
   }
 
   executeCachePost(cacheTarget: string, key: string, data: any): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: data,
-      cache: cacheTarget,
-      urlSuffix: "/".concat(key)
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("post", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, key);
+    return this.executeHelper("post", url, data, this.getDefaultHeaders());
   }
 
   executeCacheQuery(cacheTarget: string, query: string): ng.IPromise<any> {
-    let request: IRestRequest = {
-      jsonPayload: {query: query},
-      cache: cacheTarget,
-      urlSuffix: "?action=search"
-    };
-    let url: string = this.generateUrl(request);
-    return this.executeHelper("post", url, request.jsonPayload, this.getDefaultHeaders());
+    let url: string = this.generateRequestURL(cacheTarget, "?action=search");
+    return this.executeHelper("post", url, {query: query}, this.getDefaultHeaders());
   }
 
   clearGetCache(): void {
@@ -121,17 +91,15 @@ export class RestService {
     return deferred.promise;
   }
 
-  private generateUrl(request: IRestRequest): string {
+  private generateRequestURL(cacheTarget: string, urlSuffix: string): string {
     let l: ng.ILocationService = this.$location;
     let base: string = `${l.protocol()}://${l.host()}:${this.restBinding.port}/`;
-    return base + "rest/" + request.cache + request.urlSuffix;
+    return base + "rest/" + cacheTarget + (isNotNullOrUndefined(urlSuffix) ? "/".concat(urlSuffix) : "");
   }
 
   private processResponseFailure(promise: ng.IDeferred<any>, response: any): void {
-
     if (response.status !== 401) {
-      let result: any = response.data;
-      promise.reject(result);
+      promise.reject(response.data);
     }
   }
 

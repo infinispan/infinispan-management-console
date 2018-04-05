@@ -13,6 +13,10 @@ export function isNonEmptyString(str: string): boolean {
   return isString(str) && str.length > 0;
 }
 
+export function isEmptyString(s: any): boolean {
+  return isString(s) && s.length === 0;
+}
+
 export function isBoolean(object: any): boolean {
   return (typeof object === "boolean");
 

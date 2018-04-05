@@ -9,13 +9,51 @@
         <li><a ui-sref="container({profileName: ctrl.container.profile, containerName: ctrl.container.name})">{{ctrl.container.name}}</a>
         <li class="active"><strong>Query</strong>
       </ol>
+      <div class="dropdown pull-right" uib-dropdown>
+        <button class="btn btn-default" type="button" id="edit_config.button"
+                ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})">
+          <span class="pficon pficon-settings"></span> Configuration
+        </button>
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdown_menu.button" uib-dropdown-toggle>
+          Actions
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+          <li role="presentation" class="enabled">
+            <a id="reset_stats.button" role="menuitem" ng-click="ctrl.resetStats()">Reset statistics</a>
+          </li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation">
+            <a role="menuitem" tabindex="-1" id="config.button"
+               ui-sref="edit-cache-config({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheType: ctrl.cache.type, cacheName: ctrl.cache.name})"
+            >View configuration</a>
+          </li>
+        </ul>
+      </div>
       <h1>
-                <span id-generator="availability" class="label"
-                      ng-class="ctrl.currentCacheAvailability() ? 'label-success' : 'label-danger'">
-                    {{ctrl.currentClusterAvailabilityAsString()}}
-                </span>&nbsp;{{ctrl.cache.name}}
+       <span id-generator="availability" class="label" ng-class="ctrl.currentCacheAvailability() ? 'label-success' : 'label-danger'">
+         {{ctrl.currentClusterAvailabilityAsString()}}
+       </span>&nbsp;{{ctrl.cache.name}}
       </h1>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12">
+      <!--ul class="nav nav-tabs nav-tabs-pf"-->
+      <ul class="nav nav-tabs nav-tabs">
+        <li><a
+          ui-sref="cache({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName: ctrl.cache.name, cacheType: ctrl.cache.type})">General
+          status</a></li>
+        <li ng-if="!ctrl.isLocalMode()"><a
+          ui-sref="caches-node-stats({profileName: ctrl.container.profile, containerName: ctrl.container.name, cacheName:ctrl.cache.name, cacheType: ctrl.cache.type})">Nodes</a>
+        </li>
+        <li class="active"><a>Query</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="padding-top: 20px">
     <div class="col-sm-12">
       <div class="row">
         <div class="col-sm-12">
@@ -44,4 +82,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

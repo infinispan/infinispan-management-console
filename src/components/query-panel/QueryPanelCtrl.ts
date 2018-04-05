@@ -18,7 +18,7 @@ export class QueryPanelCtrl implements ng.IComponentController {
   }
 
   executeAction(): void {
-    this.executionActionHelper(this.name, this.inputParams[0], this.inputParams[1]).then((response: any) => {
+    this.executionActionHelper().then((response: any) => {
       this.statusCode = 200;
       if (isNotNullOrUndefined(response) && isNotNullOrUndefined(response.data)) {
         if (isObject(response.data)) {
@@ -37,26 +37,26 @@ export class QueryPanelCtrl implements ng.IComponentController {
     });
   }
 
-  executionActionHelper(type: string, param1: string, param2: any): ng.IPromise<any> {
+  executionActionHelper(): ng.IPromise<any> {
     let response: ng.IPromise<any>;
-    switch (type) {
+    switch (this.name) {
       case "SEARCH":
-        response = this.restService.executeCacheQuery(this.cacheName, param2);
+        response = this.restService.executeCacheQuery(this.cacheName, this.inputParams[1]);
         break;
       case "POST":
-        response = this.restService.executeCachePost(this.cacheName, param1, param2);
+        response = this.restService.executeCachePost(this.cacheName, this.inputParams[0], this.inputParams[1]);
         break;
       case "PUT":
-        response = this.restService.executeCachePut(this.cacheName, param1, param2);
+        response = this.restService.executeCachePut(this.cacheName, this.inputParams[0], this.inputParams[1]);
         break;
       case "GET":
-        response = this.restService.executeCacheGet(this.cacheName, param1);
+        response = this.restService.executeCacheGet(this.cacheName, this.inputParams[0]);
         break;
       case "DELETE":
-        response = this.restService.executeCacheDeleteKey(this.cacheName, param1);
+        response = this.restService.executeCacheDeleteKey(this.cacheName, this.inputParams[0]);
         break;
       default:
-        console.log("Unknown request type " + type);
+        console.log("Unknown request type " + this.name);
     }
     return response;
   }

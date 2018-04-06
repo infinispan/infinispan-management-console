@@ -19,20 +19,28 @@ export class QueryPanelCtrl implements ng.IComponentController {
 
   executeAction(): void {
     this.executionActionHelper().then((response: any) => {
-      this.statusCode = 200;
+      if (isNotNullOrUndefined(response.status)) {
+        this.statusCode = response.status;
+      } else {
+        this.statusCode = 200;
+      }
       if (isNotNullOrUndefined(response) && isNotNullOrUndefined(response.data)) {
         if (isObject(response.data)) {
           this.editor.setValue(JSON.stringify(response.data, null, "\t"));
         } else {
-          this.editor.setValue("Request executed successfully. No response returned.");
+          this.editor.setValue(response.statusText);
         }
       }
     }).catch((error: any) => {
-      this.statusCode = 401;
-      if (isEmptyString(error)) {
-        this.editor.setValue("Error response with no further details returned");
+      if (isNotNullOrUndefined(error.status)) {
+        this.statusCode = error.status;
       } else {
-        this.editor.setValue(JSON.stringify(error, null, "\t"));
+        this.statusCode = 401;
+      }
+      if (isEmptyString(error)) {
+        this.editor.setValue("Error response with no further details received");
+      } else {
+        this.editor.setValue(error.statusText);
       }
     });
   }

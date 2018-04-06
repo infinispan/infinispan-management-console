@@ -87,13 +87,7 @@ export class RestService {
       default:
         deferred.reject("Unknown request type " + type);
     }
-    response.then(
-      (success: any) => { deferred.resolve(success); },
-      (failure: any) => {
-        if (failure.status !== 401) {
-          deferred.reject(failure.data);
-        }
-      });
+    response.then((success: any) => { deferred.resolve(success); }, (failure: any) => { deferred.reject(failure); });
     return deferred.promise;
   }
 

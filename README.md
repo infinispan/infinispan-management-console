@@ -3,6 +3,8 @@
 - Install node.js and npm
 - Install gulp globally (use sudo if needed): `npm install gulp -g`
 - run `npm install` to install local packages and client dependencies
+- Configure jspm to avoid GitHub rate limit errors, see [here](https://stackoverflow.com/questions/30995040/jspm-saying-github-rate-limit-reached-how-to-fix) for details.
+- run `jspm install` 
 - NOTE: you will need to repeat the step above if there are some changes to package.json
 
 # Setting up the server (we need it for web application to fetch data, you do this only once)

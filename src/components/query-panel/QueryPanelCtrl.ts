@@ -64,7 +64,6 @@ export class QueryPanelCtrl implements ng.IComponentController {
   $postLink(): void {
     this.$timeout(() => {
       let area: HTMLTextAreaElement = <HTMLTextAreaElement>document.getElementById(this.name + "-response-text-area");
-      console.log("after timeout " + area + " for " + this.name);
       let editorConfig: EditorConfiguration = <EditorConfiguration> {
         lineNumbers: true,
         mode: {

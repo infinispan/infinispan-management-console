@@ -30,39 +30,45 @@ export class RestService {
 
   executeCacheGet(cacheTarget: string, key: string): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, key);
-    return this.executeHelper("get", url, undefined, this.getDefaultHeaders());
+    return this.executeHelper("get", url, undefined);
   }
 
   executeCacheDelete(cacheTarget: string): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, undefined);
-    return this.executeHelper("delete", url, undefined, this.getDefaultHeaders());
+    return this.executeHelper("delete", url, undefined);
   }
 
   executeCacheDeleteKey(cacheTarget: string, key: string): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, key);
-    return this.executeHelper("delete", url, undefined, this.getDefaultHeaders());
+    return this.executeHelper("delete", url, undefined);
   }
 
   executeCachePut(cacheTarget: string, key: string, data: any): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, key);
-    return this.executeHelper("put", url, data, this.getDefaultHeaders());
+    return this.executeHelper("put", url, data);
   }
 
   executeCachePost(cacheTarget: string, key: string, data: any): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, key);
-    return this.executeHelper("post", url, data, this.getDefaultHeaders());
+    return this.executeHelper("post", url, data);
   }
 
   executeCacheQuery(cacheTarget: string, query: string): ng.IPromise<any> {
     let url: string = this.generateRequestURL(cacheTarget, "?action=search");
-    return this.executeHelper("post", url, {query: query}, this.getDefaultHeaders());
+    return this.executeHelper("post", url, {query: query});
   }
 
   clearGetCache(): void {
     this.$cacheFactory.get("$http").removeAll();
   }
 
-  private executeHelper(type: string, url: string, data: any, headers?: ng.IRequestShortcutConfig): ng.IPromise<any> {
+  private executeHelper(type: string, url: string, data: any): ng.IPromise<any> {
+    let headers: ng.IRequestShortcutConfig = {
+      headers: {
+        "Accept": "*/*",
+        "Content-type": "application/json"
+      }
+    };
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
     let response: IHttpPromise;
     switch (type) {
@@ -82,11 +88,11 @@ export class RestService {
         deferred.reject("Unknown request type " + type);
     }
     response.then(
-      (success: any) => {
-        deferred.resolve(success);
-      },
+      (success: any) => { deferred.resolve(success); },
       (failure: any) => {
-        this.processResponseFailure(deferred, failure);
+        if (failure.status !== 401) {
+          deferred.reject(failure.data);
+        }
       });
     return deferred.promise;
   }
@@ -95,21 +101,6 @@ export class RestService {
     let l: ng.ILocationService = this.$location;
     let base: string = `${l.protocol()}://${l.host()}:${this.restBinding.port}/`;
     return base + "rest/" + cacheTarget + (isNotNullOrUndefined(urlSuffix) ? "/".concat(urlSuffix) : "");
-  }
-
-  private processResponseFailure(promise: ng.IDeferred<any>, response: any): void {
-    if (response.status !== 401) {
-      promise.reject(response.data);
-    }
-  }
-
-  private getDefaultHeaders(): ng.IRequestShortcutConfig {
-    return <ng.IRequestShortcutConfig> {
-      headers: {
-        "Accept": "*/*",
-        "Content-type": "application/json"
-      }
-    };
   }
 }
 

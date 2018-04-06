@@ -56,7 +56,7 @@ export class QueryPanelCtrl implements ng.IComponentController {
         response = this.restService.executeCacheDeleteKey(this.cacheName, this.inputParams[0]);
         break;
       default:
-        console.log("Unknown request type " + this.name);
+        console.error("Unknown request type " + this.name);
     }
     return response;
   }

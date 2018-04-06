@@ -304,7 +304,7 @@ export class DmrService {
     try {
       return JSON.parse(value);
     } catch (e) {
-      console.log("Invalid JSON value " + value + " for field " + key);
+      console.error("Invalid JSON value " + value + " for field " + key);
     }
   }
 }

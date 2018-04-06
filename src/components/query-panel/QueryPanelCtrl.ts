@@ -1,7 +1,7 @@
 import CodeMirror = require("codemirror");
 import {RestService} from "../../services/rest/RestService";
 import {EditorConfiguration} from "codemirror";
-import {isNotNullOrUndefined, isObject, isEmptyString} from "../../common/utils/Utils";
+import {isNotNullOrUndefined, isObject} from "../../common/utils/Utils";
 
 export class QueryPanelCtrl implements ng.IComponentController {
   static $inject: string[] = ["restService", "$timeout"];
@@ -19,29 +19,19 @@ export class QueryPanelCtrl implements ng.IComponentController {
 
   executeAction(): void {
     this.executionActionHelper().then((response: any) => {
-      if (isNotNullOrUndefined(response.status)) {
-        this.statusCode = response.status;
-      } else {
-        this.statusCode = 200;
+      this.statusCode = response.status;
+      let responseText: string = response.statusText;
+      if (isNotNullOrUndefined(response.data) && isObject(response.data)) {
+        responseText = JSON.stringify(response.data, null, "\t");
       }
-      if (isNotNullOrUndefined(response) && isNotNullOrUndefined(response.data)) {
-        if (isObject(response.data)) {
-          this.editor.setValue(JSON.stringify(response.data, null, "\t"));
-        } else {
-          this.editor.setValue(response.statusText);
-        }
-      }
+      this.editor.setValue(responseText);
     }).catch((error: any) => {
-      if (isNotNullOrUndefined(error.status)) {
-        this.statusCode = error.status;
-      } else {
-        this.statusCode = 401;
+      this.statusCode = error.status;
+      let responseText: string = error.statusText;
+      if (isNotNullOrUndefined(error.data) && isObject(error.data)) {
+        responseText = JSON.stringify(error.data, null, "\t");
       }
-      if (isEmptyString(error)) {
-        this.editor.setValue("Error response with no further details received");
-      } else {
-        this.editor.setValue(error.statusText);
-      }
+      this.editor.setValue(responseText);
     });
   }
 

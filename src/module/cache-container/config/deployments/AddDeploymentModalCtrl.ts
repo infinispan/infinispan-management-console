@@ -13,7 +13,7 @@ export class AddDeploymentModalCtrl {
 
   uploadAndDeployArtifact(): void {
     this.containerConfigService.uploadAndDeployArtifact(this.fileToUpload)
-      .catch(e => console.log("Error in deployment upload of " + this.fileToUpload + ":" + e.toString()))
+      .catch(e => console.error("Error in deployment upload of " + this.fileToUpload + ":" + e.toString()))
       .finally(() => this.$state.reload());
   };
 }

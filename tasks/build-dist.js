@@ -1,13 +1,13 @@
 module.exports = (gulp, config) => () => {
   const path = require('path');
   const replace = require('gulp-string-replace');
-  const rename = require("gulp-rename");
+  const rename = require('gulp-rename');
   const Builder = require('jspm').Builder;
   const builder = new Builder();
   const packageJson = require(path.join(config.projectDir, 'package.json'));
   const appName = packageJson.name;
   const version = packageJson.version;
-  const fileName = appName.concat(version);
+  const fileName = appName.concat('-').concat(version);
 
   return beginBuild()
     .then(buildSFX).then(changeIndexJsVersion)
@@ -22,9 +22,6 @@ module.exports = (gulp, config) => () => {
   }
 
   function buildSFX() {
-    const appName = packageJson.name;
-    const version = packageJson.version;
-    const fileName = appName.concat('-').concat(version);
     const distFileName = `${fileName}.min.js`;
     const outFile = path.join(config.scriptsDir, distFileName);
     const moduleName = config.moduleName;

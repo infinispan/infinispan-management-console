@@ -33,7 +33,8 @@
       "info",
       "time",
       "timeEnd",
-      "trace"
+      "trace",
+      "log"
     ],
     "no-consecutive-blank-lines": true,
     "no-debugger": true,

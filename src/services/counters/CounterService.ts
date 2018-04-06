@@ -103,7 +103,6 @@ export class CounterService {
 
   reset(container: ICacheContainer, counter: ICounter): ng.IPromise<any> {
     return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coord: IServerAddress) => {
-      console.log("Invoking reset on " + coord);
       return this.dmrService.executePost({
         address: this.getCounterRuntimeAddress(counter, container.name, coord.host, coord.name),
         operation: "counter-reset"

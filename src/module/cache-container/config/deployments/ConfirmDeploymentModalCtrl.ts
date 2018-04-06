@@ -17,7 +17,7 @@ export class ConfirmDeploymentModalCtrl {
   confirmDeployArtifact(): void {
     this.containerConfigService.deployArtifact(this.container, this.artifact)
       .catch((e) => {
-        console.log("Error in deploy " + e.toString());
+        console.error("Error in deploy " + e.toString());
       })
       .finally(() => {
         this.$state.reload();
@@ -27,7 +27,7 @@ export class ConfirmDeploymentModalCtrl {
   confirmUndeployArtifact(): void {
     this.containerConfigService.undeployArtifact(this.container, this.artifact)
       .catch((e) => {
-        console.log("Error in undeploy " + e.toString());
+        console.error("Error in undeploy " + e.toString());
       })
       .finally(() => {
         this.$state.reload();
@@ -37,7 +37,7 @@ export class ConfirmDeploymentModalCtrl {
   confirmRemoveArtifact(): void {
     this.containerConfigService.removeArtifact(this.container, this.artifact)
       .catch((e) => {
-        console.log("Error in remove " + e.toString());
+        console.error("Error in remove " + e.toString());
       })
       .finally(() => {
         this.$state.reload();

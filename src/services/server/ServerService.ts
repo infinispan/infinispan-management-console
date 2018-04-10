@@ -72,6 +72,18 @@ export class ServerService {
     });
   }
 
+  getServersInState(servers: IServerAddress [], state: string): ng.IPromise<IServerAddress[]> {
+    let promises: ng.IPromise<any> [] = [];
+    for (let server of servers) {
+      promises.push(this.getServerStatus(server).then(status => {
+        if (status.toUpperCase() === state.toUpperCase()) {
+          return server;
+        }
+      }));
+    }
+    return this.$q.all(promises);
+  }
+
   getServer(serverAddress: IServerAddress): ng.IPromise<IServer> {
     let deferred: ng.IDeferred<IServer> = this.$q.defer<IServer>();
     this.dmrService.readResource({

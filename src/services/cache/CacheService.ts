@@ -8,19 +8,22 @@ import {CacheConfigService} from "../cache-config/CacheConfigService";
 import {IServerAddress} from "../server/IServerAddress";
 import {ICacheContainer} from "../container/ICacheContainer";
 import {JGroupsService} from "../jgroups/JGroupsService";
-import {isNullOrUndefined} from "../../common/utils/Utils";
+import {isNullOrUndefined, isNotNullOrUndefined} from "../../common/utils/Utils";
 import {ICacheConfiguration} from "../cache-config/ICacheConfiguration";
+import {ServerService} from "../server/ServerService";
+import {SERVER_STATE_RUNNING} from "../server/Server";
 
 const module: ng.IModule = App.module("managementConsole.services.cache", []);
 
 export class CacheService {
-  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType", "cacheConfigService"];
+  static $inject: string[] = ["$q", "dmrService", "jGroupsService", "launchType", "cacheConfigService", "serverService"];
 
   constructor(private $q: ng.IQService,
               private dmrService: DmrService,
               private jgroupsService: JGroupsService,
               private launchType: LaunchTypeService,
-              private cacheConfigService: CacheConfigService) {
+              private cacheConfigService: CacheConfigService,
+              private serverService: ServerService) {
   }
 
   getAllCachesInContainer(container: ICacheContainer): ng.IPromise<ICache[]> {
@@ -118,7 +121,11 @@ export class CacheService {
 
   getCacheStats(container: ICacheContainer, cache: ICache): ng.IPromise<any> {
     let firstServer: IServerAddress = container.serverGroup.members[0];
-    let address: string [] = this.generateHostServerAddress(firstServer, container, cache);
+    return this.getCacheStatsOnServer(firstServer, container, cache);
+  }
+
+  getCacheStatsOnServer(server: IServerAddress, container: ICacheContainer, cache: ICache): ng.IPromise<any> {
+    let address: string [] = this.generateHostServerAddress(server, container, cache);
     let request: IDmrRequest = {
       address: address,
       "include-runtime": true,
@@ -130,15 +137,14 @@ export class CacheService {
   getCacheStatsForServers(container: ICacheContainer, cache: ICache): ng.IPromise<any[]> {
     let promises: ng.IPromise<any> [] = [];
     let servers: IServerAddress [] = container.serverGroup.members;
-    for (let server of servers) {
-      let address: string [] = this.generateHostServerAddress(server, container, cache);
-      let request: IDmrRequest = {
-        address: address,
-        "include-runtime": true,
-        recursive: true
-      };
-      promises.push(this.dmrService.readResource(request));
-    }
+    // only query running servers for the cache stats, non-running servers won't respond
+    promises.push(this.serverService.getServersInState(servers, SERVER_STATE_RUNNING).then(servers => {
+      for (let server of servers) {
+        if (isNotNullOrUndefined(server)) {
+          return this.getCacheStatsOnServer(server, container, cache);
+        }
+      }
+    }));
     return this.$q.all(promises);
   }
 

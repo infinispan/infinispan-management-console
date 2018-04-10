@@ -1,4 +1,4 @@
-import {deepGet, capitalizeFirstLetter, convertBytes} from "../../common/utils/Utils";
+import {deepGet, capitalizeFirstLetter, convertBytes, convertTime} from "../../common/utils/Utils";
 import {openConfirmationModal} from "../../common/dialogs/Modals";
 import {ServerService} from "../../services/server/ServerService";
 import {IServerAddress} from "../../services/server/IServerAddress";
@@ -137,6 +137,10 @@ export class ServerInstanceCtrl {
 
   isDomainMode(): boolean {
     return this.launchType.isDomainMode();
+  }
+
+  getStatAndConvertTime(statName: string): string {
+    return convertTime(this.nodeStats[statName]);
   }
 
   private refresh(): void {

@@ -29,7 +29,7 @@ export class ServerService {
 
   createServer(server: INewServerInstance): ng.IPromise<void> {
     return this.dmrService.add({
-      "auto-start": false,
+      "auto-start": true,
       address: [].concat("host", server.address.host, "server-config", server.address.name),
       "group": server["server-group"],
       "socket-binding-group": server["socket-binding-group"],

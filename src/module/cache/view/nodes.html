@@ -64,8 +64,8 @@
       <tbody>
         <tr ng-repeat="stats in ctrl.allCacheStats">
           <td class="NodeName">{{ctrl.container.serverGroup.members[$index].toString()}}</td>
-          <td class="AverageReadTime">{{stats['average-read-time'] | number}}</td>
-          <td class="AverageWriteTime">{{stats['average-write-time'] | number}}</td>
+          <td class="AverageReadTime">{{ctrl.convertTime(stats['average-read-time'])}}</td>
+          <td class="AverageWriteTime">{{ctrl.convertTime(stats['average-write-time'])}}</td>
           <td class="TotalEntries">{{stats['number-of-entries'] | number}}</td>
           <td class="TotalReads">{{(stats['hits'] + stats['misses'])| number}}</td>
           <td class="TotalFailedReads">{{stats['misses'] | number}}</td>

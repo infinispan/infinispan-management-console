@@ -53,15 +53,15 @@
                 <table class="col-md-12">
                   <tr>
                     <th>Avg Reads</th>
-                    <td id-generator="perf.reads">{{ctrl.nodeStats['average-read-time'] | number}} ms</td>
+                    <td id-generator="perf.reads">{{ctrl.getStatAndConvertTime('average-read-time')}}</td>
                   </tr>
                   <tr>
                     <th>Avg Writes</th>
-                    <td id-generator="perf.writes">{{ctrl.nodeStats['average-write-time'] | number}} ms</td>
+                    <td id-generator="perf.writes">{{ctrl.getStatAndConvertTime('average-write-time')}}</td>
                   </tr>
                   <tr>
                     <th>Avg Removes</th>
-                    <td id-generator="perf.remove">{{ctrl.nodeStats['average-remove-time'] | number}} ms</td>
+                    <td id-generator="perf.remove">{{ctrl.getStatAndConvertTime('average-remove-time')}}</td>
                   </tr>
                 </table>
               </div>

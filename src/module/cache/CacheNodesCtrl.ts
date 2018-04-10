@@ -2,7 +2,7 @@ import {ICacheContainer} from "../../services/container/ICacheContainer";
 import {ICache} from "../../services/cache/ICache";
 import {CacheService} from "../../services/cache/CacheService";
 import {IStateService} from "angular-ui-router";
-import {convertBytes} from "../../common/utils/Utils";
+import {convertBytes, convertTime} from "../../common/utils/Utils";
 export class CacheNodesCtrl {
   static $inject: string[] = ["$state", "cacheService", "container", "cache", "allCacheStats"];
 
@@ -30,5 +30,9 @@ export class CacheNodesCtrl {
 
   refresh(): void {
     this.$state.reload();
+  }
+
+  convertTime(nanos: number): string {
+    return convertTime(nanos);
   }
 }

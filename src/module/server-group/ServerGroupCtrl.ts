@@ -21,13 +21,12 @@ import {ModalService} from "../../services/modal/ModalService";
 
 export class ServerGroupCtrl {
   static $inject: string[] = ["$state", "$uibModal", "dmrService", "serverGroupService", "serverService",
-    "jGroupsService", "launchType", "serverGroup", "available", "status", "$filter", "modalService"];
+    "jGroupsService", "launchType", "serverGroup", "available", "status", "hosts", "$filter", "modalService"];
 
   serverStatusMap: IMap<string> = {};
   statuses: string [] = [];
   serverInetMap: IMap<string> = {};
   coordinator: IServerAddress;
-  hosts: string[];
 
   filteredMembers: any[];
   searchNameQuery: string;
@@ -42,12 +41,12 @@ export class ServerGroupCtrl {
               public serverGroup: IServerGroup,
               public available: boolean,
               private status: string,
+              private hosts: string [],
               private $filter: any,
               private modalService: ModalService) {
     this.fetchSGCoordinator();
     this.fetchServerStatuses();
     this.fetchInetAddresses();
-    this.hosts = this.filterUniqueHosts();
 
     this.filteredMembers = this.search();
   }
@@ -226,12 +225,6 @@ export class ServerGroupCtrl {
 
   private serverStatuses(): string [] {
     return this.statuses;
-  }
-
-  private filterUniqueHosts(): string[] {
-    return this.serverGroup.members
-      .map((server) => server.host)
-      .filter((item, post, array) => array.indexOf(item) === post);
   }
 
   private fetchServerStatuses(): void {

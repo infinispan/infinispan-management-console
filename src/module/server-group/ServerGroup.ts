@@ -8,6 +8,7 @@ import {IServerGroup} from "../../services/server-group/IServerGroup";
 import {IRedirectState} from "../../common/IRedirectState";
 import {EndpointService} from "../../services/endpoint/EndpointService";
 import {endpointFilter} from "./endpoints/filters/EndpointFilter";
+import {DomainService} from "../../services/domain/DomainService";
 
 const module: ng.IModule = App.module("managementConsole.server-group", []);
 
@@ -28,13 +29,16 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         return serverGroupService.getServerGroupMapWithMembers($stateParams.serverGroup);
       }],
       available: ["serverGroupService", "serverGroup",
-        (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
-        return serverGroupService.isGroupAvailable(serverGroup);
-      }],
+        (serverGroupService: ServerGroupService, serverGroup: IServerGroup) => {
+          return serverGroupService.isGroupAvailable(serverGroup);
+        }],
       status: ["serverGroupService", "serverGroup",
-        (serverGroupService:ServerGroupService, serverGroup:IServerGroup) => {
+        (serverGroupService: ServerGroupService, serverGroup: IServerGroup) => {
           return serverGroupService.getServerGroupStatus(serverGroup);
-        }]
+        }],
+      hosts: ["domainService", (domainService: DomainService) => {
+        return domainService.getHosts();
+      }]
     }
   });
   $stateProvider.state("server-group.nodes", {

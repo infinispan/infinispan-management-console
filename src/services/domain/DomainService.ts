@@ -38,6 +38,15 @@ export class DomainService {
     return deferred.promise;
   }
 
+  getHosts(): ng.IPromise<string []> {
+    let deferred: ng.IDeferred<string []> = this.$q.defer<string []>();
+    let request: IDmrRequest = <IDmrRequest>{
+      address: [],
+      "child-type": "host"
+    };
+    this.dmrService.readChildResources(request).then(response => deferred.resolve(Object.keys(response)));
+    return deferred.promise;
+  }
 }
 
 module.service("domainService", DomainService);

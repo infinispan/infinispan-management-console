@@ -1,18 +1,19 @@
 import {AuthenticationService} from "../../services/authentication/AuthenticationService";
 import {IStateService} from "angular-ui-router";
-import {BRAND_NAME, BRAND_IMAGE} from "../../common/Constants";
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
+import {IRootScopeService} from "../../common/IRootScopeService";
 
 export class NavbarCtrl {
-  static $inject: string[] = ["$scope", "$state", "authService", "launchType", "user"];
+  static $inject: string[] = ["$rootScope", "$scope", "$state", "authService", "launchType", "user"];
 
-  brandName: string = BRAND_NAME;
-  brandImage: string = BRAND_IMAGE;
+  brandName: string = this.$rootScope.constants.product;
+  brandImage: string = this.$rootScope.constants.productImage;
   showNavbar: boolean;
   stateChanging: boolean;
   states: any[];
 
-  constructor(private $scope: ng.IScope,
+  constructor(private $rootScope: IRootScopeService,
+              private $scope: ng.IScope,
               private $state: IStateService,
               private authService: AuthenticationService,
               private launchType: LaunchTypeService,

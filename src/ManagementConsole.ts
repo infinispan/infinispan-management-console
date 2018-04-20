@@ -47,6 +47,7 @@ import IModalService = angular.ui.bootstrap.IModalService;
 import IAugmentedJQuery = angular.IAugmentedJQuery;
 import {LaunchTypeService} from "./services/launchtype/LaunchTypeService";
 import {IdGeneratorDirective} from "./components/directives/IdGeneratorDirective";
+import {Constants} from "./constants";
 
 const App: ng.IAngularStatic = angular;
 
@@ -145,6 +146,7 @@ module.run(($rootScope: IRootScopeService, $timeout: ng.ITimeoutService) => {
   $rootScope.page = <IPage>{htmlClass: ""};
   $rootScope.isDomainControllerAlive = true;
   $rootScope.safeApply = (f: Function) => $timeout(() => this.$apply(f));
+  $rootScope.constants = Constants.Default;
 });
 
 // @ngInject

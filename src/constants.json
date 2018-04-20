@@ -1,0 +1,10 @@
+{
+  "infinispan": {
+    "product": "Infinispan Management Console",
+    "productImage": "assets/images/brand.svg"
+  },
+  "jdg": {
+    "product": "RedHat DataGrid Management Console",
+    "productImage": "assets/images/brand.svg"
+  }
+}

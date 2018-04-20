@@ -81,6 +81,8 @@
         <jboss.snapshots.repo.id>jboss-snapshots-repository</jboss.snapshots.repo.id>
         <jboss.snapshots.repo.url>https://repository.jboss.org/nexus/content/repositories/snapshots/
         </jboss.snapshots.repo.url>
+        <branding.repo></branding.repo>
+        <branding.branch></branding.branch>
     </properties>
 
     <build>
@@ -112,14 +114,19 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>gulp build</id>
-                        <goals>
-                            <goal>gulp</goal>
-                        </goals>
-                        <phase>generate-resources</phase>
-                        <configuration>
-                            <arguments>build</arguments>
-                        </configuration>
+                      <id>gulp build</id>
+                      <goals>
+                        <goal>gulp</goal>
+                      </goals>
+
+                      <!-- optional: the default phase is "generate-resources" -->
+                      <phase>generate-resources</phase>
+
+                      <configuration>
+                        <!-- optional: if not specified, it will run gulp's default
+                        task (and you can remove this whole <configuration> section.) -->
+                        <arguments>build --repo ${branding.repo} --branch ${branding.branch}</arguments>
+                      </configuration>
                     </execution>
                 </executions>
             </plugin>

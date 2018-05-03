@@ -52,40 +52,52 @@ export class CounterService {
   }
 
   getAllCountersHelper(cacheContainer: ICacheContainer): ng.IPromise<ICounter[]> {
-
+    let request: IDmrRequest;
     let deferred: ng.IDeferred<ICounter[]> = this.$q.defer<ICounter[]>();
-    this.jGroupsService.getServerGroupCoordinator(cacheContainer.serverGroup).then((coord: IServerAddress) => {
-
-      let request: IDmrRequest = <IDmrRequest>{
-        address: this.getCountersRuntimeAddress(cacheContainer.name, coord.host, coord.name),
+    if (this.launchType.isStandaloneMode()) {
+      request = <IDmrRequest>{
+        address: this.getCountersRuntimeAddress(cacheContainer.name),
         "recursive-depth": 2,
         "include-runtime": true
       };
-
-      this.dmrService.readResource(request)
-        .then((response: any): ICounter[] => {
-          let counters: ICounter[] = [];
-          let trail: String [] = [];
-          traverse(response, (key: string, value: string, trail: string []) => {
-            let traversingCounterObject: boolean = (key === "name");
-            if (traversingCounterObject) {
-              let counter: any = deepValue(response, trail);
-              let type: string = trail[0];
-              if (isNotNullOrUndefined(counter) && type === "strong-counter") {
-                counters.push(new StrongCounter(counter.name, counter.storage, counter["initial-value"],
-                  counter.value, counter["lower-bound"], counter["upper-bound"]));
-              } else if (isNotNullOrUndefined(counter) && type === "weak-counter") {
-                counters.push(new WeakCounter(counter.name, counter.storage, counter["initial-value"],
-                  counter.value, counter.concurrency));
-              }
-            }
-          }, trail);
-          return counters;
-        }).then(counters => {
+      this.findCounters(request).then(counters => {
         deferred.resolve(counters);
       });
-    });
+    } else {
+      this.jGroupsService.getServerGroupCoordinator(cacheContainer.serverGroup).then((coord: IServerAddress) => {
+        request = <IDmrRequest>{
+          address: this.getCountersRuntimeAddress(cacheContainer.name, coord.host, coord.name),
+          "recursive-depth": 2,
+          "include-runtime": true
+        };
+        this.findCounters(request).then(counters => {
+          deferred.resolve(counters);
+        });
+      });
+    }
     return deferred.promise;
+  }
+
+  findCounters(request: IDmrRequest): ng.IPromise<ICounter[]> {
+    return this.dmrService.readResource(request).then((response: any) => {
+      let counters: ICounter[] = [];
+      let trail: String [] = [];
+      traverse(response, (key: string, value: string, trail: string []) => {
+        let traversingCounterObject: boolean = (key === "name");
+        if (traversingCounterObject) {
+          let counter: any = deepValue(response, trail);
+          let type: string = trail[0];
+          if (isNotNullOrUndefined(counter) && type === "strong-counter") {
+            counters.push(new StrongCounter(counter.name, counter.storage, counter["initial-value"],
+              counter.value, counter["lower-bound"], counter["upper-bound"]));
+          } else if (isNotNullOrUndefined(counter) && type === "weak-counter") {
+            counters.push(new WeakCounter(counter.name, counter.storage, counter["initial-value"],
+              counter.value, counter.concurrency));
+          }
+        }
+      }, trail);
+      return counters;
+    });
   }
 
   create(counter: ICounter, profile: string, container: string): ng.IPromise<any> {
@@ -102,12 +114,19 @@ export class CounterService {
   }
 
   reset(container: ICacheContainer, counter: ICounter): ng.IPromise<any> {
-    return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coord: IServerAddress) => {
+    if (this.launchType.isStandaloneLocalMode()) {
       return this.dmrService.executePost({
-        address: this.getCounterRuntimeAddress(counter, container.name, coord.host, coord.name),
+        address: this.getCounterRuntimeAddress(counter, container.name),
         operation: "counter-reset"
       });
-    });
+    } else {
+      return this.jGroupsService.getServerGroupCoordinator(container.serverGroup).then((coord: IServerAddress) => {
+        return this.dmrService.executePost({
+          address: this.getCounterRuntimeAddress(counter, container.name, coord.host, coord.name),
+          operation: "counter-reset"
+        });
+      });
+    }
   }
 
   remove(container: ICacheContainer, counter: ICounter): ng.IPromise<any> {
@@ -154,17 +173,17 @@ export class CounterService {
   }
 
   private getCountersConfigurationAddress(container: string, profile?: string): string[] {
-    let address: string [] = [].concat("profile", profile);
+    let address: string [] = this.launchType.isDomainMode() ? [].concat("profile", profile) : [];
     return this.getContainerAddress(container, address).concat("counters", "COUNTERS");
   }
 
-  private getCountersRuntimeAddress(container: string, host: string, server: string): string[] {
-    let path: string [] = [].concat("host", host).concat("server", server);
+  private getCountersRuntimeAddress(container: string, host?: string, server?: string): string[] {
+    let path: string [] = this.launchType.isStandaloneMode() ? [] : [].concat("host", host).concat("server", server);
     return this.getContainerAddress(container, path).concat("counters", "COUNTERS");
   }
 
-  private getCounterRuntimeAddress(c: ICounter, container: string, host: string, server: string): string[] {
-    let path: string [] = [].concat("host", host).concat("server", server);
+  private getCounterRuntimeAddress(c: ICounter, container: string, host?: string, server?: string): string[] {
+    let path: string [] = this.launchType.isStandaloneMode() ? [] : [].concat("host", host).concat("server", server);
     return this.getContainerAddress(container, path).concat("counters", "COUNTERS")
       .concat(c instanceof StrongCounter ? "strong-counter" : "weak-counter")
       .concat(c.getName());

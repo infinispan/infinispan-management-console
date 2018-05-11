@@ -4,7 +4,7 @@
 
     <groupId>org.infinispan</groupId>
     <artifactId>infinispan-management-console</artifactId>
-    <version>9.3.0-SNAPSHOT</version>
+    <version>9.3.0.Beta1</version>
     <packaging>jar</packaging>
     <name>Infinispan Management Console</name>
     <description>Web Management Console for Infinispan</description>
@@ -81,8 +81,8 @@
         <jboss.snapshots.repo.id>jboss-snapshots-repository</jboss.snapshots.repo.id>
         <jboss.snapshots.repo.url>https://repository.jboss.org/nexus/content/repositories/snapshots/
         </jboss.snapshots.repo.url>
-        <branding.repo></branding.repo>
-        <branding.branch></branding.branch>
+        <branding.repo />
+        <branding.branch />
     </properties>
 
     <build>
@@ -119,12 +119,11 @@
                         <goal>gulp</goal>
                       </goals>
 
-                      <!-- optional: the default phase is "generate-resources" -->
+                      
                       <phase>generate-resources</phase>
 
                       <configuration>
-                        <!-- optional: if not specified, it will run gulp's default
-                        task (and you can remove this whole <configuration> section.) -->
+                        
                         <arguments>build --repo ${branding.repo} --branch ${branding.branch}</arguments>
                       </configuration>
                     </execution>

@@ -12,7 +12,7 @@ module.exports = (gulp, config) => () => {
   }
 
   function validBranch(str) {
-    return "${branding.branch}" !== str;
+    return '${branding.branch}' !== str;
   }
 
   if (validURL(config.cmdParams.repo) && validBranch(config.cmdParams.branch)) {

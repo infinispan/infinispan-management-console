@@ -19,6 +19,7 @@ import "angular-ui-router";
 import "deepmerge";
 import "codemirror";
 import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/protobuf/protobuf.js";
 import "angularjs-dropdown-multiselect";
 import "c3/c3.js";
 import "d3/d3.js";

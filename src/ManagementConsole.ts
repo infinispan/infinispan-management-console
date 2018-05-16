@@ -18,6 +18,7 @@ import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";
 import "angular-ui-router";
 import "deepmerge";
 import "codemirror";
+import "codemirror/mode/javascript/javascript.js";
 import "angularjs-dropdown-multiselect";
 import "c3/c3.js";
 import "d3/d3.js";

@@ -27,7 +27,7 @@
     "gulp-protractor": "~2.3.0",
     "gulp-rename": "1.2.2",
     "gulp-size": "2.1.0",
-    "gulp-string-replace": "^1.0.0",
+    "gulp-string-replace": "1.0.0",
     "gulp-tslint": "~5.0.0",
     "gulp-typedoc": "~2.0.0",
     "gulp-util": "3.0.7",

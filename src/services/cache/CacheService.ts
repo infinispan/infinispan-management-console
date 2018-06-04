@@ -168,6 +168,10 @@ export class CacheService {
     return this.executeCacheOp(container.name, container.profile, cache, "clear-cache");
   }
 
+  deleteCache(container: ICacheContainer, cache: ICache): ng.IPromise<any> {
+    return this.executeCacheOp(container.name, container.profile, cache, "remove");
+  }
+
   resetStats(container: ICacheContainer, cache: ICache): ng.IPromise<any> {
     return this.executeCacheOp(container.name, container.profile, cache, "reset-statistics");
   }

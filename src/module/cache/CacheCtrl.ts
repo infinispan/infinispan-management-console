@@ -117,6 +117,28 @@ export class CacheCtrl {
     });
   }
 
+  createDeleteModal(): void {
+    this.clearOpsFeedback();
+    let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal,
+      "Deleting cache " + this.cache.name + " will remove the cache itself along with all its contents. Delete?");
+    modal.result.then(() => {
+      this.cacheService.deleteCache(this.container, this.cache)
+        .then(() => this.successExecuteOperation = true)
+        .catch((e: any) => {
+          this.errorExecuting = true;
+          this.errorDescription = e.toString();
+        })
+        .finally(() => {
+          this.$state.go("container.caches", {
+            profileName: this.container.profile,
+            containerName: this.container.name
+          }, {
+            reload: true
+          });
+        });
+    });
+  }
+
   createEnableRebalancingModal(): void {
     this.clearOpsFeedback();
     let modal: IModalServiceInstance = openConfirmationModal(this.$uibModal,

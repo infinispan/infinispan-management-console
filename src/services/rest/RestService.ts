@@ -70,7 +70,7 @@ export class RestService {
       }
     };
     let deferred: ng.IDeferred<any> = this.$q.defer<any>();
-    let response: IHttpPromise;
+    let response: IHttpPromise<any>;
     switch (type) {
       case "post":
         response = this.$http.post(url, data, headers);

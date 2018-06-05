@@ -158,7 +158,7 @@ export class ContainerService {
 
           this.$q.all(viewPromisies)
             .then((views: [string[]]) => {
-              if (views.length === 0 || views.length === 1) {
+              if (views.length >= 0 && views.length < 2) {
                 deferred.resolve(true);
                 return;
               }

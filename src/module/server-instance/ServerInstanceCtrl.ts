@@ -28,8 +28,6 @@ export class ServerInstanceCtrl {
   private mappedBufferPoolCount: number;
   private mappedBufferPoolMemoryUsed: number;
 
-  private nodeStats: any;
-
   constructor(private $state: IStateService, private $interval: IIntervalService, private $uibModal: IModalService,
               private serverService: ServerService, private coord: IServerAddress, private serverInstance: IServer,
               private memoryStats: any, private nodeStats: any,

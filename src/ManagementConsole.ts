@@ -12,6 +12,7 @@
 
 import * as angular from "angular";
 import "jquery";
+import "angular-animate"
 import "angular-local-storage";
 import "angular-ui-bootstrap";
 import "angular-ui-bootstrap/dist/ui-bootstrap-tpls.js";

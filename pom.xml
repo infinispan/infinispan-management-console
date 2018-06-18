@@ -83,6 +83,7 @@
         </jboss.snapshots.repo.url>
         <branding.repo></branding.repo>
         <branding.branch></branding.branch>
+        <branding.infinispan.shortName>infinispan</branding.infinispan.shortName>
     </properties>
 
     <build>
@@ -177,6 +178,53 @@
                     <serverId>${jboss.releases.repo.id}</serverId>
                 </configuration>
             </plugin>
+
+          <!-- License artifacts -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+              <execution>
+                <id>generate-license-files</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <property name="baseDir" value="${basedir}/src/main/resources/licenses"/>
+                    <property name="project.build.directory" value="${project.build.directory}"/>
+                    <property name="brand.prefix" value="${branding.infinispan.shortName}"/>
+                    <ant antfile="${basedir}/src/main/resources/licenses/build.xml">
+                      <target name="default"/>
+                    </ant>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>package-license-files</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>${basedir}/src/main/resources/licenses/assembly/console.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- / License artifacts -->
+
         </plugins>
     </build>
 </project>

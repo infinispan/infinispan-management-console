@@ -4,7 +4,7 @@
 
     <groupId>org.infinispan</groupId>
     <artifactId>infinispan-management-console</artifactId>
-    <version>9.3.0-SNAPSHOT</version>
+    <version>9.3.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Infinispan Management Console</name>
     <description>Web Management Console for Infinispan</description>
@@ -81,8 +81,8 @@
         <jboss.snapshots.repo.id>jboss-snapshots-repository</jboss.snapshots.repo.id>
         <jboss.snapshots.repo.url>https://repository.jboss.org/nexus/content/repositories/snapshots/
         </jboss.snapshots.repo.url>
-        <branding.repo></branding.repo>
-        <branding.branch></branding.branch>
+        <branding.repo />
+        <branding.branch />
         <branding.infinispan.shortName>infinispan</branding.infinispan.shortName>
     </properties>
 
@@ -120,12 +120,11 @@
                         <goal>gulp</goal>
                       </goals>
 
-                      <!-- optional: the default phase is "generate-resources" -->
+                      
                       <phase>generate-resources</phase>
 
                       <configuration>
-                        <!-- optional: if not specified, it will run gulp's default
-                        task (and you can remove this whole <configuration> section.) -->
+                        
                         <arguments>build --repo ${branding.repo} --branch ${branding.branch}</arguments>
                       </configuration>
                     </execution>
@@ -179,7 +178,7 @@
                 </configuration>
             </plugin>
 
-          <!-- License artifacts -->
+          
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
@@ -193,11 +192,11 @@
                 </goals>
                 <configuration>
                   <target>
-                    <property name="baseDir" value="${basedir}/src/main/resources/licenses"/>
-                    <property name="project.build.directory" value="${project.build.directory}"/>
-                    <property name="brand.prefix" value="${branding.infinispan.shortName}"/>
+                    <property name="baseDir" value="${basedir}/src/main/resources/licenses" />
+                    <property name="project.build.directory" value="${project.build.directory}" />
+                    <property name="brand.prefix" value="${branding.infinispan.shortName}" />
                     <ant antfile="${basedir}/src/main/resources/licenses/build.xml">
-                      <target name="default"/>
+                      <target name="default" />
                     </ant>
                   </target>
                 </configuration>
@@ -223,7 +222,7 @@
               </execution>
             </executions>
           </plugin>
-          <!-- / License artifacts -->
+          
 
         </plugins>
     </build>

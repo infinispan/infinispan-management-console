@@ -38,6 +38,12 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         }],
       serverInstance: ["$stateParams", "serverService", ($stateParams, serverService: ServerService) => {
         return serverService.getServer(new ServerAddress($stateParams.host, $stateParams.server));
+      }],
+      memoryStats: ["$stateParams", "serverService", ($stateParams, serverService: ServerService) => {
+        return serverService.getServerStats(new ServerAddress($stateParams.host, $stateParams.server));
+      }],
+      nodeStats: ["$stateParams", "serverService", ($stateParams, serverService: ServerService) => {
+        return serverService.getAggregateNodeStats(new ServerAddress($stateParams.host, $stateParams.server));
       }]
     }
   });

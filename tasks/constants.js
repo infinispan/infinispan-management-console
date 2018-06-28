@@ -6,10 +6,10 @@ module.exports = (gulp, cfg) =>() => {
   var config = require('../src/constants.json'), envConfig = config.infinispan;
 
 
-  if (cfg.branding === 'infinispan') {
-    envConfig = config.infinispan;
-  } else {
+  if (cfg.branding === 'jdg') {
     envConfig = config.jdg;
+  } else {
+    envConfig = config.infinispan;
   }
 
   return ngConstant({

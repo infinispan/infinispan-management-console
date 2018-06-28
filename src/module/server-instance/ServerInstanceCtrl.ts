@@ -10,7 +10,8 @@ import {IStateService} from "angular-ui-router";
 import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 export class ServerInstanceCtrl {
-  static $inject: string[] = ["$state", "$interval", "$uibModal", "serverService", "coord", "serverInstance", "launchType"];
+  static $inject: string[] = ["$state", "$interval", "$uibModal", "serverService", "coord",
+    "serverInstance", "memoryStats", "nodeStats", "launchType"];
 
   public config: any;
   public data: any;
@@ -31,8 +32,8 @@ export class ServerInstanceCtrl {
 
   constructor(private $state: IStateService, private $interval: IIntervalService, private $uibModal: IModalService,
               private serverService: ServerService, private coord: IServerAddress, private serverInstance: IServer,
+              private memoryStats: any, private nodeStats: any,
               private launchType: LaunchTypeService) {
-    this.$interval(() => (this.refreshStats()), 500, 1);
     this.chartHeight = 200;
     this.label = "percent";
     this.data = {
@@ -45,6 +46,8 @@ export class ServerInstanceCtrl {
       units: "Heap Memory",
       thresholds: { warning: 60, error: 90 }
     };
+    this.extractMemoryStats(memoryStats);
+    this.extractNodeStats(nodeStats);
   }
 
   refreshStats(): void {
@@ -55,44 +58,14 @@ export class ServerInstanceCtrl {
 
   fetchThreadAndMemoryStats(address: IServerAddress): void {
     this.serverService.getServerStats(address).then(response => {
-      // memory
-      const memory: any = response.memory["heap-memory-usage"];
-      const used: number = (memory.used / 1024) / 1024;
-      const max: number = (memory.max / 1024) / 1024;
-
-      // threading
-      let threading: any = response.threading;
-      this.threadCount = threading["thread-count"];
-      this.threadPeakCount = threading["peak-thread-count"];
-      this.threadDaemonCount = threading["daemon-thread-count"];
-
-      let directBufferPool: any = deepGet(response, "buffer-pool.name.direct");
-      let mappedBufferPool: any = deepGet(response, "buffer-pool.name.mapped");
-
-      this.directBufferPoolCount = directBufferPool.count;
-      this.directBufferPoolMemoryUsed = directBufferPool["memory-used"];
-
-      this.mappedBufferPoolCount = mappedBufferPool.count;
-      this.mappedBufferPoolMemoryUsed = mappedBufferPool["memory-used"];
-
-      this.data = {
-        dataAvailable: true,
-        used: Math.ceil(used),
-        total: Math.ceil(max)
-      };
+      this.extractMemoryStats(response);
     });
   }
 
   fetchAggregateNodeStats(address: IServerAddress): void {
 
     this.serverService.getAggregateNodeStats(address).then(response => {
-      // TODO here we need to loop through all cache containers and add all stats up
-      // but for now just use the first container found
-      let containersRoot: any = response["cache-container"];
-      for (var prop in containersRoot) {
-        this.nodeStats = containersRoot[prop];
-        break;
-      }
+      this.extractNodeStats(response);
     });
   }
 
@@ -141,6 +114,44 @@ export class ServerInstanceCtrl {
 
   getStatAndConvertTime(statName: string): string {
     return convertTime(this.nodeStats[statName]);
+  }
+
+  private extractMemoryStats(response: any): void {
+    // memory
+    const memory: any = response.memory["heap-memory-usage"];
+    const used: number = (memory.used / 1024) / 1024;
+    const max: number = (memory.max / 1024) / 1024;
+
+    // threading
+    let threading: any = response.threading;
+    this.threadCount = threading["thread-count"];
+    this.threadPeakCount = threading["peak-thread-count"];
+    this.threadDaemonCount = threading["daemon-thread-count"];
+
+    let directBufferPool: any = deepGet(response, "buffer-pool.name.direct");
+    let mappedBufferPool: any = deepGet(response, "buffer-pool.name.mapped");
+
+    this.directBufferPoolCount = directBufferPool.count;
+    this.directBufferPoolMemoryUsed = directBufferPool["memory-used"];
+
+    this.mappedBufferPoolCount = mappedBufferPool.count;
+    this.mappedBufferPoolMemoryUsed = mappedBufferPool["memory-used"];
+
+    this.data = {
+      dataAvailable: true,
+      used: Math.ceil(used),
+      total: Math.ceil(max)
+    };
+  }
+
+  private extractNodeStats(response: any): void {
+    // TODO here we need to loop through all cache containers and add all stats up
+    // but for now just use the first container found
+    let containersRoot: any = response["cache-container"];
+    for (var prop in containersRoot) {
+      this.nodeStats = containersRoot[prop];
+      break;
+    }
   }
 
   private refresh(): void {

@@ -271,7 +271,8 @@ System.config({
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "callsite": "npm:callsite@1.0.0",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "process": "github:jspm/nodelibs-process@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:binary-extensions@1.5.0": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -423,7 +424,8 @@ System.config({
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "constants": "github:jspm/nodelibs-constants@0.1.0",
       "crypto": "github:jspm/nodelibs-crypto@0.1.0",
-      "randombytes": "npm:randombytes@2.0.3"
+      "randombytes": "npm:randombytes@2.0.3",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:browserify-sign@4.0.0": {
       "bn.js": "npm:bn.js@4.11.6",
@@ -472,6 +474,9 @@ System.config({
     "npm:c3@0.4.11": {
       "css": "github:systemjs/plugin-css@0.1.33",
       "d3": "npm:d3@3.5.17"
+    },
+    "npm:caseless@0.11.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:chalk@1.1.3": {
       "ansi-styles": "npm:ansi-styles@2.2.1",
@@ -544,6 +549,7 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "qs": "npm:qs@6.2.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "url": "github:jspm/nodelibs-url@0.1.0",
       "zlib": "github:jspm/nodelibs-zlib@0.1.0"
     },
@@ -772,6 +778,7 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2",
       "qs": "npm:qs@0.4.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "url": "github:jspm/nodelibs-url@0.1.0"
     },
     "npm:extglob@0.3.2": {
@@ -895,10 +902,12 @@ System.config({
       "wide-align": "npm:wide-align@1.1.0"
     },
     "npm:generate-function@2.0.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:generate-object-property@1.2.0": {
-      "is-property": "npm:is-property@1.0.2"
+      "is-property": "npm:is-property@1.0.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:glob-base@0.3.0": {
       "glob-parent": "npm:glob-parent@2.0.0",
@@ -908,7 +917,8 @@ System.config({
     "npm:glob-parent@2.0.0": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "is-glob": "npm:is-glob@2.0.1",
-      "path": "github:jspm/nodelibs-path@0.1.0"
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:glob@7.0.6": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
@@ -952,15 +962,20 @@ System.config({
     "npm:has-binary@0.1.6": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "isarray": "npm:isarray@0.0.1"
+      "isarray": "npm:isarray@0.0.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:has-binary@0.1.7": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.1",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
-      "isarray": "npm:isarray@0.0.1"
+      "isarray": "npm:isarray@0.0.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:has-color@0.1.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:has-cors@1.1.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:has-unicode@2.0.1": {
       "os": "github:jspm/nodelibs-os@0.1.0",
@@ -1015,6 +1030,9 @@ System.config({
     "npm:https-browserify@0.0.0": {
       "http": "github:jspm/nodelibs-http@1.7.1"
     },
+    "npm:immutable@3.8.1": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
     "npm:inflight@1.0.5": {
       "once": "npm:once@1.3.3",
       "process": "github:jspm/nodelibs-process@0.1.2",
@@ -1065,6 +1083,7 @@ System.config({
     "npm:isstream@0.1.2": {
       "events": "github:jspm/nodelibs-events@0.1.1",
       "stream": "github:jspm/nodelibs-stream@0.1.0",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
     "npm:jquery-match-height@0.7.2": {
@@ -1373,6 +1392,9 @@ System.config({
       "async": "npm:async@0.1.15",
       "net": "github:jspm/nodelibs-net@0.1.2"
     },
+    "npm:preserve@0.2.0": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
+    },
     "npm:process-nextick-args@1.0.7": {
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
@@ -1392,6 +1414,9 @@ System.config({
     },
     "npm:punycode@1.3.2": {
       "process": "github:jspm/nodelibs-process@0.1.2"
+    },
+    "npm:qs@0.4.2": {
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:randomatic@1.1.5": {
       "is-number": "npm:is-number@2.1.0",
@@ -1505,7 +1530,8 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0"
     },
     "npm:require-main-filename@1.0.1": {
-      "process": "github:jspm/nodelibs-process@0.1.2"
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:requires-port@1.0.0": {
       "systemjs-json": "github:systemjs/plugin-json@0.1.2"
@@ -1770,7 +1796,8 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:ultron@1.0.2": {
-      "events": "github:jspm/nodelibs-events@0.1.1"
+      "events": "github:jspm/nodelibs-events@0.1.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2"
     },
     "npm:url@0.10.3": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
@@ -1814,10 +1841,12 @@ System.config({
     },
     "npm:window-size@0.1.4": {
       "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "tty": "github:jspm/nodelibs-tty@0.1.0"
     },
     "npm:window-size@0.2.0": {
       "process": "github:jspm/nodelibs-process@0.1.2",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.2",
       "tty": "github:jspm/nodelibs-tty@0.1.0"
     },
     "npm:wrap-ansi@2.0.0": {

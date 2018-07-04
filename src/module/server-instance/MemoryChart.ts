@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/globals/d3/index.d.ts" />
-/// <reference path="../../../typings/globals/c3/index.d.ts" />
 
 import * as c3 from "c3";
 export class InstanceMemoryChart {

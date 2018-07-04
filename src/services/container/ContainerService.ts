@@ -206,7 +206,7 @@ export class ContainerService {
   getSiteArrays(container: ICacheContainer): ng.IPromise<{[id: string]: string[]}> {
     let deferred: ng.IDeferred<{[id: string]: string[]}> = this.$q.defer<{[id: string]: string[]}>();
     this.jGroupsService.getServerGroupCoordinator(container.serverGroup)
-      .then(coordinator => {
+      .then((coordinator: IServerAddress) => {
         deferred.resolve(this.$q.all({
           "sites-online": this.getSite("sites-online", coordinator, container),
           "sites-offline": this.getSite("sites-offline", coordinator, container),

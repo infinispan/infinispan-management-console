@@ -5,6 +5,7 @@ import IAttributes = angular.IAttributes;
 import IDirective = angular.IDirective;
 import IDirectiveFactory = angular.IDirectiveFactory;
 import {VertilizeContainerDirective} from "./VertilizeContainerDirective";
+import {IDirectiveLinkFn} from "angular";
 
 export class VertilizeDirective implements IDirective {
 
@@ -18,7 +19,7 @@ export class VertilizeDirective implements IDirective {
     return directive;
   }
 
-  public link: Function = (scope: IScope, element: IAugmentedJQuery, attrs: IAttributes, parent: VertilizeContainerDirective) => {
+  public link: IDirectiveLinkFn = (scope: IScope, element: IAugmentedJQuery, attrs: IAttributes, parent: VertilizeContainerDirective) => {
     // My index allocation
     let myIndex: number = parent.allocateMe();
     // Watch my height

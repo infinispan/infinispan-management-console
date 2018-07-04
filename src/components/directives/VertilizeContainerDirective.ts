@@ -5,6 +5,7 @@ import IAttributes = angular.IAttributes;
 import IDirective = angular.IDirective;
 import IDirectiveFactory = angular.IDirectiveFactory;
 import IWindowService = angular.IWindowService;
+import {IDirectiveLinkFn} from "angular";
 
 export class VertilizeContainerDirective implements IDirective {
 
@@ -44,7 +45,7 @@ export class VertilizeContainerDirective implements IDirective {
     return height;
   }
 
-  public link: Function = (scope: IScope, element: IAugmentedJQuery, attrs: IAttributes) => {
+  public link: IDirectiveLinkFn = (scope: IScope, element: IAugmentedJQuery, attrs: IAttributes) => {
     // Add window resize to digest cycle
     angular.element(this.$window).bind("resize", () => {
       return scope.$apply();

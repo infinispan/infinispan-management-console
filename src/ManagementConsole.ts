@@ -1,16 +1,12 @@
-/// <reference path="../typings/globals/jquery/index.d.ts" />
-/// <reference path="../typings/globals/angular/index.d.ts" />
-/// <reference path="../typings/globals/angular-ui-router/index.d.ts" />
-/// <reference path="../typings/globals/toastr/index.d.ts" />
-/// <reference path="../typings/globals/angular-translate/index.d.ts" />
-/// <reference path="../typings/globals/angular-local-storage/index.d.ts" />
-/// <reference path="../typings/globals/angular-ui-bootstrap/index.d.ts" />
-/// <reference path="../typings/modules/deepmerge/index.d.ts" />
-/// <reference path="../typings/modules/codemirror/index.d.ts" />
-
 /* tslint:disable:variable-name */
 
-import * as angular from "angular";
+import * as _angular_ from 'angular';
+
+// https://stackoverflow.com/questions/40664298/angular-1-x-with-typescript-2-x-types-and-systemjs-using-global-typings
+declare global {
+  const angular: typeof _angular_;
+}
+
 import "jquery";
 import "angular-animate"
 import "angular-local-storage";

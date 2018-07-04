@@ -44,7 +44,7 @@ export class SecurityService {
             roles: []
           };
 
-          angular.forEach(auth.role, (role, roleName) => {
+          angular.forEach(auth.role, (role, roleName: string) => {
             authorization.roles.push({
               name: roleName,
               permissions: role.permissions

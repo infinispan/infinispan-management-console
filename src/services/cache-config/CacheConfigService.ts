@@ -130,8 +130,8 @@ export class CacheConfigService {
 
     this.dmrService.readResource(request).then(response => {
       let templatePromises: ng.IPromise<ITemplate>[] = [];
-      angular.forEach(response, (templates, templateType) => {
-        angular.forEach(templates, (template, templateName) => {
+      angular.forEach(response, (templates, templateType: string) => {
+        angular.forEach(templates, (template, templateName: string) => {
           // Ignore none template configurations
           if (isNotNullOrUndefined(template.template) && !template.template) {
             return;
@@ -262,8 +262,8 @@ export class CacheConfigService {
 
   private extractITemplatesFromConfigurations(config: any): ITemplate[] {
     let templateArray: ITemplate[] = [];
-    angular.forEach(config, (templates, templateType) => {
-      angular.forEach(templates, (template, templateName) => {
+    angular.forEach(config, (templates, templateType: string) => {
+      angular.forEach(templates, (template, templateName: string) => {
         // Ignore none template configurations
         if (isNotNullOrUndefined(template.template) && !template.template) {
           return;
@@ -357,7 +357,7 @@ export class CacheConfigService {
 
   private createBackupNodes(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
-      angular.forEach(config, (val, key) => {
+      angular.forEach(config, (val, key: string) => {
         let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty"];
         this.addCompositeOperationsToBuilder(builder, address.concat(key), val, exclusionList, true);
         if (isNotNullOrUndefined(val["state-transfer"])) {
@@ -625,7 +625,7 @@ export class CacheConfigService {
 
     if (isNotNullOrUndefined(config)) {
       // iterate properties of model object and append (key/value) properties to op object
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         if (isNullOrUndefined(value)) {
           return;
         }
@@ -659,7 +659,7 @@ export class CacheConfigService {
   private createWriteAttributeOperations(builder: CompositeOpBuilder, address: string[], config: any,
                                          excludedAttributes: string[]): void {
     if (isNotNullOrUndefined(config)) {
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         let excluded: boolean = excludedAttributes.some(attribute => key === attribute) || isNullOrUndefined(value) || isObject(value);
         if (!excluded) {
           if (isJsonString(value)) {
@@ -674,7 +674,7 @@ export class CacheConfigService {
   private composeWriteObjectOperations(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
       let includedAttributes: string[] = ["indexing-properties", "string-keyed-table", "binary-keyed-table"];
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         let included: boolean = includedAttributes.some(attribute => key === attribute);
         if (included && isObject(value)) {
           builder.add(createWriteAttrReq(address, key, value));

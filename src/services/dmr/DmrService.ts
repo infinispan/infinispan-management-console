@@ -235,7 +235,7 @@ export class DmrService {
 
     if (isNotNullOrUndefined(config)) {
       // iterate properties of model object and append (key/value) properties to op object
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         if (isNullOrUndefined(value)) {
           return;
         }
@@ -276,7 +276,7 @@ export class DmrService {
   private createWriteAttributeOperations(builder: CompositeOpBuilder, address: string[], config: any,
                                          excludedAttributes: string[]): void {
     if (isNotNullOrUndefined(config)) {
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         let excluded: boolean = excludedAttributes.some(attribute => key === attribute) || isNullOrUndefined(value) || isObject(value);
         if (!excluded) {
           if (isJsonString(value)) {
@@ -291,7 +291,7 @@ export class DmrService {
   private composeWriteObjectOperations(builder: CompositeOpBuilder, address: string[], config: any): void {
     if (isNotNullOrUndefined(config)) {
       let includedAttributes: string[] = ["indexing-properties", "string-keyed-table", "binary-keyed-table"];
-      angular.forEach(config, (value, key) => {
+      angular.forEach(config, (value, key: string) => {
         let included: boolean = includedAttributes.some(attribute => key === attribute);
         if (included && isObject(value)) {
           builder.add(createWriteAttrReq(address, key, value));

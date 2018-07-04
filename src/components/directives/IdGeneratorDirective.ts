@@ -5,6 +5,7 @@ import IDirectiveFactory = angular.IDirectiveFactory;
 import {isNotNullOrUndefined, stringEndsWith, isNonEmptyString} from "../../common/utils/Utils";
 import {IStateService} from "angular-ui-router";
 import {IScope} from "../../common/IScopeService";
+import {IDirectiveLinkFn} from "angular";
 
 export function generateFieldId(val: string, parent?: string): string {
   let id: string = isNonEmptyString(parent) ? parent : "";
@@ -26,7 +27,7 @@ export class IdGeneratorDirective implements IDirective {
   constructor(public $state: IStateService) {
   }
 
-  public link: Function = ($scope: IScope, element: IAugmentedJQuery, attributes: IAttributes) => {
+  public link: IDirectiveLinkFn = ($scope: IScope, element: IAugmentedJQuery, attributes: IAttributes) => {
     attributes.$observe("idGenerator", () => {
       element.attr("id", this.generateId(attributes));
     });

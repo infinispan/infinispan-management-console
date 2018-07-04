@@ -79,7 +79,7 @@ export class ContainerTasksService {
             return this.executeTaskInternal(task);
           },
           error => deferred.reject(error))
-        .then(response => deferred.resolve(response),
+        .then((response: string) => deferred.resolve(response),
           error => deferred.reject(error));
       return deferred.promise;
     }

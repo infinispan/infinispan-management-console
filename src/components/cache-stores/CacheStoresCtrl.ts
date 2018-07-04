@@ -203,7 +203,7 @@ export class CacheStoresCtrl implements IConfigurationCallback {
 
     if (!noPrevStore) {
       if (isNotNullOrUndefined(newMeta)) {
-        angular.forEach(this.store, (value, key) => {
+        angular.forEach(this.store, (value, key: string) => {
           if (CUSTOM_FIELDS.indexOf(key) < 0) {
             if (key !== "write-behind" && !newMeta.hasOwnProperty(key)) {
               delete this.store[key];
@@ -270,7 +270,7 @@ export class CacheStoresCtrl implements IConfigurationCallback {
   private getCommonCheckboxes(): string[] {
     let checkboxes: string[] = [];
     let genericStoreMeta: any = getMetaForResource(this.meta, "store");
-    angular.forEach(genericStoreMeta, (value, key) => {
+    angular.forEach(genericStoreMeta, (value, key: string) => {
       let type: any = value.type;
       let deprecated: boolean = isNotNullOrUndefined(value.deprecated);
       if (isNotNullOrUndefined(type)) {

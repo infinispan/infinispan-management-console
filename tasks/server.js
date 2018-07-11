@@ -15,13 +15,12 @@ module.exports = (gulp, serverRootDir, watchDir, openBrowser, projectRoot, confi
         '/node_modules': path.join(projectRoot, 'node_modules')
       };
     }
-
     const browserSync = require('browser-sync').init({
       server: {
         baseDir: [serverRootDir],
         middleware: [
-          proxy('/management', {target: 'http://localhost:9990/management'}),
-          proxy('/logout', {target: 'http://localhost:9990/logout'}),
+          proxy('/management', {target: 'http://localhost:9990/'}),
+          proxy('/logout', {target: 'http://localhost:9990/'}),
         ],
         routes: routes,
         index: './index.html',

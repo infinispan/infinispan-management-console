@@ -70,6 +70,8 @@ module.config(($translateProvider: ITranslateProvider) => {
     prefix: "assets/languages/locale-",
     suffix: ".txt"
   });
+  // see https://angular-translate.github.io/docs/#/guide/19_security
+  $translateProvider.useSanitizeValueStrategy("sanitize");
   $translateProvider.preferredLanguage("enUS");
 });
 

@@ -66,10 +66,10 @@ System.config({
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },
     "github:angular-translate/bower-angular-translate@2.11.1": {
-      "angular": "github:angular/bower-angular@1.5.8"
+      "angular": "npm:angular@1.5.11"
     },
     "github:angular/bower-angular-sanitize@1.5.11": {
-      "angular": "github:angular/bower-angular@1.5.8"
+      "angular": "npm:angular@1.5.11"
     },
     "github:frankwallis/plugin-typescript@4.0.5": {
       "typescript": "npm:typescript@1.8.9"

@@ -63,10 +63,10 @@ System.config({
       "angular-translate": "github:angular-translate/bower-angular-translate@2.11.1"
     },
     "github:angular-translate/bower-angular-translate@2.11.1": {
-      "angular": "github:angular/bower-angular@1.7.0"
+      "angular": "npm:angular@1.5.11"
     },
     "github:angular/bower-angular-sanitize@1.5.11": {
-      "angular": "github:angular/bower-angular@1.7.0"
+      "angular": "npm:angular@1.5.11"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"

@@ -4,7 +4,7 @@
 
     <groupId>org.infinispan</groupId>
     <artifactId>infinispan-management-console</artifactId>
-    <version>9.4.0-SNAPSHOT</version>
+    <version>9.4.0.Alpha1</version>
     <packaging>jar</packaging>
     <name>Infinispan Management Console</name>
     <description>Web Management Console for Infinispan</description>

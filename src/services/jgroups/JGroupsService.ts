@@ -154,6 +154,10 @@ export class JGroupsService {
     if (hostServerSplitIndex > 0) {
       let host: string = view.substring(1, hostServerSplitIndex);
       let server: string = view.substring(hostServerSplitIndex + 1, lastIndex);
+      let serverHintingOn: boolean = ((server.indexOf("site-id") > 0 || server.indexOf("rack-id") > 0 || server.indexOf("machine-id") > 0));
+      if (serverHintingOn) {
+        server = server.substring(0, server.indexOf(" "));
+      }
       return new ServerAddress(host, server);
     } else {
       let host: string = view.substring(1, lastIndex);

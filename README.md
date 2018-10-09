@@ -4,6 +4,7 @@
 - Install gulp globally (use sudo if needed): `npm install gulp -g`
 - run `npm install` to install local packages and client dependencies
 - Configure jspm to avoid GitHub rate limit errors, see [here](https://stackoverflow.com/questions/30995040/jspm-saying-github-rate-limit-reached-how-to-fix) for details.
+- Install jspm globally (use sudo if needed): `npm install jspm -g`
 - run `jspm install` 
 - NOTE: you will need to repeat the step above if there are some changes to package.json
 
@@ -11,7 +12,7 @@
 - you need JDK 7 or 8 and Maven
 - from the top-level of infinispan ($ISPN_HOME) run: `./build.sh clean package -DskipTests`
 - cd $ISPN_HOME/server/integration/build/target/infinispan-server-*
-- run `./bin/add-user.sh -u admin '!qazxsw2'` to create an admin user
+- run `./bin/add-user.sh -u admin -p !qazxsw2 -g admin` to create an admin user
 
 #  Running web application
 - run server by going to $ISPN_HOME/server/integration/build/target/infinispan-server-* and running `./bin/domain.sh`

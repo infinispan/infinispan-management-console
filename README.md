@@ -12,7 +12,7 @@
 - you need JDK 7 or 8 and Maven
 - from the top-level of infinispan ($ISPN_HOME) run: `./build.sh clean package -DskipTests`
 - cd $ISPN_HOME/server/integration/build/target/infinispan-server-*
-- run `./bin/add-user.sh -u admin '!qazxsw2'` to create an admin user
+- run `./bin/add-user.sh -u admin -p !qazxsw2 -g admin` to create an admin user
 
 #  Running web application
 - run server by going to $ISPN_HOME/server/integration/build/target/infinispan-server-* and running `./bin/domain.sh`

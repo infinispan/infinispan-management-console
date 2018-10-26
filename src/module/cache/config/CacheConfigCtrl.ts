@@ -44,6 +44,8 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
       }
     });
 
+    this.$scope.$on("updateTemplate", ()=> this.updateTemplateWithoutModalAsk());
+
     if (!this.isEditMode()) {
       setIsNewNodeRecursively(this.template);
     }
@@ -73,28 +75,36 @@ export class CacheConfigCtrl extends AbstractConfigurationCtrl {
     });
   }
 
+  updateTemplateWithoutModalAsk() {
+    this.updateCacheConfiguration();
+  }
+
   updateTemplate(): void {
     openConfirmationModal(this.$uibModal, "Update configuration " + this.template["template-name"] + "?").result.then(() => {
-      this.cacheConfigService.updateCacheConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
-        .then(() => {
-            if (this.launchType.isStandaloneMode()) {
-              openConfirmationModal(this.$uibModal,
-                "Config changes will only be made available after you manually restart the server!").result.then(() => {
-                this.goToContainerCachesView();
-              }, () => {
-                this.goToContainerCachesView();
-              });
-            } else {
-              openRestartModal(this.$uibModal).result.then(() => {
-                this.serverGroupService.restartServers(this.container.serverGroup).then(() => this.goToContainerCachesView());
-              }, () => {
-                this.goToContainerCachesView();
-              });
-            }
-            this.cleanMetaData();
-          },
-          error => openErrorModal(this.$uibModal, error));
-    });
+        this.updateCacheConfiguration();
+      });
+  }
+
+  private updateCacheConfiguration() {
+    this.cacheConfigService.updateCacheConfiguration(this.container, this.template.type, this.template["template-name"], this.template)
+      .then(() => {
+          if (this.launchType.isStandaloneMode()) {
+            openConfirmationModal(this.$uibModal,
+              "Config changes will only be made available after you manually restart the server!").result.then(() => {
+              this.goToContainerCachesView();
+            }, () => {
+              this.goToContainerCachesView();
+            });
+          } else {
+            openRestartModal(this.$uibModal).result.then(() => {
+              this.serverGroupService.restartServers(this.container.serverGroup).then(() => this.goToContainerCachesView());
+            }, () => {
+              this.goToContainerCachesView();
+            });
+          }
+          this.cleanMetaData();
+        },
+        error => openErrorModal(this.$uibModal, error));
   }
 
   private reloadMetaAndDataOnTypeChange(newType: string, oldType: string): void {

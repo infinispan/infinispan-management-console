@@ -6,6 +6,8 @@ import {
   makeFieldClean,
   makeFieldDirty
 } from "../../common/configuration/ConfigUtil";
+import {IModalService} from "angular-ui-bootstrap";
+import {openConfirmationModal} from "../../common/dialogs/Modals";
 
 export const MEMORY_TYPES: string [] = [ "BINARY", "OBJECT", "OFF-HEAP"];
 
@@ -25,7 +27,7 @@ export class MemoryCtrl implements IConfigurationCallback {
   loadedWithData: boolean = false;
   createdOrDestroyedFromUI: boolean = false;
 
-  constructor() {
+  constructor(private $scope: ng.IScope, private $uibModal: IModalService) {
     this.fields.length = 0;
     this.memoryTypes = MEMORY_TYPES;
     if (isNotNullOrUndefined(this.configCallbacks)) {
@@ -75,12 +77,18 @@ export class MemoryCtrl implements IConfigurationCallback {
   }
 
   destroy(): void {
-    delete this.data[this.type];
-    this.data["is-new-node"] = !this.loadedWithData;
-    this.fields.length = 0;
-    this.allfields.length = 0;
-    this.cleanMetadata();
-    this.createdOrDestroyedFromUI = true;
+
+    openConfirmationModal(this.$uibModal, "Are you sure you want delete this configuration?").result.then(() => {
+      delete this.data[this.type];
+      this.data["is-new-node"] = !this.loadedWithData;
+      this.fields.length = 0;
+      this.allfields.length = 0;
+      this.cleanMetadata();
+      this.createdOrDestroyedFromUI = true;
+      this.$scope.$emit("updateTemplate");
+    });
+
+
   }
 
   iterateFields(callback: (attribute: string) => void): void {

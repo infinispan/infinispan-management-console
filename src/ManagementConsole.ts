@@ -46,7 +46,7 @@ import IModalService = angular.ui.bootstrap.IModalService;
 import IAugmentedJQuery = angular.IAugmentedJQuery;
 import {LaunchTypeService} from "./services/launchtype/LaunchTypeService";
 import {IdGeneratorDirective} from "./components/directives/IdGeneratorDirective";
-import {Constants} from "./constants";
+import {Constants} from "./Constants";
 
 const App: ng.IAngularStatic = angular;
 

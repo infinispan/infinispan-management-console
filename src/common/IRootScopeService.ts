@@ -1,5 +1,5 @@
 import {IPage} from "./IPage";
-import {IConstants} from "../constants";
+import {IConstants} from "../Constants";
 
 export interface IRootScopeService extends ng.IRootScopeService {
   constants: IConstants;

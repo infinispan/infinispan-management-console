@@ -6,20 +6,9 @@ import os.path
 import subprocess
 import shutil
 import tempfile
-import argparse
 from datetime import *
 from multiprocessing import Process
 from utils import *
-
-parser = argparse.ArgumentParser()
-parser.add_argument("version", help="the version to be released")
-parser.add_argument("--branch", help="the branch to be released", default="master")
-parser.add_argument("--assetRepo", help="target asset repository used to fetch assets to be included in this release")
-parser.add_argument("--assetBranch", help="target asset branch at the asset repository")
-parser.add_argument("--mvnOnly", help="invoke maven build only",
-                    action="store_true")
-args = parser.parse_args()
-
 
 try:
   from xml.etree.ElementTree import ElementTree
@@ -174,12 +163,22 @@ def release():
     help_and_exit()
   
   base_dir = os.getcwd()
-  version = validate_version(args.version)
-  branch = args.branch
-  mvn_only = args.mvnOnly
+  version = validate_version(sys.argv[1])
+  branch = "master"
 
-  if mvn_only:
-    prettyprint("Maven build only", Levels.INFO)
+  mvn_only = False
+  if len(sys.argv) > 2:
+    if sys.argv[2].startswith("--mvn-only"):
+       mvn_only = True
+    else:
+      branch = sys.argv[2]
+
+  if len(sys.argv) > 3:
+     if sys.argv[3].startswith("--mvn-only"):
+       mvn_only = True
+     else:
+       prettyprint("Unknown argument %s" % sys.argv[3], Levels.WARNING)
+       help_and_exit()
 
   prettyprint("Releasing Infinispan Management Console version %s from branch '%s'" % (version, branch), Levels.INFO)
   sure = input_with_default("Are you sure you want to continue?", "N")
@@ -223,7 +222,7 @@ def release():
   
   # Step 3: Build and test in Maven2
   prettyprint("Step 4: Build and test in Maven2", Levels.INFO)
-  maven_build_distribution(version, args.assetRepo, args.assetBranch)
+  maven_build_distribution(version)
   prettyprint("Step 4: Complete", Levels.INFO)
 
   ## Tag the release
@@ -252,4 +251,3 @@ def release():
 
 if __name__ == "__main__":
   release()
-

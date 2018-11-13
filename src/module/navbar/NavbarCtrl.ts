@@ -6,8 +6,8 @@ import {IRootScopeService} from "../../common/IRootScopeService";
 export class NavbarCtrl {
   static $inject: string[] = ["$rootScope", "$scope", "$state", "authService", "launchType", "user"];
 
-  brandName: string = this.$rootScope.constants.product;
-  brandImage: string = this.$rootScope.constants.productImage;
+  brandName: string = this.$rootScope.constants.name;
+  brandImage: string = this.$rootScope.constants.image;
   showNavbar: boolean;
   stateChanging: boolean;
   states: any[];

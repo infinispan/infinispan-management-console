@@ -38,7 +38,6 @@ gulp.task('fonts', require('./tasks/fonts')(gulp, config));
 gulp.task('html', require('./tasks/html')(gulp, config));
 gulp.task('json', require('./tasks/json')(gulp, config));
 gulp.task('assets', require('./tasks/assets')(gulp, config));
-gulp.task('brand', require('./tasks/brand')(gulp, config));
 
 gulp.task('compile:src', ['clean:src'], require('./tasks/compile')(gulp, config.srcDir));
 gulp.task('compile', ['constants', 'compile:src']);
@@ -57,7 +56,7 @@ gulp.task('check', require('./tasks/check')());
 gulp.task('ng:directives', ['compile:src'], require('./tasks/ng-directives')(gulp, config));
 gulp.task('ng:annotate', ['ng:directives'], require('./tasks/ng-annotate')(gulp, config));
 
-gulp.task('build:dist', ['constants', 'ng:annotate', 'less', 'fonts', 'html', 'json', 'assets', 'brand'], require('./tasks/build-dist')(gulp, config));
+gulp.task('build:dist', ['constants', 'ng:annotate', 'less', 'fonts', 'html', 'json', 'assets'], require('./tasks/build-dist')(gulp, config));
 gulp.task('build', require('./tasks/build')());
 
 gulp.task('default', require('./tasks/default')());

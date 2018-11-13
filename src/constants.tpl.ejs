@@ -1,11 +1,11 @@
 export interface IConstants {<% constants.forEach(function(constant) {%>
-<%= constant.name.replace(/"/g, "'") %>: string;<% }) %>
+    <%= constant.name.replace(/"/g, "'") %>: string;<% }) %>
 }
 
 export class Constants {
-static get Default(): IConstants {
-return {<% constants.forEach(function(constant) {%>
-<%= constant.name.replace(/"/g, "'") %>: <%= constant.value.replace(/"/g, '"')%>,<% }) %>
-};
-}
+    static get Default(): IConstants {
+        return {<% constants.forEach(function(constant) {%>
+            <%= constant.name.replace(/"/g, "'") %>: <%= constant.value.replace(/"/g, '"')%>,<% }) %>
+        };
+    }
 }

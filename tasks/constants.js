@@ -2,20 +2,13 @@ module.exports = (gulp, cfg) =>() => {
 
   const path = require('path');
   const rename = require('gulp-rename');
-  var ngConstant = require('gulp-ng-constant');
-  var config = require('../src/constants.json'), envConfig = config.infinispan;
-
-
-  if (cfg.branding === 'jdg') {
-    envConfig = config.jdg;
-  } else {
-    envConfig = config.infinispan;
-  }
+  const ngConstant = require('gulp-ng-constant');
+  var config = require('../project.json');
 
   return ngConstant({
-    constants: envConfig,
+    constants: config,
     templatePath: path.join(cfg.srcDir, 'constants.tpl.ejs'),
     stream: true
-  }).pipe(rename('constants.ts'))
+  }).pipe(rename('Constants.ts'))
     .pipe(gulp.dest(cfg.srcDir));
 }

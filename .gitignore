@@ -16,7 +16,7 @@ vendor/
 typings/
 report/
 docs/
-src/constants.ts
+src/Constants.ts
 src/**/*.js
 src/**/*.js.map
 src/**/*.css

@@ -375,19 +375,15 @@ class DryRunUploader(DryRun):
   def upload(self, fr, to, type):
     self.copy(fr, "%s/%s/%s" % (self.location_root, type, to))    
 
-def maven_build_distribution(version, assetRepo, assetBranch):
+def maven_build_distribution(version):
   """Builds the distribution in the current working dir"""
   mvn_commands = [["clean"], ["install"], ["deploy"]]
     
   for c in mvn_commands:
-    mvn_command = c[0]
     if settings['dry_run']:
       c.append("-DskipNexusStagingDeployMojo=true -Dmaven.deploy.skip=true")
     if not settings['verbose']:
       c.insert(0, '-q')
-    if mvn_command == 'install' and assetRepo and assetBranch: 
-      mvn_param = "-Dbranding.repo={} -Dbranding.branch={}".format(assetRepo, assetBranch)
-      c.insert(0, mvn_param)
     c.insert(0, 'mvn')
     subprocess.check_call(c)
 
@@ -412,4 +408,3 @@ def assert_python_minimum_version(major, minor):
     
   
 
-  

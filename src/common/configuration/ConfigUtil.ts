@@ -1,6 +1,7 @@
 import {isNotNullOrUndefined, deepGet, isNullOrUndefined, isObject} from "../utils/Utils";
 import {ISPNException} from "../utils/ISPNException";
 
+export const PERSISTENCE_PATH: string = "children.persistence.model-description.PERSISTENCE.";
 export const RESOURCE_DESCRIPTION_MAP: Object = {
   "general": ".attributes",
   "locking": "children.locking.model-description.LOCKING.attributes",
@@ -11,21 +12,19 @@ export const RESOURCE_DESCRIPTION_MAP: Object = {
   "partition-handling": "children.partition-handling.model-description.PARTITION_HANDLING.attributes",
   "tx": "children.transaction.model-description.TRANSACTION.attributes",
   "statetransfer": "children.state-transfer.model-description.STATE_TRANSFER.attributes",
-  "filestore": "children.file-store.model-description.*.attributes",
-  "remotestore": "children.remote-store.model-description.*.attributes",
-  "mixed-keyed-jdbc-store": "children.mixed-keyed-jdbc-store.model-description.*.attributes",
-  "binary-keyed-jdbc-store": "children.binary-keyed-jdbc-store.model-description.*.attributes",
-  "string-keyed-jdbc-store": "children.string-keyed-jdbc-store.model-description.*.attributes",
-  "remote-store": "children.remote-store.model-description.*.attributes",
-  "file-store": "children.file-store.model-description.*.attributes",
-  "rocksdb-store": "children.rocksdb-store.model-description.*.attributes",
-  "store": "children.store.model-description.*.attributes",
-  "rest-store": "children.rest-store.model-description.*.attributes",
   "backup": "children.backup.model-description.*.attributes",
-  "loader": "children.loader.model-description.*.attributes",
   "authorization": "children.security.model-description.*.children.authorization.model-description.*.attributes",
-  "write-behind": "children.store.model-description.*.children",
-  "rocksdb-children": "children.rocksdb-store.model-description.*.children",
+  "filestore": PERSISTENCE_PATH + "children.file-store.model-description.*.attributes",
+  "remotestore": PERSISTENCE_PATH + "children.remote-store.model-description.*.attributes",
+  "string-keyed-jdbc-store": PERSISTENCE_PATH + "children.string-keyed-jdbc-store.model-description.*.attributes",
+  "remote-store": PERSISTENCE_PATH + "children.remote-store.model-description.*.attributes",
+  "file-store": PERSISTENCE_PATH + "children.file-store.model-description.*.attributes",
+  "rocksdb-store": PERSISTENCE_PATH + "children.rocksdb-store.model-description.*.attributes",
+  "store": PERSISTENCE_PATH + "children.store.model-description.*.attributes",
+  "rest-store": PERSISTENCE_PATH + "children.rest-store.model-description.*.attributes",
+  "loader": PERSISTENCE_PATH + "children.loader.model-description.*.attributes",
+  "write-behind": PERSISTENCE_PATH + "children.store.model-description.*.children",
+  "rocksdb-children": PERSISTENCE_PATH + "children.rocksdb-store.model-description.*.children",
 };
 
 export function isFieldValueModified(meta: any): boolean {

@@ -11,7 +11,7 @@ dist
 src/main/bower_components
 target
 *.iml
-*.pyc
+**/*.pyc
 vendor/
 typings/
 report/

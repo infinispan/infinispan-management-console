@@ -48,7 +48,8 @@ export class CacheConfigService {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.dmrService.readResource({
       address: this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name),
-      recursive: true
+      recursive: true,
+      "include-aliases": true
     }).then(response => {
       response.type = type;
       response["template-name"] = name;
@@ -231,7 +232,8 @@ export class CacheConfigService {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.dmrService.readResource({
       address: this.getConfigAddress(container.name, container.profile).concat(templateType + "-configuration", templateName),
-      recursive: true
+      recursive: true,
+      "include-aliases": true
     }).then(response => {
       response.type = templateType;
       response["template-name"] = templateName;

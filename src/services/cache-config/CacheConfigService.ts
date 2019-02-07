@@ -327,6 +327,7 @@ export class CacheConfigService {
           this.createHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
           this.createHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
           this.createHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+          this.createHelper(builder, address.concat("persistence", "PERSISTENCE"), config.persistence, true);
           this.createBackupNodes(builder, address.concat("backup"), config.backup);
           if (this.isSecurityAuthorizationEnabled(config)) {
             this.updateSecurityAuthorization(config);
@@ -345,11 +346,15 @@ export class CacheConfigService {
     return deferred.promise;
   }
 
-  private createHelper(builder: CompositeOpBuilder, address: string[], config: any): void {
+  private createHelper(builder: CompositeOpBuilder, address: string[], config: any, requiredNode?: boolean): void {
     if (isNotNullOrUndefined(config)) {
       let exclusionList: string[] = ["is-new-node", "store-type", "store-original-type", "is-dirty", "is-removed"];
       if (isNullOrUndefined(config.EVICTION) && isNullOrUndefined(config.COMPRESSION)) {
         exclusionList.push("type");
+      }
+      if (requiredNode) {
+        let nodeName: string = address.slice(-1).pop();
+        config[nodeName]["required-node"] = true;
       }
       this.addOperationsToBuilder(builder, address, config, exclusionList, true);
     }
@@ -445,6 +450,7 @@ export class CacheConfigService {
       this.updateHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
       this.updateHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
       this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+      this.updateHelper(builder, address.concat("persistence", "PERSISTENCE"), config.persistence);
 
       if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
         this.updateSecurityAuthorization(config);
@@ -594,7 +600,7 @@ export class CacheConfigService {
         this.addCompositeOperationsToBuilder(builder, address, config[modelNode], excludedAttributes, force);
       }
     }
-  };
+  }
 
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,
                                           excludedAttributes: string[], force: boolean = false): void {

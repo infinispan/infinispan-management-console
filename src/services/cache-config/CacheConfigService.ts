@@ -48,7 +48,8 @@ export class CacheConfigService {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.dmrService.readResource({
       address: this.getConfigAddress(container.name, container.profile).concat(type + "-configuration", name),
-      recursive: true
+      recursive: true,
+      "include-aliases": true
     }).then(response => {
       response.type = type;
       response["template-name"] = name;
@@ -231,7 +232,8 @@ export class CacheConfigService {
     let deferred: ng.IDeferred<any> = this.$q.defer();
     this.dmrService.readResource({
       address: this.getConfigAddress(container.name, container.profile).concat(templateType + "-configuration", templateName),
-      recursive: true
+      recursive: true,
+      "include-aliases": true
     }).then(response => {
       response.type = templateType;
       response["template-name"] = templateName;
@@ -334,6 +336,9 @@ export class CacheConfigService {
             this.createHelper(builder, address.concat("security", "SECURITY", "authorization", "AUTHORIZATION"), config.security.SECURITY.authorization);
           }
 
+          // We must first create persistence=PERSISTENCE node before we can write through the old alias address
+          config.persistence.PERSISTENCE["required-node"] = true;
+          this.createHelper(builder, address.concat("persistence", "PERSISTENCE"), config.persistence);
           this.createCacheLoader(builder, address, config);
           this.createCacheStore(builder, address, config);
 
@@ -445,6 +450,7 @@ export class CacheConfigService {
       this.updateHelper(builder, address.concat("partition-handling", "PARTITION_HANDLING"), config["partition-handling"]);
       this.updateHelper(builder, address.concat("transaction", "TRANSACTION"), config.transaction);
       this.updateHelper(builder, address.concat("state-transfer", "STATE_TRANSFER"), config["state-transfer"]);
+      this.updateHelper(builder, address.concat("persistence", "PERSISTENCE"), config.persistence);
 
       if (this.isSecurityAuthorizationDefinedAndDirty(config)) {
         this.updateSecurityAuthorization(config);
@@ -594,7 +600,7 @@ export class CacheConfigService {
         this.addCompositeOperationsToBuilder(builder, address, config[modelNode], excludedAttributes, force);
       }
     }
-  };
+  }
 
   private addCompositeOperationsToBuilder(builder: CompositeOpBuilder, address: string[], config: any,
                                           excludedAttributes: string[], force: boolean = false): void {

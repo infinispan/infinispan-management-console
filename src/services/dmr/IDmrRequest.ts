@@ -13,6 +13,7 @@ export interface IDmrRequest {
   "file-names"?: string[];
   group?: string;
   "include-runtime"?: boolean;
+  "include-aliases"?: boolean;
   name?: string;
   operation?: string;
   parameters?: any;

@@ -375,7 +375,7 @@ export class CacheConfigService {
   private createCacheLoader(builder: CompositeOpBuilder, address: string[], config: any): void {
     let loaderClass: string = deepGet(config, "loader.LOADER.class");
     if (isNotNullOrUndefined(loaderClass) && loaderClass !== "None") {
-      this.createHelper(builder, address.concat("loader", "LOADER"), config.loader);
+      this.createHelper(builder, address.concat("loader", "LOADER"), config.loader, true);
     }
   }
 
@@ -387,7 +387,7 @@ export class CacheConfigService {
 
     let objectKey: string = storeType.toUpperCase().replace(/-/g, "_");
     config[storeType][objectKey]["required-node"] = true;
-    this.createHelper(builder, address.concat(storeType, objectKey), config[storeType]);
+    this.createHelper(builder, address.concat(storeType, objectKey), config[storeType], true);
 
     let store: any = config[storeType][objectKey];
     if (isNotNullOrUndefined(store)) {

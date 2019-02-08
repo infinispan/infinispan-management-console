@@ -9,6 +9,7 @@ import {IRedirectState} from "../../common/IRedirectState";
 import {EndpointService} from "../../services/endpoint/EndpointService";
 import {endpointFilter} from "./endpoints/filters/EndpointFilter";
 import {DomainService} from "../../services/domain/DomainService";
+import {LaunchTypeService} from "../../services/launchtype/LaunchTypeService";
 
 const module: ng.IModule = App.module("managementConsole.server-group", []);
 
@@ -36,9 +37,8 @@ module.config(($stateProvider: ng.ui.IStateProvider) => {
         (serverGroupService: ServerGroupService, serverGroup: IServerGroup) => {
           return serverGroupService.getServerGroupStatus(serverGroup);
         }],
-      hosts: ["domainService", (domainService: DomainService) => {
-        return domainService.getHosts();
-      }]
+      hosts: ["domainService", "launchType",
+        (domainService: DomainService, launchType: LaunchTypeService) => launchType.isDomainMode() ? domainService.getHosts() : []]
     }
   });
   $stateProvider.state("server-group.nodes", {

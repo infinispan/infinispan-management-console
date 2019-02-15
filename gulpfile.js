@@ -54,9 +54,8 @@ gulp.task('check:tslint:src', require('./tasks/check-tslint')(gulp, config.srcDi
 gulp.task('check', require('./tasks/check')());
 
 gulp.task('ng:directives', ['compile:src'], require('./tasks/ng-directives')(gulp, config));
-gulp.task('ng:annotate', ['ng:directives'], require('./tasks/ng-annotate')(gulp, config));
 
-gulp.task('build:dist', ['constants', 'ng:annotate', 'less', 'fonts', 'html', 'json', 'assets'], require('./tasks/build-dist')(gulp, config));
+gulp.task('build:dist', ['constants', 'ng:directives', 'less', 'fonts', 'html', 'json', 'assets'], require('./tasks/build-dist')(gulp, config));
 gulp.task('build', require('./tasks/build')());
 
 gulp.task('default', require('./tasks/default')());

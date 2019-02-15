@@ -73,7 +73,7 @@
       "angular-ui-bootstrap": "npm:angular-ui-bootstrap@2.2.0",
       "angular-ui-router": "npm:angular-ui-router@0.3.1",
       "angularjs-dropdown-multiselect": "npm:angularjs-dropdown-multiselect@2.0.0-beta.10",
-      "bootstrap": "npm:bootstrap@3.3.7",
+      "bootstrap": "npm:bootstrap@3.4.1",
       "bootstrap-css": "npm:bootstrap-css@3.0.0",
       "browser-sync": "npm:browser-sync@2.18.3",
       "c3": "npm:c3@0.4.11",

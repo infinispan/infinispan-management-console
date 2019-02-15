@@ -19,7 +19,7 @@
     "patternfly": "~4.0.0-rc.1"
   },
   "devDependencies": {
-    "browser-sync": "2.18.3",
+    "browser-sync": "2.26.3",
     "chai": "4.1.2",
     "del": "2.2.2",
     "eslint": "3.19.0",

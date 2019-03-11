@@ -337,8 +337,7 @@ export class CacheConfigService {
           }
 
           // We must first create persistence=PERSISTENCE node before we can write through the old alias address
-          config.persistence.PERSISTENCE["required-node"] = true;
-          this.createHelper(builder, address.concat("persistence", "PERSISTENCE"), config.persistence);
+          builder.add(this.createAddOperation(address.concat("persistence", "PERSISTENCE", null, []));
           this.createCacheLoader(builder, address, config);
           this.createCacheStore(builder, address, config);
 

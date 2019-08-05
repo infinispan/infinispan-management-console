@@ -13,6 +13,7 @@
     "@types/deepmerge": "^2.1.0",
     "@types/toastr": "^2.1.35",
     "bootstrap": "3.3.7",
+    "natives": "1.1.6",
     "patternfly": "~4.0.0-rc.1"
   },
   "devDependencies": {

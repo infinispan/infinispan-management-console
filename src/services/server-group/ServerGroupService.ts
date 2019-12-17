@@ -43,7 +43,7 @@ export class ServerGroupService {
   getAllServerGroupsMap(): ng.IPromise<IMap<IServerGroup>> {
     if (this.launchType.isDomainMode()) {
       return this.getAllServerGroupsMapDomain();
-    } else if (this.launchType.isStandaloneMode()) {
+    } else {
       return this.getAllServerGroupsMapStandalone();
     }
   }

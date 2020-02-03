@@ -135,17 +135,20 @@ export class CacheService {
   }
 
   getCacheStatsForServers(container: ICacheContainer, cache: ICache): ng.IPromise<any[]> {
-    let promises: ng.IPromise<any> [] = [];
-    let servers: IServerAddress [] = container.serverGroup.members;
+    let promises: ng.IPromise<any>[] = [];
+    let servers: IServerAddress[] = container.serverGroup.members;
+    let allStats: any[] = [];
     // only query running servers for the cache stats, non-running servers won't respond
-    promises.push(this.serverService.getServersInState(servers, SERVER_STATE_RUNNING).then(servers => {
+    this.serverService.getServersInState(servers, SERVER_STATE_RUNNING).then(servers => {
       for (let server of servers) {
         if (isNotNullOrUndefined(server)) {
-          return this.getCacheStatsOnServer(server, container, cache);
+          promises.push(
+            this.getCacheStatsOnServer(server, container, cache).then(nodeStats => allStats.push(nodeStats))
+          );
         }
       }
-    }));
-    return this.$q.all(promises);
+    });
+    return this.$q.all(promises).then(() => allStats);
   }
 
   startCache(container: ICacheContainer, cache: ICache): ng.IPromise<any> {
